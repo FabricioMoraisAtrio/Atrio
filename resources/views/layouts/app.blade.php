@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Átrio — @yield('title')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* ── VARIÁVEIS ── */
+        :root {
+            --bg-page:   #F8FAFC;
+            --bg-card:   #FFFFFF;
+            --bg-subtle: #F9FAFB;
+            --bg-hover:  #F3F4F6;
+            --border:    #E5E7EB;
+            --border-sub:#F3F4F6;
+            --text-1:    #111827;
+            --text-2:    #374151;
+            --text-3:    #6B7280;
+            --text-4:    #9CA3AF;
+            --accent:    #004B8D;
+            --accent-bg: #E8F0F9;
+        }
+
+        [data-theme="dark"] {
+            --bg-page:   #161B27;
+            --bg-card:   #1E2536;
+            --bg-subtle: #252C42;
+            --bg-hover:  rgba(96,165,250,0.08);
+            --border:    #2D3550;
+            --border-sub:#252C42;
+            --text-1:    #E2E8F0;
+            --text-2:    #94A3B8;
+            --text-3:    #64748B;
+            --text-4:    #475569;
+            --accent:    #60A5FA;
+            --accent-bg: rgba(96,165,250,0.12);
+        }
+
+        /* ── BASE ── */
+        body { background: var(--bg-page) !important; }
+        aside { background: var(--bg-card) !important; border-color: var(--border) !important; }
+        header { background: var(--bg-card) !important; border-color: var(--border) !important; }
+        main { background: var(--bg-page) !important; }
+
+        /* ── CARDS E FUNDOS ── */
+        [style*="background: #fff"], [style*="background:#fff"] { background: var(--bg-card) !important; }
+        [style*="background: #F9FAFB"] { background: var(--bg-subtle) !important; }
+        [style*="background: #F3F4F6"] { background: var(--bg-hover) !important; }
+        [style*="background: #E8F0F9"] { background: var(--accent-bg) !important; }
+        [style*="background: #E6F5F4"] { background: rgba(0,156,140,0.12) !important; }
+        [style*="background: #F5EDE6"] { background: rgba(124,55,0,0.15) !important; }
+        [style*="background: #F3E8FF"] { background: rgba(139,92,246,0.15) !important; }
+
+        /* ── CARD PENDENTES ── */
+        [style*="background: #FFFBEB"] { background: rgba(234,179,8,0.07) !important; }
+        [style*="background: #FEF3C7"] { background: rgba(234,179,8,0.1) !important; }
+        /* Mural de observações */
+        [data-theme="dark"] .observation-feed-card {
+            background: var(--bg-card) !important;
+            border-color: var(--border) !important;
+        }
+
+        [data-theme="dark"] [style*="background: #FFFBEB"] {
+            background: rgba(96,165,250,0.06) !important;
+        }
+        [data-theme="dark"] [style*="background: #FEF3C7"] {
+            background: rgba(96,165,250,0.1) !important;
+        }
+        [data-theme="dark"] [style*="border: 1px solid #FDE68A"] {
+            border-color: rgba(96,165,250,0.2) !important;
+        }
+        [data-theme="dark"] [style*="color: #92400E"] { color: #93C5FD !important; }
+
+        /* ── BORDAS ── */
+        [style*="border: 1px solid #F3F4F6"]        { border-color: var(--border-sub) !important; }
+        [style*="border-top: 1px solid #F9FAFB"]    { border-color: var(--border-sub) !important; }
+        [style*="border-bottom: 1px solid #F3F4F6"] { border-color: var(--border-sub) !important; }
+        [style*="border-bottom: 1px solid #F9FAFB"] { border-color: var(--border-sub) !important; }
+        [style*="border-bottom: 1px solid #E5E7EB"] { border-color: var(--border) !important; }
+        [style*="border-right: 1px solid #E5E7EB"]  { border-color: var(--border) !important; }
+        [style*="border-bottom: 2px solid #E5E7EB"] { border-color: var(--border) !important; }
+
+        /* ── TEXTOS ── */
+        [style*="color: #111827"] { color: var(--text-1) !important; }
+        [style*="color: #374151"] { color: var(--text-2) !important; }
+        [style*="color: #6B7280"] { color: var(--text-3) !important; }
+        [style*="color: #9CA3AF"] { color: var(--text-4) !important; }
+
+        /* ── INPUTS ── */
+        input, textarea, select { color: var(--text-1) !important; }
+
+        /* ── SIDEBAR ATIVO ── */
+        [style*="background: #E8F0F9; color: #004B8D"] {
+            background: var(--accent-bg) !important;
+            color: var(--accent) !important;
+        }
+
+        /* ── BADGE TOPBAR ── */
+        [style*="background: #F3F4F6; padding: 4px 10px"] {
+            background: var(--bg-subtle) !important;
+            color: var(--text-2) !important;
+        }
+
+        /* ── HOVER DARK ── */
+        [data-theme="dark"] a[href]:hover {
+            background: rgba(96,165,250,0.08) !important;
+        }
+        [data-theme="dark"] tr:hover td {
+            background: rgba(96,165,250,0.06) !important;
+        }
+        [data-theme="dark"] button[style*="background: #004B8D"]:hover {
+            background: #003a6e !important;
+        }
+        [data-theme="dark"] a[style*="background: #004B8D"]:hover {
+            background: #003a6e !important;
+        }
+        [data-theme="dark"] button[style*="color: #EF4444"]:hover {
+            background: rgba(239,68,68,0.1) !important;
+        }
+
+        /* ── BOTÃO TEMA ── */
+        #theme-toggle {
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-subtle);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            color: var(--text-3);
+            transition: background 0.15s;
+        }
+        #theme-toggle:hover { background: var(--bg-hover) !important; }
+    </style>
+    <script>
+        // Aplica tema antes do render para evitar flash
+        (function() {
+            const saved = localStorage.getItem('atrio-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = saved || (prefersDark ? 'dark' : 'light');
+            if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
+</head>
+<body class="min-h-screen">
+
+<div class="flex min-h-screen">
+
+    {{-- SIDEBAR --}}
+    <aside style="width: 240px; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
+
+        <div style="padding: 24px 20px 20px; border-bottom: 1px solid #F3F4F6;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; background: #004B8D; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" fill="white" opacity="0.9"/>
+                        <path d="M12 2L3 7l9 5 9-5-9-5z" fill="white"/>
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-size: 15px; font-weight: 700; color: #004B8D; letter-spacing: 0.5px;">ÁTRIO</div>
+                    <div style="font-size: 10px; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase;">Portal Institucional</div>
+                </div>
+            </div>
+        </div>
+
+        <nav style="flex: 1; padding: 16px 12px;">
+            @auth
+                @hasrole('secretaria')
+@hasrole('secretaria')
+    @php
+        $pendentesCount = \Illuminate\Support\Facades\Cache::remember(
+            'pendentes_count_' . session('school_id'),
+            now()->addMinutes(5),
+            function () {
+                return \App\Models\Student::where('is_atypical', true)
+                    ->with(['documents' => fn($q) => $q->where('year', date('Y'))->select('id','student_id','type')])
+                    ->get()
+                    ->filter(function ($aluno) {
+                        $criados = $aluno->documents->pluck('type')->toArray();
+                        return count(array_diff(['estudo_caso','pei','paee'], $criados)) > 0;
+                    })->count();
+            }
+        );
+
+        $items = [
+            ['route' => 'secretaria.dashboard',        'icon' => 'grid',     'label' => 'Painel'],
+            ['route' => 'secretaria.turmas.index',     'icon' => 'academic', 'label' => 'Turmas'],
+            ['route' => 'secretaria.alunos.index',     'icon' => 'users',    'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
+            ['route' => 'secretaria.documentos.index', 'icon' => 'doc',      'label' => 'Documentos'],
+            ['route' => 'secretaria.usuarios.index',   'icon' => 'user',     'label' => 'Usuários'],
+        ];
+    @endphp
+@endhasrole
+                @endhasrole
+
+                @hasrole('professor')
+                    @php $items = [
+                        ['route' => 'professor.dashboard',        'icon' => 'grid', 'label' => 'Painel'],
+                        ['route' => 'professor.documentos.index', 'icon' => 'doc',  'label' => 'Documentos'],
+                    ]; @endphp
+                @endhasrole
+
+                @hasrole('pai')
+                    @php $items = [
+                        ['route' => 'pai.dashboard', 'icon' => 'grid', 'label' => 'Painel'],
+                    ]; @endphp
+                @endhasrole
+
+                @foreach($items ?? [] as $item)
+                    @php
+                        $isActive = request()->routeIs($item['route']) || request()->routeIs($item['route'] . '.*');
+                        $badge = $item['badge'] ?? null;
+                    @endphp
+                    <a href="{{ route($item['route']) }}"
+                       style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 8px; margin-bottom: 2px; font-size: 14px; font-weight: 500; text-decoration: none;
+                           {{ $isActive ? 'background: #E8F0F9; color: #004B8D;' : 'color: #6B7280;' }}">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            @include('layouts.partials.icon', ['icon' => $item['icon'], 'active' => $isActive])
+                            {{ $item['label'] }}
+                        </div>
+                        @if($badge)
+                            <span style="background: #EF4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px;">
+                                {{ $badge }}
+                            </span>
+                        @endif
+                    </a>
+                @endforeach
+            @endauth
+        </nav>
+
+        @auth
+        <div style="padding: 16px 12px; border-top: 1px solid #F3F4F6;">
+            <a href="{{ route('profile.edit') }}"
+               style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; text-decoration: none; color: #374151;">
+                @if(auth()->user()->avatar)
+                    <img src="{{ \Illuminate\Support\Facades\Storage::url(auth()->user()->avatar) }}"
+                         style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                @else
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #004B8D; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0;">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                @endif
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 13px; font-weight: 500; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {{ auth()->user()->name }}
+                    </div>
+                    <div style="font-size: 11px; color: #9CA3AF;">
+                        {{ auth()->user()->getRoleNames()->first() }}
+                    </div>
+                </div>
+            </a>
+            <form method="POST" action="{{ route('logout') }}" style="margin-top: 4px;">
+                @csrf
+                <button type="submit"
+                        style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; border: none; background: none; cursor: pointer; font-size: 13px; color: #EF4444; text-align: left;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                    Sair
+                </button>
+            </form>
+        </div>
+        @endauth
+    </aside>
+
+    <div style="margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh;">
+
+        <header style="border-bottom: 1px solid #E5E7EB; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 30;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                @hasSection('breadcrumb')
+                    @yield('breadcrumb')
+                @else
+                    <span style="color: #111827; font-weight: 500;">@yield('title')</span>
+                @endif
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                @auth
+                <span style="font-size: 12px; color: #9CA3AF; background: #F3F4F6; padding: 4px 10px; border-radius: 20px;">
+                    {{ auth()->user()->school?->name ?? 'Sistema Átrio' }}
+                </span>
+                @endauth
+
+                <button id="theme-toggle" onclick="toggleTheme()" title="Alternar tema">
+                    <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <main style="flex: 1; padding: 32px;">
+            @if(session('success'))
+                <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                    {{ session('success') }}
+                </div>
+            @endif
+            @yield('content')
+        </main>
+    </div>
+</div>
+
+<script>
+function updateIcons(theme) {
+    const sun = document.getElementById('icon-sun');
+    const moon = document.getElementById('icon-moon');
+    if (!sun || !moon) return;
+    sun.style.display = theme === 'dark' ? 'block' : 'none';
+    moon.style.display = theme === 'dark' ? 'none' : 'block';
+}
+
+function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    if (next === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('atrio-theme', next);
+    updateIcons(next);
+}
+
+// Inicializa ícone correto
+(function() {
+    const theme = localStorage.getItem('atrio-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    updateIcons(theme);
+})();
+</script>
+<script>
+function updateIcons(theme) {
+    const sun = document.getElementById('icon-sun');
+    const moon = document.getElementById('icon-moon');
+    if (!sun || !moon) return;
+    sun.style.display = theme === 'dark' ? 'block' : 'none';
+    moon.style.display = theme === 'dark' ? 'none' : 'block';
+}
+
+function applyHoverBehavior(theme) {
+    if (theme === 'dark') {
+        document.querySelectorAll('[onmouseover]').forEach(el => {
+            el.removeAttribute('onmouseover');
+            el.removeAttribute('onmouseout');
+        });
+    }
+}
+
+function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    if (next === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('atrio-theme', next);
+    updateIcons(next);
+    applyHoverBehavior(next);
+    // Recarrega para aplicar hover corretamente no light
+    if (next === 'light') location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const theme = localStorage.getItem('atrio-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    updateIcons(theme);
+    applyHoverBehavior(theme);
+});
+
+// Inicializa ícone antes do DOM completo
+(function() {
+    const theme = localStorage.getItem('atrio-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    updateIcons(theme);
+})();
+</script>
+</body>
+</html>

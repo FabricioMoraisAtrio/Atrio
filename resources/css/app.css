@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+:root {
+    --primary: #004B8D;
+    --primary-dark: #003366;
+    --primary-light: #E8F0F9;
+    --secondary: #009C8C;
+    --secondary-light: #E6F5F4;
+    --tertiary: #7C3700;
+    --tertiary-light: #F5EDE6;
+    --neutral: #CBCBCB;
+    --sidebar-width: 240px;
+}
