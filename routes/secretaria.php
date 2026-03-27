@@ -25,4 +25,3 @@ Route::post('alunos/{aluno}/observacoes', [ObservationController::class, 'store'
 Route::delete('observacoes/{observation}', [ObservationController::class, 'destroy'])->name('observacoes.destroy');
 Route::get('documentos/{documento}/word', DocumentWordController::class)
     ->name('documentos.word');
-Route::get('turmas/{turma}/show', [SchoolClassController::class, 'show'])->name('turmas.show');
