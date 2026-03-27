@@ -26,4 +26,3 @@ Route::delete('observacoes/{observation}', [ObservationController::class, 'destr
 Route::get('documentos/{documento}/word', DocumentWordController::class)
     ->name('documentos.word');
 Route::get('turmas/{turma}/show', [SchoolClassController::class, 'show'])->name('turmas.show');
-Route::get('documentos', AllDocumentsController::class)->name('documentos.index');
