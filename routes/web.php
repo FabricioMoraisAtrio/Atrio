@@ -5,6 +5,15 @@ use App\Http\Controllers\Auth\LogoutController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Secretaria\AllDocumentsController;
 
+
+
+Route::get('/cron/notificacoes', function () {
+    if (request('token') !== config('app.cron_token')) {
+        abort(403);
+    }
+    \Artisan::call('atrio:notificacoes-diarias');
+    return response()->json(['ok' => true]);
+});
 Route::get('/', [LoginController::class, 'create'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 
