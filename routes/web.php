@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Hash;
 
 // Serve logos de escola
 Route::get('/logo/{filename}', function (string $filename) {
-    $path = storage_path('app/public/logos/' . $filename);
-    if (!file_exists($path)) abort(404);
-    return response()->file($path);
+    $storagePath = storage_path('app/public/logos/' . $filename);
+    $publicPath  = base_path('public/logos/' . $filename);
+    if (file_exists($storagePath)) return response()->file($storagePath);
+    if (file_exists($publicPath))  return response()->file($publicPath);
+    abort(404);
 })->where('filename', '[^/]+')->name('school.logo');
 
 // Esqueceu a senha
