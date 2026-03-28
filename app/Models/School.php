@@ -9,7 +9,7 @@ class School extends Model
 {
     protected $fillable = [
         'name', 'slug', 'is_active', 'plan', 'plan_status',
-        'plan_expires_at', 'max_students', 'notes',
+        'plan_expires_at', 'max_students', 'notes', 'logo',
     ];
 
     protected function casts(): array
@@ -44,4 +44,5 @@ class School extends Model
     {
         return $this->plan_expires_at && $this->plan_expires_at->isPast();
     }
+
 }

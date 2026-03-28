@@ -63,4 +63,9 @@ protected function casts(): array
         return $this->hasMany(Observation::class)->latest();
     }
 
+    public function laudos(): HasMany
+    {
+        return $this->hasMany(Laudo::class)->latest();
+    }
+
 }

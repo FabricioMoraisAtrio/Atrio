@@ -69,6 +69,7 @@
                 <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">
                     Senha
                 </label>
+                
                 <input type="password" name="password"
                        style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box; transition: border-color 0.2s;"
                        onfocus="this.style.borderColor='#004B8D'"
@@ -76,10 +77,10 @@
             </div>
 
             <div style="text-align: right; margin-bottom: 28px;">
-                <a href="#" style="font-size: 11px; color: #9CA3AF; letter-spacing: 0.5px; text-transform: uppercase; text-decoration: none;">
-                    Esqueceu a senha?
-                </a>
-            </div>
+    <a href="{{ route('password.request') }}" style="font-size: 11px; color: #9CA3AF; letter-spacing: 0.5px; text-transform: uppercase; text-decoration: none;">
+        Esqueceu a senha?
+    </a>
+</div>
 
             <button type="submit"
                     style="width: 100%; background: #004B8D; color: white; border: none; padding: 14px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 6px; cursor: pointer; transition: background 0.2s;"
@@ -92,15 +93,15 @@
 
     {{-- Footer --}}
     <div style="text-align: center; margin-top: 32px;">
-        <div style="display: flex; justify-content: center; gap: 24px; margin-bottom: 12px;">
-            <a href="#" style="font-size: 11px; color: #9CA3AF; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase;">Termos</a>
-            <a href="#" style="font-size: 11px; color: #9CA3AF; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase;">Privacidade</a>
-            <a href="#" style="font-size: 11px; color: #9CA3AF; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase;">Suporte</a>
-        </div>
-        <p style="font-size: 11px; color: #D1D5DB; letter-spacing: 1px; text-transform: uppercase;">
-            © {{ date('Y') }} Sistema Átrio
-        </p>
+    <div style="display: flex; justify-content: center; gap: 24px; margin-bottom: 12px;">
+        <a href="{{ route('termos') }}" style="font-size: 11px; color: #9CA3AF; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase;">Termos</a>
+        <a href="{{ route('privacidade') }}" style="font-size: 11px; color: #9CA3AF; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase;">Privacidade</a>
+        <a href="{{ route('suporte') }}" style="font-size: 11px; color: #9CA3AF; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase;">Suporte</a>
     </div>
+    <p style="font-size: 11px; color: #D1D5DB; letter-spacing: 1px; text-transform: uppercase;">
+        © {{ date('Y') }} Sistema Átrio
+    </p>
+</div>
 </div>
 
 </body>
