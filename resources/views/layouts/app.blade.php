@@ -8,33 +8,33 @@
     <style>
         /* ── VARIÁVEIS ── */
         :root {
-            --bg-page:   #F8FAFC;
+            --bg-page:   #EEF4FB;
             --bg-card:   #FFFFFF;
-            --bg-subtle: #F9FAFB;
-            --bg-hover:  #F3F4F6;
-            --border:    #E5E7EB;
-            --border-sub:#F3F4F6;
-            --text-1:    #111827;
-            --text-2:    #374151;
-            --text-3:    #6B7280;
-            --text-4:    #9CA3AF;
+            --bg-subtle: #F0F6FD;
+            --bg-hover:  #E2EDF8;
+            --border:    #C8DDF0;
+            --border-sub:#D8E9F5;
+            --text-1:    #0D1F36;
+            --text-2:    #2C4A6E;
+            --text-3:    #5A7FA8;
+            --text-4:    #8EB3D4;
             --accent:    #004B8D;
-            --accent-bg: #E8F0F9;
+            --accent-bg: #D6E8F8;
         }
 
         [data-theme="dark"] {
-            --bg-page:   #161B27;
-            --bg-card:   #1E2536;
-            --bg-subtle: #252C42;
-            --bg-hover:  rgba(96,165,250,0.08);
-            --border:    #2D3550;
-            --border-sub:#252C42;
-            --text-1:    #E2E8F0;
-            --text-2:    #94A3B8;
-            --text-3:    #64748B;
-            --text-4:    #475569;
-            --accent:    #60A5FA;
-            --accent-bg: rgba(96,165,250,0.12);
+            --bg-page:   #0E1420;
+            --bg-card:   #151D2E;
+            --bg-subtle: #1C2640;
+            --bg-hover:  rgba(255,255,255,0.04);
+            --border:    #253048;
+            --border-sub:#1C2640;
+            --text-1:    #E8EEFA;
+            --text-2:    #8FA8C8;
+            --text-3:    #546A88;
+            --text-4:    #364A64;
+            --accent:    #3B82F6;
+            --accent-bg: rgba(59,130,246,0.18);
         }
 
         /* ── BASE ── */
@@ -42,6 +42,22 @@
         aside { background: var(--bg-card) !important; border-color: var(--border) !important; }
         header { background: var(--bg-card) !important; border-color: var(--border) !important; }
         main { background: var(--bg-page) !important; }
+
+        /* ── DARK: sidebar mais escura que o conteúdo ── */
+        [data-theme="dark"] aside {
+            background: #101622 !important;
+            border-color: #1E2A40 !important;
+        }
+        [data-theme="dark"] header {
+            background: #121926 !important;
+            border-color: #1E2A40 !important;
+        }
+
+        /* ── DARK: tabelas ── */
+        [data-theme="dark"] table { border-color: #1E2A40 !important; }
+        [data-theme="dark"] thead tr { background: #101622 !important; }
+        [data-theme="dark"] tbody tr:hover td { background: rgba(59,130,246,0.08) !important; }
+        [data-theme="dark"] td, [data-theme="dark"] th { border-color: #1E2A40 !important; }
 
         /* ── CARDS E FUNDOS ── */
         [style*="background: #fff"], [style*="background:#fff"] { background: var(--bg-card) !important; }
@@ -89,6 +105,9 @@
 
         /* ── INPUTS ── */
         input, textarea, select { color: var(--text-1) !important; }
+        [data-theme="dark"] select { background: var(--bg-subtle) !important; }
+        [data-theme="dark"] input[type="date"] { background: var(--bg-subtle) !important; color-scheme: dark; }
+        [data-theme="dark"] label[style*="background: #F3F4F6"] { color: var(--text-2) !important; }
 
         /* ── SIDEBAR ATIVO ── */
         [style*="background: #E8F0F9; color: #004B8D"] {
@@ -104,19 +123,24 @@
 
         /* ── HOVER DARK ── */
         [data-theme="dark"] a[href]:hover {
-            background: rgba(96,165,250,0.08) !important;
+            background: rgba(59,130,246,0.10) !important;
         }
         [data-theme="dark"] tr:hover td {
-            background: rgba(96,165,250,0.06) !important;
+            background: rgba(59,130,246,0.08) !important;
         }
         [data-theme="dark"] button[style*="background: #004B8D"]:hover {
-            background: #003a6e !important;
+            background: #2563EB !important;
         }
         [data-theme="dark"] a[style*="background: #004B8D"]:hover {
-            background: #003a6e !important;
+            background: #2563EB !important;
         }
         [data-theme="dark"] button[style*="color: #EF4444"]:hover {
-            background: rgba(239,68,68,0.1) !important;
+            background: rgba(239,68,68,0.12) !important;
+        }
+        /* Sidebar item ativo no dark */
+        [data-theme="dark"] [style*="background: #E8F0F9; color: #004B8D"] {
+            background: rgba(59,130,246,0.20) !important;
+            color: #60A5FA !important;
         }
 
         /* ── BOTÃO TEMA ── */
@@ -150,55 +174,78 @@
     {{-- SIDEBAR --}}
     <aside style="width: 240px; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
 
+        {{-- Logo --}}
         <div style="padding: 24px 20px 20px; border-bottom: 1px solid #F3F4F6;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="width: 36px; height: 36px; background: #004B8D; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" fill="white" opacity="0.9"/>
-                        <path d="M12 2L3 7l9 5 9-5-9-5z" fill="white"/>
-                    </svg>
-                </div>
-                <div>
-                    <div style="font-size: 15px; font-weight: 700; color: #004B8D; letter-spacing: 0.5px;">ÁTRIO</div>
-                    <div style="font-size: 10px; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase;">Portal Institucional</div>
-                </div>
-            </div>
+            <a href="{{ auth()->check() ? route(auth()->user()->getRoleNames()->first() . '.dashboard') : '/' }}"
+               style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                @auth
+                    @php $school = auth()->user()->school; @endphp
+                    @if($school?->logo)
+                        <img src="{{ \Illuminate\Support\Facades\Storage::url($school->logo) }}"
+                             style="height: 40px; object-fit: contain; max-width: 120px; flex-shrink: 0;">
+                        <div style="min-width: 0;">
+                            <div style="font-size: 13px; font-weight: 700; color: #004B8D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $school->name }}</div>
+                            <div style="font-size: 10px; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase;">Portal Institucional</div>
+                        </div>
+                    @else
+                        <div style="width: 36px; height: 36px; background: #004B8D; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" fill="white" opacity="0.9"/>
+                                <path d="M12 2L3 7l9 5 9-5-9-5z" fill="white"/>
+                            </svg>
+                        </div>
+                        <div style="min-width: 0;">
+                            <div style="font-size: 15px; font-weight: 700; color: #004B8D; letter-spacing: 0.5px;">ÁTRIO</div>
+                            <div style="font-size: 10px; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase;">
+                                {{ $school?->name ?? 'Portal Institucional' }}
+                            </div>
+                        </div>
+                    @endif
+                @else
+                    <div style="width: 36px; height: 36px; background: #004B8D; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" fill="white" opacity="0.9"/>
+                            <path d="M12 2L3 7l9 5 9-5-9-5z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div style="font-size: 15px; font-weight: 700; color: #004B8D; letter-spacing: 0.5px;">ÁTRIO</div>
+                        <div style="font-size: 10px; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase;">Portal Institucional</div>
+                    </div>
+                @endauth
+            </a>
         </div>
 
         <nav style="flex: 1; padding: 16px 12px;">
             @auth
                 @hasrole('secretaria')
-@hasrole('secretaria')
-    @php
-        $pendentesCount = \Illuminate\Support\Facades\Cache::remember(
-            'pendentes_count_' . session('school_id'),
-            now()->addMinutes(5),
-            function () {
-                return \App\Models\Student::where('is_atypical', true)
-                    ->with(['documents' => fn($q) => $q->where('year', date('Y'))->select('id','student_id','type')])
-                    ->get()
-                    ->filter(function ($aluno) {
-                        $criados = $aluno->documents->pluck('type')->toArray();
-                        return count(array_diff(['estudo_caso','pei','paee'], $criados)) > 0;
-                    })->count();
-            }
-        );
-
-        $items = [
-            ['route' => 'secretaria.dashboard',        'icon' => 'grid',     'label' => 'Painel'],
-            ['route' => 'secretaria.turmas.index',     'icon' => 'academic', 'label' => 'Turmas'],
-            ['route' => 'secretaria.alunos.index',     'icon' => 'users',    'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
-            ['route' => 'secretaria.documentos.index', 'icon' => 'doc',      'label' => 'Documentos'],
-            ['route' => 'secretaria.usuarios.index',   'icon' => 'user',     'label' => 'Usuários'],
-        ];
-    @endphp
-@endhasrole
+                    @php
+                        $pendentesCount = \Illuminate\Support\Facades\Cache::remember(
+                            'pendentes_count_' . session('school_id'),
+                            now()->addMinutes(5),
+                            fn() => \App\Models\Student::where('is_atypical', true)
+                                ->with(['documents' => fn($q) => $q->where('year', date('Y'))->select('id','student_id','type')])
+                                ->get()
+                                ->filter(fn($a) => count(array_diff(['estudo_caso','pei','paee'], $a->documents->pluck('type')->toArray())) > 0)
+                                ->count()
+                        );
+                        $items = [
+                            ['route' => 'secretaria.dashboard',        'icon' => 'grid',     'label' => 'Painel'],
+                            ['route' => 'secretaria.turmas.index',     'icon' => 'academic', 'label' => 'Turmas'],
+                            ['route' => 'secretaria.alunos.index',     'icon' => 'users',    'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
+                            ['route' => 'secretaria.documentos.index', 'icon' => 'doc',      'label' => 'Documentos'],
+                            ['route' => 'secretaria.laudos.index',     'icon' => 'laudo',    'label' => 'Laudos'],
+                            ['route' => 'secretaria.usuarios.index',   'icon' => 'user',     'label' => 'Usuários'],
+                        ];
+                    @endphp
                 @endhasrole
 
                 @hasrole('professor')
                     @php $items = [
-                        ['route' => 'professor.dashboard',        'icon' => 'grid', 'label' => 'Painel'],
-                        ['route' => 'professor.documentos.index', 'icon' => 'doc',  'label' => 'Documentos'],
+                        ['route' => 'professor.dashboard',        'icon' => 'grid',     'label' => 'Painel'],
+                        ['route' => 'professor.turmas.index',     'icon' => 'academic', 'label' => 'Turmas'],
+                        ['route' => 'professor.documentos.index', 'icon' => 'doc',      'label' => 'Documentos'],
+                        ['route' => 'professor.laudos.index',     'icon' => 'laudo',    'label' => 'Laudos'],
                     ]; @endphp
                 @endhasrole
 
@@ -276,12 +323,6 @@
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
-                @auth
-                <span style="font-size: 12px; color: #9CA3AF; background: #F3F4F6; padding: 4px 10px; border-radius: 20px;">
-                    {{ auth()->user()->school?->name ?? 'Sistema Átrio' }}
-                </span>
-                @endauth
-
                 <button id="theme-toggle" onclick="toggleTheme()" title="Alternar tema">
                     <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
                         <circle cx="12" cy="12" r="5"/>

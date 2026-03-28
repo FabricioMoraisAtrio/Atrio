@@ -128,6 +128,10 @@ public function show(Student $aluno)
 
     public function destroy(Student $aluno)
     {
+        if ($aluno->documents()->exists() || $aluno->laudos()->exists()) {
+            return back()->with('error', 'Não é possível remover o aluno pois ele possui documentos ou laudos cadastrados.');
+        }
+
         $aluno->delete();
         return redirect()->route('secretaria.alunos.index')
             ->with('success', 'Aluno removido.');

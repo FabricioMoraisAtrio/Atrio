@@ -1,5 +1,4 @@
 @php $color = $active ? '#004B8D' : '#9CA3AF'; @endphp
-
 @if($icon === 'grid')
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ $color }}" stroke-width="2">
     <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
@@ -25,5 +24,10 @@
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ $color }}" stroke-width="2">
     <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
     <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+</svg>
+@elseif($icon === 'laudo')
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ $color }}" stroke-width="2">
+    <path d="M9 12h6M9 16h6M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z"/>
+    <path d="M13 3v5h5"/>
 </svg>
 @endif

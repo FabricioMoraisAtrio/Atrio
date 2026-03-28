@@ -8,12 +8,11 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-        $filhos = auth()->user()->children()
-            ->with(['documents' => function ($q) {
-                $q->where('year', date('Y'))
-                  ->orderBy('type');
-            }, 'schoolClasses'])
-            ->get();
+        $filhos = auth()->user()->children()->with([
+            'documents' => fn($q) => $q->where('year', date('Y')),
+            'schoolClasses',
+            'laudos',
+        ])->get();
 
         return view('pai.dashboard', compact('filhos'));
     }

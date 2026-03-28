@@ -152,4 +152,8 @@
 
 {{-- Mural --}}
 <x-observation-feed :aluno="$aluno" role="secretaria" />
+
+{{-- Carregar laudos --}}
+@php $aluno->load('laudos.uploader'); @endphp
+<x-laudo-feed :aluno="$aluno" role="secretaria" />
 @endsection

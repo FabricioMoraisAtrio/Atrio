@@ -12,6 +12,12 @@ class SchoolController extends Controller
 {
     public function index()
     {
+        // Auto-suspende escolas com plano expirado
+        School::where('plan_status', 'active')
+            ->whereNotNull('plan_expires_at')
+            ->where('plan_expires_at', '<', now())
+            ->update(['plan_status' => 'suspended']);
+
         $schools = School::withCount(['users', 'students'])
             ->latest()->get();
 
@@ -79,28 +85,38 @@ class SchoolController extends Controller
     }
 
     public function update(Request $request, School $school)
-    {
-        $data = $request->validate([
-            'name'            => 'required|string|max:255',
-            'plan'            => 'required|in:pro,enterprise',
-            'plan_status'     => 'required|in:active,suspended,cancelled',
-            'plan_expires_at' => 'required|date',
-            'max_students'    => 'required|integer|min:1',
-            'is_active'       => 'boolean',
-            'notes'           => 'nullable|string',
-        ]);
+{
+    $data = $request->validate([
+        'name'            => 'required|string|max:255',
+        'plan'            => 'required|in:free,pro,enterprise',
+        'plan_status'     => 'required|in:active,inactive,suspended',
+        'plan_expires_at' => 'nullable|date',
+        'max_students'    => 'required|integer|min:1',
+        'is_active'       => 'boolean',
+        'notes'           => 'nullable|string',
+        'logo'            => 'nullable|file|mimes:svg,png,jpg,jpeg|max:2048',
+    ]);
 
-        $school->update([
-            ...$data,
-            'is_active' => $request->boolean('is_active'),
-        ]);
-
-        return redirect()->route('admin.schools.show', $school)
-            ->with('success', 'Escola atualizada.');
+    if ($request->hasFile('logo')) {
+        if ($school->logo) {
+            \Storage::disk('public')->delete($school->logo);
+        }
+        $data['logo'] = $request->file('logo')->store('logos', 'public');
     }
+
+    $data['is_active'] = $request->boolean('is_active');
+    $school->update($data);
+
+    return redirect()->route('admin.schools.show', $school)
+        ->with('success', 'Escola atualizada.');
+}
 
     public function destroy(School $school)
     {
+        if ($school->students()->exists() || $school->users()->exists() || $school->documents()->exists()) {
+            return back()->with('error', 'Não é possível remover a escola pois ela possui usuários, alunos ou documentos cadastrados.');
+        }
+
         $school->delete();
         return redirect()->route('admin.schools.index')
             ->with('success', 'Escola removida.');

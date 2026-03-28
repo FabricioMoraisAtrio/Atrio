@@ -10,6 +10,9 @@ use App\Http\Controllers\Secretaria\DocumentPdfController;
 use App\Http\Controllers\Secretaria\ObservationController;
 use App\Http\Controllers\Secretaria\DocumentWordController;
 use App\Http\Controllers\Secretaria\AllDocumentsController;
+use App\Http\Controllers\Secretaria\LaudoController;
+
+
 
 Route::get('/dashboard', [DashboardController::class, '__invoke'])->name('dashboard');
 
@@ -25,3 +28,8 @@ Route::post('alunos/{aluno}/observacoes', [ObservationController::class, 'store'
 Route::delete('observacoes/{observation}', [ObservationController::class, 'destroy'])->name('observacoes.destroy');
 Route::get('documentos/{documento}/word', DocumentWordController::class)
     ->name('documentos.word');
+Route::post('alunos/{aluno}/laudos', [LaudoController::class, 'store'])->name('alunos.laudos.store');
+Route::get('laudos/{laudo}/download', [LaudoController::class, 'download'])->name('laudos.download');
+Route::delete('laudos/{laudo}', [LaudoController::class, 'destroy'])->name('laudos.destroy');
+Route::get('laudos', [LaudoController::class, 'index'])->name('laudos.index');
+Route::get('documentos', AllDocumentsController::class)->name('documentos.index');

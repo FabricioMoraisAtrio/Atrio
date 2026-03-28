@@ -7,9 +7,16 @@ use App\Http\Controllers\Professor\DocumentPdfController;
 use App\Http\Controllers\Professor\ObservationController;
 use App\Http\Controllers\Professor\StudentController;
 use App\Http\Controllers\Professor\DocumentWordController;
+use App\Http\Controllers\Professor\SchoolClassController;
+use App\Http\Controllers\Professor\LaudoController;
 
 
 Route::get('/dashboard', [DashboardController::class, '__invoke'])->name('dashboard');
+
+Route::get('/turmas', [SchoolClassController::class, 'index'])->name('turmas.index');
+
+Route::get('/laudos', [LaudoController::class, 'index'])->name('laudos.index');
+Route::get('/laudos/{laudo}/download', [LaudoController::class, 'download'])->name('laudos.download');
 
 Route::get('/documentos', [DocumentController::class, 'index'])->name('documentos.index');
 

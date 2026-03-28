@@ -20,25 +20,31 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
-            return back()
-                ->withErrors(['email' => 'Credenciais inválidas.'])
-                ->onlyInput('email');
+        $remember = $request->boolean('remember');
+
+        // Tenta guard padrão (secretaria, professor, pai)
+        if (Auth::guard('web')->attempt($credentials, $remember)) {
+            $user = Auth::guard('web')->user();
+
+            if (! $user->is_active) {
+                Auth::guard('web')->logout();
+                return back()->withErrors(['email' => 'Usuário inativo.'])->onlyInput('email');
+            }
+
+            $request->session()->regenerate();
+            $request->session()->put('school_id', $user->school_id);
+
+            return redirect()->route($user->getRoleNames()->first() . '.dashboard');
         }
 
-        $user = Auth::user();
-
-        if (! $user->is_active) {
-            Auth::logout();
-            return back()->withErrors(['email' => 'Usuário inativo.']);
+        // Tenta guard admin (superadmin)
+        if (Auth::guard('admin')->attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard');
         }
 
-        $request->session()->regenerate();
-        $request->session()->put('school_id', $user->school_id); // adicionar esta linha
-
-
-        $role = $user->getRoleNames()->first();
-
-        return redirect()->route($role . '.dashboard');
+        return back()
+            ->withErrors(['email' => 'Credenciais inválidas.'])
+            ->onlyInput('email');
     }
 }

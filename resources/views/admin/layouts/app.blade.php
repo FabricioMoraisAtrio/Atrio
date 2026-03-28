@@ -9,6 +9,7 @@
 <body style="background: #F8FAFC; min-height: 100vh; font-family: sans-serif;">
 
 <div style="display: flex; min-height: 100vh;">
+    
 
     {{-- Sidebar Admin --}}
     <aside style="width: 240px; background: #0F172A; display: flex; flex-direction: column; min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
@@ -17,6 +18,7 @@
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="width: 36px; height: 36px; background: #004B8D; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        
                         <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" fill="white" opacity="0.9"/>
                         <path d="M12 2L3 7l9 5 9-5-9-5z" fill="white"/>
                     </svg>

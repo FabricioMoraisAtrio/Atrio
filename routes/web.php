@@ -14,11 +14,15 @@ Route::get('/cron/notificacoes', function () {
     \Artisan::call('atrio:notificacoes-diarias');
     return response()->json(['ok' => true]);
 });
-Route::get('/', [LoginController::class, 'create'])->name('login');
-Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+Route::get('/', fn() => view('landing'))->name('home');
+Route::get('/entrar', [LoginController::class, 'create'])->name('login');
+Route::post('/entrar', [LoginController::class, 'store'])->name('login.store');
 
 Route::middleware(['auth', 'school.active'])->group(function () {
     Route::post('/logout', [LogoutController::class, '__invoke'])->name('logout');
+
+    Route::get('/perfil', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/perfil', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     Route::middleware('role:secretaria')
         ->prefix('secretaria')->name('secretaria.')
@@ -34,9 +38,8 @@ Route::middleware(['auth', 'school.active'])->group(function () {
 });
 
 Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Authenticate::class])->group(function () {
-    Route::get('/', [\App\Http\Controllers\Admin\LoginController::class, 'create'])->name('admin.login');
-    Route::get('/login', [\App\Http\Controllers\Admin\LoginController::class, 'create']);
-    Route::post('/login', [\App\Http\Controllers\Admin\LoginController::class, 'store'])->name('admin.login.store');
+    Route::get('/', fn() => redirect()->route('login', ['perfil' => 'escola']))->name('admin.login');
+    Route::get('/login', fn() => redirect()->route('login', ['perfil' => 'escola']));
 
     Route::middleware('admin.auth')->group(function () {
         Route::post('/logout', [\App\Http\Controllers\Admin\LoginController::class, 'destroy'])->name('admin.logout');
@@ -44,9 +47,4 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
         Route::resource('schools', \App\Http\Controllers\Admin\SchoolController::class)->names('admin.schools');
         Route::post('schools/{school}/reset-password/{user}', [\App\Http\Controllers\Admin\SchoolController::class, 'resetPassword'])->name('admin.schools.resetPassword');
     });
-Route::get('/perfil', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-Route::put('/perfil', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-Route::get('secretaria/documentos', [AllDocumentsController::class, 'index']);
-Route::get('documentos/{documento}/pdf', [\App\Http\Controllers\Pai\DocumentPdfController::class, '__invoke'])
-    ->name('documentos.pdf');
 });

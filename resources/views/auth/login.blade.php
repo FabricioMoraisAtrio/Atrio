@@ -3,7 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Átrio — Acesso</title>
+    @php
+        $perfil = request('perfil');
+        $perfilLabel = match($perfil) {
+            'escola'      => 'Acesso — Escola',
+            'responsavel' => 'Acesso — Responsável',
+            default       => 'Acesso ao Sistema',
+        };
+        $perfilSub = match($perfil) {
+            'escola'      => 'Secretaria, professores e administração',
+            'responsavel' => 'Área do responsável',
+            default       => 'Portal de Gestão Inclusiva',
+        };
+    @endphp
+    <title>Átrio — {{ $perfilLabel }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body style="background: #F8FAFC; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
@@ -22,8 +35,11 @@
             SISTEMA ÁTRIO
         </h1>
         <p style="font-size: 11px; color: #9CA3AF; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">
-            Portal de Gestão Inclusiva
+            {{ $perfilSub }}
         </p>
+        <a href="{{ route('home') }}" style="display: inline-block; margin-top: 10px; font-size: 11px; color: #9CA3AF; text-decoration: none; letter-spacing: 0.5px;">
+            ← Voltar à página inicial
+        </a>
     </div>
 
     {{-- Card --}}

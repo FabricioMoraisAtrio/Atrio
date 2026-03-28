@@ -36,6 +36,6 @@ public function store(Request $request)
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-return redirect()->route('admin.dashboard');
+        return redirect()->route('login', ['perfil' => 'escola']);
     }
 }

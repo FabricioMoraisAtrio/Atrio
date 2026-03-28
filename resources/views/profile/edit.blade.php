@@ -87,6 +87,7 @@
                 </div>
             </label>
 
+            @hasrole('secretaria')
             <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
                 <input type="checkbox" name="notify_plan_expiring" value="1"
                        {{ $user->notify_plan_expiring ? 'checked' : '' }}
@@ -96,6 +97,7 @@
                     <p style="font-size: 12px; color: #9CA3AF; margin: 0;">Alertas quando o plano da escola estiver próximo do vencimento</p>
                 </div>
             </label>
+            @endhasrole
         </div>
 
         <button type="submit"
