@@ -38,11 +38,17 @@ class SchoolController extends Controller
             'plan_expires_at' => 'required|date',
             'max_students'    => 'required|integer|min:1',
             'notes'           => 'nullable|string',
+            'logo'            => 'nullable|file|mimes:svg,png,jpg,jpeg|max:2048',
             // Secretaria inicial
             'admin_name'      => 'required|string|max:255',
             'admin_email'     => 'required|email|unique:users,email',
             'admin_password'  => 'required|min:6',
         ]);
+
+        $logoPath = null;
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('logos', 'public');
+        }
 
         $school = School::create([
             'name'            => $data['name'],
@@ -53,6 +59,7 @@ class SchoolController extends Controller
             'max_students'    => $data['max_students'],
             'notes'           => $data['notes'] ?? null,
             'is_active'       => true,
+            'logo'            => $logoPath,
         ]);
 
         $secretaria = User::create([
