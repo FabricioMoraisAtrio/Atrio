@@ -6,7 +6,7 @@
     <div class="flex items-center gap-4">
         @if($school->logo)
             <img src="{{ route('school.logo', ['filename' => basename($school->logo)]) }}"
-                 alt="Logo {{ $school->name }}" class="h-10 w-10 object-contain rounded">
+                 alt="Logo {{ $school->name }}" style="height: 48px; width: 48px; object-fit: contain; border-radius: 6px;">
         @endif
         <div>
             <h2 class="text-lg font-semibold text-gray-800">{{ $school->name }}</h2>
