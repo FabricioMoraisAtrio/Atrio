@@ -181,7 +181,7 @@
                 @auth
                     @php $school = auth()->user()->school; @endphp
                     @if($school?->logo)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::url($school->logo) }}"
+                        <img src="{{ asset($school->logo) }}"
                              style="height: 40px; object-fit: contain; max-width: 120px; flex-shrink: 0;">
                         <div style="min-width: 0;">
                             <div style="font-size: 13px; font-weight: 700; color: #004B8D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $school->name }}</div>
