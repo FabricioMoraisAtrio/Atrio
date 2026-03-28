@@ -5,7 +5,7 @@
 <div class="flex items-center justify-between mb-6">
     <div class="flex items-center gap-4">
         @if($school->logo)
-            <img src="{{ \Illuminate\Support\Facades\Storage::url($school->logo) }}"
+            <img src="/storage/{{ $school->logo }}"
                  alt="Logo {{ $school->name }}" class="h-12 object-contain">
         @endif
         <div>
