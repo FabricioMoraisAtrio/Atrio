@@ -12,6 +12,7 @@
             if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
         })();
     </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body style="background: var(--bg-page, #F8FAFC); min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
 

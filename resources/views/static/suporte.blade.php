@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Átrio — Suporte</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body style="background: #F8FAFC; font-family: sans-serif; color: #111827;">
 
