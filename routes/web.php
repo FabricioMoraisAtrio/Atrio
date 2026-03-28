@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+// Serve logos de escola
+Route::get('/logo/{filename}', function (string $filename) {
+    $path = storage_path('app/public/logos/' . $filename);
+    if (!file_exists($path)) abort(404);
+    return response()->file($path);
+})->where('filename', '[^/]+')->name('school.logo');
+
 // Esqueceu a senha
 Route::get('/esqueceu-senha', function () {
     return view('auth.forgot-password');

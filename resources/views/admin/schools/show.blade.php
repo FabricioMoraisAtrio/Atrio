@@ -5,7 +5,7 @@
 <div class="flex items-center justify-between mb-6">
     <div class="flex items-center gap-4">
         @if($school->logo)
-            <img src="{{ asset($school->logo) }}"
+            <img src="{{ route('school.logo', ['filename' => basename($school->logo)]) }}"
                  alt="Logo {{ $school->name }}" class="h-12 object-contain">
         @endif
         <div>

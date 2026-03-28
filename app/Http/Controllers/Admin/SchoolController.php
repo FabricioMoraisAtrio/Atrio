@@ -47,9 +47,7 @@ class SchoolController extends Controller
 
         $logoPath = null;
         if ($request->hasFile('logo')) {
-            $filename = $request->file('logo')->hashName();
-            $request->file('logo')->move(public_path('logos'), $filename);
-            $logoPath = 'logos/' . $filename;
+            $logoPath = $request->file('logo')->store('logos', 'public');
         }
 
         $school = School::create([
@@ -107,12 +105,10 @@ class SchoolController extends Controller
     ]);
 
     if ($request->hasFile('logo')) {
-        if ($school->logo && file_exists(public_path($school->logo))) {
-            unlink(public_path($school->logo));
+        if ($school->logo) {
+            \Storage::disk('public')->delete($school->logo);
         }
-        $filename = $request->file('logo')->hashName();
-        $request->file('logo')->move(public_path('logos'), $filename);
-        $data['logo'] = 'logos/' . $filename;
+        $data['logo'] = $request->file('logo')->store('logos', 'public');
     } else {
         unset($data['logo']);
     }
