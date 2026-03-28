@@ -3,9 +3,15 @@
 
 @section('content')
 <div class="flex items-center justify-between mb-6">
-    <div>
-        <h2 class="text-lg font-semibold text-gray-800">{{ $school->name }}</h2>
-        <p class="text-sm text-gray-500">{{ $school->slug }}</p>
+    <div class="flex items-center gap-4">
+        @if($school->logo)
+            <img src="{{ \Illuminate\Support\Facades\Storage::url($school->logo) }}"
+                 alt="Logo {{ $school->name }}" class="h-12 object-contain">
+        @endif
+        <div>
+            <h2 class="text-lg font-semibold text-gray-800">{{ $school->name }}</h2>
+            <p class="text-sm text-gray-500">{{ $school->slug }}</p>
+        </div>
     </div>
     <a href="{{ route('admin.schools.edit', $school) }}"
        class="bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg px-4 py-2 transition">
