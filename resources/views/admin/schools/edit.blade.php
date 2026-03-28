@@ -19,7 +19,7 @@
             @if($school->logo)
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Logo atual</label>
-                    <img src="/storage/{{ $school->logo }}"
+                    <img src="{{ asset($school->logo) }}"
                         style="height: 40px; object-fit: contain;">
                 </div>
             @endif
