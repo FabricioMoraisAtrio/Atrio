@@ -53,10 +53,18 @@
                     </div>
                 </td>
                 <td style="padding: 14px 20px;">
-                    @php $role = $usuario->getRoleNames()->first(); @endphp
-                    <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
-                        {{ $role === 'professor' ? 'background: #E8F0F9; color: #004B8D;' : ($role === 'pai' ? 'background: #F5EDE6; color: #7C3700;' : 'background: #E6F5F4; color: #009C8C;') }}">
-                        {{ ucfirst($role) }}
+                    @php
+                        $role = $usuario->getRoleNames()->first();
+                        $roleLabels = ['professor' => 'Professor', 'pai' => 'Responsável', 'coordenador' => 'Coordenação', 'orientador' => 'Orientação Pedagógica'];
+                        $roleStyles = [
+                            'professor'  => 'background: #E8F0F9; color: #004B8D;',
+                            'pai'        => 'background: #F5EDE6; color: #7C3700;',
+                            'coordenador'=> 'background: #E6F5F4; color: #009C8C;',
+                            'orientador' => 'background: #F3E8FF; color: #7C3AED;',
+                        ];
+                    @endphp
+                    <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; {{ $roleStyles[$role] ?? 'background: #F3F4F6; color: #6B7280;' }}">
+                        {{ $roleLabels[$role] ?? ucfirst($role) }}
                     </span>
                 </td>
                 <td style="padding: 14px 20px; font-size: 13px; color: #6B7280;">

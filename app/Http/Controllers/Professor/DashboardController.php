@@ -11,22 +11,27 @@ class DashboardController extends Controller
     {
         $professor = auth()->user();
 
+        $professorId = $professor->id;
+
         $turmas = $professor->schoolClasses()
             ->where('year', date('Y'))
-            ->with(['students' => function ($q) {
+            ->with(['students' => function ($q) use ($professorId) {
                 $q->where('is_atypical', true)
-                  ->with(['documents' => function ($d) {
-                      $d->where('year', date('Y'));
+                  ->with(['documents' => function ($d) use ($professorId) {
+                      // Carrega o PEI deste professor + qualquer estudo_caso (de qualquer autor)
+                      $d->where('year', date('Y'))
+                        ->where(fn($q) => $q->where('type', 'estudo_caso')
+                            ->orWhere(fn($q2) => $q2->where('type', 'pei')->where('author_id', $professorId)));
                   }]);
             }])
             ->get();
 
-        // Alunos atípicos com documentos pendentes
+        // PEI pendente = este professor ainda não criou o seu para o aluno
         $pendentes = collect();
         foreach ($turmas as $turma) {
             foreach ($turma->students as $aluno) {
-                $tipos = ['estudo_caso', 'pei', 'paee'];
-                $tiposCriados = $aluno->documents->pluck('type')->toArray();
+                $tiposCriados = $aluno->documents->where('type', 'pei')->pluck('type')->toArray();
+                $tipos = ['pei'];
                 $tiposFaltando = array_diff($tipos, $tiposCriados);
 
                 if (! empty($tiposFaltando)) {

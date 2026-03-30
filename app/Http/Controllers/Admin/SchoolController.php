@@ -88,37 +88,54 @@ class SchoolController extends Controller
 
     public function edit(School $school)
     {
-        return view('admin.schools.edit', compact('school'));
+        $secretaria = $school->users()->whereHas('roles', fn($q) => $q->where('name', 'secretaria'))->first();
+        return view('admin.schools.edit', compact('school', 'secretaria'));
     }
 
     public function update(Request $request, School $school)
-{
-    $data = $request->validate([
-        'name'            => 'required|string|max:255',
-        'plan'            => 'required|in:free,pro,enterprise',
-        'plan_status'     => 'required|in:active,inactive,suspended',
-        'plan_expires_at' => 'nullable|date',
-        'max_students'    => 'required|integer|min:1',
-        'is_active'       => 'boolean',
-        'notes'           => 'nullable|string',
-        'logo'            => 'nullable|file|mimes:svg,png,jpg,jpeg|max:2048',
-    ]);
+    {
+        $data = $request->validate([
+            'name'              => 'required|string|max:255',
+            'plan'              => 'required|in:free,pro,enterprise',
+            'plan_status'       => 'required|in:active,inactive,suspended',
+            'plan_expires_at'   => 'nullable|date',
+            'max_students'      => 'required|integer|min:1',
+            'is_active'         => 'boolean',
+            'notes'             => 'nullable|string',
+            'logo'              => 'nullable|file|mimes:svg,png,jpg,jpeg|max:2048',
+            'secretaria_name'   => 'nullable|string|max:255',
+            'secretaria_email'  => 'nullable|email|unique:users,email,' . ($request->input('secretaria_id') ?: 'NULL'),
+        ]);
 
-    if ($request->hasFile('logo')) {
-        if ($school->logo) {
-            \Storage::disk('public')->delete($school->logo);
+        if ($request->hasFile('logo')) {
+            if ($school->logo) {
+                \Storage::disk('public')->delete($school->logo);
+            }
+            $data['logo'] = $request->file('logo')->store('logos', 'public');
+        } else {
+            unset($data['logo']);
         }
-        $data['logo'] = $request->file('logo')->store('logos', 'public');
-    } else {
-        unset($data['logo']);
+
+        $data['is_active'] = $request->boolean('is_active');
+        $school->update(\Arr::except($data, ['secretaria_name', 'secretaria_email']));
+
+        // Atualiza usuário secretaria se informado
+        if ($request->filled('secretaria_id') && $request->filled('secretaria_name')) {
+            $secretaria = User::where('id', $request->secretaria_id)
+                ->where('school_id', $school->id)
+                ->first();
+
+            if ($secretaria) {
+                $secretaria->update(array_filter([
+                    'name'  => $data['secretaria_name'],
+                    'email' => $data['secretaria_email'] ?? null,
+                ]));
+            }
+        }
+
+        return redirect()->route('admin.schools.show', $school)
+            ->with('success', 'Escola atualizada.');
     }
-
-    $data['is_active'] = $request->boolean('is_active');
-    $school->update($data);
-
-    return redirect()->route('admin.schools.show', $school)
-        ->with('success', 'Escola atualizada.');
-}
 
     public function destroy(School $school)
     {

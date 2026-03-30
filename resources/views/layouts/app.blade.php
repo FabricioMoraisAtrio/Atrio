@@ -177,7 +177,11 @@
 
         {{-- Logo --}}
         <div style="padding: 24px 20px 20px; border-bottom: 1px solid #F3F4F6;">
-            <a href="{{ auth()->check() ? route(auth()->user()->getRoleNames()->first() . '.dashboard') : '/' }}"
+            @php
+                $roleDashboardMap = ['secretaria' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'professor.dashboard', 'pai' => 'pai.dashboard'];
+                $dashboardRoute = auth()->check() ? ($roleDashboardMap[auth()->user()->getRoleNames()->first()] ?? '/') : '/';
+            @endphp
+            <a href="{{ auth()->check() ? route($dashboardRoute) : '/' }}"
                style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
                 @auth
                     @php $school = auth()->user()->school; @endphp
@@ -219,7 +223,7 @@
 
         <nav style="flex: 1; padding: 16px 12px;">
             @auth
-                @hasrole('secretaria')
+                @hasanyrole(['coordenador', 'orientador'])
                     @php
                         $pendentesCount = \Illuminate\Support\Facades\Cache::remember(
                             'pendentes_count_' . session('school_id'),
@@ -239,6 +243,14 @@
                             ['route' => 'secretaria.usuarios.index',   'icon' => 'user',     'label' => 'Usuários'],
                         ];
                     @endphp
+                @endhasanyrole
+
+                @hasrole('secretaria')
+                    @php $items = [
+                        ['route' => 'secretaria.dashboard',      'icon' => 'grid',  'label' => 'Painel'],
+                        ['route' => 'secretaria.alunos.index',   'icon' => 'users', 'label' => 'Alunos'],
+                        ['route' => 'secretaria.usuarios.index', 'icon' => 'user',  'label' => 'Usuários'],
+                    ]; @endphp
                 @endhasrole
 
                 @hasrole('professor')
@@ -246,7 +258,6 @@
                         ['route' => 'professor.dashboard',        'icon' => 'grid',     'label' => 'Painel'],
                         ['route' => 'professor.turmas.index',     'icon' => 'academic', 'label' => 'Turmas'],
                         ['route' => 'professor.documentos.index', 'icon' => 'doc',      'label' => 'Documentos'],
-                        ['route' => 'professor.laudos.index',     'icon' => 'laudo',    'label' => 'Laudos'],
                     ]; @endphp
                 @endhasrole
 
@@ -295,7 +306,16 @@
                         {{ auth()->user()->name }}
                     </div>
                     <div style="font-size: 11px; color: #9CA3AF;">
-                        {{ auth()->user()->getRoleNames()->first() }}
+                        @php
+                            $roleLabels = [
+                                'secretaria'  => 'Secretaria',
+                                'coordenador' => 'Coordenação',
+                                'orientador'  => 'Orientação Pedagógica',
+                                'professor'   => 'Professor',
+                                'pai'         => 'Responsável',
+                            ];
+                            echo $roleLabels[auth()->user()->getRoleNames()->first()] ?? auth()->user()->getRoleNames()->first();
+                        @endphp
                     </div>
                 </div>
             </a>

@@ -57,7 +57,15 @@
                 <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">
                     {{ str_replace('_', ' ', $campo) }}
                 </p>
-                <p style="font-size: 14px; color: #374151; margin: 0; line-height: 1.7; white-space: pre-line;">{{ $valor }}</p>
+                @if(is_array($valor))
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        @foreach($valor as $tag)
+                            <span style="padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #E8F0F9; color: #004B8D;">{{ $tag }}</span>
+                        @endforeach
+                    </div>
+                @else
+                    <p style="font-size: 14px; color: #374151; margin: 0; line-height: 1.7; white-space: pre-line;">{{ $valor }}</p>
+                @endif
             </div>
             @endif
         @endforeach

@@ -12,11 +12,16 @@ use App\Models\Student;
 
 class UserController extends Controller
 {
+    private function rolesPermitidos(): array
+    {
+        return ['professor', 'pai', 'coordenador', 'orientador'];
+    }
+
     public function index()
     {
         $usuarios = User::with('roles', 'schoolClasses')
             ->where('school_id', session('school_id'))
-            ->whereHas('roles', fn($q) => $q->whereIn('name', ['professor', 'pai']))
+            ->whereHas('roles', fn($q) => $q->whereIn('name', $this->rolesPermitidos()))
             ->latest()
             ->get();
 
@@ -26,7 +31,7 @@ class UserController extends Controller
     public function create()
     {
         $turmas = SchoolClass::where('year', date('Y'))->orderBy('name')->get();
-        $roles  = Role::whereIn('name', ['professor', 'pai'])->get();
+        $roles  = Role::whereIn('name', $this->rolesPermitidos())->get();
         $alunos = Student::orderBy('name')->get();
 
         return view('secretaria.usuarios.create', compact('turmas', 'roles', 'alunos'));
@@ -34,11 +39,13 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $rolesValidos = implode(',', $this->rolesPermitidos());
+
         $data = $request->validate([
             'name'               => 'required|string|max:255',
             'email'              => 'required|email|unique:users,email',
             'admin_password'     => 'required|min:6',
-            'role'               => 'required|in:professor,pai',
+            'role'               => 'required|in:' . $rolesValidos,
             'school_class_ids'   => 'nullable|array',
             'school_class_ids.*' => 'exists:school_classes,id',
             'subject'            => 'nullable|string|max:100',

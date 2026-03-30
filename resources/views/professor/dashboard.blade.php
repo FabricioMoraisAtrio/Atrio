@@ -33,9 +33,10 @@
                     </div>
                     <div style="display: flex; gap: 4px;">
                         @foreach($item['faltando'] as $tipo)
-                            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">
-                                {{ strtoupper(str_replace('_', ' ', $tipo)) }}
-                            </span>
+                            <a href="{{ route('professor.alunos.documentos.create', [$item['aluno'], 'type' => $tipo]) }}"
+                               style="background: #92400E; color: #fff; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; text-decoration: none;">
+                                + {{ strtoupper(str_replace('_', ' ', $tipo)) }}
+                            </a>
                         @endforeach
                     </div>
                 </div>
@@ -81,20 +82,26 @@
                                style="font-size: 12px; color: #004B8D; text-decoration: none; font-weight: 600; padding: 5px 12px; border: 1px solid #E8F0F9; border-radius: 8px; background: #E8F0F9;">
                                 Ver perfil
                             </a>
-                            @foreach(['estudo_caso', 'pei', 'paee'] as $tipo)
-                                @php $doc = $aluno->documents->firstWhere('type', $tipo); @endphp
-                                @if($doc)
-                                    <a href="{{ route('professor.documentos.show', $doc) }}"
-                                       style="font-size: 11px; background: #ECFDF5; color: #065F46; font-weight: 600; padding: 5px 10px; border-radius: 8px; text-decoration: none;">
-                                        {{ strtoupper(str_replace('_', ' ', $tipo)) }}
-                                    </a>
-                                @else
-                                    <a href="{{ route('professor.alunos.documentos.create', [$aluno, 'type' => $tipo]) }}"
-                                       style="font-size: 11px; background: #F3F4F6; color: #6B7280; font-weight: 600; padding: 5px 10px; border-radius: 8px; text-decoration: none;">
-                                        + {{ strtoupper(str_replace('_', ' ', $tipo)) }}
-                                    </a>
-                                @endif
-                            @endforeach
+                            @php
+                                // Apenas o PEI deste professor para este aluno
+                                $meuPei = $aluno->documents->firstWhere('type', 'pei');
+                                $temEstudoCaso = $aluno->documents->contains('type', 'estudo_caso');
+                            @endphp
+                            @if($meuPei)
+                                <a href="{{ route('professor.documentos.show', $meuPei) }}"
+                                   style="font-size: 11px; background: #ECFDF5; color: #065F46; font-weight: 600; padding: 5px 10px; border-radius: 8px; text-decoration: none;">
+                                    PEI ✓
+                                </a>
+                            @elseif(!$temEstudoCaso)
+                                <span style="font-size: 11px; background: #F3F4F6; color: #9CA3AF; font-weight: 500; padding: 5px 10px; border-radius: 8px;" title="Aguardando Estudo de Caso">
+                                    PEI bloqueado
+                                </span>
+                            @else
+                                <a href="{{ route('professor.alunos.documentos.create', [$aluno, 'type' => 'pei']) }}"
+                                   style="font-size: 11px; background: #004B8D; color: #fff; font-weight: 600; padding: 5px 10px; border-radius: 8px; text-decoration: none;">
+                                    + PEI
+                                </a>
+                            @endif
                         </div>
                     </div>
                 @endforeach

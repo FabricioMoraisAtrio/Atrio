@@ -184,4 +184,123 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
 </div>
 @endif
 
+
+{{-- Controle de Adaptações para Prova --}}
+@if($adaptacoesPorTurma->isNotEmpty())
+@php
+    // Coleta todas as adaptações únicas para os filtros
+    $todasAdaptacoes = $adaptacoesPorTurma->flatMap(fn($t) => $t['alunos']->flatMap(fn($a) => $a['adaptacoes']))->unique()->sort()->values();
+    $todasTurmas = $adaptacoesPorTurma->pluck('turma');
+@endphp
+
+<div style="margin-top: 8px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h2 style="font-size: 14px; font-weight: 700; color: #111827; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
+            Controle de Adaptações para Prova
+        </h2>
+        <button onclick="window.print()" style="font-size: 12px; color: #004B8D; font-weight: 600; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+            Imprimir
+        </button>
+    </div>
+
+    {{-- Filtros estilo Excel --}}
+    <div style="background: #fff; border: 1px solid #F3F4F6; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end;">
+        <div>
+            <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Turma</label>
+            <select id="filtro-turma" onchange="filtrarAdaptacoes()"
+                    style="border: 1px solid #D1D5DB; border-radius: 6px; padding: 7px 28px 7px 10px; font-size: 13px; color: #374151; background: #F9FAFB; cursor: pointer; appearance: auto;">
+                <option value="">Todas as turmas</option>
+                @foreach($todasTurmas as $t)
+                    <option value="{{ $t->id }}">{{ $t->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Tipo de adaptação</label>
+            <select id="filtro-adaptacao" onchange="filtrarAdaptacoes()"
+                    style="border: 1px solid #D1D5DB; border-radius: 6px; padding: 7px 28px 7px 10px; font-size: 13px; color: #374151; background: #F9FAFB; cursor: pointer; appearance: auto;">
+                <option value="">Todas as adaptações</option>
+                @foreach($todasAdaptacoes as $tag)
+                    <option value="{{ $tag }}">{{ $tag }}</option>
+                @endforeach
+            </select>
+        </div>
+        <button onclick="document.getElementById('filtro-turma').value=''; document.getElementById('filtro-adaptacao').value=''; filtrarAdaptacoes();"
+                style="padding: 7px 14px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 12px; color: #6B7280; background: none; cursor: pointer;">
+            Limpar filtros
+        </button>
+        <div style="margin-left: auto; font-size: 12px; color: #9CA3AF; align-self: center;">
+            <span id="total-linhas">0</span> aluno(s)
+        </div>
+    </div>
+
+    {{-- Tabela --}}
+    <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse;" id="tabela-adaptacoes">
+            <thead>
+                <tr style="background: #F9FAFB;">
+                    <th style="text-align: left; padding: 11px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                    <th style="text-align: left; padding: 11px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
+                    <th style="text-align: left; padding: 11px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Adaptações</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-adaptacoes">
+                @foreach($adaptacoesPorTurma as $grupo)
+                    @foreach($grupo['alunos'] as $registro)
+                    <tr class="linha-adaptacao"
+                        data-turma="{{ $grupo['turma']->id }}"
+                        data-adaptacoes="{{ implode('|', $registro['adaptacoes']) }}"
+                        style="border-top: 1px solid #F9FAFB;">
+                        <td style="padding: 13px 20px;">
+                            <a href="{{ route('secretaria.alunos.show', $registro['aluno']) }}"
+                               style="font-size: 14px; font-weight: 500; color: #111827; text-decoration: none;">
+                                {{ $registro['aluno']->name }}
+                            </a>
+                        </td>
+                        <td style="padding: 13px 20px; font-size: 13px; color: #6B7280;">{{ $grupo['turma']->name }}</td>
+                        <td style="padding: 13px 20px;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                @foreach($registro['adaptacoes'] as $tag)
+                                    <span class="tag-adaptacao" style="padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #E8F0F9; color: #004B8D;">{{ $tag }}</span>
+                                @endforeach
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                @endforeach
+            </tbody>
+        </table>
+        <div id="sem-resultados" style="display: none; padding: 32px; text-align: center; font-size: 14px; color: #9CA3AF;">
+            Nenhum aluno encontrado com este filtro.
+        </div>
+    </div>
+</div>
+
+<script>
+function filtrarAdaptacoes() {
+    const turmaFiltro = document.getElementById('filtro-turma').value;
+    const adaptacaoFiltro = document.getElementById('filtro-adaptacao').value;
+    const linhas = document.querySelectorAll('.linha-adaptacao');
+    let visiveis = 0;
+
+    linhas.forEach(function(linha) {
+        const turmaOk = !turmaFiltro || linha.dataset.turma === turmaFiltro;
+        const adaptOk = !adaptacaoFiltro || linha.dataset.adaptacoes.split('|').includes(adaptacaoFiltro);
+        const mostrar = turmaOk && adaptOk;
+        linha.style.display = mostrar ? '' : 'none';
+        if (mostrar) visiveis++;
+    });
+
+    document.getElementById('total-linhas').textContent = visiveis;
+    document.getElementById('sem-resultados').style.display = visiveis === 0 ? '' : 'none';
+}
+
+// Conta inicial
+document.addEventListener('DOMContentLoaded', function() {
+    filtrarAdaptacoes();
+});
+</script>
+@endif
+
 @endsection

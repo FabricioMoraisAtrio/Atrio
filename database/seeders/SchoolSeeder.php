@@ -47,5 +47,27 @@ class SchoolSeeder extends Seeder
             ]
         );
         $pai->assignRole('pai');
+
+        $coordenador = User::firstOrCreate(
+            ['email' => 'coordenador@atrio.com.br'],
+            [
+                'name'      => 'Coordenador Demo',
+                'password'  => bcrypt('password'),
+                'school_id' => $school->id,
+                'is_active' => true,
+            ]
+        );
+        $coordenador->assignRole('coordenador');
+
+        $orientador = User::firstOrCreate(
+            ['email' => 'orientador@atrio.com.br'],
+            [
+                'name'      => 'Orientador Demo',
+                'password'  => bcrypt('password'),
+                'school_id' => $school->id,
+                'is_active' => true,
+            ]
+        );
+        $orientador->assignRole('orientador');
     }
 }

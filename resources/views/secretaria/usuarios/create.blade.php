@@ -47,9 +47,10 @@
                         onchange="toggleRole(this.value)"
                         style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;">
                     <option value="">Selecione</option>
+                    @php $roleLabels = ['professor' => 'Professor', 'pai' => 'Responsável (Pai/Mãe)', 'coordenador' => 'Coordenação', 'orientador' => 'Orientação Pedagógica']; @endphp
                     @foreach($roles as $role)
                         <option value="{{ $role->name }}" {{ old('role') == $role->name ? 'selected' : '' }}>
-                            {{ ucfirst($role->name) }}
+                            {{ $roleLabels[$role->name] ?? ucfirst($role->name) }}
                         </option>
                     @endforeach
                 </select>

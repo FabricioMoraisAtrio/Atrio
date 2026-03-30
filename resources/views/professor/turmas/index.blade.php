@@ -25,7 +25,9 @@
                     default      => ['bg' => '#F3E8FF', 'text' => '#7C3AED'],
                 };
             @endphp
-            <div style="background: #fff; border: 1px solid #F3F4F6; border-radius: 14px; padding: 24px;">
+            <a href="{{ route('professor.turmas.show', $turma) }}"
+               style="display: block; text-decoration: none; background: #fff; border: 1px solid #F3F4F6; border-radius: 14px; padding: 24px; transition: border-color 0.15s;"
+               onmouseover="this.style.borderColor='#004B8D'" onmouseout="this.style.borderColor='#F3F4F6'">
                 <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px;">
                     <div>
                         <div style="font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 6px;">{{ $turma->name }}</div>
@@ -39,7 +41,7 @@
                     </div>
                 </div>
                 <div style="font-size: 12px; color: #9CA3AF;">Ano letivo {{ $turma->year }}</div>
-            </div>
+            </a>
         @endforeach
     </div>
 @endif

@@ -74,7 +74,7 @@ Route::middleware(['auth', 'school.active'])->group(function () {
     Route::get('/perfil', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/perfil', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
-    Route::middleware('role:secretaria')
+    Route::middleware('role:secretaria|coordenador|orientador')
         ->prefix('secretaria')->name('secretaria.')
         ->group(base_path('routes/secretaria.php'));
 

@@ -38,26 +38,27 @@ private function verificarAcesso(int $studentId): void
     {
         $this->verificarAcesso($aluno->id);
 
-        $type = $request->query('type', 'estudo_caso');
+        $type = 'pei';
 
-        if (in_array($type, ['pei', 'paee'])) {
-            $hasCase = Document::where('student_id', $aluno->id)
-                ->where('type', 'estudo_caso')
-                ->where('year', date('Y'))
-                ->exists();
-
-            if (! $hasCase) {
-                return back()->withErrors(['documento' => 'Preencha o Estudo de Caso antes de criar PEI ou PAEE.']);
-            }
-        }
-
-        $exists = Document::where('student_id', $aluno->id)
-            ->where('type', $type)
+        // Verifica se existe estudo de caso (qualquer autor)
+        $hasCase = Document::where('student_id', $aluno->id)
+            ->where('type', 'estudo_caso')
             ->where('year', date('Y'))
             ->exists();
 
+        if (! $hasCase) {
+            return back()->withErrors(['documento' => 'O Estudo de Caso ainda não foi preenchido para este aluno. Aguarde a coordenação ou orientação.']);
+        }
+
+        // Verifica se ESTE professor já criou o PEI para este aluno
+        $exists = Document::where('student_id', $aluno->id)
+            ->where('type', $type)
+            ->where('year', date('Y'))
+            ->where('author_id', auth()->id())
+            ->exists();
+
         if ($exists) {
-            return back()->withErrors(['documento' => 'Já existe um ' . strtoupper($type) . ' para este aluno em ' . date('Y') . '.']);
+            return back()->withErrors(['documento' => 'Você já preencheu o PEI para este aluno em ' . date('Y') . '.']);
         }
 
         return view('professor.documentos.create', compact('aluno', 'type'));
@@ -68,20 +69,19 @@ public function store(Student $aluno, Request $request)
     $this->verificarAcesso($aluno->id);
 
     $request->validate([
-        'type' => 'required|in:estudo_caso,pei,paee',
+        'type' => 'required|in:pei',
     ]);
 
-    $type = $request->input('type'); // $type definido AQUI
+    $type = $request->input('type');
 
-    if (in_array($type, ['pei', 'paee'])) {
-        $hasCase = Document::where('student_id', $aluno->id)
-            ->where('type', 'estudo_caso')
-            ->where('year', date('Y'))
-            ->exists();
+    // Bloqueia se não há estudo de caso
+    $hasCase = Document::where('student_id', $aluno->id)
+        ->where('type', 'estudo_caso')
+        ->where('year', date('Y'))
+        ->exists();
 
-        if (! $hasCase) {
-            return back()->withErrors(['documento' => 'Preencha o Estudo de Caso antes.']);
-        }
+    if (! $hasCase) {
+        return back()->withErrors(['documento' => 'O Estudo de Caso ainda não foi preenchido para este aluno.']);
     }
 
     $content = DocumentContentService::buildContent($type, $request);

@@ -143,7 +143,7 @@ public function show(Student $aluno)
             'school_class_id' => 'required|exists:school_classes,id',
         ]);
 
-        $aluno->schoolClasses()->syncWithoutDetaching([$request->school_class_id]);
+        $aluno->schoolClasses()->sync([$request->school_class_id]);
 
         return back()->with('success', 'Turma vinculada com sucesso.');
     }

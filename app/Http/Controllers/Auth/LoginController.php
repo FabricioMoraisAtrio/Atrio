@@ -34,7 +34,15 @@ class LoginController extends Controller
             $request->session()->regenerate();
             $request->session()->put('school_id', $user->school_id);
 
-            return redirect()->route($user->getRoleNames()->first() . '.dashboard');
+            $roleDashboards = [
+                'secretaria'  => 'secretaria.dashboard',
+                'coordenador' => 'secretaria.dashboard',
+                'orientador'  => 'secretaria.dashboard',
+                'professor'   => 'professor.dashboard',
+                'pai'         => 'pai.dashboard',
+            ];
+            $role = $user->getRoleNames()->first();
+            return redirect()->route($roleDashboards[$role] ?? 'login');
         }
 
         // Tenta guard admin (superadmin)

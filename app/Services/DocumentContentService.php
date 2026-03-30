@@ -17,9 +17,8 @@ class DocumentContentService
             ],
             'pei' => [
                 'objetivos'          => $request->input('objetivos'),
-                'adaptacoes'         => $request->input('adaptacoes'),
+                'adaptacoes'         => json_decode($request->input('adaptacoes', '[]'), true) ?: [],
                 'avaliacao'          => $request->input('avaliacao'),
-                'progresso'          => $request->input('progresso'),
                 'observacoes_livres' => $request->input('observacoes_livres'),
             ],
             'paee' => [

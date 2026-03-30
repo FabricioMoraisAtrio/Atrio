@@ -16,4 +16,11 @@ class SchoolClassController extends Controller
 
         return view('professor.turmas.index', compact('turmas'));
     }
+
+    public function show(SchoolClass $turma)
+    {
+        $turma->load(['students' => fn($q) => $q->orderBy('name'), 'teachers']);
+
+        return view('professor.turmas.show', compact('turma'));
+    }
 }

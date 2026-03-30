@@ -101,12 +101,17 @@
 </div>
 
 {{-- Documentos --}}
+@php
+    $docsAno = $aluno->documents->where('year', date('Y'));
+    $docsNaoPei = $docsAno->whereIn('type', ['estudo_caso', 'paee']);
+    $peis = $docsAno->where('type', 'pei')->load('author');
+@endphp
 <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 24px; margin-bottom: 16px;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Documentos {{ date('Y') }}</h3>
         <div style="display: flex; gap: 8px;">
-            @foreach(['estudo_caso' => 'Estudo de Caso', 'pei' => 'PEI', 'paee' => 'PAEE'] as $tipo => $label)
-                @unless($aluno->documents->where('type', $tipo)->where('year', date('Y'))->count())
+            @foreach(['estudo_caso' => 'Estudo de Caso', 'paee' => 'PAEE'] as $tipo => $label)
+                @unless($docsNaoPei->where('type', $tipo)->count())
                     <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => $tipo]) }}"
                        style="font-size: 12px; background: #F3F4F6; color: #374151; font-weight: 600; padding: 6px 12px; border-radius: 8px; text-decoration: none;">
                         + {{ $label }}
@@ -122,32 +127,54 @@
         </div>
     @endif
 
-    @forelse($aluno->documents->where('year', date('Y')) as $doc)
+    {{-- Estudo de caso e PAEE --}}
+    @foreach($docsNaoPei as $doc)
         <a href="{{ route('secretaria.documentos.show', $doc) }}"
            style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none; margin-bottom: 4px;"
-           onmouseover="this.style.background='#F9FAFB'"
-           onmouseout="this.style.background='transparent'">
+           onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="width: 32px; height: 32px; border-radius: 8px; background: #E8F0F9; display: flex; align-items: center; justify-content: center;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>
-                    </svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                 </div>
                 <div>
-                    <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">
-                        {{ strtoupper(str_replace('_', ' ', $doc->type)) }}
-                    </p>
+                    <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">{{ strtoupper(str_replace('_', ' ', $doc->type)) }}</p>
                     <p style="font-size: 12px; color: #9CA3AF; margin: 0;">{{ $doc->updated_at->format('d/m/Y') }}</p>
                 </div>
             </div>
-            <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;
-                {{ $doc->status === 'published' ? 'background: #ECFDF5; color: #065F46;' : 'background: #FEF3C7; color: #92400E;' }}">
+            <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; {{ $doc->status === 'published' ? 'background: #ECFDF5; color: #065F46;' : 'background: #FEF3C7; color: #92400E;' }}">
                 {{ $doc->status === 'published' ? 'Publicado' : 'Rascunho' }}
             </span>
         </a>
-    @empty
+    @endforeach
+
+    {{-- PEIs consolidados por professor --}}
+    @if($peis->isNotEmpty())
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #F3F4F6;">
+            <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px;">PEIs preenchidos pelos professores</p>
+            @foreach($peis as $pei)
+                <a href="{{ route('secretaria.documentos.show', $pei) }}"
+                   style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none; margin-bottom: 4px;"
+                   onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #E8F0F9; display: flex; align-items: center; justify-content: center;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                        </div>
+                        <div>
+                            <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">PEI</p>
+                            <p style="font-size: 12px; color: #9CA3AF; margin: 0;">{{ $pei->author->name ?? '—' }} · {{ $pei->updated_at->format('d/m/Y') }}</p>
+                        </div>
+                    </div>
+                    <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; {{ $pei->status === 'published' ? 'background: #ECFDF5; color: #065F46;' : 'background: #FEF3C7; color: #92400E;' }}">
+                        {{ $pei->status === 'published' ? 'Publicado' : 'Rascunho' }}
+                    </span>
+                </a>
+            @endforeach
+        </div>
+    @endif
+
+    @if($docsNaoPei->isEmpty() && $peis->isEmpty())
         <p style="font-size: 13px; color: #9CA3AF;">Nenhum documento criado para {{ date('Y') }}.</p>
-    @endforelse
+    @endif
 </div>
 
 {{-- Mural --}}

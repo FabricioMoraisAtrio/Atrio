@@ -90,12 +90,36 @@
                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">{{ old('notes', $school->notes) }}</textarea>
             </div>
 
+            {{-- Usuário secretaria --}}
+            @if($secretaria)
+            <div class="border-t border-gray-200 pt-4 mt-2">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Usuário Secretaria</p>
+                <input type="hidden" name="secretaria_id" value="{{ $secretaria->id }}">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Nome</label>
+                        <input type="text" name="secretaria_name"
+                               value="{{ old('secretaria_name', $secretaria->name) }}"
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                        @error('secretaria_name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">E-mail</label>
+                        <input type="email" name="secretaria_email"
+                               value="{{ old('secretaria_email', $secretaria->email) }}"
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                        @error('secretaria_email')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <div class="flex gap-3 pt-2">
                 <button type="submit"
                         class="bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg px-4 py-2 transition">
                     Atualizar
                 </button>
-<a href="{{ route('admin.schools.show', $school) }}"
+                <a href="{{ route('admin.schools.show', $school) }}"
                    class="text-sm text-gray-500 hover:underline self-center">Cancelar</a>
             </div>
         </form>
