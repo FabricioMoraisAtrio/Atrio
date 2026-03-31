@@ -13,6 +13,7 @@ class Student extends Model
 protected $fillable = [
     'school_id', 'name', 'registration_number',
     'birth_date', 'is_atypical', 'condition', 'has_case_study',
+    'tea_nivel_suporte',
     'cid_autismo', 'cid_tdah', 'cid_down',
     'cid_deficiencia_intelectual', 'cid_deficiencia_visual',
     'cid_deficiencia_auditiva', 'cid_outros',

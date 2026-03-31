@@ -56,8 +56,18 @@
                     <p style="font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 16px 0 12px;">Condições identificadas</p>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+                        {{-- TEA com nível de suporte --}}
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: 1px solid #F3F4F6;"
+                               onmouseover="this.style.borderColor='#004B8D'"
+                               onmouseout="this.style.borderColor='#F3F4F6'">
+                            <input type="checkbox" name="cid_autismo" value="1"
+                                   id="cid_autismo_check"
+                                   {{ old('cid_autismo', $aluno->cid_autismo) ? 'checked' : '' }}
+                                   onchange="document.getElementById('tea_nivel_field').style.display = this.checked ? 'block' : 'none'">
+                            <span style="font-size: 13px; color: #374151;">Autismo (TEA)</span>
+                        </label>
+
                         @foreach([
-                            'cid_autismo'                 => 'Autismo (TEA)',
                             'cid_tdah'                    => 'TDAH',
                             'cid_down'                    => 'Síndrome de Down',
                             'cid_deficiencia_intelectual' => 'Deficiência Intelectual',
@@ -82,6 +92,18 @@
                                    onchange="document.getElementById('condition_field').style.display = this.checked ? 'block' : 'none'">
                             <span style="font-size: 13px; color: #374151;">Outros</span>
                         </label>
+                    </div>
+
+                    {{-- Nível de suporte TEA --}}
+                    <div id="tea_nivel_field" style="{{ old('cid_autismo', $aluno->cid_autismo) ? '' : 'display:none;' }} margin-bottom: 16px;">
+                        <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Nível de suporte TEA</label>
+                        <select name="tea_nivel_suporte"
+                                style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;">
+                            <option value="">Não informado</option>
+                            <option value="1" {{ old('tea_nivel_suporte', $aluno->tea_nivel_suporte) == '1' ? 'selected' : '' }}>Nível 1 — Requer suporte</option>
+                            <option value="2" {{ old('tea_nivel_suporte', $aluno->tea_nivel_suporte) == '2' ? 'selected' : '' }}>Nível 2 — Requer suporte substancial</option>
+                            <option value="3" {{ old('tea_nivel_suporte', $aluno->tea_nivel_suporte) == '3' ? 'selected' : '' }}>Nível 3 — Requer suporte muito substancial</option>
+                        </select>
                     </div>
 
                     <div id="condition_field" style="{{ old('cid_outros', $aluno->cid_outros) ? '' : 'display:none;' }}">

@@ -52,7 +52,7 @@
                         <span class="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded">
                             {{ ucfirst($obs->category) }}
                         </span>
-                        <span class="text-xs text-gray-400">{{ $obs->created_at->diffForHumans() }}</span>
+                        <span class="text-xs text-gray-400">{{ $obs->created_at->format('d/m/Y') }}</span>
                     </div>
                     <p class="text-sm text-gray-700">{{ $obs->content }}</p>
                 </div>

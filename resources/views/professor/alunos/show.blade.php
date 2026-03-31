@@ -44,6 +44,9 @@
         <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px;">
             @foreach($flags as $field => $label)
                 <span style="background: #F5EDE6; color: #7C3700; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ $label }}</span>
+                @if($field === 'cid_autismo' && $aluno->tea_nivel_suporte)
+                    <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;">Nível {{ $aluno->tea_nivel_suporte }}</span>
+                @endif
             @endforeach
         </div>
     @endif

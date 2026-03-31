@@ -16,10 +16,24 @@ class DocumentContentService
                 'observacoes_livres' => $request->input('observacoes_livres'),
             ],
             'pei' => [
-                'objetivos'          => $request->input('objetivos'),
-                'adaptacoes'         => json_decode($request->input('adaptacoes', '[]'), true) ?: [],
-                'avaliacao'          => $request->input('avaliacao'),
-                'observacoes_livres' => $request->input('observacoes_livres'),
+                'materia'                 => $request->input('materia'),
+                // Nível atual de desenvolvimento
+                'nivel_academico'         => $request->input('nivel_academico'),
+                'nivel_comunicacao'       => $request->input('nivel_comunicacao'),
+                'nivel_socioemocional'    => $request->input('nivel_socioemocional'),
+                // Metas estruturadas
+                'metas_curto_prazo'       => $request->input('metas_curto_prazo'),
+                'metas_medio_prazo'       => $request->input('metas_medio_prazo'),
+                'metas_longo_prazo'       => $request->input('metas_longo_prazo'),
+                // Estratégias e suporte especializado
+                'estrategias_pedagogicas' => $request->input('estrategias_pedagogicas'),
+                'aee_frequencia'          => $request->input('aee_frequencia'),
+                'caa_recursos'            => $request->input('caa_recursos'),
+                // Adaptações
+                'objetivos'               => $request->input('objetivos'),
+                'adaptacoes'              => json_decode($request->input('adaptacoes', '[]'), true) ?: [],
+                'avaliacao'               => $request->input('avaliacao'),
+                'observacoes_livres'      => $request->input('observacoes_livres'),
             ],
             'paee' => [
                 'cronograma'         => $request->input('cronograma'),

@@ -9,7 +9,7 @@ class School extends Model
 {
     protected $fillable = [
         'name', 'slug', 'is_active', 'plan', 'plan_status',
-        'plan_expires_at', 'max_students', 'notes', 'logo',
+        'plan_expires_at', 'max_students', 'notes', 'logo', 'theme_color',
     ];
 
     protected function casts(): array

@@ -10,6 +10,7 @@ use App\Http\Controllers\Secretaria\DocumentPdfController;
 use App\Http\Controllers\Secretaria\ObservationController;
 use App\Http\Controllers\Secretaria\DocumentWordController;
 use App\Http\Controllers\Secretaria\AllDocumentsController;
+use App\Http\Controllers\Secretaria\DocumentoFinalController;
 use App\Http\Controllers\Secretaria\LaudoController;
 
 
@@ -33,3 +34,4 @@ Route::get('laudos/{laudo}/download', [LaudoController::class, 'download'])->nam
 Route::delete('laudos/{laudo}', [LaudoController::class, 'destroy'])->name('laudos.destroy');
 Route::get('laudos', [LaudoController::class, 'index'])->name('laudos.index');
 Route::get('documentos', AllDocumentsController::class)->name('documentos.index');
+Route::get('alunos/{aluno}/documento-final', DocumentoFinalController::class)->name('alunos.documento-final');

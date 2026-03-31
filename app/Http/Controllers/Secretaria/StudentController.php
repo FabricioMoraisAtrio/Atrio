@@ -9,13 +9,62 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-public function index()
+public function index(\Illuminate\Http\Request $request)
 {
-    $alunos = Student::with(['schoolClasses:id,name,shift,year'])
-        ->latest()
-        ->get();
+    $query = Student::with(['schoolClasses:id,name,shift,year'])->latest();
 
-    return view('secretaria.alunos.index', compact('alunos'));
+    if ($request->filled('adaptacao')) {
+        $tag = $request->input('adaptacao');
+        $query->whereHas('documents', function ($q) use ($tag) {
+            $q->where('type', 'pei')
+              ->whereRaw("json_extract(content, '$.adaptacoes') LIKE ?", ['%' . $tag . '%']);
+        });
+    }
+
+    if ($request->filled('materia')) {
+        $materia = $request->input('materia');
+        $query->whereHas('documents', function ($q) use ($materia) {
+            $q->where('type', 'pei')
+              ->whereRaw("json_extract(content, '$.materia') = ?", [$materia]);
+        });
+    }
+
+    if ($request->filled('perfil')) {
+        $perfil = $request->input('perfil');
+        match ($perfil) {
+            'atipico'  => $query->where('is_atypical', true),
+            'tipico'   => $query->where('is_atypical', false),
+            'tea'      => $query->where('cid_autismo', true),
+            'tdah'     => $query->where('cid_tdah', true),
+            'down'     => $query->where('cid_down', true),
+            'intelectual' => $query->where('cid_deficiencia_intelectual', true),
+            'visual'   => $query->where('cid_deficiencia_visual', true),
+            'auditiva' => $query->where('cid_deficiencia_auditiva', true),
+            default    => null,
+        };
+    }
+
+    $alunos = $query->get();
+
+    $todasAdaptacoes = [
+        'Tempo extra na prova', 'Prova com fonte ampliada', 'Prova com imagens de apoio',
+        'Avaliação oral', 'Redução de questões', 'Questões objetivas (sem dissertativas)',
+        'Material concreto/manipulativo', 'Texto de apoio', 'Prova em braille',
+        'Intérprete de Libras', 'Sala separada', 'Leitura em voz alta pelo professor',
+        'Uso de calculadora', 'Apoio de escriba', 'Adaptação de conteúdo',
+        'Gravação de resposta (áudio)', 'Prova digitalizada', 'Sem limite de tempo',
+    ];
+
+    $materias = \App\Models\Document::where('type', 'pei')
+        ->whereNotNull('content')
+        ->get()
+        ->pluck('content.materia')
+        ->filter()
+        ->unique()
+        ->sort()
+        ->values();
+
+    return view('secretaria.alunos.index', compact('alunos', 'todasAdaptacoes', 'materias'));
 }
     public function create()
     {
@@ -33,6 +82,7 @@ public function index()
             'is_atypical'                 => 'boolean',
             'condition'                   => 'nullable|string|max:255',
             'school_class_id'             => 'nullable|exists:school_classes,id',
+            'tea_nivel_suporte'           => 'nullable|in:1,2,3',
             'cid_autismo'                 => 'boolean',
             'cid_tdah'                    => 'boolean',
             'cid_down'                    => 'boolean',
@@ -45,6 +95,7 @@ public function index()
         $data['school_id']                    = session('school_id');
         $data['is_atypical']                  = $request->boolean('is_atypical');
         $data['cid_autismo']                  = $request->boolean('cid_autismo');
+        $data['tea_nivel_suporte']            = $request->boolean('cid_autismo') ? $request->input('tea_nivel_suporte') : null;
         $data['cid_tdah']                     = $request->boolean('cid_tdah');
         $data['cid_down']                     = $request->boolean('cid_down');
         $data['cid_deficiencia_intelectual']  = $request->boolean('cid_deficiencia_intelectual');
@@ -109,11 +160,12 @@ public function show(Student $aluno)
             'birth_date'          => 'required|date',
             'is_atypical'         => 'boolean',
             'condition'           => 'nullable|string|max:255',
-            
+            'tea_nivel_suporte'   => 'nullable|in:1,2,3',
         ]);
 
         $data['is_atypical'] = $request->boolean('is_atypical');
         $data['cid_autismo']                 = $request->boolean('cid_autismo');
+        $data['tea_nivel_suporte']           = $request->boolean('cid_autismo') ? $request->input('tea_nivel_suporte') : null;
         $data['cid_tdah']                    = $request->boolean('cid_tdah');
         $data['cid_down']                    = $request->boolean('cid_down');
         $data['cid_deficiencia_intelectual'] = $request->boolean('cid_deficiencia_intelectual');

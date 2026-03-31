@@ -19,10 +19,17 @@
                 <p style="font-size: 13px; color: #9CA3AF; margin: 0;">Matrícula: {{ $aluno->registration_number }}</p>
             </div>
         </div>
-        <a href="{{ route('secretaria.alunos.edit', $aluno) }}"
-           style="background: #004B8D; color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;">
-            Editar
-        </a>
+        <div style="display: flex; gap: 8px;">
+            <a href="{{ route('secretaria.alunos.documento-final', $aluno) }}"
+               style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid #E5E7EB; color: #374151;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                Documento Final
+            </a>
+            <a href="{{ route('secretaria.alunos.edit', $aluno) }}"
+               style="background: #004B8D; color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;">
+                Editar
+            </a>
+        </div>
     </div>
 </div>
 
@@ -50,6 +57,9 @@
                 @foreach(['cid_autismo' => 'TEA', 'cid_tdah' => 'TDAH', 'cid_down' => 'Down', 'cid_deficiencia_intelectual' => 'D. Intelectual', 'cid_deficiencia_visual' => 'D. Visual', 'cid_deficiencia_auditiva' => 'D. Auditiva', 'cid_outros' => 'Outros'] as $field => $label)
                     @if($aluno->$field)
                         <span style="background: #F5EDE6; color: #7C3700; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">{{ $label }}</span>
+                        @if($field === 'cid_autismo' && $aluno->tea_nivel_suporte)
+                            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;">Nível {{ $aluno->tea_nivel_suporte }}</span>
+                        @endif
                     @endif
                 @endforeach
             </div>

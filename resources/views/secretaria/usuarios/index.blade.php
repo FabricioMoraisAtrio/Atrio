@@ -34,7 +34,7 @@
         <tbody>
             @forelse($usuarios as $usuario)
             <tr style="border-top: 1px solid #F9FAFB;"
-                onmouseover="this.style.background='#FAFAFA'"
+                onmouseover="this.style.background=document.documentElement.getAttribute('data-theme')==='dark'?'rgba(77,159,255,0.06)':'#FAFAFA'"
                 onmouseout="this.style.background='transparent'">
                 <td style="padding: 14px 20px;">
                     <div style="display: flex; align-items: center; gap: 10px;">

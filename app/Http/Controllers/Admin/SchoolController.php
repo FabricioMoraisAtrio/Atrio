@@ -39,6 +39,7 @@ class SchoolController extends Controller
             'max_students'    => 'required|integer|min:1',
             'notes'           => 'nullable|string',
             'logo'            => 'nullable|file|mimes:svg,png,jpg,jpeg|max:2048',
+            'theme_color'     => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
             // Secretaria inicial
             'admin_name'      => 'required|string|max:255',
             'admin_email'     => 'required|email|unique:users,email',
@@ -60,6 +61,7 @@ class SchoolController extends Controller
             'notes'           => $data['notes'] ?? null,
             'is_active'       => true,
             'logo'            => $logoPath,
+            'theme_color'     => $data['theme_color'] ?? null,
         ]);
 
         $secretaria = User::create([
@@ -103,6 +105,7 @@ class SchoolController extends Controller
             'is_active'         => 'boolean',
             'notes'             => 'nullable|string',
             'logo'              => 'nullable|file|mimes:svg,png,jpg,jpeg|max:2048',
+            'theme_color'       => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
             'secretaria_name'   => 'nullable|string|max:255',
             'secretaria_email'  => 'nullable|email|unique:users,email,' . ($request->input('secretaria_id') ?: 'NULL'),
         ]);

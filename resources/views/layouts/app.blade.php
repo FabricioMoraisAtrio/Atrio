@@ -23,19 +23,20 @@
         }
 
         [data-theme="dark"] {
-            --bg-page:   #0E1420;
-            --bg-card:   #151D2E;
-            --bg-subtle: #1C2640;
-            --bg-hover:  rgba(255,255,255,0.04);
-            --border:    #253048;
-            --border-sub:#1C2640;
-            --text-1:    #E8EEFA;
-            --text-2:    #8FA8C8;
-            --text-3:    #546A88;
-            --text-4:    #364A64;
-            --accent:    #3B82F6;
-            --accent-bg: rgba(59,130,246,0.18);
+            --bg-page:   #1C2B40;
+            --bg-card:   #243352;
+            --bg-subtle: #2A3B58;
+            --bg-hover:  rgba(255,255,255,0.07);
+            --border:    #384F6E;
+            --border-sub:#2A3B58;
+            --text-1:    #FFFFFF;
+            --text-2:    #C8D8EE;
+            --text-3:    #8AAAC8;
+            --text-4:    #6090B4;
+            --accent:    #4D9FFF;
+            --accent-bg: rgba(77,159,255,0.20);
         }
+        [data-theme="dark"] body { color: var(--text-1) !important; }
 
         /* ── BASE ── */
         body { background: var(--bg-page) !important; }
@@ -43,21 +44,21 @@
         header { background: var(--bg-card) !important; border-color: var(--border) !important; }
         main { background: var(--bg-page) !important; }
 
-        /* ── DARK: sidebar mais escura que o conteúdo ── */
+        /* ── DARK: sidebar levemente mais escura que o conteúdo ── */
         [data-theme="dark"] aside {
-            background: #101622 !important;
-            border-color: #1E2A40 !important;
+            background: #1A2740 !important;
+            border-color: #304560 !important;
         }
         [data-theme="dark"] header {
-            background: #121926 !important;
-            border-color: #1E2A40 !important;
+            background: #1C2A44 !important;
+            border-color: #304560 !important;
         }
 
         /* ── DARK: tabelas ── */
-        [data-theme="dark"] table { border-color: #1E2A40 !important; }
-        [data-theme="dark"] thead tr { background: #101622 !important; }
-        [data-theme="dark"] tbody tr:hover td { background: rgba(59,130,246,0.08) !important; }
-        [data-theme="dark"] td, [data-theme="dark"] th { border-color: #1E2A40 !important; }
+        [data-theme="dark"] table { border-color: #304560 !important; }
+        [data-theme="dark"] thead tr { background: #1A2740 !important; }
+        [data-theme="dark"] tbody tr:hover td { background: rgba(77,159,255,0.08) !important; }
+        [data-theme="dark"] td, [data-theme="dark"] th { border-color: #304560 !important; }
 
         /* ── CARDS E FUNDOS ── */
         [style*="background: #fff"], [style*="background:#fff"] { background: var(--bg-card) !important; }
@@ -84,9 +85,9 @@
             background: rgba(96,165,250,0.1) !important;
         }
         [data-theme="dark"] [style*="border: 1px solid #FDE68A"] {
-            border-color: rgba(96,165,250,0.2) !important;
+            border-color: rgba(77,159,255,0.2) !important;
         }
-        [data-theme="dark"] [style*="color: #92400E"] { color: #93C5FD !important; }
+        [data-theme="dark"] [style*="color: #92400E"] { color: #7EC8FF !important; }
 
         /* ── BORDAS ── */
         [style*="border: 1px solid #F3F4F6"]        { border-color: var(--border-sub) !important; }
@@ -123,25 +124,34 @@
 
         /* ── HOVER DARK ── */
         [data-theme="dark"] a[href]:hover {
-            background: rgba(59,130,246,0.10) !important;
+            background: rgba(77,159,255,0.10) !important;
         }
-        [data-theme="dark"] tr:hover td {
-            background: rgba(59,130,246,0.08) !important;
+        /* Hover no dark mode — handlers inline são removidos via JS, o CSS assume */
+        [data-theme="dark"] tbody tr { background: transparent !important; }
+        [data-theme="dark"] tbody tr:hover td {
+            background: rgba(96,165,250,0.06) !important;
         }
         [data-theme="dark"] button[style*="background: #004B8D"]:hover {
-            background: #2563EB !important;
+            background: #2272CC !important;
         }
         [data-theme="dark"] a[style*="background: #004B8D"]:hover {
-            background: #2563EB !important;
+            background: #2272CC !important;
         }
         [data-theme="dark"] button[style*="color: #EF4444"]:hover {
-            background: rgba(239,68,68,0.12) !important;
+            background: rgba(239,68,68,0.15) !important;
         }
         /* Sidebar item ativo no dark */
         [data-theme="dark"] [style*="background: #E8F0F9; color: #004B8D"] {
-            background: rgba(59,130,246,0.20) !important;
-            color: #60A5FA !important;
+            background: rgba(77,159,255,0.22) !important;
+            color: #7EC8FF !important;
         }
+        /* Garante texto branco em labels e spans no dark */
+        [data-theme="dark"] span[style*="color: #374151"],
+        [data-theme="dark"] span[style*="color: #6B7280"],
+        [data-theme="dark"] label[style*="color: #374151"],
+        [data-theme="dark"] p[style*="color: #374151"] { color: var(--text-2) !important; }
+        [data-theme="dark"] input::placeholder,
+        [data-theme="dark"] textarea::placeholder { color: var(--text-4) !important; }
 
         /* ── BOTÃO TEMA ── */
         #theme-toggle {
@@ -157,6 +167,38 @@
         }
         #theme-toggle:hover { background: var(--bg-hover) !important; }
     </style>
+    @php
+        $schoolTheme = null;
+        $accentBg    = null;
+        if (auth()->check()) {
+            $rawColor = auth()->user()->school?->theme_color;
+            if ($rawColor && preg_match('/^#[0-9A-Fa-f]{6}$/', $rawColor)) {
+                $schoolTheme = $rawColor;
+                $r  = hexdec(substr($rawColor, 1, 2));
+                $g  = hexdec(substr($rawColor, 3, 2));
+                $b  = hexdec(substr($rawColor, 5, 2));
+                $lr = round($r * 0.14 + 255 * 0.86);
+                $lg = round($g * 0.14 + 255 * 0.86);
+                $lb = round($b * 0.14 + 255 * 0.86);
+                $accentBg = sprintf('#%02x%02x%02x', $lr, $lg, $lb);
+            }
+        }
+    @endphp
+    @if($schoolTheme)
+    <style>
+        :root {
+            --accent:    {{ $schoolTheme }};
+            --accent-bg: {{ $accentBg }};
+        }
+        /* Override inline styles hardcoded com a cor padrão Átrio */
+        [style*="background: #004B8D"] { background: {{ $schoolTheme }} !important; }
+        [style*="color: #004B8D"]      { color: {{ $schoolTheme }} !important; }
+        [style*="background: #E8F0F9"] { background: {{ $accentBg }} !important; }
+        [style*="border-color: #004B8D"], [style*="border-bottom-color: #004B8D"] {
+            border-color: {{ $schoolTheme }} !important;
+        }
+    </style>
+    @endif
     <script>
         // Aplica tema antes do render para evitar flash
         (function() {
@@ -369,78 +411,95 @@
 </div>
 
 <script>
+// Cores da escola injetadas pelo servidor (usadas ao voltar para o tema claro)
+const SCHOOL_ACCENT    = @json($schoolTheme ?? null);
+const SCHOOL_ACCENT_BG = @json($accentBg ?? null);
+
 function updateIcons(theme) {
-    const sun = document.getElementById('icon-sun');
+    const sun  = document.getElementById('icon-sun');
     const moon = document.getElementById('icon-moon');
     if (!sun || !moon) return;
-    sun.style.display = theme === 'dark' ? 'block' : 'none';
-    moon.style.display = theme === 'dark' ? 'none' : 'block';
+    sun.style.display  = theme === 'dark' ? 'block' : 'none';
+    moon.style.display = theme === 'dark' ? 'none'  : 'block';
 }
 
-function toggleTheme() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const next = isDark ? 'light' : 'dark';
-    if (next === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-        document.documentElement.removeAttribute('data-theme');
-    }
-    localStorage.setItem('atrio-theme', next);
-    updateIcons(next);
+function applySchoolTheme() {
+    if (!SCHOOL_ACCENT) return;
+    const root = document.documentElement;
+    root.style.setProperty('--accent',    SCHOOL_ACCENT);
+    root.style.setProperty('--accent-bg', SCHOOL_ACCENT_BG || SCHOOL_ACCENT);
 }
 
-// Inicializa ícone correto
-(function() {
-    const theme = localStorage.getItem('atrio-theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    updateIcons(theme);
-})();
-</script>
-<script>
-function updateIcons(theme) {
-    const sun = document.getElementById('icon-sun');
-    const moon = document.getElementById('icon-moon');
-    if (!sun || !moon) return;
-    sun.style.display = theme === 'dark' ? 'block' : 'none';
-    moon.style.display = theme === 'dark' ? 'none' : 'block';
+function removeSchoolTheme() {
+    const root = document.documentElement;
+    root.style.removeProperty('--accent');
+    root.style.removeProperty('--accent-bg');
 }
+
+// Armazena os handlers inline originais para restaurar no tema claro
+const _hoverStore = new WeakMap();
 
 function applyHoverBehavior(theme) {
     if (theme === 'dark') {
         document.querySelectorAll('[onmouseover]').forEach(el => {
+            _hoverStore.set(el, {
+                over: el.getAttribute('onmouseover'),
+                out:  el.getAttribute('onmouseout'),
+            });
             el.removeAttribute('onmouseover');
             el.removeAttribute('onmouseout');
+            // Limpa qualquer background inline que já tenha sido aplicado
+            if (el.style.background && el.style.background !== 'transparent') {
+                el.style.background = 'transparent';
+            }
+        });
+    } else {
+        // Restaura handlers ao voltar para o tema claro
+        document.querySelectorAll('tr, a, button').forEach(el => {
+            const stored = _hoverStore.get(el);
+            if (stored) {
+                el.setAttribute('onmouseover', stored.over);
+                if (stored.out) el.setAttribute('onmouseout', stored.out);
+                _hoverStore.delete(el);
+            }
         });
     }
 }
 
 function toggleTheme() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const next = isDark ? 'light' : 'dark';
+    const next   = isDark ? 'light' : 'dark';
+
     if (next === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
+        removeSchoolTheme();
     } else {
         document.documentElement.removeAttribute('data-theme');
+        applySchoolTheme();
     }
+
+    applyHoverBehavior(next);
     localStorage.setItem('atrio-theme', next);
     updateIcons(next);
-    applyHoverBehavior(next);
-    // Recarrega para aplicar hover corretamente no light
-    if (next === 'light') location.reload();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const theme = localStorage.getItem('atrio-theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    updateIcons(theme);
-    applyHoverBehavior(theme);
-});
+// Inicializa ao carregar
+(function () {
+    const saved       = localStorage.getItem('atrio-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme       = saved || (prefersDark ? 'dark' : 'light');
 
-// Inicializa ícone antes do DOM completo
-(function() {
-    const theme = localStorage.getItem('atrio-theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        applySchoolTheme();
+    }
     updateIcons(theme);
+
+    // Aplica remoção dos hover handlers após o DOM estar pronto
+    if (theme === 'dark') {
+        document.addEventListener('DOMContentLoaded', () => applyHoverBehavior('dark'));
+    }
 })();
 </script>
 </body>

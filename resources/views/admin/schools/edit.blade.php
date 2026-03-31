@@ -84,6 +84,43 @@
                 </label>
             </div>
 
+            {{-- Tema de cores --}}
+            <div>
+                <label class="block text-sm text-gray-600 mb-1">Cor do tema da escola</label>
+                <p class="text-xs text-gray-400 mb-2">Define a cor de destaque do painel para os usuários desta escola.</p>
+                <div class="flex flex-wrap gap-2 mb-2" id="preset-swatches">
+                    @foreach([
+                        '#004B8D' => 'Azul Átrio (padrão)',
+                        '#16A34A' => 'Verde',
+                        '#7C3AED' => 'Roxo',
+                        '#DC2626' => 'Vermelho',
+                        '#EA580C' => 'Laranja',
+                        '#0891B2' => 'Turquesa',
+                        '#BE185D' => 'Rosa',
+                        '#92400E' => 'Marrom',
+                    ] as $hex => $name)
+                        <button type="button"
+                                onclick="selectColor('{{ $hex }}')"
+                                title="{{ $name }}"
+                                data-color="{{ $hex }}"
+                                style="width: 28px; height: 28px; border-radius: 50%; background: {{ $hex }}; border: 2px solid transparent; cursor: pointer; transition: transform 0.1s;"
+                                onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+                        </button>
+                    @endforeach
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="color" id="color-picker" value="{{ old('theme_color', $school->theme_color ?? '#004B8D') }}"
+                           onchange="selectColor(this.value)"
+                           class="w-8 h-8 rounded cursor-pointer border border-gray-300 p-0.5">
+                    <input type="text" name="theme_color" id="color-hex"
+                           value="{{ old('theme_color', $school->theme_color ?? '#004B8D') }}"
+                           maxlength="7" placeholder="#004B8D"
+                           oninput="syncColor(this.value)"
+                           class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-28 focus:outline-none focus:ring-2 focus:ring-gray-800 font-mono">
+                    <span class="text-xs text-gray-400">código hexadecimal</span>
+                </div>
+            </div>
+
             <div>
                 <label class="block text-sm text-gray-600 mb-1">Observações internas</label>
                 <textarea name="notes" rows="3"
@@ -125,4 +162,22 @@
         </form>
     </div>
 </div>
+<script>
+function selectColor(hex) {
+    document.getElementById('color-hex').value = hex;
+    document.getElementById('color-picker').value = hex;
+    document.querySelectorAll('#preset-swatches button').forEach(btn => {
+        btn.style.border = btn.dataset.color === hex ? '2px solid #111827' : '2px solid transparent';
+    });
+}
+function syncColor(val) {
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+        document.getElementById('color-picker').value = val;
+        document.querySelectorAll('#preset-swatches button').forEach(btn => {
+            btn.style.border = btn.dataset.color.toLowerCase() === val.toLowerCase() ? '2px solid #111827' : '2px solid transparent';
+        });
+    }
+}
+selectColor(document.getElementById('color-hex').value || '#004B8D');
+</script>
 @endsection
