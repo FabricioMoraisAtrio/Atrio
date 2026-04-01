@@ -50,19 +50,28 @@
             </div>
 
             <div>
-                <label class="block text-sm text-gray-600 mb-1">Logo da escola <span class="text-gray-400">(SVG, PNG ou JPG)</span></label>
-                <label for="logo-input" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid #D1D5DB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; background: #F9FAFB;"
-                       onmouseover="this.style.background='#F3F4F6'" onmouseout="this.style.background='#F9FAFB'">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-                    </svg>
-                    <span id="logo-label">Escolher imagem…</span>
-                </label>
-                <input id="logo-input" type="file" name="logo" accept=".svg,.png,.jpg,.jpeg,image/svg+xml,image/png,image/jpeg"
-                       style="display: none;"
-                       onchange="document.getElementById('logo-label').textContent = this.files[0]?.name ?? 'Escolher imagem…'">
-                @error('logo')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
-            </div>
+    <label class="block text-sm text-gray-600 mb-1">Logo da escola <span class="text-gray-400">(SVG, PNG ou JPG)</span></label>
+    
+    {{-- Preview --}}
+    <div id="logo-preview-wrapper" style="display:none; margin-bottom:10px;">
+        <p style="font-size:11px; color:#9CA3AF; margin-bottom:4px;">Pré-visualização:</p>
+        <img id="logo-preview-img"
+             src=""
+             style="height:56px; max-width:180px; object-fit:contain; border:1px solid #E5E7EB; border-radius:8px; padding:6px; background:#F9FAFB;">
+                    </div>
+
+                    <label for="logo-input" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid #D1D5DB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; background: #F9FAFB;"
+                        onmouseover="this.style.background='#F3F4F6'" onmouseout="this.style.background='#F9FAFB'">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                        </svg>
+                        <span id="logo-label">Escolher imagem…</span>
+                    </label>
+                    <input id="logo-input" type="file" name="logo" accept=".svg,.png,.jpg,.jpeg,image/svg+xml,image/png,image/jpeg"
+                        style="display: none;"
+                        onchange="previewLogo(this)">
+                    @error('logo')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                </div>
 
             {{-- Tema de cores --}}
             <div>
@@ -146,6 +155,24 @@
     </div>
 </div>
 <script>
+
+function previewLogo(input) {
+    const label   = document.getElementById('logo-label');
+    const wrapper = document.getElementById('logo-preview-wrapper');
+    const img     = document.getElementById('logo-preview-img');
+
+    if (input.files && input.files[0]) {
+        label.textContent = input.files[0].name;
+
+        const reader = new FileReader();
+        reader.onload = e => {
+            img.src = e.target.result;
+            wrapper.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 function selectColor(hex) {
     document.getElementById('color-hex').value = hex;
     document.getElementById('color-picker').value = hex;
