@@ -18,7 +18,8 @@
     @endphp
     <title>Átrio — {{ $perfilLabel }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 </head>
 <body style="background: #F8FAFC; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
 

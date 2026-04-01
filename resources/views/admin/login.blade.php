@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Átrio Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center">
 
