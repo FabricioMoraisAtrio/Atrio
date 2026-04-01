@@ -22,10 +22,12 @@
             <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0 0 16px;">Foto de perfil</p>
             <div style="display: flex; align-items: center; gap: 16px;">
                 @if($user->avatar)
-                    <img src="{{ \Illuminate\Support\Facades\Storage::url($user->avatar) }}"
-                         style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                    <img id="avatar-preview"
+                        src="{{ \Illuminate\Support\Facades\Storage::url($user->avatar) }}?v={{ $user->updated_at->timestamp }}"
+                        style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
                 @else
-                    <div style="width: 64px; height: 64px; border-radius: 50%; background: #004B8D; color: white; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <div id="avatar-preview"
+                        style="width: 64px; height: 64px; border-radius: 50%; background: #004B8D; color: white; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                         {{ strtoupper(substr($user->name, 0, 1)) }}
                     </div>
                 @endif
@@ -112,8 +114,20 @@ function previewAvatar(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = e => {
-            const img = document.querySelector('img[src*="avatars"], div[style*="border-radius: 50%"][style*="background: #004B8D"]');
-            if (img) img.src = e.target.result;
+            const el = document.getElementById('avatar-preview');
+            if (!el) return;
+
+            if (el.tagName === 'IMG') {
+                // já era uma imagem, só atualiza o src
+                el.src = e.target.result;
+            } else {
+                // era o div com inicial — substitui por uma img
+                const img = document.createElement('img');
+                img.id = 'avatar-preview';
+                img.src = e.target.result;
+                img.style = 'width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0;';
+                el.replaceWith(img);
+            }
         };
         reader.readAsDataURL(input.files[0]);
     }

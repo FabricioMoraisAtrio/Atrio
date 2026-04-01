@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
     public function edit()
-    {
-        return view('profile.edit', ['user' => auth()->user()]);
-    }
+        {
+            return view('profile.edit', ['user' => auth()->user()->fresh()]);
+        }
 
     public function update(Request $request)
     {
@@ -48,6 +48,6 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return back()->with('success', 'Perfil atualizado com sucesso.');
+        return redirect()->route('profile.edit')->with('success', 'Perfil atualizado com sucesso.');
     }
 }
