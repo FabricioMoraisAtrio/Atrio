@@ -72,9 +72,32 @@
                             </div>
                             <div>
                                 <p style="font-size: 14px; font-weight: 500; color: #111827; margin: 0;">{{ $aluno->name }}</p>
-                                @if($aluno->condition)
-                                    <p style="font-size: 12px; color: #9CA3AF; margin: 0;">{{ $aluno->condition }}</p>
-                                @endif
+                                <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
+                                    @if($aluno->cid_autismo)
+                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #FEF3C7; color: #92400E;">TEA</span>
+                                    @endif
+                                    @if($aluno->cid_tdah)
+                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #EDE9FE; color: #5B21B6;">TDAH</span>
+                                    @endif
+                                    @if($aluno->cid_down)
+                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #FCE7F3; color: #9D174D;">Down</span>
+                                    @endif
+                                    @if($aluno->cid_deficiencia_intelectual)
+                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #DBEAFE; color: #1E40AF;">Def. Intelectual</span>
+                                    @endif
+                                    @if($aluno->cid_deficiencia_visual)
+                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #D1FAE5; color: #065F46;">Def. Visual</span>
+                                    @endif
+                                    @if($aluno->cid_deficiencia_auditiva)
+                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #E0F2FE; color: #0369A1;">Def. Auditiva</span>
+                                    @endif
+                                    @if($aluno->cid_outros)
+                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #F3F4F6; color: #6B7280;">Outros</span>
+                                    @endif
+                                    @if($aluno->condition && !$aluno->cid_autismo && !$aluno->cid_tdah && !$aluno->cid_down && !$aluno->cid_deficiencia_intelectual && !$aluno->cid_deficiencia_visual && !$aluno->cid_deficiencia_auditiva && !$aluno->cid_outros)
+                                        <span style="font-size: 11px; color: #9CA3AF;">{{ $aluno->condition }}</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
