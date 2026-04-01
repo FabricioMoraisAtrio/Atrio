@@ -68,8 +68,9 @@
 
 {{-- Modal de confirmação de exclusão --}}
 <div id="modal-delete"
-     class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
-    <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
+     class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center"
+     style="display:none;">
+    <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-auto mt-32">
         <h3 class="text-base font-semibold text-gray-900 mb-1">Excluir escola</h3>
         <p class="text-sm text-gray-500 mb-4">
             Esta ação é <strong>irreversível</strong>. Todos os alunos, documentos, usuários e laudos serão excluídos permanentemente.
@@ -83,7 +84,8 @@
                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-red-400">
 
         <form id="modal-form" method="POST">
-            @csrf @method('DELETE')
+            @csrf
+            @method('DELETE')
             <input type="hidden" name="confirmation" id="modal-hidden-confirmation">
             <div class="flex justify-end gap-3">
                 <button type="button"
@@ -91,8 +93,8 @@
                         class="text-sm text-gray-500 hover:text-gray-700 px-4 py-2">
                     Cancelar
                 </button>
-                <button type="submit"
-                        onclick="document.getElementById('modal-hidden-confirmation').value = document.getElementById('modal-confirmation').value"
+                <button type="button"
+                        onclick="confirmarDelete()"
                         class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
                     Excluir permanentemente
                 </button>
@@ -106,11 +108,30 @@ function abrirModalDelete(id, nome) {
     document.getElementById('modal-confirmation').value = '';
     document.getElementById('modal-form').action = '/superadmin/schools/' + id;
     document.getElementById('modal-delete').dataset.nome = nome;
-    document.getElementById('modal-delete').classList.remove('hidden');
+    document.getElementById('modal-delete').style.display = 'flex';
 }
+
 function fecharModalDelete() {
-    document.getElementById('modal-delete').classList.add('hidden');
+    document.getElementById('modal-delete').style.display = 'none';
 }
+
+function confirmarDelete() {
+    const digitado = document.getElementById('modal-confirmation').value;
+    const esperado = document.getElementById('modal-delete').dataset.nome;
+
+    if (digitado !== esperado) {
+        alert('O nome digitado não confere com o nome da escola.');
+        return;
+    }
+
+    document.getElementById('modal-hidden-confirmation').value = digitado;
+    document.getElementById('modal-form').submit();
+}
+
+// Fechar ao clicar fora do modal
+document.getElementById('modal-delete').addEventListener('click', function(e) {
+    if (e.target === this) fecharModalDelete();
+});
 </script>
 
 @endsection
