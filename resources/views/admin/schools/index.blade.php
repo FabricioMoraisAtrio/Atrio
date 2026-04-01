@@ -47,8 +47,9 @@
                        class="text-gray-500 hover:underline">Editar</a>
                     <form method="POST" action="{{ route('admin.schools.destroy', $school) }}" class="inline">
                         @csrf @method('DELETE')
-                        <button type="submit"
-                                onclick="return confirm('Remover escola e todos os dados?')"
+                        {{-- Botão que abre o modal --}}
+                        <button type="button"
+                                onclick="abrirModalDelete('{{ $school->id }}', '{{ addslashes($school->name) }}')"
                                 class="text-red-500 hover:underline">
                             Remover
                         </button>
@@ -63,4 +64,53 @@
         </tbody>
     </table>
 </div>
+
+
+{{-- Modal de confirmação de exclusão --}}
+<div id="modal-delete"
+     class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
+        <h3 class="text-base font-semibold text-gray-900 mb-1">Excluir escola</h3>
+        <p class="text-sm text-gray-500 mb-4">
+            Esta ação é <strong>irreversível</strong>. Todos os alunos, documentos, usuários e laudos serão excluídos permanentemente.
+        </p>
+        <p class="text-sm text-gray-700 mb-2">
+            Digite o nome da escola para confirmar:
+        </p>
+        <input id="modal-confirmation"
+               type="text"
+               placeholder="Nome da escola"
+               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-red-400">
+
+        <form id="modal-form" method="POST">
+            @csrf @method('DELETE')
+            <input type="hidden" name="confirmation" id="modal-hidden-confirmation">
+            <div class="flex justify-end gap-3">
+                <button type="button"
+                        onclick="fecharModalDelete()"
+                        class="text-sm text-gray-500 hover:text-gray-700 px-4 py-2">
+                    Cancelar
+                </button>
+                <button type="submit"
+                        onclick="document.getElementById('modal-hidden-confirmation').value = document.getElementById('modal-confirmation').value"
+                        class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+                    Excluir permanentemente
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function abrirModalDelete(id, nome) {
+    document.getElementById('modal-confirmation').value = '';
+    document.getElementById('modal-form').action = '/superadmin/schools/' + id;
+    document.getElementById('modal-delete').dataset.nome = nome;
+    document.getElementById('modal-delete').classList.remove('hidden');
+}
+function fecharModalDelete() {
+    document.getElementById('modal-delete').classList.add('hidden');
+}
+</script>
+
 @endsection

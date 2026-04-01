@@ -140,16 +140,59 @@ class SchoolController extends Controller
             ->with('success', 'Escola atualizada.');
     }
 
-    public function destroy(School $school)
-    {
-        if ($school->students()->exists() || $school->users()->exists() || $school->documents()->exists()) {
-            return back()->with('error', 'Não é possível remover a escola pois ela possui usuários, alunos ou documentos cadastrados.');
+    public function destroy(School $school, Request $request)
+{
+    // Dupla verificação: nome da escola
+    if ($request->input('confirmation') !== $school->name) {
+        return back()->with('error', 'Nome da escola não confere. Exclusão cancelada.');
+    }
+
+    // Cascade manual
+    $schoolId = $school->id;
+
+    \DB::transaction(function () use ($school, $schoolId) {
+        \App\Models\Document::where('school_id', $schoolId)->delete();
+        \App\Models\Observation::where('school_id', $schoolId)->delete();
+
+        // Laudos — apaga arquivos do storage também
+        $laudos = \App\Models\Laudo::where('school_id', $schoolId)->get();
+        foreach ($laudos as $laudo) {
+            \Storage::disk('public')->delete($laudo->arquivo);
+        }
+        \App\Models\Laudo::where('school_id', $schoolId)->delete();
+
+        // Pivôs
+        \DB::table('school_class_student')
+            ->whereIn('school_class_id', \App\Models\SchoolClass::where('school_id', $schoolId)->pluck('id'))
+            ->delete();
+        \DB::table('school_class_user')
+            ->whereIn('school_class_id', \App\Models\SchoolClass::where('school_id', $schoolId)->pluck('id'))
+            ->delete();
+        \DB::table('student_user')
+            ->whereIn('student_id', \App\Models\Student::where('school_id', $schoolId)->pluck('id'))
+            ->delete();
+
+        \App\Models\SchoolClass::where('school_id', $schoolId)->delete();
+        \App\Models\Student::where('school_id', $schoolId)->delete();
+
+        // Usuários — remove roles/permissions antes
+        $users = \App\Models\User::where('school_id', $schoolId)->get();
+        foreach ($users as $user) {
+            $user->roles()->detach();
+            $user->delete();
+        }
+
+        // Logo do storage
+        if ($school->logo) {
+            \Storage::disk('public')->delete($school->logo);
         }
 
         $school->delete();
-        return redirect()->route('admin.schools.index')
-            ->with('success', 'Escola removida.');
-    }
+    });
+
+    return redirect()->route('admin.schools.index')
+        ->with('success', 'Escola e todos os dados removidos com sucesso.');
+}
 
     public function resetPassword(School $school, User $user)
     {
