@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Átrio — Portal de Acesso</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #F0F5FB; min-height: 100vh; font-family: sans-serif; }
