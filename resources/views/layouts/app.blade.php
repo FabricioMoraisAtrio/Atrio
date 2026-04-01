@@ -290,9 +290,10 @@
 
                 @hasrole('secretaria')
                     @php $items = [
-                        ['route' => 'secretaria.dashboard',      'icon' => 'grid',  'label' => 'Painel'],
-                        ['route' => 'secretaria.alunos.index',   'icon' => 'users', 'label' => 'Alunos'],
-                        ['route' => 'secretaria.usuarios.index', 'icon' => 'user',  'label' => 'Usuários'],
+                        ['route' => 'secretaria.dashboard',      'icon' => 'grid',     'label' => 'Painel'],
+                        ['route' => 'secretaria.turmas.index',   'icon' => 'academic', 'label' => 'Turmas'],
+                        ['route' => 'secretaria.alunos.index',   'icon' => 'users',    'label' => 'Alunos'],
+                        ['route' => 'secretaria.usuarios.index', 'icon' => 'user',     'label' => 'Usuários'],
                     ]; @endphp
                 @endhasrole
 
