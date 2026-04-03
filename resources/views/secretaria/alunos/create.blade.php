@@ -19,8 +19,28 @@
     @endif
 
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 28px;">
-        <form method="POST" action="{{ route('secretaria.alunos.store') }}">
+        <form method="POST" action="{{ route('secretaria.alunos.store') }}" enctype="multipart/form-data">
             @csrf
+
+            {{-- Foto --}}
+            <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
+                <div id="foto-preview-wrapper" style="width: 64px; height: 64px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; border: 2px solid #E5E7EB;">
+                    <img id="foto-preview" src="" style="display:none; width:100%; height:100%; object-fit:cover;" alt="">
+                    <span id="foto-inicial">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                </div>
+                <div>
+                    <p style="font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px;">Foto do aluno</p>
+                    <label for="foto-input" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #F3F4F6; border: 1px solid #E5E7EB; border-radius: 8px; font-size: 13px; font-weight: 600; color: #374151; cursor: pointer;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        Escolher foto
+                    </label>
+                    <input type="file" id="foto-input" name="photo" accept="image/*"
+                           onchange="previewFoto(this)" style="display:none;">
+                    <p id="foto-nome" style="font-size: 12px; color: #9CA3AF; margin: 6px 0 0;">Nenhum arquivo selecionado</p>
+                </div>
+            </div>
 
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Nome completo</label>
@@ -46,6 +66,22 @@
                 @error('birth_date')<p style="font-size: 12px; color: #EF4444; margin-top: 4px;">{{ $message }}</p>@enderror
             </div>
 
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Nome completo do responsável</label>
+                <input type="text" name="responsavel_nome" value="{{ old('responsavel_nome') }}"
+                       placeholder="Ex: Maria Silva Santos"
+                       style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
+                       onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Nome completo do 2º responsável</label>
+                <input type="text" name="responsavel_2_nome" value="{{ old('responsavel_2_nome') }}"
+                       placeholder="Opcional"
+                       style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
+                       onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">
+            </div>
+
             <div style="margin-bottom: 24px;">
                 <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Turma</label>
                 <select name="school_class_id"
@@ -65,7 +101,7 @@
                     <input type="checkbox" name="is_atypical" value="1"
                            id="is_atypical" {{ old('is_atypical') ? 'checked' : '' }}
                            onchange="toggleAtypical(this.checked)">
-                    <span style="font-size: 14px; font-weight: 600; color: #111827;">Aluno com perfil de atipicidade</span>
+                    <span style="font-size: 14px; font-weight: 600; color: #111827;">Aluno público alvo da Educação Especial</span>
                 </label>
                 <p style="font-size: 12px; color: #9CA3AF; margin: 0 0 0 26px;">Marque para habilitar os campos de condição</p>
 
@@ -73,44 +109,22 @@
 
                     <p style="font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 12px;">Condições identificadas</p>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
-                        {{-- TEA com nível de suporte --}}
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: 1px solid #F3F4F6;"
-                               onmouseover="this.style.borderColor='#004B8D'"
-                               onmouseout="this.style.borderColor='#F3F4F6'">
-                            <input type="checkbox" name="cid_autismo" value="1"
-                                   id="cid_autismo_check"
-                                   {{ old('cid_autismo') ? 'checked' : '' }}
-                                   onchange="document.getElementById('tea_nivel_field').style.display = this.checked ? 'block' : 'none'">
-                            <span style="font-size: 13px; color: #374151;">Autismo (TEA)</span>
-                        </label>
-
-                        @foreach([
-                            'cid_tdah'                    => 'TDAH',
-                            'cid_down'                    => 'Síndrome de Down',
-                            'cid_deficiencia_intelectual' => 'Deficiência Intelectual',
-                            'cid_deficiencia_visual'      => 'Deficiência Visual',
-                            'cid_deficiencia_auditiva'    => 'Deficiência Auditiva',
-                        ] as $field => $label)
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: 1px solid #F3F4F6;"
+                    @php $transtornos = config('transtornos'); @endphp
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 16px;">
+                        @foreach($transtornos as $field => [$sigla, $nome])
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 10px; border-radius: 8px; border: 1px solid #F3F4F6;"
                                    onmouseover="this.style.borderColor='#004B8D'"
                                    onmouseout="this.style.borderColor='#F3F4F6'">
                                 <input type="checkbox" name="{{ $field }}" value="1"
-                                       {{ old($field) ? 'checked' : '' }}>
-                                <span style="font-size: 13px; color: #374151;">{{ $label }}</span>
+                                       {{ old($field) ? 'checked' : '' }}
+                                       @if($field === 'cid_autismo') id="cid_autismo_check" onchange="document.getElementById('tea_nivel_field').style.display = this.checked ? 'block' : 'none'" @endif
+                                       @if($field === 'cid_outros') id="cid_outros_check" onchange="document.getElementById('condition_field').style.display = this.checked ? 'block' : 'none'" @endif>
+                                <div>
+                                    <span style="font-size: 12px; font-weight: 700; color: #004B8D;">{{ $sigla }}</span>
+                                    <span style="font-size: 11px; color: #6B7280; display: block; line-height: 1.3;">{{ $nome }}</span>
+                                </div>
                             </label>
                         @endforeach
-
-                        {{-- Outros — ativa campo de texto --}}
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: 1px solid #F3F4F6;"
-                               onmouseover="this.style.borderColor='#004B8D'"
-                               onmouseout="this.style.borderColor='#F3F4F6'">
-                            <input type="checkbox" name="cid_outros" value="1"
-                                   id="cid_outros_check"
-                                   {{ old('cid_outros') ? 'checked' : '' }}
-                                   onchange="document.getElementById('condition_field').style.display = this.checked ? 'block' : 'none'">
-                            <span style="font-size: 13px; color: #374151;">Outros</span>
-                        </label>
                     </div>
 
                     {{-- Nível de suporte TEA --}}
@@ -119,9 +133,9 @@
                         <select name="tea_nivel_suporte"
                                 style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;">
                             <option value="">Não informado</option>
-                            <option value="1" {{ old('tea_nivel_suporte') == '1' ? 'selected' : '' }}>Nível 1 — Requer suporte</option>
-                            <option value="2" {{ old('tea_nivel_suporte') == '2' ? 'selected' : '' }}>Nível 2 — Requer suporte substancial</option>
-                            <option value="3" {{ old('tea_nivel_suporte') == '3' ? 'selected' : '' }}>Nível 3 — Requer suporte muito substancial</option>
+                            <option value="1" {{ old('tea_nivel_suporte') == '1' ? 'selected' : '' }}>Nível 1</option>
+                            <option value="2" {{ old('tea_nivel_suporte') == '2' ? 'selected' : '' }}>Nível 2</option>
+                            <option value="3" {{ old('tea_nivel_suporte') == '3' ? 'selected' : '' }}>Nível 3</option>
                         </select>
                     </div>
 
@@ -156,6 +170,19 @@ function toggleAtypical(checked) {
     if (!checked) {
         document.getElementById('condition_field').style.display = 'none';
         document.getElementById('cid_outros_check').checked = false;
+    }
+}
+function previewFoto(input) {
+    if (input.files && input.files[0]) {
+        var nome = document.getElementById('foto-nome');
+        if (nome) nome.textContent = input.files[0].name;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('foto-preview').src = e.target.result;
+            document.getElementById('foto-preview').style.display = 'block';
+            document.getElementById('foto-inicial').style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
     }
 }
 </script>

@@ -1,0 +1,162 @@
+@php
+    $content  = isset($documento) ? ($documento->content ?? []) : [];
+    $todasAdaptacoes = [
+        'Tempo extra na prova', 'Prova com fonte ampliada', 'Prova com imagens de apoio',
+        'Avaliação oral', 'Redução de questões', 'Questões objetivas (sem dissertativas)',
+        'Material concreto/manipulativo', 'Texto de apoio', 'Prova em braille',
+        'Intérprete de Libras', 'Sala separada', 'Leitura em voz alta pelo professor',
+        'Uso de calculadora', 'Apoio de escriba', 'Adaptação de conteúdo',
+        'Gravação de resposta (áudio)', 'Prova digitalizada', 'Sem limite de tempo',
+    ];
+
+    $selecionadas = $content['adaptacoes'] ?? [];
+    if (is_string($selecionadas)) {
+        $selecionadas = array_filter(array_map('trim', explode(',', $selecionadas)));
+    }
+    $selecionadas = array_values($selecionadas);
+
+    $colunas = [
+        'realiza_sem_suporte' => 'Realiza sem suporte',
+        'realiza_com_apoio'   => 'Realiza com apoio',
+        'ainda_nao_realiza'   => 'Ainda não realiza',
+        'nao_observado'       => 'Não observado',
+    ];
+@endphp
+
+{{-- ═══ MATÉRIA (auto-preenchida, somente leitura) ═══ --}}
+<div style="margin-bottom: 24px;">
+    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Disciplina / Matéria</label>
+    @if($subject)
+        <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #E8F0F9; border-radius: 8px;">
+            <span style="font-size: 15px; font-weight: 700; color: #004B8D;">{{ $subject->name }}</span>
+            <span style="font-size: 11px; color: #6B7280;">{{ $subject->label_responsavel }}</span>
+        </div>
+        <input type="hidden" name="materia" value="{{ $subject->name }}">
+    @else
+        <input type="text" name="materia" value="{{ old('materia', $content['materia'] ?? '') }}"
+               placeholder="Ex: Matemática, Português, Ciências..."
+               style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
+               onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">
+    @endif
+</div>
+
+{{-- ═══ ESTRATÉGIAS PEDAGÓGICAS ═══ --}}
+<div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+    <p style="font-size: 11px; font-weight: 700; color: #004B8D; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Estratégias Pedagógicas</p>
+    <p style="font-size: 12px; color: #9CA3AF; margin: 0 0 16px;">Descreva como você vai adaptar o ensino desta disciplina para este aluno.</p>
+    <textarea name="estrategias_pedagogicas" rows="4"
+              placeholder="Ex: Uso de material concreto, atividades em dupla, rotina estruturada, apoio visual..."
+              style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.6;"
+              onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">{{ old('estrategias_pedagogicas', $content['estrategias_pedagogicas'] ?? '') }}</textarea>
+</div>
+
+{{-- ═══ INVENTÁRIO DE HABILIDADES ═══ --}}
+@if($subject && $subject->inventoryItems->count())
+@php
+    $categorias = [
+        'academica'      => ['label' => 'Habilidades Acadêmicas',      'cor' => '#004B8D', 'key' => 'habilidades_academicas'],
+        'socioemocional' => ['label' => 'Habilidades Socioemocionais',  'cor' => '#009C8C', 'key' => 'habilidades_socioemocionais'],
+        'funcional'      => ['label' => 'Habilidades Funcionais',       'cor' => '#7C3700', 'key' => 'habilidades_funcionais'],
+    ];
+    $itensPorCategoria = $subject->inventoryItems->groupBy('categoria');
+@endphp
+
+@foreach($categorias as $catKey => $cat)
+    @php $itens = $itensPorCategoria->get($catKey, collect()); @endphp
+    @if($itens->count())
+    <div style="border: 1px solid #F3F4F6; border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
+        <div style="padding: 14px 20px; border-bottom: 1px solid #F3F4F6; background: rgba(0,0,0,0.02);">
+            <p style="font-size: 11px; font-weight: 700; color: {{ $cat['cor'] }}; letter-spacing: 1px; text-transform: uppercase; margin: 0;">
+                {{ $cat['label'] }} — {{ $subject->name }}
+            </p>
+            <p style="font-size: 11px; color: #9CA3AF; margin: 4px 0 0;">Avalie cada meta conforme o desempenho do aluno nesta disciplina.</p>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                <thead>
+                    <tr style="background: #F9FAFB;">
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280; width: 36%;">Metas / Objetivos</th>
+                        @foreach($colunas as $colLabel)
+                            <th style="text-align: center; padding: 10px 6px; font-size: 10px; font-weight: 600; color: #6B7280; width: 10%;">{{ $colLabel }}</th>
+                        @endforeach
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280; width: 14%;">Responsável</th>
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280;">Observações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($itens as $i => $item)
+                        @php $saved = $content[$cat['key']][$i] ?? []; @endphp
+                        <tr style="border-top: 1px solid #F3F4F6; {{ $i % 2 !== 0 ? 'background: #FAFAFA;' : '' }}">
+                            <td style="padding: 10px 14px; color: #374151; font-size: 13px;">
+                                {{ $item->meta }}
+                                <input type="hidden" name="{{ $cat['key'] }}[{{ $i }}][meta]" value="{{ $item->meta }}">
+                            </td>
+                            @foreach(array_keys($colunas) as $col)
+                                <td style="text-align: center; padding: 10px 6px;">
+                                    <input type="checkbox"
+                                           name="{{ $cat['key'] }}[{{ $i }}][{{ $col }}]"
+                                           value="1"
+                                           {{ !empty($saved[$col]) ? 'checked' : '' }}
+                                           style="width: 15px; height: 15px; cursor: pointer; accent-color: {{ $cat['cor'] }};">
+                                </td>
+                            @endforeach
+                            <td style="padding: 10px 14px;">
+                                <input type="text" name="{{ $cat['key'] }}[{{ $i }}][responsavel]"
+                                       value="{{ $saved['responsavel'] ?? $subject->label_responsavel }}"
+                                       style="width: 100%; border: none; border-bottom: 1px solid #E5E7EB; padding: 4px 0; font-size: 12px; color: #374151; outline: none; background: transparent;"
+                                       onfocus="this.style.borderColor='{{ $cat['cor'] }}'" onblur="this.style.borderColor='#E5E7EB'">
+                            </td>
+                            <td style="padding: 10px 14px;">
+                                <input type="text" name="{{ $cat['key'] }}[{{ $i }}][observacoes]"
+                                       value="{{ $saved['observacoes'] ?? '' }}"
+                                       placeholder="..."
+                                       style="width: 100%; border: none; border-bottom: 1px solid #E5E7EB; padding: 4px 0; font-size: 12px; color: #374151; outline: none; background: transparent;"
+                                       onfocus="this.style.borderColor='{{ $cat['cor'] }}'" onblur="this.style.borderColor='#E5E7EB'">
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+@endforeach
+@endif
+
+{{-- ═══ ADAPTAÇÕES CURRICULARES ═══ --}}
+<div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+    <p style="font-size: 11px; font-weight: 700; color: #004B8D; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Adaptações e/ou Adequações no Processo de Avaliação</p>
+    <p style="font-size: 12px; color: #9CA3AF; margin: 0 0 14px;">Selecione as adaptações aplicáveis a esta disciplina.</p>
+    <div id="tags-container" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+        @foreach($todasAdaptacoes as $tag)
+            @php $ativa = in_array($tag, $selecionadas); @endphp
+            <button type="button" onclick="toggleTag(this, '{{ $tag }}')" data-tag="{{ $tag }}"
+                    style="padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid; transition: all 0.15s;
+                        {{ $ativa ? 'background: #004B8D; color: white; border-color: #004B8D;' : 'background: white; color: #6B7280; border-color: #D1D5DB;' }}">
+                {{ $tag }}
+            </button>
+        @endforeach
+    </div>
+    <input type="hidden" name="adaptacoes" id="adaptacoes-input" value="{{ old('adaptacoes', json_encode($selecionadas)) }}">
+    <p style="font-size: 12px; color: #9CA3AF;"><span id="tags-count">{{ count($selecionadas) }}</span> adaptação(ões) selecionada(s)</p>
+</div>
+
+<script>
+(function() {
+    var input    = document.getElementById('adaptacoes-input');
+    var selected = [];
+    try { selected = JSON.parse(input.value) || []; } catch(e) { selected = []; }
+    window.toggleTag = function(btn, tag) {
+        var idx = selected.indexOf(tag);
+        if (idx === -1) {
+            selected.push(tag);
+            btn.style.background = '#004B8D'; btn.style.color = 'white'; btn.style.borderColor = '#004B8D';
+        } else {
+            selected.splice(idx, 1);
+            btn.style.background = 'white'; btn.style.color = '#6B7280'; btn.style.borderColor = '#D1D5DB';
+        }
+        input.value = JSON.stringify(selected);
+        document.getElementById('tags-count').textContent = selected.length;
+    };
+})();
+</script>

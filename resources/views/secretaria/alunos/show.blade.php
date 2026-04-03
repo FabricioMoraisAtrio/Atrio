@@ -11,15 +11,36 @@
 
     <div style="display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="width: 52px; height: 52px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center;">
-                {{ strtoupper(substr($aluno->name, 0, 1)) }}
+            <div style="position: relative; width: 110px; height: 110px; flex-shrink: 0;">
+                @if($aluno->photo)
+                    <img src="{{ asset('storage/' . $aluno->photo) }}" alt="{{ $aluno->name }}"
+                         style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #E5E7EB;">
+                @else
+                    <div style="width: 110px; height: 110px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 36px; font-weight: 700; display: flex; align-items: center; justify-content: center;">
+                        {{ strtoupper(substr($aluno->name, 0, 1)) }}
+                    </div>
+                @endif
+                <label title="Alterar foto" style="position: absolute; bottom: 4px; right: 4px; width: 26px; height: 26px; background: #004B8D; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 2px solid #fff;">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    <form method="POST" action="{{ route('secretaria.alunos.uploadPhoto', $aluno) }}" enctype="multipart/form-data" style="display:none;" id="foto-form-{{ $aluno->id }}">
+                        @csrf
+                        <input type="file" name="photo" accept="image/*" onchange="document.getElementById('foto-form-{{ $aluno->id }}').submit()">
+                    </form>
+                </label>
             </div>
             <div>
                 <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ $aluno->name }}</h1>
                 <p style="font-size: 13px; color: #9CA3AF; margin: 0;">Matrícula: {{ $aluno->registration_number }}</p>
             </div>
         </div>
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            @if($aluno->is_atypical)
+            <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+               style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; background: #E8F0F9; color: #004B8D;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+                PEI Consolidado
+            </a>
+            @endif
             <a href="{{ route('secretaria.alunos.documento-final', $aluno) }}"
                style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid #E5E7EB; color: #374151;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
@@ -39,6 +60,24 @@
     </div>
 @endif
 
+{{-- Responsáveis --}}
+@if($aluno->responsavel_nome || $aluno->responsavel_2_nome)
+<div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 16px 20px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 24px;">
+    @if($aluno->responsavel_nome)
+    <div>
+        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">Responsável</p>
+        <p style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">{{ $aluno->responsavel_nome }}</p>
+    </div>
+    @endif
+    @if($aluno->responsavel_2_nome)
+    <div>
+        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">2º Responsável</p>
+        <p style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">{{ $aluno->responsavel_2_nome }}</p>
+    </div>
+    @endif
+</div>
+@endif
+
 {{-- Cards de info --}}
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
@@ -48,23 +87,23 @@
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
         <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Perfil</p>
         @if($aluno->is_atypical)
-            <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Atípico</span>
+            <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Público Alvo</span>
             @if($aluno->condition)
                 <p style="font-size: 13px; color: #6B7280; margin: 6px 0 0;">{{ $aluno->condition }}</p>
             @endif
             {{-- Flags CID --}}
             <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;">
-                @foreach(['cid_autismo' => 'TEA', 'cid_tdah' => 'TDAH', 'cid_down' => 'Down', 'cid_deficiencia_intelectual' => 'D. Intelectual', 'cid_deficiencia_visual' => 'D. Visual', 'cid_deficiencia_auditiva' => 'D. Auditiva', 'cid_outros' => 'Outros'] as $field => $label)
+                @foreach(config('transtornos') as $field => [$sigla, $nome])
                     @if($aluno->$field)
-                        <span style="background: #F5EDE6; color: #7C3700; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">{{ $label }}</span>
+                        <span style="background: #F5EDE6; color: #7C3700; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px;" title="{{ $nome }}">{{ $sigla }}</span>
                         @if($field === 'cid_autismo' && $aluno->tea_nivel_suporte)
-                            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;">Nível {{ $aluno->tea_nivel_suporte }}</span>
+                            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;">N{{ $aluno->tea_nivel_suporte }}</span>
                         @endif
                     @endif
                 @endforeach
             </div>
         @else
-            <span style="background: #F3F4F6; color: #6B7280; font-size: 12px; padding: 4px 10px; border-radius: 20px;">Típico</span>
+            <span style="background: #F3F4F6; color: #6B7280; font-size: 12px; padding: 4px 10px; border-radius: 20px;">Não público alvo</span>
         @endif
     </div>
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
@@ -128,6 +167,10 @@
                     </a>
                 @endunless
             @endforeach
+            <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => 'pei']) }}"
+               style="font-size: 12px; background: #E8F0F9; color: #004B8D; font-weight: 600; padding: 6px 12px; border-radius: 8px; text-decoration: none;">
+                + PEI
+            </a>
         </div>
     </div>
 

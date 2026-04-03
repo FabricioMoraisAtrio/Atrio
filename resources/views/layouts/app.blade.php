@@ -281,19 +281,25 @@
                             ['route' => 'secretaria.dashboard',        'icon' => 'grid',     'label' => 'Painel'],
                             ['route' => 'secretaria.turmas.index',     'icon' => 'academic', 'label' => 'Turmas'],
                             ['route' => 'secretaria.alunos.index',     'icon' => 'users',    'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
-                            ['route' => 'secretaria.documentos.index', 'icon' => 'doc',      'label' => 'Documentos'],
-                            ['route' => 'secretaria.laudos.index',     'icon' => 'laudo',    'label' => 'Laudos'],
-                            ['route' => 'secretaria.usuarios.index',   'icon' => 'user',     'label' => 'Usuários'],
+                            ['route' => 'secretaria.documentos.index',           'icon' => 'doc',    'label' => 'Documentos'],
+                            ['route' => 'secretaria.laudos.index',               'icon' => 'laudo',  'label' => 'Laudos'],
+                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina', 'label' => 'Rotina Docs'],
+                            ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina', 'label' => 'Adaptações'],
+                            ['route' => 'secretaria.subjects.index',         'icon' => 'subject','label' => 'Matérias'],
+                            ['route' => 'secretaria.usuarios.index',         'icon' => 'user',   'label' => 'Usuários'],
                         ];
                     @endphp
                 @endhasanyrole
 
                 @hasrole('secretaria')
                     @php $items = [
-                        ['route' => 'secretaria.dashboard',      'icon' => 'grid',     'label' => 'Painel'],
-                        ['route' => 'secretaria.turmas.index',   'icon' => 'academic', 'label' => 'Turmas'],
-                        ['route' => 'secretaria.alunos.index',   'icon' => 'users',    'label' => 'Alunos'],
-                        ['route' => 'secretaria.usuarios.index', 'icon' => 'user',     'label' => 'Usuários'],
+                        ['route' => 'secretaria.dashboard',          'icon' => 'grid',    'label' => 'Painel'],
+                        ['route' => 'secretaria.turmas.index',       'icon' => 'academic','label' => 'Turmas'],
+                        ['route' => 'secretaria.alunos.index',       'icon' => 'users',   'label' => 'Alunos'],
+                        ['route' => 'secretaria.rotinas.documentos.index', 'icon' => 'rotina', 'label' => 'Rotina Docs'],
+                        ['route' => 'secretaria.rotinas.adaptacoes',       'icon' => 'rotina', 'label' => 'Adaptações'],
+                        ['route' => 'secretaria.subjects.index',           'icon' => 'subject','label' => 'Matérias'],
+                        ['route' => 'secretaria.usuarios.index',           'icon' => 'user',   'label' => 'Usuários'],
                     ]; @endphp
                 @endhasrole
 

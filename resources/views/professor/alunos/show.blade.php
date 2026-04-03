@@ -11,17 +11,29 @@
 
     <div style="display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="width: 52px; height: 52px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center;">
-                {{ strtoupper(substr($aluno->name, 0, 1)) }}
-            </div>
+            @if($aluno->photo)
+                <img src="{{ asset('storage/' . $aluno->photo) }}" alt="{{ $aluno->name }}"
+                     style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #E5E7EB; flex-shrink: 0;">
+            @else
+                <div style="width: 110px; height: 110px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 36px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    {{ strtoupper(substr($aluno->name, 0, 1)) }}
+                </div>
+            @endif
             <div>
-                <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ $aluno->name }}</h1>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                    <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0;">{{ $aluno->name }}</h1>
+                    @if($subject)
+                        <span style="background: #E8F0F9; color: #004B8D; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;">
+                            {{ $subject->name }}
+                        </span>
+                    @endif
+                </div>
                 <p style="font-size: 13px; color: #9CA3AF; margin: 0;">Matrícula: {{ $aluno->registration_number }}</p>
             </div>
         </div>
         @if($aluno->is_atypical)
             <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 20px;">
-                {{ $aluno->condition ?? 'Atípico' }}
+                Público Alvo
             </span>
         @endif
     </div>
@@ -30,20 +42,13 @@
 {{-- Flags CID --}}
 @if($aluno->is_atypical)
     @php
-        $flags = array_filter([
-            'cid_autismo' => 'TEA',
-            'cid_tdah' => 'TDAH',
-            'cid_down' => 'Down',
-            'cid_deficiencia_intelectual' => 'D. Intelectual',
-            'cid_deficiencia_visual' => 'D. Visual',
-            'cid_deficiencia_auditiva' => 'D. Auditiva',
-            'cid_outros' => 'Outros',
-        ], fn($label, $field) => $aluno->$field, ARRAY_FILTER_USE_BOTH);
+        $transtornos = config('transtornos');
+        $ativos = array_filter($transtornos, fn($v, $k) => $aluno->$k, ARRAY_FILTER_USE_BOTH);
     @endphp
-    @if(count($flags))
+    @if(count($ativos))
         <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px;">
-            @foreach($flags as $field => $label)
-                <span style="background: #F5EDE6; color: #7C3700; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ $label }}</span>
+            @foreach($ativos as $field => [$sigla, $nome])
+                <span style="background: #F5EDE6; color: #7C3700; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;" title="{{ $nome }}">{{ $sigla }}</span>
                 @if($field === 'cid_autismo' && $aluno->tea_nivel_suporte)
                     <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;">Nível {{ $aluno->tea_nivel_suporte }}</span>
                 @endif

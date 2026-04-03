@@ -79,29 +79,27 @@ public function index(\Illuminate\Http\Request $request)
             'registration_number'         => ['required', 'string', 'max:50',
                 \Illuminate\Validation\Rule::unique('students')->where('school_id', session('school_id'))],
             'birth_date'                  => 'required|date',
+            'responsavel_nome'            => 'nullable|string|max:255',
+            'responsavel_2_nome'          => 'nullable|string|max:255',
             'is_atypical'                 => 'boolean',
             'condition'                   => 'nullable|string|max:255',
             'school_class_id'             => 'nullable|exists:school_classes,id',
             'tea_nivel_suporte'           => 'nullable|in:1,2,3',
-            'cid_autismo'                 => 'boolean',
-            'cid_tdah'                    => 'boolean',
-            'cid_down'                    => 'boolean',
-            'cid_deficiencia_intelectual' => 'boolean',
-            'cid_deficiencia_visual'      => 'boolean',
-            'cid_deficiencia_auditiva'    => 'boolean',
-            'cid_outros'                  => 'boolean',
+            'photo'                       => 'nullable|image|max:2048',
         ]);
 
-        $data['school_id']                    = session('school_id');
-        $data['is_atypical']                  = $request->boolean('is_atypical');
-        $data['cid_autismo']                  = $request->boolean('cid_autismo');
-        $data['tea_nivel_suporte']            = $request->boolean('cid_autismo') ? $request->input('tea_nivel_suporte') : null;
-        $data['cid_tdah']                     = $request->boolean('cid_tdah');
-        $data['cid_down']                     = $request->boolean('cid_down');
-        $data['cid_deficiencia_intelectual']  = $request->boolean('cid_deficiencia_intelectual');
-        $data['cid_deficiencia_visual']       = $request->boolean('cid_deficiencia_visual');
-        $data['cid_deficiencia_auditiva']     = $request->boolean('cid_deficiencia_auditiva');
-        $data['cid_outros']                   = $request->boolean('cid_outros');
+        $data['school_id'] = session('school_id');
+
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('alunos/fotos', 'public');
+        }
+
+        $data['is_atypical']       = $request->boolean('is_atypical');
+        $data['tea_nivel_suporte'] = $request->boolean('cid_autismo') ? $request->input('tea_nivel_suporte') : null;
+
+        foreach (array_keys(config('transtornos')) as $campo) {
+            $data[$campo] = $request->boolean($campo);
+        }
 
         $school = \App\Models\School::find(session('school_id'));
         $currentCount = \App\Models\Student::count();
@@ -151,27 +149,34 @@ public function show(Student $aluno)
         $data = $request->validate([
             'name'                => 'required|string|max:255',
             'registration_number' => [
-            'required',
-            'string',
-            'max:50',
-            \Illuminate\Validation\Rule::unique('students')
-                ->where('school_id', session('school_id'))
-                ->ignore($aluno->id),],
+                'required', 'string', 'max:50',
+                \Illuminate\Validation\Rule::unique('students')
+                    ->where('school_id', session('school_id'))
+                    ->ignore($aluno->id),
+            ],
             'birth_date'          => 'required|date',
+            'responsavel_nome'    => 'nullable|string|max:255',
+            'responsavel_2_nome'  => 'nullable|string|max:255',
             'is_atypical'         => 'boolean',
             'condition'           => 'nullable|string|max:255',
             'tea_nivel_suporte'   => 'nullable|in:1,2,3',
+            'photo'               => 'nullable|image|max:2048',
         ]);
 
-        $data['is_atypical'] = $request->boolean('is_atypical');
-        $data['cid_autismo']                 = $request->boolean('cid_autismo');
-        $data['tea_nivel_suporte']           = $request->boolean('cid_autismo') ? $request->input('tea_nivel_suporte') : null;
-        $data['cid_tdah']                    = $request->boolean('cid_tdah');
-        $data['cid_down']                    = $request->boolean('cid_down');
-        $data['cid_deficiencia_intelectual'] = $request->boolean('cid_deficiencia_intelectual');
-        $data['cid_deficiencia_visual']      = $request->boolean('cid_deficiencia_visual');
-        $data['cid_deficiencia_auditiva']    = $request->boolean('cid_deficiencia_auditiva');
-        $data['cid_outros']                  = $request->boolean('cid_outros');
+        if ($request->hasFile('photo')) {
+            if ($aluno->photo) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($aluno->photo);
+            }
+            $data['photo'] = $request->file('photo')->store('alunos/fotos', 'public');
+        }
+
+        $data['is_atypical']       = $request->boolean('is_atypical');
+        $data['tea_nivel_suporte'] = $request->boolean('cid_autismo') ? $request->input('tea_nivel_suporte') : null;
+
+        foreach (array_keys(config('transtornos')) as $campo) {
+            $data[$campo] = $request->boolean($campo);
+        }
+
         $aluno->update($data);
 
         return redirect()->route('secretaria.alunos.show', $aluno)
@@ -187,6 +192,22 @@ public function show(Student $aluno)
         $aluno->delete();
         return redirect()->route('secretaria.alunos.index')
             ->with('success', 'Aluno removido.');
+    }
+
+    public function uploadPhoto(Request $request, Student $aluno)
+    {
+        $request->validate([
+            'photo' => 'required|image|max:2048',
+        ]);
+
+        if ($aluno->photo) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($aluno->photo);
+        }
+
+        $path = $request->file('photo')->store('alunos/fotos', 'public');
+        $aluno->update(['photo' => $path]);
+
+        return back()->with('success', 'Foto atualizada com sucesso.');
     }
 
     public function attachClass(Request $request, Student $aluno)

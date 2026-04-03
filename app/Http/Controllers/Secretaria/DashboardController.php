@@ -13,9 +13,12 @@ class DashboardController extends Controller
         $ano = date('Y');
 
         $turmas = SchoolClass::where('year', $ano)
-            ->with(['students' => fn($q) => $q->with([
-                'documents' => fn($q) => $q->where('year', $ano)->select('id', 'student_id', 'type'),
-            ])])
+            ->with([
+                'students' => fn($q) => $q->with([
+                    'documents' => fn($q) => $q->where('year', $ano)->select('id', 'student_id', 'type', 'author_id'),
+                ]),
+                'teachers',
+            ])
             ->orderBy('name')
             ->get()
             ->map(function ($turma) {
@@ -25,12 +28,29 @@ class DashboardController extends Controller
                     return count(array_diff(['estudo_caso', 'pei', 'paee'], $criados)) > 0;
                 });
 
+                // Professores que ainda não preencheram PEI para algum aluno atípico
+                $professoresPendentes = collect();
+                if ($atipicos->isNotEmpty() && $turma->teachers->isNotEmpty()) {
+                    foreach ($turma->teachers as $professor) {
+                        $faltando = $atipicos->filter(function ($aluno) use ($professor) {
+                            return !$aluno->documents
+                                ->where('type', 'pei')
+                                ->where('author_id', $professor->id)
+                                ->count();
+                        });
+                        if ($faltando->isNotEmpty()) {
+                            $professoresPendentes->push($professor->name);
+                        }
+                    }
+                }
+
                 return [
-                    'turma'         => $turma,
-                    'total'         => $turma->students->count(),
-                    'atipicos'      => $atipicos->count(),
-                    'atipicos_list' => $atipicos->take(5)->values(),
-                    'pendentes'     => $pendentes->count(),
+                    'turma'                  => $turma,
+                    'total'                  => $turma->students->count(),
+                    'atipicos'               => $atipicos->count(),
+                    'atipicos_list'          => $atipicos->take(5)->values(),
+                    'pendentes'              => $pendentes->count(),
+                    'professores_pendentes'  => $professoresPendentes->unique()->values(),
                 ];
             });
 

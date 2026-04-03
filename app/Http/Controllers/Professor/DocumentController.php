@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Professor;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Services\DocumentContentService;
 use Illuminate\Http\Request;
 
@@ -61,7 +62,11 @@ private function verificarAcesso(int $studentId): void
             return back()->withErrors(['documento' => 'Você já preencheu o PEI para este aluno em ' . date('Y') . '.']);
         }
 
-        return view('professor.documentos.create', compact('aluno', 'type'));
+        // Busca a matéria vinculada ao professor (pelo slug no pivot)
+        $subjectSlug = auth()->user()->schoolClasses()->first()?->pivot->subject;
+        $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->with('inventoryItems')->first() : null;
+
+        return view('professor.documentos.create', compact('aluno', 'type', 'subject'));
     }
 
 public function store(Student $aluno, Request $request)
@@ -120,7 +125,11 @@ public function edit(Document $documento)
 {
     $this->verificarAcesso($documento->student_id);
     $documento->load('student');
-    return view('professor.documentos.edit', compact('documento'));
+
+    $subjectSlug = auth()->user()->schoolClasses()->first()?->pivot->subject;
+    $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->with('inventoryItems')->first() : null;
+
+    return view('professor.documentos.edit', compact('documento', 'subject'));
 }
 
 public function update(Request $request, Document $documento)
@@ -133,5 +142,18 @@ public function update(Request $request, Document $documento)
 
     return redirect()->route('professor.documentos.show', $documento)
         ->with('success', 'Documento atualizado.');
+}
+
+public function destroy(Document $documento)
+{
+    if ($documento->type !== 'pei' || $documento->author_id !== auth()->id()) {
+        abort(403);
+    }
+
+    $studentId = $documento->student_id;
+    $documento->delete();
+
+    return redirect()->route('professor.alunos.show', $studentId)
+        ->with('success', 'PEI excluído com sucesso.');
 }
 }

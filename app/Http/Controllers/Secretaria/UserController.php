@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Models\Student;
+use App\Models\Subject;
 
 class UserController extends Controller
 {
@@ -30,11 +31,12 @@ class UserController extends Controller
 
     public function create()
     {
-        $turmas = SchoolClass::where('year', date('Y'))->orderBy('name')->get();
-        $roles  = Role::whereIn('name', $this->rolesPermitidos())->get();
-        $alunos = Student::orderBy('name')->get();
+        $turmas   = SchoolClass::where('year', date('Y'))->orderBy('name')->get();
+        $roles    = Role::whereIn('name', $this->rolesPermitidos())->get();
+        $alunos   = Student::orderBy('name')->get();
+        $subjects = Subject::orderBy('ordem')->get();
 
-        return view('secretaria.usuarios.create', compact('turmas', 'roles', 'alunos'));
+        return view('secretaria.usuarios.create', compact('turmas', 'roles', 'alunos', 'subjects'));
     }
 
     public function store(Request $request)
@@ -48,7 +50,7 @@ class UserController extends Controller
             'role'               => 'required|in:' . $rolesValidos,
             'school_class_ids'   => 'nullable|array',
             'school_class_ids.*' => 'exists:school_classes,id',
-            'subject'            => 'nullable|string|max:100',
+            'subject'            => 'nullable|exists:subjects,slug',
             'student_ids'        => 'nullable|array',
             'student_ids.*'      => 'exists:students,id',
         ]);
@@ -82,10 +84,11 @@ class UserController extends Controller
     public function edit(User $usuario)
     {
         $usuario->load('roles', 'schoolClasses', 'children');
-        $turmas = SchoolClass::where('year', date('Y'))->orderBy('name')->get();
-        $alunos = Student::orderBy('name')->get();
+        $turmas   = SchoolClass::where('year', date('Y'))->orderBy('name')->get();
+        $alunos   = Student::orderBy('name')->get();
+        $subjects = Subject::orderBy('ordem')->get();
 
-        return view('secretaria.usuarios.edit', compact('usuario', 'turmas', 'alunos'));
+        return view('secretaria.usuarios.edit', compact('usuario', 'turmas', 'alunos', 'subjects'));
     }
 
     public function update(Request $request, User $usuario)
@@ -96,7 +99,7 @@ class UserController extends Controller
             'password'           => 'nullable|min:6',
             'school_class_ids'   => 'nullable|array',
             'school_class_ids.*' => 'exists:school_classes,id',
-            'subject'            => 'nullable|string|max:100',
+            'subject'            => 'nullable|exists:subjects,slug',
             'student_ids'        => 'nullable|array',
             'student_ids.*'      => 'exists:students,id',
             'is_active'          => 'boolean',

@@ -50,12 +50,18 @@
 
             @if($usuario->hasRole('professor'))
                 <div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                    <p style="font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 12px;">Matéria</p>
-                    <input type="text" name="subject"
-                           value="{{ old('subject', $usuario->schoolClasses->first()?->pivot->subject) }}"
-                           placeholder="Ex: Matemática, Português..."
-                           style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box; margin-bottom: 20px;"
-                           onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">
+                    <p style="font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px;">Matéria</p>
+                    @php $subjectAtual = old('subject', $usuario->schoolClasses->first()?->pivot->subject); @endphp
+                    <select name="subject"
+                            style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box; margin-bottom: 20px;"
+                            onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">
+                        <option value="">Selecione a matéria</option>
+                        @foreach($subjects as $subject)
+                            <option value="{{ $subject->slug }}" {{ $subjectAtual === $subject->slug ? 'selected' : '' }}>
+                                {{ $subject->name }}
+                            </option>
+                        @endforeach
+                    </select>
 
                     <p style="font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 12px;">Turmas</p>
                     <div style="display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto;">

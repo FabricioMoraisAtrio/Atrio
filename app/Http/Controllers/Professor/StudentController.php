@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Professor;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\SchoolClass;
+use App\Models\Subject;
 
 class StudentController extends Controller
 {
@@ -19,6 +20,9 @@ class StudentController extends Controller
 
         $aluno->load('observations.user', 'documents');
 
-        return view('professor.alunos.show', compact('aluno'));
+        $subjectSlug = auth()->user()->schoolClasses()->first()?->pivot->subject;
+        $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->first() : null;
+
+        return view('professor.alunos.show', compact('aluno', 'subject'));
     }
 }

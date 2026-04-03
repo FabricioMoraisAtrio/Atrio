@@ -11,26 +11,46 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Student extends Model
 {
 protected $fillable = [
-    'school_id', 'name', 'registration_number',
-    'birth_date', 'is_atypical', 'condition', 'has_case_study',
+    'school_id', 'name', 'photo', 'registration_number',
+    'birth_date', 'responsavel_nome', 'responsavel_2_nome',
+    'is_atypical', 'condition', 'has_case_study',
     'tea_nivel_suporte',
     'cid_autismo', 'cid_tdah', 'cid_down',
     'cid_deficiencia_intelectual', 'cid_deficiencia_visual',
     'cid_deficiencia_auditiva', 'cid_outros',
+    'cid_ahsd', 'cid_dalt', 'cid_dfm', 'cid_disl', 'cid_epile',
+    'cid_mc', 'cid_mult', 'cid_si', 'cid_tag', 'cid_tda',
+    'cid_tdc', 'cid_tdl', 'cid_tod', 'cid_tpac', 'cid_tps', 'cid_th',
 ];
 protected function casts(): array
 {
     return [
-        'birth_date'                 => 'date',
-        'is_atypical'                => 'boolean',
-        'has_case_study'             => 'boolean',
-        'cid_autismo'                => 'boolean',
-        'cid_tdah'                   => 'boolean',
-        'cid_down'                   => 'boolean',
-        'cid_deficiencia_intelectual'=> 'boolean',
-        'cid_deficiencia_visual'     => 'boolean',
-        'cid_deficiencia_auditiva'   => 'boolean',
-        'cid_outros'                 => 'boolean',
+        'birth_date'                  => 'date',
+        'is_atypical'                 => 'boolean',
+        'has_case_study'              => 'boolean',
+        'cid_autismo'                 => 'boolean',
+        'cid_tdah'                    => 'boolean',
+        'cid_down'                    => 'boolean',
+        'cid_deficiencia_intelectual' => 'boolean',
+        'cid_deficiencia_visual'      => 'boolean',
+        'cid_deficiencia_auditiva'    => 'boolean',
+        'cid_outros'                  => 'boolean',
+        'cid_ahsd'                    => 'boolean',
+        'cid_dalt'                    => 'boolean',
+        'cid_dfm'                     => 'boolean',
+        'cid_disl'                    => 'boolean',
+        'cid_epile'                   => 'boolean',
+        'cid_mc'                      => 'boolean',
+        'cid_mult'                    => 'boolean',
+        'cid_si'                      => 'boolean',
+        'cid_tag'                     => 'boolean',
+        'cid_tda'                     => 'boolean',
+        'cid_tdc'                     => 'boolean',
+        'cid_tdl'                     => 'boolean',
+        'cid_tod'                     => 'boolean',
+        'cid_tpac'                    => 'boolean',
+        'cid_tps'                     => 'boolean',
+        'cid_th'                      => 'boolean',
     ];
 }
 

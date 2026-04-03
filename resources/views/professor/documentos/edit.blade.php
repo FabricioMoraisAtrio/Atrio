@@ -2,7 +2,7 @@
 @section('title', 'Editar Documento')
 
 @section('content')
-<div style="max-width: 640px;">
+<div style="max-width: 1000px;">
     <div style="margin-bottom: 24px;">
         <a href="{{ route('professor.documentos.show', $documento) }}"
            style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
@@ -25,7 +25,7 @@
             @if($documento->type === 'estudo_caso')
                 @include('secretaria.documentos.partials.estudo_caso')
             @elseif($documento->type === 'pei')
-                @include('secretaria.documentos.partials.pei')
+                @include('professor.documentos.partials.pei')
             @elseif($documento->type === 'paee')
                 @include('secretaria.documentos.partials.paee')
             @endif

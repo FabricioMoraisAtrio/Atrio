@@ -2,7 +2,7 @@
 @section('title', 'Editar Documento')
 
 @section('content')
-<div style="max-width: 640px;">
+<div style="max-width: 1000px;">
     <div style="margin-bottom: 24px;">
         <a href="{{ route('secretaria.documentos.show', $documento) }}"
            style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">

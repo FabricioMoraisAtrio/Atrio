@@ -129,7 +129,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
             @if($item['atipicos'] > 0)
             <div>
                 <div style="font-size: 20px; font-weight: 700; color: #004B8D;">{{ $item['atipicos'] }}</div>
-                <div style="font-size: 11px; color: #9CA3AF;">atípicos</div>
+                <div style="font-size: 11px; color: #9CA3AF;">público alvo</div>
             </div>
             @endif
             @if($item['pendentes'] > 0)
@@ -154,18 +154,28 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
                 +{{ $item['atipicos'] - 5 }}
             </div>
             @endif
-            <span style="font-size: 11px; color: #9CA3AF; margin-left: 10px;">atípicos</span>
+            <span style="font-size: 11px; color: #9CA3AF; margin-left: 10px;">público alvo</span>
         </div>
         @else
-        <div style="font-size: 12px; color: #9CA3AF;">Sem alunos atípicos</div>
+        <div style="font-size: 12px; color: #9CA3AF;">Sem alunos público alvo</div>
         @endif
 
-        {{-- Badge de pendentes --}}
-        @if($item['pendentes'] > 0)
+        {{-- Badge de pendentes + professores que faltam --}}
+        @if($item['pendentes'] > 0 || $item['professores_pendentes']->isNotEmpty())
         <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #F9FAFB;">
+            @if($item['pendentes'] > 0)
             <span style="font-size: 11px; font-weight: 600; color: #92400E; background: #FEF3C7; padding: 4px 10px; border-radius: 20px;">
                 ⚠ {{ $item['pendentes'] }} com docs incompletos
             </span>
+            @endif
+            @if($item['professores_pendentes']->isNotEmpty())
+            <div style="margin-top: 8px;">
+                <p style="font-size: 10px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">Faltam preencher PEI:</p>
+                @foreach($item['professores_pendentes'] as $prof)
+                    <span style="font-size: 11px; font-weight: 500; color: #DC2626; background: #FEF2F2; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-right: 4px; margin-bottom: 4px;">{{ $prof }}</span>
+                @endforeach
+            </div>
+            @endif
         </div>
         @endif
     </a>

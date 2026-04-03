@@ -36,8 +36,8 @@
                 style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
             <option value="">Todos os perfis</option>
             <optgroup label="Perfil geral">
-                <option value="atipico"  {{ request('perfil') === 'atipico'  ? 'selected' : '' }}>Atípico</option>
-                <option value="tipico"   {{ request('perfil') === 'tipico'   ? 'selected' : '' }}>Típico</option>
+                <option value="atipico"  {{ request('perfil') === 'atipico'  ? 'selected' : '' }}>Público Alvo</option>
+                <option value="tipico"   {{ request('perfil') === 'tipico'   ? 'selected' : '' }}>Não público alvo</option>
             </optgroup>
             <optgroup label="Condição específica">
                 <option value="tea"         {{ request('perfil') === 'tea'         ? 'selected' : '' }}>TEA (Autismo)</option>
@@ -117,12 +117,30 @@
                 onmouseout="this.style.background='transparent'">
                 <td style="padding: 14px 20px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 34px; height: 34px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            {{ strtoupper(substr($aluno->name, 0, 1)) }}
-                        </div>
+                        @if($aluno->photo)
+                            <img src="{{ asset('storage/' . $aluno->photo) }}" alt="{{ $aluno->name }}"
+                                 style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid #E5E7EB; flex-shrink: 0;">
+                        @else
+                            <div style="width: 34px; height: 34px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                {{ strtoupper(substr($aluno->name, 0, 1)) }}
+                            </div>
+                        @endif
                         <div>
                             <div style="font-size: 14px; font-weight: 500; color: #111827;" class="aluno-name">{{ $aluno->name }}</div>
-                            <div style="font-size: 12px; color: #9CA3AF;">{{ $aluno->birth_date->format('d/m/Y') }}</div>
+                            @if($aluno->is_atypical)
+                                <div style="display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px;">
+                                    @foreach(config('transtornos') as $field => [$sigla, $nome])
+                                        @if($aluno->$field)
+                                            <span style="background: #F5EDE6; color: #7C3700; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 20px;" title="{{ $nome }}">{{ $sigla }}@if($field === 'cid_autismo' && $aluno->tea_nivel_suporte) N{{ $aluno->tea_nivel_suporte }}@endif</span>
+                                        @endif
+                                    @endforeach
+                                    @if($aluno->condition)
+                                        <span style="background: #F3F4F6; color: #6B7280; font-size: 10px; padding: 1px 6px; border-radius: 20px;">{{ $aluno->condition }}</span>
+                                    @endif
+                                </div>
+                            @else
+                                <div style="font-size: 12px; color: #9CA3AF;">{{ $aluno->birth_date->format('d/m/Y') }}</div>
+                            @endif
                         </div>
                     </div>
                 </td>
@@ -133,10 +151,10 @@
                 <td style="padding: 14px 20px;">
                     @if($aluno->is_atypical)
                         <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">
-                            Atípico
+                            Público Alvo
                         </span>
                     @else
-                        <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; padding: 3px 8px; border-radius: 20px;">Típico</span>
+                        <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; padding: 3px 8px; border-radius: 20px;">Não público alvo</span>
                     @endif
                 </td>
                 <td style="padding: 14px 20px;">

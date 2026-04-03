@@ -3,10 +3,17 @@
 
 @section('content')
 <div style="margin-bottom: 28px;">
-    <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 4px;">
+    <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 6px;">
         Olá, {{ auth()->user()->name }}
     </h1>
-    <p style="font-size: 14px; color: #9CA3AF; margin: 0;">Resumo das suas turmas e alunos inclusivos</p>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <p style="font-size: 14px; color: #9CA3AF; margin: 0;">Resumo das suas turmas e alunos inclusivos</p>
+        @if($subject)
+            <span style="background: #E8F0F9; color: #004B8D; font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 20px;">
+                {{ $subject->name }}
+            </span>
+        @endif
+    </div>
 </div>
 
 @if(session('success'))
@@ -45,23 +52,147 @@
     </div>
 @endif
 
+{{-- Filtro por diagnóstico --}}
+@php
+    $filtroCidLabel = $filtroCid ? ($transtornos[$filtroCid][0] . ' — ' . $transtornos[$filtroCid][1]) : '';
+@endphp
+<form method="GET" action="{{ route('professor.dashboard') }}" id="formFiltroCid"
+      style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 16px 20px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
+    <input type="hidden" name="filtro_cid" id="filtro_cid_value" value="{{ $filtroCid ?? '' }}">
+    <div style="flex: 1; min-width: 200px; position: relative;">
+        <label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Filtrar por diagnóstico</label>
+        <input type="text" id="filtro_cid_input" placeholder="Digite sigla ou nome..." autocomplete="off"
+               value="{{ $filtroCidLabel }}"
+               oninput="filtrarSugestoes(this.value)"
+               onfocus="filtrarSugestoes(this.value)"
+               style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff; box-sizing: border-box;">
+        <div id="sugestoes_cid"
+             style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; margin-top: 4px; max-height: 220px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+        </div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+        <button type="submit"
+                style="background: #004B8D; color: white; border: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+            Filtrar
+        </button>
+        @if($filtroCid)
+            <a href="{{ route('professor.dashboard') }}"
+               style="padding: 9px 14px; border-radius: 8px; font-size: 13px; color: #6B7280; text-decoration: none; border: 1px solid #E5E7EB;">
+                Limpar
+            </a>
+        @endif
+    </div>
+</form>
+
+@php
+    $transtornosJson = json_encode(
+        collect($transtornos)->map(fn($v, $k) => ['field' => $k, 'sigla' => $v[0], 'nome' => $v[1]])->values()
+    );
+@endphp
+<script>
+const transtornosData = {!! $transtornosJson !!};
+let matchesAtuais = [];
+
+function filtrarSugestoes(query) {
+    const box = document.getElementById('sugestoes_cid');
+    const q = query.toLowerCase().trim();
+
+    // Limpa seleção anterior ao digitar nova busca
+    document.getElementById('filtro_cid_value').value = '';
+
+    matchesAtuais = q === ''
+        ? transtornosData
+        : transtornosData.filter(t =>
+            t.sigla.toLowerCase().includes(q) || t.nome.toLowerCase().includes(q)
+          );
+
+    if (matchesAtuais.length === 0) {
+        box.style.display = 'none';
+        return;
+    }
+
+    box.innerHTML = matchesAtuais.map(t => `
+        <div onclick="selecionarCid('${t.field}', '${t.sigla} — ${t.nome}')"
+             style="padding: 9px 14px; font-size: 13px; color: #374151; cursor: pointer; border-bottom: 1px solid #F9FAFB; display: flex; align-items: center; gap: 8px;"
+             onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='#fff'">
+            <span style="font-size: 11px; font-weight: 700; background: #F5EDE6; color: #7C3700; padding: 2px 7px; border-radius: 20px; flex-shrink: 0;">${t.sigla}</span>
+            <span>${t.nome}</span>
+        </div>
+    `).join('');
+
+    box.style.display = 'block';
+}
+
+function selecionarCid(field, label) {
+    document.getElementById('filtro_cid_value').value = field;
+    document.getElementById('filtro_cid_input').value = label;
+    document.getElementById('sugestoes_cid').style.display = 'none';
+}
+
+function autoSelecionarEFiltrar() {
+    // Se já há um valor selecionado via clique na sugestão, apenas envia
+    const valorAtual = document.getElementById('filtro_cid_value').value;
+    if (valorAtual) {
+        document.getElementById('formFiltroCid').submit();
+        return;
+    }
+
+    // Tenta auto-selecionar o primeiro match
+    if (matchesAtuais.length > 0) {
+        const t = matchesAtuais[0];
+        selecionarCid(t.field, `${t.sigla} — ${t.nome}`);
+        document.getElementById('formFiltroCid').submit();
+    }
+}
+
+document.getElementById('filtro_cid_input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        autoSelecionarEFiltrar();
+    }
+});
+
+document.getElementById('formFiltroCid').addEventListener('submit', function(e) {
+    const valorAtual = document.getElementById('filtro_cid_value').value;
+    if (!valorAtual && matchesAtuais.length > 0) {
+        e.preventDefault();
+        const t = matchesAtuais[0];
+        selecionarCid(t.field, `${t.sigla} — ${t.nome}`);
+        this.submit();
+    }
+});
+
+document.addEventListener('click', function(e) {
+    const box = document.getElementById('sugestoes_cid');
+    if (!box.contains(e.target) && e.target.id !== 'filtro_cid_input') {
+        box.style.display = 'none';
+    }
+});
+</script>
+
 @forelse($turmas as $turma)
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 24px; margin-bottom: 16px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #F9FAFB;">
             <div>
-                <h3 style="font-size: 16px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ $turma->name }}</h3>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                    <h3 style="font-size: 16px; font-weight: 700; color: #111827; margin: 0;">{{ $turma->name }}</h3>
+                    @if($subject)
+                        <span style="background: #E8F0F9; color: #004B8D; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 20px;">
+                            {{ $subject->name }}
+                        </span>
+                    @endif
+                </div>
                 <p style="font-size: 12px; color: #9CA3AF; margin: 0;">
                     {{ $turma->shift }} · {{ $turma->year }}
-                    @if($turma->pivot->subject) · {{ $turma->pivot->subject }} @endif
                 </p>
             </div>
             <span style="background: #E6F5F4; color: #009C8C; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px;">
-                {{ $turma->students->count() }} aluno(s) atípico(s)
+                {{ $turma->students->count() }} aluno(s) público alvo
             </span>
         </div>
 
         @if($turma->students->isEmpty())
-            <p style="font-size: 13px; color: #9CA3AF;">Nenhum aluno atípico nesta turma.</p>
+            <p style="font-size: 13px; color: #9CA3AF;">Nenhum aluno público alvo nesta turma.</p>
         @else
             <div>
                 @foreach($turma->students as $aluno)
@@ -73,29 +204,16 @@
                             <div>
                                 <p style="font-size: 14px; font-weight: 500; color: #111827; margin: 0;">{{ $aluno->name }}</p>
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
-                                    @if($aluno->cid_autismo)
-                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #FEF3C7; color: #92400E;">TEA</span>
-                                    @endif
-                                    @if($aluno->cid_tdah)
-                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #EDE9FE; color: #5B21B6;">TDAH</span>
-                                    @endif
-                                    @if($aluno->cid_down)
-                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #FCE7F3; color: #9D174D;">Down</span>
-                                    @endif
-                                    @if($aluno->cid_deficiencia_intelectual)
-                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #DBEAFE; color: #1E40AF;">Def. Intelectual</span>
-                                    @endif
-                                    @if($aluno->cid_deficiencia_visual)
-                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #D1FAE5; color: #065F46;">Def. Visual</span>
-                                    @endif
-                                    @if($aluno->cid_deficiencia_auditiva)
-                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #E0F2FE; color: #0369A1;">Def. Auditiva</span>
-                                    @endif
-                                    @if($aluno->cid_outros)
-                                        <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #F3F4F6; color: #6B7280;">Outros</span>
-                                    @endif
-                                    @if($aluno->condition && !$aluno->cid_autismo && !$aluno->cid_tdah && !$aluno->cid_down && !$aluno->cid_deficiencia_intelectual && !$aluno->cid_deficiencia_visual && !$aluno->cid_deficiencia_auditiva && !$aluno->cid_outros)
-                                        <span style="font-size: 11px; color: #9CA3AF;">{{ $aluno->condition }}</span>
+                                    @foreach(config('transtornos') as $field => [$sigla, $nome])
+                                        @if($aluno->$field)
+                                            <span style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: #F5EDE6; color: #7C3700;" title="{{ $nome }}">{{ $sigla }}</span>
+                                            @if($field === 'cid_autismo' && $aluno->tea_nivel_suporte)
+                                                <span style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #FEF3C7; color: #92400E;">Nível {{ $aluno->tea_nivel_suporte }}</span>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                    @if($aluno->condition)
+                                        <span style="font-size: 10px; color: #9CA3AF; padding: 2px 6px;">{{ $aluno->condition }}</span>
                                     @endif
                                 </div>
                             </div>

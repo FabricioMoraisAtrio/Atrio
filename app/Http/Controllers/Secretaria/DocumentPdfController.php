@@ -12,6 +12,10 @@ class DocumentPdfController extends Controller
     public function __invoke(Document $documento)
     {
         $documento->load('student', 'author');
+        $documento->student->load([
+            'school',
+            'schoolClasses' => fn($q) => $q->where('year', $documento->year),
+        ]);
 
         // Log LGPD
         DocumentAccessLog::create([

@@ -17,7 +17,7 @@ Route::get('/documentos', [DocumentController::class, 'index'])->name('documento
 
 Route::resource('alunos.documentos', DocumentController::class)
     ->shallow()
-    ->only(['create', 'store', 'show', 'edit', 'update']);
+    ->only(['create', 'store', 'show', 'edit', 'update', 'destroy']);
 
 Route::get('documentos/{documento}/pdf', [DocumentPdfController::class, '__invoke'])
     ->name('documentos.pdf');
