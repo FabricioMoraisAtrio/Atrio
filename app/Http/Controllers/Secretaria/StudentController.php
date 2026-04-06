@@ -11,60 +11,31 @@ class StudentController extends Controller
 {
 public function index(\Illuminate\Http\Request $request)
 {
-    $query = Student::with(['schoolClasses:id,name,shift,year'])->latest();
+    $ano = date('Y');
+    $query = Student::with(['schoolClasses' => fn($q) => $q->where('year', $ano)])->latest();
 
-    if ($request->filled('adaptacao')) {
-        $tag = $request->input('adaptacao');
-        $query->whereHas('documents', function ($q) use ($tag) {
-            $q->where('type', 'pei')
-              ->whereRaw("json_extract(content, '$.adaptacoes') LIKE ?", ['%' . $tag . '%']);
-        });
-    }
-
-    if ($request->filled('materia')) {
-        $materia = $request->input('materia');
-        $query->whereHas('documents', function ($q) use ($materia) {
-            $q->where('type', 'pei')
-              ->whereRaw("json_extract(content, '$.materia') = ?", [$materia]);
-        });
+    if ($request->filled('turma')) {
+        $query->whereHas('schoolClasses', fn($q) => $q->where('school_classes.id', $request->input('turma')));
     }
 
     if ($request->filled('perfil')) {
-        $perfil = $request->input('perfil');
-        match ($perfil) {
-            'atipico'  => $query->where('is_atypical', true),
-            'tipico'   => $query->where('is_atypical', false),
-            'tea'      => $query->where('cid_autismo', true),
-            'tdah'     => $query->where('cid_tdah', true),
-            'down'     => $query->where('cid_down', true),
+        match ($request->input('perfil')) {
+            'atipico'     => $query->where('is_atypical', true),
+            'tipico'      => $query->where('is_atypical', false),
+            'tea'         => $query->where('cid_autismo', true),
+            'tdah'        => $query->where('cid_tdah', true),
+            'down'        => $query->where('cid_down', true),
             'intelectual' => $query->where('cid_deficiencia_intelectual', true),
-            'visual'   => $query->where('cid_deficiencia_visual', true),
-            'auditiva' => $query->where('cid_deficiencia_auditiva', true),
-            default    => null,
+            'visual'      => $query->where('cid_deficiencia_visual', true),
+            'auditiva'    => $query->where('cid_deficiencia_auditiva', true),
+            default       => null,
         };
     }
 
     $alunos = $query->get();
+    $turmas = SchoolClass::where('year', $ano)->orderBy('name')->get();
 
-    $todasAdaptacoes = [
-        'Tempo extra na prova', 'Prova com fonte ampliada', 'Prova com imagens de apoio',
-        'Avaliação oral', 'Redução de questões', 'Questões objetivas (sem dissertativas)',
-        'Material concreto/manipulativo', 'Texto de apoio', 'Prova em braille',
-        'Intérprete de Libras', 'Sala separada', 'Leitura em voz alta pelo professor',
-        'Uso de calculadora', 'Apoio de escriba', 'Adaptação de conteúdo',
-        'Gravação de resposta (áudio)', 'Prova digitalizada', 'Sem limite de tempo',
-    ];
-
-    $materias = \App\Models\Document::where('type', 'pei')
-        ->whereNotNull('content')
-        ->get()
-        ->pluck('content.materia')
-        ->filter()
-        ->unique()
-        ->sort()
-        ->values();
-
-    return view('secretaria.alunos.index', compact('alunos', 'todasAdaptacoes', 'materias'));
+    return view('secretaria.alunos.index', compact('alunos', 'turmas'));
 }
     public function create()
     {

@@ -187,12 +187,12 @@ document.addEventListener('click', function(e) {
                 </p>
             </div>
             <span style="background: #E6F5F4; color: #009C8C; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px;">
-                {{ $turma->students->count() }} aluno(s) público alvo
+                {{ $turma->students->count() }} aluno(s) {{ strtolower(term('publico_alvo')) }}
             </span>
         </div>
 
         @if($turma->students->isEmpty())
-            <p style="font-size: 13px; color: #9CA3AF;">Nenhum aluno público alvo nesta turma.</p>
+            <p style="font-size: 13px; color: #9CA3AF;">Nenhum {{ strtolower(term('aluno')) }} {{ strtolower(term('publico_alvo')) }} nesta {{ strtolower(term('turma')) }}.</p>
         @else
             <div>
                 @foreach($turma->students as $aluno)

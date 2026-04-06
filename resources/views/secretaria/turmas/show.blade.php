@@ -6,7 +6,7 @@
     <a href="{{ route('secretaria.turmas.index') }}"
        style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Voltar para turmas
+        Voltar para {{ strtolower(term('turmas')) }}
     </a>
     <div style="display: flex; align-items: center; justify-content: space-between;">
         <div>
@@ -17,11 +17,11 @@
             <button onclick="document.getElementById('modal-aluno').style.display='flex'"
                     style="background: #004B8D; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-                Novo aluno
+                Novo {{ strtolower(term('aluno')) }}
             </button>
             <a href="{{ route('secretaria.turmas.edit', $turma) }}"
                style="padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid #E5E7EB; color: #374151;">
-                Editar turma
+                Editar {{ strtolower(term('turma')) }}
             </a>
         </div>
     </div>
@@ -37,15 +37,15 @@
 {{-- Cards métricas --}}
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Total de alunos</p>
+        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Total de {{ strtolower(term('alunos')) }}</p>
         <p style="font-size: 28px; font-weight: 700; color: #111827; margin: 0;">{{ $turma->students->count() }}</p>
     </div>
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Alunos atípicos</p>
+        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">{{ term('alunos') }} atípicos</p>
         <p style="font-size: 28px; font-weight: 700; color: #7E22CE; margin: 0;">{{ $turma->students->where('is_atypical', true)->count() }}</p>
     </div>
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Professores</p>
+        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">{{ term('professores') }}</p>
         <p style="font-size: 28px; font-weight: 700; color: #004B8D; margin: 0;">{{ $turma->teachers->count() }}</p>
     </div>
 </div>
@@ -53,12 +53,12 @@
 {{-- Lista de alunos --}}
 <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; overflow: hidden;">
     <div style="padding: 16px 20px; border-bottom: 1px solid #F3F4F6;">
-        <p style="font-size: 13px; font-weight: 600; color: #374151; margin: 0;">Alunos matriculados</p>
+        <p style="font-size: 13px; font-weight: 600; color: #374151; margin: 0;">{{ term('alunos') }} matriculados</p>
     </div>
     <table style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr style="background: #F9FAFB;">
-                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">{{ term('aluno') }}</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Matrícula</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Est. Caso</th>
@@ -101,7 +101,7 @@
             @empty
             <tr>
                 <td colspan="5" style="padding: 48px; text-align: center; color: #9CA3AF; font-size: 14px;">
-                    Nenhum aluno matriculado nesta turma.
+                    Nenhum {{ strtolower(term('aluno')) }} matriculado nesta {{ strtolower(term('turma')) }}.
                 </td>
             </tr>
             @endforelse
@@ -114,7 +114,7 @@
      style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center;">
     <div style="background: #fff; border-radius: 16px; padding: 32px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; position: relative;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-            <h2 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0;">Novo aluno</h2>
+            <h2 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0;">Novo {{ strtolower(term('aluno')) }}</h2>
             <button onclick="document.getElementById('modal-aluno').style.display='none'"
                     style="background: none; border: none; cursor: pointer; color: #9CA3AF; padding: 4px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -151,7 +151,7 @@
                     <input type="checkbox" name="is_atypical" value="1"
                            id="modal_is_atypical"
                            onchange="document.getElementById('modal_atypical_fields').style.display = this.checked ? 'block' : 'none'">
-                    <span style="font-size: 14px; font-weight: 600; color: #111827;">Aluno com perfil de atipicidade</span>
+                    <span style="font-size: 14px; font-weight: 600; color: #111827;">{{ term('aluno') }} com perfil de atipicidade</span>
                 </label>
 
                 <div id="modal_atypical_fields" style="display: none; margin-top: 16px;">
@@ -186,7 +186,7 @@
             <div style="display: flex; gap: 12px;">
                 <button type="submit"
                         style="background: #004B8D; color: white; border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; flex: 1;">
-                    Cadastrar aluno
+                    Cadastrar {{ strtolower(term('aluno')) }}
                 </button>
                 <button type="button" onclick="document.getElementById('modal-aluno').style.display='none'"
                         style="padding: 11px 20px; border-radius: 8px; font-size: 13px; color: #6B7280; border: 1px solid #E5E7EB; background: none; cursor: pointer;">

@@ -14,7 +14,7 @@
             <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ $cfg['titulo'] }}</h1>
             <p style="font-size: 13px; color: #9CA3AF; margin: 0;">
                 {{ $alunos->count() }} aluno(s) listado(s)
-                @if($cfg['so_publico']) · apenas público alvo @endif
+                @if($cfg['so_publico']) · apenas {{ term('publico_alvo') }} @endif
             </p>
         </div>
         @php
@@ -52,7 +52,7 @@
 
     @if(!$cfg['so_publico'])
     <div style="min-width: 160px;">
-        <label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Público Alvo</label>
+        <label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">{{ term('publico_alvo') }}</label>
         <select name="publico" style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
             <option value="">Todos</option>
             <option value="sim" {{ request('publico') === 'sim' ? 'selected' : '' }}>Sim</option>
@@ -88,7 +88,7 @@
                     <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
                     <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
                     @if(!$cfg['so_publico'])
-                    <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Público Alvo</th>
+                    <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">{{ term('publico_alvo') }}</th>
                     @endif
                     <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">{{ $cfg['titulo'] }}</th>
                     <th style="text-align: right; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Ação</th>
@@ -117,7 +117,7 @@
                                         <span style="font-size: 11px; color: #6B7280; padding: 2px 8px; background: #F3F4F6; border-radius: 20px;">{{ $turma->name }} · {{ $turma->shift }}</span>
                                     @endif
                                     @if(!$cfg['so_publico'] && $aluno->is_atypical)
-                                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">Público Alvo</span>
+                                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
                                     @endif
                                 </div>
                             </td>

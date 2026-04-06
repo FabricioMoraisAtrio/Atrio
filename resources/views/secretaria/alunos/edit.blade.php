@@ -85,7 +85,7 @@
                            id="is_atypical"
                            {{ old('is_atypical', $aluno->is_atypical) ? 'checked' : '' }}
                            onchange="toggleAtypical(this.checked)">
-                    <span style="font-size: 14px; font-weight: 600; color: #111827;">Aluno público alvo da Educação Especial</span>
+                    <span style="font-size: 14px; font-weight: 600; color: #111827;">{{ term('aluno') }} {{ strtolower(term('publico_alvo')) }} da Educação Especial</span>
                 </label>
                 <p style="font-size: 12px; color: #9CA3AF; margin: 0 0 0 26px;">Marque para habilitar os campos de condição</p>
 

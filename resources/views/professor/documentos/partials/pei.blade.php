@@ -1,19 +1,5 @@
 @php
     $content  = isset($documento) ? ($documento->content ?? []) : [];
-    $todasAdaptacoes = [
-        'Tempo extra na prova', 'Prova com fonte ampliada', 'Prova com imagens de apoio',
-        'Avaliação oral', 'Redução de questões', 'Questões objetivas (sem dissertativas)',
-        'Material concreto/manipulativo', 'Texto de apoio', 'Prova em braille',
-        'Intérprete de Libras', 'Sala separada', 'Leitura em voz alta pelo professor',
-        'Uso de calculadora', 'Apoio de escriba', 'Adaptação de conteúdo',
-        'Gravação de resposta (áudio)', 'Prova digitalizada', 'Sem limite de tempo',
-    ];
-
-    $selecionadas = $content['adaptacoes'] ?? [];
-    if (is_string($selecionadas)) {
-        $selecionadas = array_filter(array_map('trim', explode(',', $selecionadas)));
-    }
-    $selecionadas = array_values($selecionadas);
 
     $colunas = [
         'realiza_sem_suporte' => 'Realiza sem suporte',
@@ -123,40 +109,3 @@
 @endforeach
 @endif
 
-{{-- ═══ ADAPTAÇÕES CURRICULARES ═══ --}}
-<div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-    <p style="font-size: 11px; font-weight: 700; color: #004B8D; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Adaptações e/ou Adequações no Processo de Avaliação</p>
-    <p style="font-size: 12px; color: #9CA3AF; margin: 0 0 14px;">Selecione as adaptações aplicáveis a esta disciplina.</p>
-    <div id="tags-container" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-        @foreach($todasAdaptacoes as $tag)
-            @php $ativa = in_array($tag, $selecionadas); @endphp
-            <button type="button" onclick="toggleTag(this, '{{ $tag }}')" data-tag="{{ $tag }}"
-                    style="padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid; transition: all 0.15s;
-                        {{ $ativa ? 'background: #004B8D; color: white; border-color: #004B8D;' : 'background: white; color: #6B7280; border-color: #D1D5DB;' }}">
-                {{ $tag }}
-            </button>
-        @endforeach
-    </div>
-    <input type="hidden" name="adaptacoes" id="adaptacoes-input" value="{{ old('adaptacoes', json_encode($selecionadas)) }}">
-    <p style="font-size: 12px; color: #9CA3AF;"><span id="tags-count">{{ count($selecionadas) }}</span> adaptação(ões) selecionada(s)</p>
-</div>
-
-<script>
-(function() {
-    var input    = document.getElementById('adaptacoes-input');
-    var selected = [];
-    try { selected = JSON.parse(input.value) || []; } catch(e) { selected = []; }
-    window.toggleTag = function(btn, tag) {
-        var idx = selected.indexOf(tag);
-        if (idx === -1) {
-            selected.push(tag);
-            btn.style.background = '#004B8D'; btn.style.color = 'white'; btn.style.borderColor = '#004B8D';
-        } else {
-            selected.splice(idx, 1);
-            btn.style.background = 'white'; btn.style.color = '#6B7280'; btn.style.borderColor = '#D1D5DB';
-        }
-        input.value = JSON.stringify(selected);
-        document.getElementById('tags-count').textContent = selected.length;
-    };
-})();
-</script>

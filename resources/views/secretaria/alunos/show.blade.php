@@ -6,7 +6,7 @@
     <a href="{{ route('secretaria.alunos.index') }}"
        style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Voltar para alunos
+        Voltar para {{ strtolower(term('alunos')) }}
     </a>
 
     <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -87,7 +87,7 @@
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
         <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Perfil</p>
         @if($aluno->is_atypical)
-            <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Público Alvo</span>
+            <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
             @if($aluno->condition)
                 <p style="font-size: 13px; color: #6B7280; margin: 6px 0 0;">{{ $aluno->condition }}</p>
             @endif
@@ -103,7 +103,7 @@
                 @endforeach
             </div>
         @else
-            <span style="background: #F3F4F6; color: #6B7280; font-size: 12px; padding: 4px 10px; border-radius: 20px;">Não público alvo</span>
+            <span style="background: #F3F4F6; color: #6B7280; font-size: 12px; padding: 4px 10px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
         @endif
     </div>
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">

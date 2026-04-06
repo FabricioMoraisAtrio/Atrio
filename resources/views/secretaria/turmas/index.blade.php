@@ -1,16 +1,16 @@
 @extends('layouts.app')
-@section('title', 'Turmas')
+@section('title', term('turmas'))
 
 @section('content')
 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
     <div>
-        <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">Turmas</h1>
-        <p style="font-size: 13px; color: #9CA3AF; margin: 0;">{{ $turmas->count() }} turmas cadastradas</p>
+        <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ term('turmas') }}</h1>
+        <p style="font-size: 13px; color: #9CA3AF; margin: 0;">{{ $turmas->count() }} {{ strtolower(term('turmas')) }} cadastradas</p>
     </div>
     <a href="{{ route('secretaria.turmas.create') }}"
        style="background: #004B8D; color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-        Nova turma
+        Nova {{ strtolower(term('turma')) }}
     </a>
 </div>
 
@@ -27,7 +27,7 @@
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Nome</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Turno</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Ano</th>
-                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Alunos</th>
+                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">{{ term('alunos') }}</th>
                 <th style="padding: 12px 20px;"></th>
             </tr>
         </thead>
@@ -48,7 +48,7 @@
                 <td style="padding: 14px 20px; font-size: 13px; color: #6B7280;">{{ $turma->year }}</td>
                 <td style="padding: 14px 20px;">
                     <span style="background: #E6F5F4; color: #009C8C; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">
-                        {{ $turma->students_count }} alunos
+                        {{ $turma->students_count }} {{ strtolower(term('alunos')) }}
                     </span>
                 </td>
                 <td style="padding: 14px 20px; text-align: right;">
@@ -59,7 +59,7 @@
                            style="font-size: 13px; color: #6B7280; text-decoration: none;">Editar</a>
                         <form method="POST" action="{{ route('secretaria.turmas.destroy', $turma) }}" style="display: inline;">
                             @csrf @method('DELETE')
-                            <button type="button" data-confirm="Remover turma?"
+                            <button type="button" data-confirm="Remover {{ strtolower(term('turma')) }}?"
                                     style="font-size: 13px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 0;">
                                 Remover
                             </button>
@@ -70,7 +70,7 @@
             @empty
             <tr>
                 <td colspan="5" style="padding: 48px; text-align: center; color: #9CA3AF; font-size: 14px;">
-                    Nenhuma turma cadastrada.
+                    Nenhuma {{ strtolower(term('turma')) }} cadastrada.
                 </td>
             </tr>
             @endforelse

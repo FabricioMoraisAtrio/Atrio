@@ -1,7 +1,7 @@
 @props(['aluno', 'role' => 'secretaria'])
 
 <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 24px; margin-bottom: 16px;">
-    <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 16px;">Laudos</h3>
+    <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 16px;">{{ term('laudos') }}</h3>
 
     @if($role === 'secretaria')
     <form method="POST"
@@ -24,7 +24,7 @@
                 @error('tipo')<p style="font-size: 12px; color: #EF4444; margin: 4px 0 0;">{{ $message }}</p>@enderror
             </div>
             <div>
-                <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Data do laudo</label>
+                <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Data do {{ strtolower(term('laudo')) }}</label>
                 <input type="date" name="data_laudo" value="{{ old('data_laudo') }}"
                        style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;">
                 @error('data_laudo')<p style="font-size: 12px; color: #EF4444; margin: 4px 0 0;">{{ $message }}</p>@enderror
@@ -49,7 +49,7 @@
             </label>
             <button type="submit"
                     style="background: #004B8D; color: white; border: none; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                Enviar laudo
+                Enviar {{ strtolower(term('laudo')) }}
             </button>
         </div>
         @error('arquivo')<p style="font-size: 12px; color: #EF4444; margin-top: 8px;">{{ $message }}</p>@enderror
@@ -81,7 +81,7 @@
                 @if($role === 'secretaria')
                     <form method="POST" action="{{ route('secretaria.laudos.destroy', $laudo) }}" style="display: inline;">
                         @csrf @method('DELETE')
-                        <button type="button" data-confirm="Remover laudo?"
+                        <button type="button" data-confirm="Remover {{ strtolower(term('laudo')) }}?"
                                 style="font-size: 12px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 0;">
                             Remover
                         </button>
@@ -90,6 +90,6 @@
             </div>
         </div>
     @empty
-        <p style="font-size: 13px; color: #9CA3AF;">Nenhum laudo cadastrado.</p>
+        <p style="font-size: 13px; color: #9CA3AF;">Nenhum {{ strtolower(term('laudo')) }} cadastrado.</p>
     @endforelse
 </div>

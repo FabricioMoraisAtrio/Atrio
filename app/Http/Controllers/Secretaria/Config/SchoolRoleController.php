@@ -21,6 +21,10 @@ class SchoolRoleController extends Controller
                 'alunos.editar' => 'Editar alunos',
                 'alunos.deletar'=> 'Remover alunos',
             ],
+            'Turmas' => [
+                'turmas.ver'      => 'Visualizar turmas',
+                'turmas.gerenciar'=> 'Criar, editar e remover turmas',
+            ],
             'Documentos' => [
                 'documentos.ver_todos'    => 'Ver todos os documentos',
                 'pei.ver'                 => 'Visualizar PEI',
@@ -38,11 +42,17 @@ class SchoolRoleController extends Controller
                 'observacoes.criar'=> 'Registrar observações',
             ],
             'Usuários' => [
+                'usuarios.ver'    => 'Visualizar usuários',
                 'usuarios.criar'  => 'Cadastrar usuários',
                 'usuarios.editar' => 'Editar usuários',
+                'usuarios.deletar'=> 'Remover usuários',
             ],
-            'Relatórios' => [
+            'Matérias' => [
+                'materias.gerenciar' => 'Criar, editar e remover matérias',
+            ],
+            'Relatórios & Configuração' => [
                 'relatorios.exportar' => 'Exportar relatórios',
+                'escola.configurar'   => 'Configurar escola',
             ],
         ];
     }

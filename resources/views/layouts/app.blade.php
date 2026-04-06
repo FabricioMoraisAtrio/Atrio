@@ -234,7 +234,7 @@
         <div style="padding: 24px 20px 20px; border-bottom: 1px solid #F3F4F6;">
             @php
                 $roleDashboardMap = ['admin' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'professor.dashboard'];
-                $dashboardRoute = auth()->check() ? ($roleDashboardMap[auth()->user()->getRoleNames()->first()] ?? 'home') : 'home';
+                $dashboardRoute = auth()->check() ? ($roleDashboardMap[auth()->user()->getRoleNames()->first()] ?? 'secretaria.dashboard') : 'secretaria.dashboard';
             @endphp
             <a href="{{ route($dashboardRoute) }}"
                style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
@@ -290,14 +290,15 @@
                                 ->count()
                         );
                         $items = [
-                            ['route' => 'secretaria.dashboard',                  'icon' => 'grid',    'label' => 'Painel'],
-                            ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => 'Turmas'],
-                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
-                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos'],
+                            ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
+                            ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel'],
+                            ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas')],
+                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => term('alunos'), 'badge' => $pendentesCount ?: null],
+                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => term('documentos')],
                             ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações'],
                             ['route' => 'secretaria.subjects.index',             'icon' => 'subject', 'label' => 'Matérias'],
                             ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários'],
-                            ['route' => 'secretaria.config.index', 'icon' => 'config', 'label' => 'Configurações', 'active' => 'secretaria.config.*'],
+                            ['route' => 'secretaria.config.index',               'icon' => 'config',  'label' => 'Configurações', 'active' => 'secretaria.config.*'],
                         ];
                     @endphp
                 @endhasrole
@@ -314,14 +315,14 @@
                                 ->count()
                         );
                         $items = [
-                            ['route' => 'secretaria.dashboard',                'icon' => 'grid',    'label' => 'Painel'],
-                            ['route' => 'secretaria.turmas.index',             'icon' => 'academic','label' => 'Turmas'],
-                            ['route' => 'secretaria.alunos.index',             'icon' => 'users',   'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
-                            ['route' => 'secretaria.documentos.index',         'icon' => 'doc',     'label' => 'Documentos'],
-                            ['route' => 'secretaria.laudos.index',             'icon' => 'laudo',   'label' => 'Laudos'],
-                            ['route' => 'secretaria.rotinas.documentos.index', 'icon' => 'rotina',  'label' => 'Rotina Docs'],
+                            ['route' => 'secretaria.dashboard',                'icon' => 'home',    'label' => 'Início'],
+                            ['route' => 'secretaria.painel',                   'icon' => 'grid',    'label' => 'Painel'],
+                            ['route' => 'secretaria.turmas.index',             'icon' => 'academic','label' => term('turmas')],
+                            ['route' => 'secretaria.alunos.index',             'icon' => 'users',   'label' => term('alunos'), 'badge' => $pendentesCount ?: null],
+                            ['route' => 'secretaria.rotinas.documentos.index', 'icon' => 'rotina',  'label' => term('documentos')],
                             ['route' => 'secretaria.rotinas.adaptacoes',       'icon' => 'rotina',  'label' => 'Adaptações'],
                             ['route' => 'secretaria.subjects.index',           'icon' => 'subject', 'label' => 'Matérias'],
+                            ['route' => 'secretaria.usuarios.index',           'icon' => 'user',    'label' => 'Usuários'],
                         ];
                     @endphp
                 @endhasanyrole
@@ -333,6 +334,28 @@
                         ['route' => 'professor.documentos.index', 'icon' => 'doc',      'label' => 'Documentos'],
                     ]; @endphp
                 @endhasrole
+
+                @php
+                    // Perfis customizados da escola (ex: s1_psicólogo)
+                    if (!isset($items) && auth()->check()) {
+                        $schoolId = session('school_id');
+                        $hasCustomRole = auth()->user()->roles()
+                            ->where('name', 'like', "s{$schoolId}_%")
+                            ->exists();
+                        if ($hasCustomRole) {
+                            $items = [
+                                ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
+                                ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel'],
+                                ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas')],
+                                ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => term('alunos')],
+                                ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => term('documentos')],
+                                ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações'],
+                                ['route' => 'secretaria.subjects.index',             'icon' => 'subject', 'label' => 'Matérias'],
+                                ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários'],
+                            ];
+                        }
+                    }
+                @endphp
 
 @foreach($items ?? [] as $item)
                     @php
@@ -381,7 +404,12 @@
                                 'orientador'  => 'Orientação Pedagógica',
                                 'professor'   => 'Professor',
                             ];
-                            echo $roleLabels[auth()->user()->getRoleNames()->first()] ?? auth()->user()->getRoleNames()->first();
+                            $sidebarRole = auth()->user()->getRoleNames()->first();
+                            $sidebarRoleLabel = $roleLabels[$sidebarRole] ?? null;
+                            if (!$sidebarRoleLabel && $sidebarRole && str_starts_with($sidebarRole, 's')) {
+                                $sidebarRoleLabel = \App\Models\SchoolRole::where('spatie_role', $sidebarRole)->value('name');
+                            }
+                            echo $sidebarRoleLabel ?? $sidebarRole;
                         @endphp
                     </div>
                 </div>

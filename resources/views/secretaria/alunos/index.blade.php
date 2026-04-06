@@ -1,22 +1,22 @@
 @extends('layouts.app')
-@section('title', 'Alunos')
+@section('title', term('alunos'))
 
 @section('content')
 
 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
     <div>
-        <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">Alunos</h1>
+        <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ term('alunos') }}</h1>
         <p style="font-size: 13px; color: #9CA3AF; margin: 0;">
-        {{ \App\Models\Student::count() }} alunos cadastrados
-        @if(request('adaptacao') || request('materia') || request('perfil'))
-            — <span style="color: #004B8D; font-weight: 600;">filtro ativo: {{ count(array_filter([request('adaptacao'), request('materia'), request('perfil')])) }} critério(s)</span>
+        {{ \App\Models\Student::count() }} {{ strtolower(term('alunos')) }} cadastrados
+        @if(request('turma') || request('perfil'))
+            — <span style="color: #004B8D; font-weight: 600;">filtro ativo: {{ count(array_filter([request('turma'), request('perfil')])) }} critério(s)</span>
         @endif
     </p>
     </div>
     <a href="{{ route('secretaria.alunos.create') }}"
        style="background: #004B8D; color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-        Novo aluno
+        Novo {{ strtolower(term('aluno')) }}
     </a>
 </div>
 
@@ -36,8 +36,8 @@
                 style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
             <option value="">Todos os perfis</option>
             <optgroup label="Perfil geral">
-                <option value="atipico"  {{ request('perfil') === 'atipico'  ? 'selected' : '' }}>Público Alvo</option>
-                <option value="tipico"   {{ request('perfil') === 'tipico'   ? 'selected' : '' }}>Não público alvo</option>
+                <option value="atipico"  {{ request('perfil') === 'atipico'  ? 'selected' : '' }}>{{ term('publico_alvo') }}</option>
+                <option value="tipico"   {{ request('perfil') === 'tipico'   ? 'selected' : '' }}>{{ term('nao_publico_alvo') }}</option>
             </optgroup>
             <optgroup label="Condição específica">
                 <option value="tea"         {{ request('perfil') === 'tea'         ? 'selected' : '' }}>TEA (Autismo)</option>
@@ -50,36 +50,25 @@
         </select>
     </div>
 
-    <div style="flex: 1; min-width: 200px;">
-        <label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Adaptação para prova</label>
-        <select name="adaptacao"
+    <div style="flex: 1; min-width: 180px;">
+        <label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Turma</label>
+        <select name="turma"
                 style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
-            <option value="">Todas as adaptações</option>
-            @foreach($todasAdaptacoes as $tag)
-                <option value="{{ $tag }}" {{ request('adaptacao') === $tag ? 'selected' : '' }}>{{ $tag }}</option>
+            <option value="">Todas as turmas</option>
+            @foreach($turmas as $turma)
+                <option value="{{ $turma->id }}" {{ request('turma') == $turma->id ? 'selected' : '' }}>
+                    {{ $turma->name }}
+                </option>
             @endforeach
         </select>
     </div>
-
-    @if($materias->isNotEmpty())
-    <div style="flex: 1; min-width: 160px;">
-        <label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Matéria</label>
-        <select name="materia"
-                style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
-            <option value="">Todas as matérias</option>
-            @foreach($materias as $m)
-                <option value="{{ $m }}" {{ request('materia') === $m ? 'selected' : '' }}>{{ $m }}</option>
-            @endforeach
-        </select>
-    </div>
-    @endif
 
     <div style="display: flex; gap: 8px;">
         <button type="submit"
                 style="background: #004B8D; color: white; border: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
             Filtrar
         </button>
-        @if(request('adaptacao') || request('materia') || request('perfil'))
+        @if(request('turma') || request('perfil'))
             <a href="{{ route('secretaria.alunos.index') }}"
                style="padding: 9px 14px; border-radius: 8px; font-size: 13px; color: #6B7280; text-decoration: none; border: 1px solid #E5E7EB;">
                 Limpar
@@ -102,9 +91,9 @@
     <table style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr style="background: #F9FAFB;">
-                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">{{ term('aluno') }}</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Matrícula</th>
-                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
+                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">{{ term('turma') }}</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Est. Caso</th>
                 <th style="padding: 12px 20px;"></th>
@@ -151,10 +140,10 @@
                 <td style="padding: 14px 20px;">
                     @if($aluno->is_atypical)
                         <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">
-                            Público Alvo
+                            {{ term('publico_alvo') }}
                         </span>
                     @else
-                        <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; padding: 3px 8px; border-radius: 20px;">Não público alvo</span>
+                        <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; padding: 3px 8px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
                     @endif
                 </td>
                 <td style="padding: 14px 20px;">
@@ -172,7 +161,7 @@
                            style="font-size: 13px; color: #6B7280; text-decoration: none;">Editar</a>
                         <form method="POST" action="{{ route('secretaria.alunos.destroy', $aluno) }}" style="display: inline;">
                             @csrf @method('DELETE')
-                            <button type="button" data-confirm="Remover aluno?"
+                            <button type="button" data-confirm="Remover {{ strtolower(term('aluno')) }}?"
                                     style="font-size: 13px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 0;">
                                 Remover
                             </button>
@@ -183,7 +172,7 @@
             @empty
             <tr>
                 <td colspan="6" style="padding: 48px; text-align: center; color: #9CA3AF; font-size: 14px;">
-                    Nenhum aluno cadastrado.
+                    Nenhum {{ strtolower(term('aluno')) }} cadastrado.
                 </td>
             </tr>
             @endforelse

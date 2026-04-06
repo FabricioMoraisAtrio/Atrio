@@ -65,11 +65,24 @@
                     {{ str_replace('_', ' ', $campo) }}
                 </p>
                 @if(is_array($valor))
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        @foreach($valor as $tag)
-                            <span style="padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #E8F0F9; color: #004B8D;">{{ $tag }}</span>
-                        @endforeach
-                    </div>
+                    @php $primeiroItem = reset($valor); @endphp
+                    @if(is_array($primeiroItem))
+                        {{-- Array de objetos (ex: habilidades_academicas) --}}
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                            @foreach($valor as $item)
+                                @if(!empty($item['meta']))
+                                    <span style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #F3F4F6; color: #374151;">{{ $item['meta'] }}</span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @else
+                        {{-- Array simples de strings (ex: adaptações) --}}
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            @foreach($valor as $tag)
+                                <span style="padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #E8F0F9; color: #004B8D;">{{ $tag }}</span>
+                            @endforeach
+                        </div>
+                    @endif
                 @else
                     <p style="font-size: 14px; color: #374151; margin: 0; line-height: 1.7; white-space: pre-line;">{{ $valor }}</p>
                 @endif

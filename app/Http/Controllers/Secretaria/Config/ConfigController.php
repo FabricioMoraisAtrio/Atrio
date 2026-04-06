@@ -54,6 +54,7 @@ class ConfigController extends Controller
             'aluno', 'alunos', 'turma', 'turmas',
             'laudo', 'laudos', 'professor', 'professores',
             'coordenador', 'orientador', 'documento', 'documentos',
+            'publico_alvo', 'nao_publico_alvo',
         ];
 
         foreach ($terms as $term) {

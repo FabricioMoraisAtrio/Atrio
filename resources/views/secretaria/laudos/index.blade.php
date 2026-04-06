@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title', 'Laudos')
+@section('title', term('laudos'))
 
 @section('content')
 <div style="margin-bottom: 24px;">
-    <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">Laudos</h1>
-    <p style="font-size: 13px; color: #9CA3AF; margin: 0;">Todos os laudos enviados para alunos da escola</p>
+    <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ term('laudos') }}</h1>
+    <p style="font-size: 13px; color: #9CA3AF; margin: 0;">Todos os {{ strtolower(term('laudos')) }} enviados para {{ strtolower(term('alunos')) }} da escola</p>
 </div>
 
 @if(session('success'))
@@ -25,7 +25,7 @@
                     default           => 'Outro',
                 } }}
             </div>
-            <span style="font-size: 12px; color: #9CA3AF;">{{ $items->count() }} laudo(s)</span>
+            <span style="font-size: 12px; color: #9CA3AF;">{{ $items->count() }} {{ strtolower(term('laudo')) }}(s)</span>
         </div>
         <div>
             @foreach($items as $laudo)
@@ -50,7 +50,7 @@
                         </a>
                         <form method="POST" action="{{ route('secretaria.laudos.destroy', $laudo) }}" style="display: inline;">
                             @csrf @method('DELETE')
-                            <button type="button" data-confirm="Remover laudo?"
+                            <button type="button" data-confirm="Remover {{ strtolower(term('laudo')) }}?"
                                     style="font-size: 12px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 0;">
                                 Remover
                             </button>
@@ -62,7 +62,7 @@
     </div>
 @empty
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 48px; text-align: center;">
-        <p style="font-size: 14px; color: #9CA3AF;">Nenhum laudo cadastrado ainda.</p>
+        <p style="font-size: 14px; color: #9CA3AF;">Nenhum {{ strtolower(term('laudo')) }} cadastrado ainda.</p>
     </div>
 @endforelse
 @endsection

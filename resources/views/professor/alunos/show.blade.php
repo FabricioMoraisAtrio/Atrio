@@ -33,7 +33,7 @@
         </div>
         @if($aluno->is_atypical)
             <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 20px;">
-                Público Alvo
+                {{ term('publico_alvo') }}
             </span>
         @endif
     </div>

@@ -69,16 +69,38 @@
 
                 <div style="margin-bottom: 24px;">
                     <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Logo da Escola</label>
-                    @if($escola->logo)
-                        <div style="margin-bottom: 12px;">
-                            <img src="{{ route('school.logo', ['filename' => basename($escola->logo)]) }}"
-                                 style="height: 48px; object-fit: contain; border: 1px solid #F3F4F6; border-radius: 8px; padding: 6px;">
-                        </div>
-                    @endif
-                    <input type="file" name="logo" accept="image/*"
-                           style="font-size: 13px; color: #6B7280;">
-                    <p style="font-size: 11px; color: #9CA3AF; margin-top: 4px;">PNG ou JPG, máx. 2MB. Aparece na barra lateral.</p>
+
+                    <div id="cfg-logo-preview-wrapper" style="{{ $escola->logo ? '' : 'display:none;' }} margin-bottom: 10px;">
+                        <img id="cfg-logo-preview-img"
+                             src="{{ $escola->logo ? route('school.logo', ['filename' => basename($escola->logo)]) : '' }}"
+                             style="height: 52px; max-width: 180px; object-fit: contain; border: 1px solid #E5E7EB; border-radius: 8px; padding: 6px; background: #F9FAFB;">
+                    </div>
+
+                    <label for="cfg-logo-input" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #D1D5DB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; background: #F9FAFB;"
+                           onmouseover="this.style.background='#F3F4F6'" onmouseout="this.style.background='#F9FAFB'">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                        </svg>
+                        <span id="cfg-logo-label">{{ $escola->logo ? 'Trocar imagem…' : 'Escolher imagem…' }}</span>
+                    </label>
+                    <input id="cfg-logo-input" type="file" name="logo" accept=".png,.jpg,.jpeg,image/png,image/jpeg"
+                           style="display: none;"
+                           onchange="previewCfgLogo(this)">
+                    <p style="font-size: 11px; color: #9CA3AF; margin-top: 6px;">PNG ou JPG, máx. 2MB. Aparece na barra lateral.</p>
                 </div>
+                <script>
+                function previewCfgLogo(input) {
+                    if (input.files && input.files[0]) {
+                        document.getElementById('cfg-logo-label').textContent = input.files[0].name;
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            document.getElementById('cfg-logo-preview-img').src = e.target.result;
+                            document.getElementById('cfg-logo-preview-wrapper').style.display = '';
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+                </script>
 
                 <button type="submit"
                         style="background: #004B8D; color: white; border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
@@ -109,8 +131,10 @@
                         ['key' => 'professores', 'singular' => false, 'label' => 'Professor (plural)',    'default' => 'Professores'],
                         ['key' => 'coordenador', 'singular' => true,  'label' => 'Coordenador',          'default' => 'Coordenador'],
                         ['key' => 'orientador',  'singular' => true,  'label' => 'Orientador',           'default' => 'Orientador'],
-                        ['key' => 'documento',   'singular' => true,  'label' => 'Documento (singular)', 'default' => 'Documento'],
-                        ['key' => 'documentos',  'singular' => false, 'label' => 'Documento (plural)',   'default' => 'Documentos'],
+                        ['key' => 'documento',        'singular' => true,  'label' => 'Documento (singular)',  'default' => 'Documento'],
+                        ['key' => 'documentos',       'singular' => false, 'label' => 'Documento (plural)',    'default' => 'Documentos'],
+                        ['key' => 'publico_alvo',     'singular' => true,  'label' => 'Público Alvo',          'default' => 'Público Alvo'],
+                        ['key' => 'nao_publico_alvo', 'singular' => true,  'label' => 'Não Público Alvo',      'default' => 'Não público alvo'],
                     ];
                 @endphp
 

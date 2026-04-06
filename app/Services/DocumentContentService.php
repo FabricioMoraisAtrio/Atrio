@@ -11,61 +11,34 @@ class DocumentContentService
         return match($type) {
 
             'estudo_caso' => [
-                // Equipe do colégio
-                'professor_titular'         => $request->input('professor_titular'),
-                'soe'                       => $request->input('soe'),
-                'scp'                       => $request->input('scp'),
-                'saee'                      => $request->input('saee'),
+                // Identificação complementar
+                'contexto_familiar'         => $request->input('contexto_familiar'),
 
-                // Equipe multidisciplinar
-                'psicologa'                 => $request->input('psicologa'),
-                'psiquiatra'                => $request->input('psiquiatra'),
-                'psicopedagoga'             => $request->input('psicopedagoga'),
-                'fisioterapeuta'            => $request->input('fisioterapeuta'),
-                'at'                        => $request->input('at'),
+                // Histórico Escolar
+                'historico_escolar'         => $request->input('historico_escolar'),
+                'frequencia_assiduidade'    => $request->input('frequencia_assiduidade'),
 
-                // Trajetória escolar
-                'historico'                 => $request->input('historico'),
+                // Observações Pedagógicas
+                'nivel_desenvolvimento'     => $request->input('nivel_desenvolvimento'),
+                'comportamento_sala'        => $request->input('comportamento_sala'),
+                'interacao_colegas'         => $request->input('interacao_colegas'),
 
-                // A) Aspectos Cognitivos e Acadêmicos
-                'atencao'                   => $request->input('atencao'),
-                'memoria'                   => $request->input('memoria'),
-                'raciocinio_logico'         => $request->input('raciocinio_logico'),
-                'leitura_escrita'           => $request->input('leitura_escrita'),
-                'matematica'                => $request->input('matematica'),
-                'organizacao'               => $request->input('organizacao'),
+                // Barreiras Identificadas
+                'desafios_conteudo'         => $request->input('desafios_conteudo'),
+                'barreiras_fisicas'         => $request->input('barreiras_fisicas'),
 
-                // B) Aspectos Comunicacionais
-                'linguagem_expressiva'      => $request->input('linguagem_expressiva'),
-                'linguagem_receptiva'       => $request->input('linguagem_receptiva'),
-                'comunicacao_alternativa'   => $request->input('comunicacao_alternativa'),
-
-                // C) Aspectos Socioemocionais e Comportamentais
-                'interacao_social'          => $request->input('interacao_social'),
-                'autonomia'                 => $request->input('autonomia'),
-                'regulacao_emocional'       => $request->input('regulacao_emocional'),
+                // Potencialidades
                 'interesses_motivacao'      => $request->input('interesses_motivacao'),
+                'habilidades_destaque'      => $request->input('habilidades_destaque'),
 
-                // D) Aspectos Sensoriais e Motores
-                'motricidade_grossa'        => $request->input('motricidade_grossa'),
-                'motricidade_fina'          => $request->input('motricidade_fina'),
-                'processamento_sensorial'   => $request->input('processamento_sensorial'),
+                // Encaminhamentos
+                'estrategias_sala'          => $request->input('estrategias_sala'),
+                'adaptacoes_necessarias'    => $request->input('adaptacoes_necessarias'),
+                'encaminhamentos_rede'      => $request->input('encaminhamentos_rede'),
 
-                // Análise da Participação e Rotina Escolar
-                'rotina'                    => $request->input('rotina'),
-                'participacao_aulas'        => $request->input('participacao_aulas'),
-                'participacao_intervalos'   => $request->input('participacao_intervalos'),
-                'apoios_necessarios'        => $request->input('apoios_necessarios'),
-
-                // Síntese
-                'potencialidades'           => $request->input('potencialidades'),
-                'barreiras'                 => $request->input('barreiras'),
-                'encaminhamentos'           => $request->input('encaminhamentos'),
-
-                // Responsáveis pela elaboração
-                'profissional_aee'          => $request->input('profissional_aee'),
-                'orientador_educacional'    => $request->input('orientador_educacional'),
-                'contribuicoes'             => $request->input('contribuicoes'),
+                // Equipe responsável
+                'elaborado_por'             => $request->input('elaborado_por'),
+                'data_elaboracao'           => date('Y-m-d'),
 
                 'observacoes_livres'        => $request->input('observacoes_livres'),
             ],
@@ -81,9 +54,6 @@ class DocumentContentService
                 'habilidades_academicas'     => $request->input('habilidades_academicas', []),
                 'habilidades_socioemocionais' => $request->input('habilidades_socioemocionais', []),
                 'habilidades_funcionais'     => $request->input('habilidades_funcionais', []),
-
-                // Adaptações curriculares (tags JSON)
-                'adaptacoes'                 => json_decode($request->input('adaptacoes', '[]'), true) ?: [],
 
                 'observacoes_livres'         => $request->input('observacoes_livres'),
             ],

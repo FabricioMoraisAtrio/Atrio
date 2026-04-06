@@ -11,217 +11,263 @@
         ->implode(', ');
     if ($aluno->condition) $diagnostico .= ($diagnostico ? ', ' : '') . $aluno->condition;
 
-    $responsaveis = collect([$aluno->responsavel_nome, $aluno->responsavel_2_nome])
-        ->filter()->implode(' / ');
-
-    $idade = $aluno->birth_date ? $aluno->birth_date->age . ' anos' : '';
+    $idade = $aluno->birth_date ? $aluno->birth_date->format('d/m/Y') . ' (' . $aluno->birth_date->age . ' anos)' : '—';
 
     $val = fn($key) => $c[$key] ?? '';
 
-    // Cores
-    $hdr = '#A8BAD0';   // cabeçalho de seção
-    $sub = '#D0DCE8';   // sub-seção
-    $lbl = '#E8EEF4';   // célula de rótulo
-    $brd = '#999';      // borda
+    $dataElab = $val('data_elaboracao')
+        ? \Carbon\Carbon::parse($val('data_elaboracao'))->format('d/m/Y')
+        : date('d/m/Y');
 @endphp
 
 <style>
-    body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #111; padding: 28px 32px; }
-    .doc-title { text-align: center; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
-    table { width: 100%; border-collapse: collapse; }
-    td, th { border: 1px solid {{ $brd }}; vertical-align: top; padding: 4px 7px; }
-    .hdr { background: {{ $hdr }}; font-weight: bold; text-align: center; text-transform: uppercase; font-size: 9px; letter-spacing: 0.5px; padding: 5px 7px; }
-    .sub { background: {{ $sub }}; font-weight: bold; font-size: 9px; padding: 4px 7px; }
-    .lbl { background: {{ $lbl }}; font-weight: bold; font-size: 9px; white-space: nowrap; width: 1%; }
-    .val { font-size: 9.5px; min-height: 18px; }
-    .tall { min-height: 40px; }
-    .sig-line { border-bottom: 1px solid #333; min-width: 180px; display: inline-block; margin-right: 8px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: DejaVu Sans, sans-serif;
+        font-size: 9.5px;
+        color: #1a1a1a;
+        padding: 28px 36px;
+        line-height: 1.5;
+    }
+
+    /* Cabeçalho */
+    .doc-header { border-bottom: 2px solid #1a1a1a; padding-bottom: 12px; margin-bottom: 16px; }
+    .doc-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .doc-school { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+    .doc-type { font-size: 9px; color: #555; }
+    .doc-title { font-size: 13px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 0; }
+
+    /* Identificação */
+    .id-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+    .id-table td { border: 1px solid #ccc; padding: 4px 8px; font-size: 9px; }
+    .id-label { background: #f0f0f0; font-weight: bold; width: 110px; color: #444; white-space: nowrap; }
+
+    /* Seção */
+    .section { margin-bottom: 16px; }
+    .section-header {
+        border-left: 3px solid #7C3700;
+        padding: 3px 0 3px 8px;
+        margin-bottom: 10px;
+    }
+    .section-title { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: #1a1a1a; }
+    .section-sub { font-size: 8.5px; color: #888; font-style: italic; margin-top: 1px; }
+
+    /* Campo */
+    .field { margin-bottom: 12px; }
+    .field-label { font-size: 9px; font-weight: bold; color: #333; margin-bottom: 4px; }
+    .field-value {
+        font-size: 9.5px;
+        color: #1a1a1a;
+        border-bottom: 1px solid #ccc;
+        min-height: 28px;
+        padding: 3px 0 6px;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    .field-value.tall { min-height: 50px; }
+    .field-value.empty { color: #bbb; font-style: italic; }
+
+    /* Grid 2 colunas */
+    .grid-2 { display: table; width: 100%; }
+    .grid-2 .col { display: table-cell; width: 50%; vertical-align: top; }
+    .grid-2 .col:first-child { padding-right: 16px; }
+
+    /* Assinaturas */
+    .sig-box { margin-top: 20px; border-top: 1px solid #ccc; padding-top: 14px; }
+    .sig-line { display: inline-block; border-bottom: 1px solid #555; width: 200px; margin-right: 8px; height: 16px; vertical-align: bottom; }
+    .sig-label { font-size: 8.5px; color: #555; margin-top: 2px; }
+
+    .footer { font-size: 8px; color: #999; text-align: center; margin-top: 10px; }
     .page-break { page-break-after: always; }
-    .footer { font-size: 8px; color: #666; text-align: center; margin-top: 8px; }
+    hr.divider { border: none; border-top: 1px solid #e0e0e0; margin: 14px 0; }
 </style>
 
-<p class="doc-title">{{ $aluno->registration_number ?? '000000' }} — ESTUDO DE CASO</p>
+{{-- ══ CABEÇALHO ══ --}}
+<div class="doc-header">
+    <div class="doc-header-top">
+        <div>
+            <div class="doc-school">{{ $school?->name }}</div>
+            <div class="doc-type">Atendimento Educacional Especializado</div>
+        </div>
+        <div style="text-align: right; font-size: 8.5px; color: #555;">
+            Matrícula: {{ $aluno->registration_number }}<br>
+            Ano Letivo: {{ $documento->year }}
+        </div>
+    </div>
+    <div class="doc-title">Estudo de Caso</div>
+</div>
 
-<table>
-    {{-- Unidade --}}
+{{-- ══ IDENTIFICAÇÃO ══ --}}
+<table class="id-table">
     <tr>
-        <td class="lbl" style="width: 100px;">Unidade:</td>
-        <td class="val">{{ $school?->name }}</td>
-    </tr>
-
-    {{-- DADOS DE IDENTIFICAÇÃO --}}
-    <tr><td class="hdr" colspan="2">Dados de Identificação</td></tr>
-    <tr>
-        <td class="lbl">Estudante:</td>
-        <td class="val">{{ $aluno->name }}</td>
+        <td class="id-label">Escola</td>
+        <td colspan="3">{{ $school?->name }}</td>
     </tr>
     <tr>
-        <td class="lbl">Data nascimento:</td>
-        <td class="val">
-            {{ $aluno->birth_date ? $aluno->birth_date->format('d/m/Y') : '' }}
-            &nbsp;&nbsp;&nbsp; Idade: {{ $idade }}
-            &nbsp;&nbsp;&nbsp; Matrícula: {{ $aluno->registration_number }}
-        </td>
+        <td class="id-label">Aluno(a)</td>
+        <td colspan="3" style="font-weight: bold;">{{ $aluno->name }}</td>
     </tr>
     <tr>
-        <td class="lbl">Diagnóstico:</td>
-        <td class="val">{{ $diagnostico }}</td>
+        <td class="id-label">Data de Nascimento</td>
+        <td>{{ $idade }}</td>
+        <td class="id-label" style="width: 80px;">Turma / Turno</td>
+        <td>{{ $turma ? $turma->name . ' · ' . $turma->shift : '—' }} &nbsp;&nbsp; Ano: {{ $documento->year }}</td>
     </tr>
+    @if($diagnostico)
     <tr>
-        <td class="lbl">Responsáveis:</td>
-        <td class="val">{{ $responsaveis }}</td>
+        <td class="id-label">Diagnóstico / Laudo</td>
+        <td colspan="3">{{ $diagnostico }}</td>
     </tr>
+    @endif
+    @if($val('contexto_familiar'))
     <tr>
-        <td class="lbl">Ano letivo:</td>
-        <td class="val">
-            {{ $documento->year }}
-            @if($turma)
-                &nbsp;&nbsp;&nbsp; Turma: {{ $turma->name }}
-                &nbsp;&nbsp;&nbsp; Turno: {{ $turma->shift }}
-            @endif
-        </td>
+        <td class="id-label">Contexto Familiar</td>
+        <td colspan="3">{{ $val('contexto_familiar') }}</td>
     </tr>
-
-    {{-- Equipe do Colégio --}}
-    <tr>
-        <td class="lbl" rowspan="4" style="vertical-align: middle; text-align: center;">Equipe do<br>Colégio</td>
-        <td class="val">Professor Titular/Conselheiro: {{ $val('professor_titular') }}</td>
-    </tr>
-    <tr><td class="val">SOE: {{ $val('soe') }}</td></tr>
-    <tr><td class="val">SCP: {{ $val('scp') }}</td></tr>
-    <tr><td class="val">SAEE: {{ $val('saee') }}</td></tr>
-
-    {{-- Equipe Multidisciplinar --}}
-    <tr>
-        <td class="lbl" rowspan="5" style="vertical-align: middle; text-align: center;">Equipe<br>Multidisciplinar</td>
-        <td class="val">Psicóloga: {{ $val('psicologa') }}</td>
-    </tr>
-    <tr><td class="val">Psiquiatra: {{ $val('psiquiatra') }}</td></tr>
-    <tr><td class="val">Psicopedagoga: {{ $val('psicopedagoga') }}</td></tr>
-    <tr><td class="val">Fisioterapeuta-Educador Físico: {{ $val('fisioterapeuta') }}</td></tr>
-    <tr><td class="val">AT: {{ $val('at') }}</td></tr>
-
-    {{-- HISTÓRICO --}}
-    <tr><td class="hdr" colspan="2">Histórico de Vida e Trajetória Escolar do(a) Estudante</td></tr>
-    <tr>
-        <td class="lbl" style="vertical-align: middle; text-align: center; width: 110px;">Trajetória escolar<br>do(a) estudante</td>
-        <td class="val tall" style="min-height: 60px;">{{ $val('historico') }}</td>
-    </tr>
-
-    {{-- CARACTERIZAÇÃO --}}
-    <tr><td class="hdr" colspan="2">Caracterização do(a) Estudante</td></tr>
-
-    {{-- A) Cognitivos --}}
-    <tr><td class="sub" colspan="2">A) Aspectos Cognitivos e Acadêmicos</td></tr>
-    @foreach(['atencao' => 'Atenção', 'memoria' => 'Memória', 'raciocinio_logico' => 'Raciocínio lógico', 'leitura_escrita' => 'Leitura e Escrita', 'matematica' => 'Matemática', 'organizacao' => 'Organização'] as $k => $l)
-    <tr>
-        <td class="lbl" style="width: 130px;">{{ $l }}</td>
-        <td class="val">{{ $val($k) }}</td>
-    </tr>
-    @endforeach
-
-    {{-- B) Comunicacionais --}}
-    <tr><td class="sub" colspan="2">B) Aspectos Comunicacionais</td></tr>
-    @foreach(['linguagem_expressiva' => 'Linguagem expressiva (fala)', 'linguagem_receptiva' => 'Linguagem receptiva (compreensão)', 'comunicacao_alternativa' => 'Comunicação alternativa'] as $k => $l)
-    <tr>
-        <td class="lbl">{{ $l }}</td>
-        <td class="val">{{ $val($k) }}</td>
-    </tr>
-    @endforeach
-
-    {{-- C) Socioemocionais --}}
-    <tr><td class="sub" colspan="2">C) Aspectos Socioemocionais e Comportamentais</td></tr>
-    @foreach(['interacao_social' => 'Interação social', 'autonomia' => 'Autonomia', 'regulacao_emocional' => 'Regulação emocional', 'interesses_motivacao' => 'Interesses e motivação'] as $k => $l)
-    <tr>
-        <td class="lbl">{{ $l }}</td>
-        <td class="val">{{ $val($k) }}</td>
-    </tr>
-    @endforeach
-
-    {{-- D) Sensoriais --}}
-    <tr><td class="sub" colspan="2">D) Aspectos Sensoriais e Motores</td></tr>
-    @foreach(['motricidade_grossa' => 'Motricidade grossa', 'motricidade_fina' => 'Motricidade fina', 'processamento_sensorial' => 'Processamento sensorial'] as $k => $l)
-    <tr>
-        <td class="lbl">{{ $l }}</td>
-        <td class="val">{{ $val($k) }}</td>
-    </tr>
-    @endforeach
+    @endif
 </table>
 
-<p class="footer">Página 1</p>
+{{-- ══ HISTÓRICO ESCOLAR ══ --}}
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Histórico Escolar</div>
+        <div class="section-sub">Trajetória e experiências anteriores.</div>
+    </div>
+
+    <div class="field">
+        <div class="field-label">Resumo da vida escolar (escolas anteriores, retenções ou avanços)</div>
+        <div class="field-value tall {{ !$val('historico_escolar') ? 'empty' : '' }}">{{ $val('historico_escolar') ?: ' ' }}</div>
+    </div>
+    <div class="field">
+        <div class="field-label">Frequência e assiduidade</div>
+        <div class="field-value {{ !$val('frequencia_assiduidade') ? 'empty' : '' }}">{{ $val('frequencia_assiduidade') ?: ' ' }}</div>
+    </div>
+</div>
+
+<hr class="divider">
+
+{{-- ══ OBSERVAÇÕES PEDAGÓGICAS ══ --}}
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Observações Pedagógicas</div>
+        <div class="section-sub">Comportamento, aprendizagem e interação.</div>
+    </div>
+
+    <div class="field">
+        <div class="field-label">Nível de desenvolvimento e aprendizagem atual</div>
+        <div class="field-value tall {{ !$val('nivel_desenvolvimento') ? 'empty' : '' }}">{{ $val('nivel_desenvolvimento') ?: ' ' }}</div>
+    </div>
+    <div class="field">
+        <div class="field-label">Comportamento em sala de aula e rotina</div>
+        <div class="field-value tall {{ !$val('comportamento_sala') ? 'empty' : '' }}">{{ $val('comportamento_sala') ?: ' ' }}</div>
+    </div>
+    <div class="field">
+        <div class="field-label">Como interage com colegas, professores e equipe</div>
+        <div class="field-value {{ !$val('interacao_colegas') ? 'empty' : '' }}">{{ $val('interacao_colegas') ?: ' ' }}</div>
+    </div>
+</div>
+
+<p class="footer">{{ $aluno->name }} · Estudo de Caso · {{ $documento->year }} &nbsp;|&nbsp; Página 1</p>
 <div class="page-break"></div>
 
-{{-- PÁGINA 2 --}}
-<p class="doc-title">{{ $aluno->registration_number ?? '000000' }} — ESTUDO DE CASO</p>
+{{-- ══ PÁGINA 2 ══ --}}
+<div class="doc-header" style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 16px;">
+    <div style="display: flex; justify-content: space-between;">
+        <div class="doc-school">{{ $school?->name }}</div>
+        <div style="font-size: 8.5px; color: #555;">{{ $aluno->name }} &nbsp;·&nbsp; Estudo de Caso &nbsp;·&nbsp; {{ $documento->year }}</div>
+    </div>
+</div>
 
-<table>
-    {{-- ANÁLISE DA PARTICIPAÇÃO --}}
-    <tr><td class="hdr" colspan="2">Análise da Participação e da Rotina Escolar</td></tr>
-    @foreach(['rotina' => 'Rotina', 'participacao_aulas' => 'Participação nas aulas', 'participacao_intervalos' => 'Participação nos intervalos', 'apoios_necessarios' => 'Apoios necessários'] as $k => $l)
-    <tr>
-        <td class="lbl" style="width: 150px;">{{ $l }}</td>
-        <td class="val tall">{{ $val($k) }}</td>
-    </tr>
+{{-- ══ BARREIRAS IDENTIFICADAS ══ --}}
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Barreiras Identificadas</div>
+        <div class="section-sub">Dificuldades e limitações encontradas.</div>
+    </div>
+
+    <div class="field">
+        <div class="field-label">Desafios na assimilação de conteúdos</div>
+        <div class="field-value tall {{ !$val('desafios_conteudo') ? 'empty' : '' }}">{{ $val('desafios_conteudo') ?: ' ' }}</div>
+    </div>
+    <div class="field">
+        <div class="field-label">Barreiras físicas, de comunicação ou atitudinais</div>
+        <div class="field-value {{ !$val('barreiras_fisicas') ? 'empty' : '' }}">{{ $val('barreiras_fisicas') ?: ' ' }}</div>
+    </div>
+</div>
+
+<hr class="divider">
+
+{{-- ══ POTENCIALIDADES ══ --}}
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Potencialidades</div>
+        <div class="section-sub">Habilidades e pontos fortes.</div>
+    </div>
+
+    <div class="field">
+        <div class="field-label">Áreas de maior interesse e motivação</div>
+        <div class="field-value tall {{ !$val('interesses_motivacao') ? 'empty' : '' }}">{{ $val('interesses_motivacao') ?: ' ' }}</div>
+    </div>
+    <div class="field">
+        <div class="field-label">Habilidades cognitivas, motoras e sociais de destaque</div>
+        <div class="field-value {{ !$val('habilidades_destaque') ? 'empty' : '' }}">{{ $val('habilidades_destaque') ?: ' ' }}</div>
+    </div>
+</div>
+
+<hr class="divider">
+
+{{-- ══ ENCAMINHAMENTOS ══ --}}
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Encaminhamentos</div>
+        <div class="section-sub">Sugestões e ações pedagógicas.</div>
+    </div>
+
+    <div class="field">
+        <div class="field-label">Estratégias e metodologias a serem adotadas em sala de aula</div>
+        <div class="field-value tall {{ !$val('estrategias_sala') ? 'empty' : '' }}">{{ $val('estrategias_sala') ?: ' ' }}</div>
+    </div>
+    <div class="field">
+        <div class="field-label">Necessidade de adaptações curriculares ou materiais específicos</div>
+        <div class="field-value {{ !$val('adaptacoes_necessarias') ? 'empty' : '' }}">{{ $val('adaptacoes_necessarias') ?: ' ' }}</div>
+    </div>
+    <div class="field">
+        <div class="field-label">Encaminhamentos para redes de apoio (psicologia, fonoaudiologia, etc.)</div>
+        <div class="field-value {{ !$val('encaminhamentos_rede') ? 'empty' : '' }}">{{ $val('encaminhamentos_rede') ?: ' ' }}</div>
+    </div>
+</div>
+
+<hr class="divider">
+
+{{-- ══ ASSINATURAS ══ --}}
+<div class="sig-box">
+    <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; color: #444;">
+        Termo de Ciência e Concordância
+    </div>
+
+    <div style="display: table; width: 100%; margin-bottom: 20px;">
+        <div style="display: table-cell; width: 50%; padding-right: 20px;">
+            <div style="font-size: 9px; font-weight: bold; margin-bottom: 2px;">Elaborado por</div>
+            <div style="font-size: 9px; color: #333; margin-bottom: 12px;">
+                {{ $val('elaborado_por') ?: '___________________________________' }}
+            </div>
+            <div class="sig-label">Assinatura &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data: {{ $dataElab }}</div>
+            <span class="sig-line"></span>
+        </div>
+        <div style="display: table-cell; width: 50%;">
+            <div style="font-size: 9px; font-weight: bold; margin-bottom: 14px;">Assinatura do(a) Responsável pelo(a) Estudante</div>
+            <span class="sig-line"></span>
+            <div class="sig-label">___/___/________</div>
+        </div>
+    </div>
+
+    @foreach(['Psicólogo(a) / Terapeuta', 'Orientador(a) Educacional', 'Coordenador(a) Pedagógico(a)'] as $sig)
+    <div style="margin-bottom: 16px;">
+        <div style="font-size: 9px; color: #555; margin-bottom: 4px;">{{ $sig }}</div>
+        <span class="sig-line" style="width: 240px;"></span>
+        &nbsp;&nbsp; ___/___/________
+    </div>
     @endforeach
+</div>
 
-    {{-- SÍNTESE --}}
-    <tr><td class="hdr" colspan="2">Síntese do Estudo de Caso</td></tr>
-    <tr>
-        <td class="lbl" style="width: 150px;">Principais potencialidades</td>
-        <td class="val tall">{{ $val('potencialidades') }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Principais barreiras para a aprendizagem e participação</td>
-        <td class="val tall">{{ $val('barreiras') }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Encaminhamentos necessários<br>(o que a escola pode fazer)</td>
-        <td class="val" style="min-height: 80px;">{{ $val('encaminhamentos') }}</td>
-    </tr>
-
-    {{-- RESPONSÁVEIS PELA ELABORAÇÃO --}}
-    <tr><td class="hdr" colspan="2">Responsáveis pela Elaboração do Estudo de Caso</td></tr>
-    <tr>
-        <td class="lbl" style="width: 150px;">Profissional do AEE</td>
-        <td class="val">{{ $val('profissional_aee') }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Orientador(a) Educacional</td>
-        <td class="val">{{ $val('orientador_educacional') }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Professor(a) Titular</td>
-        <td class="val">{{ $val('professor_titular') }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Contribuições</td>
-        <td class="val tall">{{ $val('contribuicoes') }}</td>
-    </tr>
-
-    {{-- TERMO DE CIÊNCIA --}}
-    <tr><td class="hdr" colspan="2">Termo de Ciência e Concordância por Parte dos Envolvidos</td></tr>
-    <tr>
-        <td colspan="2" style="font-size: 8.5px; text-align: center; padding: 4px; border: 1px solid {{ $brd }}; background: #f5f5f5;">
-            Assinatura dos responsáveis pela elaboração do Estudo de Caso e Responsáveis pelo estudante
-        </td>
-    </tr>
-    @foreach(['Profissional do AEE', 'Orientador(a) Educacional', 'Professor(a) Titular', 'Mãe/Responsável', 'Pai/Responsável', 'Terapeuta'] as $assinante)
-    <tr>
-        <td class="lbl" style="width: 150px; vertical-align: middle;">{{ $assinante }}</td>
-        <td style="padding: 8px 14px;">
-            <table style="width: 100%; border-collapse: collapse; border: none;">
-                <tr>
-                    <td style="border: none; width: 75%; padding: 0;">
-                        <span style="border-bottom: 1px solid #333; display: block; width: 90%; height: 18px;"></span>
-                    </td>
-                    <td style="border: none; text-align: right; padding: 0; font-size: 8.5px; color: #555;">
-                        ____/____/________
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    @endforeach
-</table>
-
-<p class="footer">Página 2</p>
+<p class="footer">{{ $aluno->name }} · Estudo de Caso · {{ $documento->year }} &nbsp;|&nbsp; Página 2</p>

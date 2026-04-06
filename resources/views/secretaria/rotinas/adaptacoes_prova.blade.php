@@ -219,7 +219,7 @@
         <tr style="background:#F9FAFB;border-bottom:1px solid #F3F4F6;">
             <th style="text-align:left;padding:10px 10px;font-size:9px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;border-right:1px solid #F3F4F6;">Turma</th>
             <th style="text-align:left;padding:10px 10px;font-size:9px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;border-right:1px solid #F3F4F6;">Estudante</th>
-            <th style="text-align:center;padding:10px 4px;font-size:9px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;border-right:1px solid #F3F4F6;">Público Alvo</th>
+            <th style="text-align:center;padding:10px 4px;font-size:9px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;border-right:1px solid #F3F4F6;">{{ term('publico_alvo') }}</th>
             <th style="text-align:left;padding:10px 8px;font-size:9px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;border-right:1px solid #F3F4F6;">Grupo</th>
             <th style="text-align:left;padding:10px 8px;font-size:9px;font-weight:700;color:#1D4ED8;text-transform:uppercase;letter-spacing:0.4px;border-right:1px solid #F3F4F6;border-left:2px solid #BFDBFE;">Suporte e Mediação</th>
             <th style="text-align:center;padding:10px 4px;font-size:9px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;border-right:1px solid #F3F4F6;">PEI/EC/PAEE</th>

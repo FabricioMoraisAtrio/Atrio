@@ -32,10 +32,10 @@ class UserController extends Controller
     {
         $schoolId = session('school_id');
 
-        // Roles built-in
-        $builtin = Role::whereIn('name', ['professor', 'coordenador', 'orientador', 'admin'])
+        // Roles built-in (apenas os dois perfis padrão do sistema)
+        $builtin = Role::whereIn('name', ['professor', 'admin'])
             ->get()
-            ->map(fn($r) => (object)['spatie_role' => $r->name, 'name' => ucfirst($r->name), 'is_system' => true]);
+            ->map(fn($r) => (object)['spatie_role' => $r->name, 'name' => match($r->name) { 'admin' => 'Administrador', 'professor' => 'Professor', default => ucfirst($r->name) }, 'is_system' => true]);
 
         // Roles customizados da escola
         $custom = SchoolRole::where('school_id', $schoolId)

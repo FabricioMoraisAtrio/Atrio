@@ -107,11 +107,6 @@ public function store(Student $aluno, Request $request)
 
     return redirect()->route('professor.dashboard')
         ->with('success', strtoupper($type) . ' criado com sucesso.');
-        // Notifica pais do aluno
-    $aluno->load('parents');
-    foreach ($aluno->parents as $pai) {
-        $pai->notify(new \App\Notifications\NovoDocumentoPaiNotification($documento));
-    }
 }
 
     public function show(Document $documento)

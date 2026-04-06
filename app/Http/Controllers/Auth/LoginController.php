@@ -41,6 +41,12 @@ class LoginController extends Controller
                 'professor'   => 'professor.dashboard',
             ];
             $role = $user->getRoleNames()->first();
+
+            // Perfis customizados da escola (prefixo s{school_id}_) → dashboard secretaria
+            if (!isset($roleDashboards[$role]) && $role && str_starts_with($role, 's')) {
+                return redirect()->route('secretaria.dashboard');
+            }
+
             return redirect()->route($roleDashboards[$role] ?? 'login');
         }
 

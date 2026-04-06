@@ -19,7 +19,7 @@ $cards = [
     ],
     [
         'label'       => 'PAEE',
-        'descricao'   => 'Plano de Atendimento Educacional Especializado dos alunos público alvo.',
+        'descricao'   => 'Plano de Atendimento Educacional Especializado dos ' . strtolower(term('alunos')) . ' ' . strtolower(term('publico_alvo')) . '.',
         'route'       => 'secretaria.rotinas.documentos.paee',
         'cor'         => '#009C8C',
         'bg'          => '#E6F5F4',
