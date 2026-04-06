@@ -61,8 +61,45 @@ Route::get('/run-migrate', function () {
     if (request('token') !== 'atrio2026migrate') {
         abort(403);
     }
-    \Artisan::call('migrate', ['--force' => true]);
-    return response('<pre>' . \Artisan::output() . '</pre>');
+
+    // Diagnóstico
+    $roles = \DB::table('roles')->get();
+    $users = \App\Models\User::with('roles')->get()->map(fn($u) => [
+        'id'    => $u->id,
+        'email' => $u->email,
+        'roles' => $u->roles->pluck('name'),
+    ]);
+    $migrations = \DB::table('migrations')->orderBy('id')->get()->pluck('migration');
+
+    // Fix: garante que o role admin existe e reatribui se necessário
+    $action = request('fix');
+    $fixLog = [];
+    if ($action === '1') {
+        // Cria role admin se não existir
+        if (!\DB::table('roles')->where('name', 'admin')->exists()) {
+            \DB::table('roles')->where('name', 'secretaria')->update(['name' => 'admin']);
+            $fixLog[] = 'Role secretaria → admin renomeado';
+        } else {
+            $fixLog[] = 'Role admin já existe';
+        }
+
+        // Para cada usuário sem role válido que tinha secretaria
+        foreach (\App\Models\User::all() as $u) {
+            if ($u->roles->isEmpty()) {
+                $fixLog[] = "Usuário {$u->email} sem role — ignorado";
+            }
+        }
+
+        \Artisan::call('permission:cache-reset');
+        $fixLog[] = 'Cache de permissões limpo';
+    }
+
+    return response()->json([
+        'roles'      => $roles,
+        'users'      => $users,
+        'migrations' => $migrations,
+        'fix_log'    => $fixLog,
+    ], 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 });
 
 Route::get('/cron/notificacoes', function () {
