@@ -4,19 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @php
-        $perfil = request('perfil');
-        $perfilLabel = match($perfil) {
-            'escola'      => 'Acesso — Escola',
-            'responsavel' => 'Acesso — Responsável',
-            default       => 'Acesso ao Sistema',
-        };
-        $perfilSub = match($perfil) {
-            'escola'      => 'Secretaria, professores e administração',
-            'responsavel' => 'Área do responsável',
-            default       => 'Portal de Gestão Inclusiva',
-        };
+        $perfilSub = 'Secretaria, professores e administração';
     @endphp
-    <title>Átrio — {{ $perfilLabel }}</title>
+    <title>Átrio — Acesso ao Sistema</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
@@ -34,7 +24,7 @@
             </svg>
         </div>
         <h1 style="font-size: 22px; font-weight: 800; color: #004B8D; letter-spacing: 3px; text-transform: uppercase; margin: 0;">
-            SISTEMA ÁTRIO
+            ÁTRIO
         </h1>
         <p style="font-size: 11px; color: #9CA3AF; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">
             {{ $perfilSub }}

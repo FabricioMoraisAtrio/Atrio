@@ -17,10 +17,20 @@ use App\Http\Controllers\Secretaria\RotinaAdaptacoesController;
 use App\Http\Controllers\Secretaria\Rotinas\DocumentosHubController;
 use App\Http\Controllers\Secretaria\Rotinas\RotinaDocumentoListController;
 use App\Http\Controllers\Secretaria\SubjectController;
+use App\Http\Controllers\Secretaria\Config\ConfigController;
+use App\Http\Controllers\Secretaria\Config\SchoolRoleController;
 
 
 
 Route::get('/dashboard', [DashboardController::class, '__invoke'])->name('dashboard');
+
+// Configurações — admin only
+Route::middleware('role:admin')->prefix('config')->name('config.')->group(function () {
+    Route::get('/',                    [ConfigController::class, 'index'])->name('index');
+    Route::put('/escola',              [ConfigController::class, 'updateEscola'])->name('escola.update');
+    Route::put('/terminologias',       [ConfigController::class, 'updateTerminologias'])->name('terminologias.update');
+    Route::resource('perfis', SchoolRoleController::class)->except(['show'])->parameters(['perfis' => 'perfil']);
+});
 
 Route::resource('turmas', SchoolClassController::class);
 Route::resource('alunos', StudentController::class);
@@ -51,8 +61,6 @@ Route::get('rotinas/documentos/estudo-caso',          [RotinaDocumentoListContro
 Route::get('rotinas/documentos/paee',                 [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'paee')->name('rotinas.documentos.paee');
 Route::get('rotinas/documentos/pei',                  [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'pei')->name('rotinas.documentos.pei');
 Route::get('rotinas/documentos/atendimentos',         [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'atendimento')->name('rotinas.documentos.atendimentos');
-Route::get('rotinas/documentos/adequacao-curricular', [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'adequacao_curricular')->name('rotinas.documentos.adequacao-curricular');
-Route::get('rotinas/documentos/material-apoio',       [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'material_apoio')->name('rotinas.documentos.material-apoio');
 
 Route::resource('materias', SubjectController::class)
     ->names('subjects')

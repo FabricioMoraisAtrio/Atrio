@@ -55,12 +55,12 @@
                 <td style="padding: 14px 20px;">
                     @php
                         $role = $usuario->getRoleNames()->first();
-                        $roleLabels = ['professor' => 'Professor', 'pai' => 'Responsável', 'coordenador' => 'Coordenação', 'orientador' => 'Orientação Pedagógica'];
+                        $roleLabels = ['professor' => 'Professor', 'coordenador' => 'Coordenação', 'orientador' => 'Orientação Pedagógica', 'admin' => 'Administrador'];
                         $roleStyles = [
                             'professor'  => 'background: #E8F0F9; color: #004B8D;',
-                            'pai'        => 'background: #F5EDE6; color: #7C3700;',
                             'coordenador'=> 'background: #E6F5F4; color: #009C8C;',
                             'orientador' => 'background: #F3E8FF; color: #7C3AED;',
+                            'admin'      => 'background: #F5EDE6; color: #7C3700;',
                         ];
                     @endphp
                     <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; {{ $roleStyles[$role] ?? 'background: #F3F4F6; color: #6B7280;' }}">
@@ -83,7 +83,7 @@
                            style="font-size: 13px; color: #004B8D; text-decoration: none; font-weight: 500;">Editar</a>
                         <form method="POST" action="{{ route('secretaria.usuarios.destroy', $usuario) }}" style="display: inline;">
                             @csrf @method('DELETE')
-                            <button type="submit" onclick="return confirm('Remover usuário?')"
+                            <button type="button" data-confirm="Remover usuário?"
                                     style="font-size: 13px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 0;">
                                 Remover
                             </button>

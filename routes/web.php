@@ -74,7 +74,7 @@ Route::middleware(['auth', 'school.active'])->group(function () {
     Route::get('/perfil', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/perfil', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
-    Route::middleware('role:secretaria|coordenador|orientador')
+    Route::middleware('school.member')
         ->prefix('secretaria')->name('secretaria.')
         ->group(base_path('routes/secretaria.php'));
 
@@ -82,9 +82,6 @@ Route::middleware(['auth', 'school.active'])->group(function () {
         ->prefix('professor')->name('professor.')
         ->group(base_path('routes/professor.php'));
 
-    Route::middleware('role:pai')
-        ->prefix('responsavel')->name('pai.')
-        ->group(base_path('routes/pai.php'));
 });
 
 Route::get('/termos', fn() => view('static.termos'))->name('termos');

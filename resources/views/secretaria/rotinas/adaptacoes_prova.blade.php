@@ -8,7 +8,7 @@
         ...array_values($filtrosAdap)
     ]);
 
-    $sel = 'width:100%;border:1px solid #E5E7EB;border-radius:5px;padding:3px 4px;font-size:10px;color:#6B7280;background:#fff;outline:none;';
+    $sel = 'width:100%;border:1px solid #E5E7EB;border-radius:5px;padding:3px 4px;font-size:10px;color:#6B7280;background:#F9FAFB;outline:none;';
     $selOn = fn($cor, $bg) => "width:100%;border:1px solid {$cor};border-radius:5px;padding:3px 4px;font-size:10px;color:{$cor};background:{$bg};outline:none;font-weight:700;";
 @endphp
 
@@ -20,6 +20,69 @@
 .rot-table select { display:block; }
 .rbadge { display:inline-block; font-size:9px; font-weight:600; padding:2px 6px; border-radius:20px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
 .rbadge-col { display:flex; flex-direction:column; gap:2px; }
+
+/* ── DARK MODE ── */
+[data-theme="dark"] .rot-wrap {
+    background: var(--bg-card) !important;
+    border-color: var(--border-sub) !important;
+}
+/* Fundos de filtro e cabeçalho */
+[data-theme="dark"] .rot-table [style*="background:#FAFAFA"],
+[data-theme="dark"] .rot-table [style*="background: #FAFAFA"],
+[data-theme="dark"] .rot-table [style*="background:#F9FAFB"],
+[data-theme="dark"] .rot-table [style*="background: #F9FAFB"] {
+    background: var(--bg-subtle) !important;
+}
+/* Bordas de separação entre colunas */
+[data-theme="dark"] .rot-table [style*="border-right:1px solid #F3F4F6"],
+[data-theme="dark"] .rot-table [style*="border-right: 1px solid #F3F4F6"],
+[data-theme="dark"] .rot-table [style*="border-right:1px solid #F9FAFB"],
+[data-theme="dark"] .rot-table [style*="border-right: 1px solid #F9FAFB"],
+[data-theme="dark"] .rot-table [style*="border-bottom:1px solid #F3F4F6"],
+[data-theme="dark"] .rot-table [style*="border-bottom: 1px solid #F3F4F6"],
+[data-theme="dark"] .rot-table [style*="border-top:1px solid #F9FAFB"],
+[data-theme="dark"] .rot-table [style*="border-top: 1px solid #F9FAFB"],
+[data-theme="dark"] .rot-table [style*="border-bottom:2px solid #F0F0F0"],
+[data-theme="dark"] .rot-table [style*="border-bottom: 2px solid #F0F0F0"] {
+    border-color: var(--border-sub) !important;
+}
+/* Bordas coloridas de grupo (azul, verde, laranja, roxo, amarelo) */
+[data-theme="dark"] .rot-table [style*="border-left:2px solid #BFDBFE"],
+[data-theme="dark"] .rot-table [style*="border-left: 2px solid #BFDBFE"] { border-left-color: rgba(59,130,246,0.35) !important; }
+[data-theme="dark"] .rot-table [style*="border-left:2px solid #BBF7D0"],
+[data-theme="dark"] .rot-table [style*="border-left: 2px solid #BBF7D0"] { border-left-color: rgba(74,222,128,0.35) !important; }
+[data-theme="dark"] .rot-table [style*="border-left:2px solid #FED7AA"],
+[data-theme="dark"] .rot-table [style*="border-left: 2px solid #FED7AA"] { border-left-color: rgba(251,146,60,0.35) !important; }
+[data-theme="dark"] .rot-table [style*="border-left:2px solid #E9D5FF"],
+[data-theme="dark"] .rot-table [style*="border-left: 2px solid #E9D5FF"] { border-left-color: rgba(167,139,250,0.35) !important; }
+[data-theme="dark"] .rot-table [style*="border-left:2px solid #FDE68A"],
+[data-theme="dark"] .rot-table [style*="border-left: 2px solid #FDE68A"] { border-left-color: rgba(251,191,36,0.35) !important; }
+/* Selects */
+[data-theme="dark"] .rot-table select {
+    background: var(--bg-subtle) !important;
+    color: var(--text-2) !important;
+    border-color: var(--border) !important;
+}
+/* Badges de categoria */
+[data-theme="dark"] [style*="background:#EFF6FF"],
+[data-theme="dark"] [style*="background: #EFF6FF"] { background: rgba(59,130,246,0.18) !important; }
+[data-theme="dark"] [style*="color:#1D4ED8"],
+[data-theme="dark"] [style*="color: #1D4ED8"] { color: #93C5FD !important; }
+[data-theme="dark"] [style*="background:#F0FDF4"],
+[data-theme="dark"] [style*="background: #F0FDF4"] { background: rgba(74,222,128,0.15) !important; }
+[data-theme="dark"] [style*="color:#166534"],
+[data-theme="dark"] [style*="color: #166534"] { color: #86EFAC !important; }
+[data-theme="dark"] [style*="background:#FFF7ED"],
+[data-theme="dark"] [style*="background: #FFF7ED"] { background: rgba(251,146,60,0.15) !important; }
+[data-theme="dark"] [style*="color:#9A3412"],
+[data-theme="dark"] [style*="color: #9A3412"] { color: #FDBA74 !important; }
+[data-theme="dark"] [style*="background:#FDF4FF"],
+[data-theme="dark"] [style*="background: #FDF4FF"] { background: rgba(167,139,250,0.15) !important; }
+/* Traço vazio */
+[data-theme="dark"] [style*="color:#E5E7EB"],
+[data-theme="dark"] [style*="color: #E5E7EB"] { color: var(--border) !important; }
+[data-theme="dark"] [style*="color:#D1D5DB"],
+[data-theme="dark"] [style*="color: #D1D5DB"] { color: var(--text-4) !important; }
 </style>
 
 <div style="margin-bottom:14px;">

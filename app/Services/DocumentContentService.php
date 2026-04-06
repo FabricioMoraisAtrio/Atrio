@@ -110,21 +110,6 @@ class DocumentContentService
                 'observacoes_livres' => $request->input('observacoes_livres'),
             ],
 
-            'adequacao_curricular' => [
-                'componente'         => $request->input('componente'),
-                'objetivo'           => $request->input('objetivo'),
-                'estrategias'        => $request->input('estrategias'),
-                'avaliacao'          => $request->input('avaliacao'),
-                'observacoes_livres' => $request->input('observacoes_livres'),
-            ],
-
-            'material_apoio' => [
-                'descricao'          => $request->input('descricao'),
-                'recursos'           => $request->input('recursos'),
-                'responsavel'        => $request->input('responsavel'),
-                'observacoes_livres' => $request->input('observacoes_livres'),
-            ],
-
             default => [],
         };
     }

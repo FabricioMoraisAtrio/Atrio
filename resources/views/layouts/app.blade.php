@@ -28,130 +28,142 @@
             --bg-subtle: #2A3B58;
             --bg-hover:  rgba(255,255,255,0.07);
             --border:    #384F6E;
-            --border-sub:#2A3B58;
-            --text-1:    #FFFFFF;
+            --border-sub:#2D4265;
+            --text-1:    #F0F6FF;
             --text-2:    #C8D8EE;
             --text-3:    #8AAAC8;
             --text-4:    #6090B4;
             --accent:    #4D9FFF;
             --accent-bg: rgba(77,159,255,0.20);
         }
-        [data-theme="dark"] body { color: var(--text-1) !important; }
 
         /* ── BASE ── */
-        body { background: var(--bg-page) !important; }
+        body { background: var(--bg-page) !important; color: var(--text-1) !important; }
         aside { background: var(--bg-card) !important; border-color: var(--border) !important; }
         header { background: var(--bg-card) !important; border-color: var(--border) !important; }
         main { background: var(--bg-page) !important; }
 
-        /* ── DARK: sidebar levemente mais escura que o conteúdo ── */
-        [data-theme="dark"] aside {
-            background: #1A2740 !important;
-            border-color: #304560 !important;
-        }
-        [data-theme="dark"] header {
-            background: #1C2A44 !important;
-            border-color: #304560 !important;
-        }
-
-        /* ── DARK: tabelas ── */
-        [data-theme="dark"] table { border-color: #304560 !important; }
+        /* ── DARK: estrutura ── */
+        [data-theme="dark"] aside  { background: #1A2740 !important; border-color: #304560 !important; }
+        [data-theme="dark"] header { background: #1C2A44 !important; border-color: #304560 !important; }
+        [data-theme="dark"] table  { border-color: #304560 !important; }
         [data-theme="dark"] thead tr { background: #1A2740 !important; }
-        [data-theme="dark"] tbody tr:hover td { background: rgba(77,159,255,0.08) !important; }
         [data-theme="dark"] td, [data-theme="dark"] th { border-color: #304560 !important; }
+        [data-theme="dark"] tbody tr { background: transparent !important; }
+        [data-theme="dark"] tbody tr:hover td { background: rgba(96,165,250,0.06) !important; }
 
-        /* ── CARDS E FUNDOS ── */
-        [style*="background: #fff"], [style*="background:#fff"] { background: var(--bg-card) !important; }
-        [style*="background: #F9FAFB"] { background: var(--bg-subtle) !important; }
-        [style*="background: #F3F4F6"] { background: var(--bg-hover) !important; }
-        [style*="background: #E8F0F9"] { background: var(--accent-bg) !important; }
-        [style*="background: #E6F5F4"] { background: rgba(0,156,140,0.12) !important; }
-        [style*="background: #F5EDE6"] { background: rgba(124,55,0,0.15) !important; }
-        [style*="background: #F3E8FF"] { background: rgba(139,92,246,0.15) !important; }
+        /* ── TEXTOS — com e sem espaço após os dois pontos ── */
+        [style*="color: #0D1F36"],[style*="color:#0D1F36"] { color: var(--text-1) !important; }
+        [style*="color: #0F172A"],[style*="color:#0F172A"] { color: var(--text-1) !important; }
+        [style*="color: #111827"],[style*="color:#111827"] { color: var(--text-1) !important; }
+        [style*="color: #1F2937"],[style*="color:#1F2937"] { color: var(--text-1) !important; }
+        [style*="color: #374151"],[style*="color:#374151"] { color: var(--text-2) !important; }
+        [style*="color: #4B5563"],[style*="color:#4B5563"] { color: var(--text-2) !important; }
+        [style*="color: #6B7280"],[style*="color:#6B7280"] { color: var(--text-3) !important; }
+        [style*="color: #9CA3AF"],[style*="color:#9CA3AF"] { color: var(--text-4) !important; }
+        [style*="color: #D1D5DB"],[style*="color:#D1D5DB"] { color: var(--text-3) !important; }
 
-        /* ── CARD PENDENTES ── */
-        [style*="background: #FFFBEB"] { background: rgba(234,179,8,0.07) !important; }
-        [style*="background: #FEF3C7"] { background: rgba(234,179,8,0.1) !important; }
-        /* Mural de observações */
-        [data-theme="dark"] .observation-feed-card {
-            background: var(--bg-card) !important;
-            border-color: var(--border) !important;
-        }
+        /* ── FUNDOS BRANCOS E CINZAS — com e sem espaço ── */
+        [style*="background: #fff"],[style*="background:#fff"],
+        [style*="background: white"],[style*="background:white"],
+        [style*="background: #FFFFFF"],[style*="background:#FFFFFF"] { background: var(--bg-card) !important; }
 
-        [data-theme="dark"] [style*="background: #FFFBEB"] {
-            background: rgba(96,165,250,0.06) !important;
-        }
-        [data-theme="dark"] [style*="background: #FEF3C7"] {
-            background: rgba(96,165,250,0.1) !important;
-        }
-        [data-theme="dark"] [style*="border: 1px solid #FDE68A"] {
-            border-color: rgba(77,159,255,0.2) !important;
-        }
-        [data-theme="dark"] [style*="color: #92400E"] { color: #7EC8FF !important; }
+        [style*="background: #F8FAFC"],[style*="background:#F8FAFC"],
+        [style*="background: #F9FAFB"],[style*="background:#F9FAFB"],
+        [style*="background: #FAFAFA"],[style*="background:#FAFAFA"],
+        [style*="background: #F3F4F6"],[style*="background:#F3F4F6"],
+        [style*="background: #F0F5FB"],[style*="background:#F0F5FB"],
+        [style*="background: #F0F6FD"],[style*="background:#F0F6FD"] { background: var(--bg-subtle) !important; }
 
-        /* ── BORDAS ── */
+        /* ── FUNDOS COLORIDOS — com e sem espaço ── */
+        [style*="background: #E8F0F9"],[style*="background:#E8F0F9"] { background: var(--accent-bg) !important; }
+        [style*="background: #E6F5F4"],[style*="background:#E6F5F4"] { background: rgba(0,156,140,0.15) !important; }
+        [style*="background: #F5EDE6"],[style*="background:#F5EDE6"] { background: rgba(124,55,0,0.18) !important; }
+        [style*="background: #F3E8FF"],[style*="background:#F3E8FF"] { background: rgba(139,92,246,0.18) !important; }
+        [style*="background: #EDE9FE"],[style*="background:#EDE9FE"] { background: rgba(109,40,217,0.18) !important; }
+        [style*="background: #EFF6E8"],[style*="background:#EFF6E8"] { background: rgba(61,122,39,0.15) !important; }
+        [style*="background: #FFF4E6"],[style*="background:#FFF4E6"] { background: rgba(199,122,0,0.15) !important; }
+        [style*="background: #F0F5FF"],[style*="background:#F0F5FF"] { background: rgba(59,91,219,0.15) !important; }
+        [style*="background: #E8FAF7"],[style*="background:#E8FAF7"] { background: rgba(0,156,140,0.13) !important; }
+
+        /* ── STATUS BADGES ── */
+        [style*="background: #ECFDF5"],[style*="background:#ECFDF5"] { background: rgba(6,95,70,0.28) !important; }
+        [style*="background: #FEF2F2"],[style*="background:#FEF2F2"] { background: rgba(153,27,27,0.28) !important; }
+        [style*="background: #FEF3C7"],[style*="background:#FEF3C7"],
+        [style*="background: #FFFBEB"],[style*="background:#FFFBEB"] { background: rgba(146,64,14,0.25) !important; }
+
+        /* ── DARK: textos de badge com cor forte ── */
+        [data-theme="dark"] [style*="color: #065F46"],[data-theme="dark"] [style*="color:#065F46"] { color: #6EDDB8 !important; }
+        [data-theme="dark"] [style*="color: #991B1B"],[data-theme="dark"] [style*="color:#991B1B"] { color: #FCA5A5 !important; }
+        [data-theme="dark"] [style*="color: #92400E"],[data-theme="dark"] [style*="color:#92400E"] { color: #FCD34D !important; }
+        [data-theme="dark"] [style*="color: #7C3700"],[data-theme="dark"] [style*="color:#7C3700"] { color: #FCD34D !important; }
+        [data-theme="dark"] [style*="color: #7E22CE"],[data-theme="dark"] [style*="color:#7E22CE"] { color: #C4B5FD !important; }
+        [data-theme="dark"] [style*="color: #7C3AED"],[data-theme="dark"] [style*="color:#7C3AED"] { color: #C4B5FD !important; }
+        [data-theme="dark"] [style*="color: #009C8C"],[data-theme="dark"] [style*="color:#009C8C"] { color: #5EEAD4 !important; }
+        [data-theme="dark"] [style*="color: #004B8D"],[data-theme="dark"] [style*="color:#004B8D"] { color: var(--accent) !important; }
+        [data-theme="dark"] [style*="color: #3D7A27"],[data-theme="dark"] [style*="color:#3D7A27"] { color: #86EFAC !important; }
+        [data-theme="dark"] [style*="color: #B45309"],[data-theme="dark"] [style*="color:#B45309"] { color: #FCD34D !important; }
+        [data-theme="dark"] [style*="color: #6D28D9"],[data-theme="dark"] [style*="color:#6D28D9"] { color: #C4B5FD !important; }
+
+        /* ── BORDAS — com e sem espaço ── */
+        [style*="border:1px solid #F3F4F6"],
         [style*="border: 1px solid #F3F4F6"]        { border-color: var(--border-sub) !important; }
+        [style*="border:1px solid #E5E7EB"],
+        [style*="border: 1px solid #E5E7EB"]        { border-color: var(--border) !important; }
+        [style*="border:1px solid #E2EAF4"],
+        [style*="border: 1px solid #E2EAF4"]        { border-color: var(--border) !important; }
+        [style*="border:1px solid #D1D5DB"],
+        [style*="border: 1px solid #D1D5DB"]        { border-color: var(--border) !important; }
+        [style*="border-top:1px solid #F9FAFB"],
         [style*="border-top: 1px solid #F9FAFB"]    { border-color: var(--border-sub) !important; }
+        [style*="border-bottom:1px solid #F3F4F6"],
         [style*="border-bottom: 1px solid #F3F4F6"] { border-color: var(--border-sub) !important; }
+        [style*="border-bottom:1px solid #F9FAFB"],
         [style*="border-bottom: 1px solid #F9FAFB"] { border-color: var(--border-sub) !important; }
+        [style*="border-bottom:1px solid #E5E7EB"],
         [style*="border-bottom: 1px solid #E5E7EB"] { border-color: var(--border) !important; }
+        [style*="border-right:1px solid #E5E7EB"],
         [style*="border-right: 1px solid #E5E7EB"]  { border-color: var(--border) !important; }
+        [style*="border-bottom:2px solid #E5E7EB"],
         [style*="border-bottom: 2px solid #E5E7EB"] { border-color: var(--border) !important; }
 
-        /* ── TEXTOS ── */
-        [style*="color: #111827"] { color: var(--text-1) !important; }
-        [style*="color: #374151"] { color: var(--text-2) !important; }
-        [style*="color: #6B7280"] { color: var(--text-3) !important; }
-        [style*="color: #9CA3AF"] { color: var(--text-4) !important; }
+        /* ── DARK: bordas coloridas de alerta ── */
+        [data-theme="dark"] [style*="border:1px solid #6EE7B7"],
+        [data-theme="dark"] [style*="border: 1px solid #6EE7B7"] { border-color: rgba(110,221,184,0.3) !important; }
+        [data-theme="dark"] [style*="border:1px solid #FECACA"],
+        [data-theme="dark"] [style*="border: 1px solid #FECACA"] { border-color: rgba(252,165,165,0.3) !important; }
+        [data-theme="dark"] [style*="border:1px solid #FDE68A"],
+        [data-theme="dark"] [style*="border: 1px solid #FDE68A"] { border-color: rgba(253,230,138,0.2) !important; }
 
         /* ── INPUTS ── */
         input, textarea, select { color: var(--text-1) !important; }
-        [data-theme="dark"] select { background: var(--bg-subtle) !important; }
+        [data-theme="dark"] input  { background: transparent !important; }
+        [data-theme="dark"] textarea { background: var(--bg-subtle) !important; border-color: var(--border) !important; }
+        [data-theme="dark"] select { background: var(--bg-subtle) !important; border-color: var(--border) !important; }
         [data-theme="dark"] input[type="date"] { background: var(--bg-subtle) !important; color-scheme: dark; }
-        [data-theme="dark"] label[style*="background: #F3F4F6"] { color: var(--text-2) !important; }
+        [data-theme="dark"] input::placeholder,
+        [data-theme="dark"] textarea::placeholder { color: var(--text-4) !important; }
 
         /* ── SIDEBAR ATIVO ── */
         [style*="background: #E8F0F9; color: #004B8D"] {
             background: var(--accent-bg) !important;
             color: var(--accent) !important;
         }
-
-        /* ── BADGE TOPBAR ── */
-        [style*="background: #F3F4F6; padding: 4px 10px"] {
-            background: var(--bg-subtle) !important;
-            color: var(--text-2) !important;
-        }
-
-        /* ── HOVER DARK ── */
-        [data-theme="dark"] a[href]:hover {
-            background: rgba(77,159,255,0.10) !important;
-        }
-        /* Hover no dark mode — handlers inline são removidos via JS, o CSS assume */
-        [data-theme="dark"] tbody tr { background: transparent !important; }
-        [data-theme="dark"] tbody tr:hover td {
-            background: rgba(96,165,250,0.06) !important;
-        }
-        [data-theme="dark"] button[style*="background: #004B8D"]:hover {
-            background: #2272CC !important;
-        }
-        [data-theme="dark"] a[style*="background: #004B8D"]:hover {
-            background: #2272CC !important;
-        }
-        [data-theme="dark"] button[style*="color: #EF4444"]:hover {
-            background: rgba(239,68,68,0.15) !important;
-        }
-        /* Sidebar item ativo no dark */
         [data-theme="dark"] [style*="background: #E8F0F9; color: #004B8D"] {
             background: rgba(77,159,255,0.22) !important;
             color: #7EC8FF !important;
         }
-        /* Garante texto branco em labels e spans no dark */
-        [data-theme="dark"] span[style*="color: #374151"],
-        [data-theme="dark"] span[style*="color: #6B7280"],
-        [data-theme="dark"] label[style*="color: #374151"],
-        [data-theme="dark"] p[style*="color: #374151"] { color: var(--text-2) !important; }
-        [data-theme="dark"] input::placeholder,
-        [data-theme="dark"] textarea::placeholder { color: var(--text-4) !important; }
+
+        /* ── MURAL DE OBSERVAÇÕES ── */
+        [data-theme="dark"] .observation-feed-card {
+            background: var(--bg-card) !important;
+            border-color: var(--border) !important;
+        }
+
+        /* ── HOVER DARK ── */
+        [data-theme="dark"] button[style*="background: #004B8D"]:hover { background: #2272CC !important; }
+        [data-theme="dark"] a[style*="background: #004B8D"]:hover       { background: #2272CC !important; }
+        [data-theme="dark"] button[style*="color: #EF4444"]:hover        { background: rgba(239,68,68,0.15) !important; }
 
         /* ── BOTÃO TEMA ── */
         #theme-toggle {
@@ -221,10 +233,10 @@
         {{-- Logo --}}
         <div style="padding: 24px 20px 20px; border-bottom: 1px solid #F3F4F6;">
             @php
-                $roleDashboardMap = ['secretaria' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'professor.dashboard', 'pai' => 'pai.dashboard'];
-                $dashboardRoute = auth()->check() ? ($roleDashboardMap[auth()->user()->getRoleNames()->first()] ?? '/') : '/';
+                $roleDashboardMap = ['admin' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'professor.dashboard'];
+                $dashboardRoute = auth()->check() ? ($roleDashboardMap[auth()->user()->getRoleNames()->first()] ?? 'home') : 'home';
             @endphp
-            <a href="{{ auth()->check() ? route($dashboardRoute) : '/' }}"
+            <a href="{{ route($dashboardRoute) }}"
                style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
                 @auth
                     @php $school = auth()->user()->school; @endphp
@@ -266,6 +278,30 @@
 
         <nav style="flex: 1; padding: 16px 12px;">
             @auth
+                @hasrole('admin')
+                    @php
+                        $pendentesCount = \Illuminate\Support\Facades\Cache::remember(
+                            'pendentes_count_' . session('school_id'),
+                            now()->addMinutes(5),
+                            fn() => \App\Models\Student::where('is_atypical', true)
+                                ->with(['documents' => fn($q) => $q->where('year', date('Y'))->select('id','student_id','type')])
+                                ->get()
+                                ->filter(fn($a) => count(array_diff(['estudo_caso','pei','paee'], $a->documents->pluck('type')->toArray())) > 0)
+                                ->count()
+                        );
+                        $items = [
+                            ['route' => 'secretaria.dashboard',                  'icon' => 'grid',    'label' => 'Painel'],
+                            ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => 'Turmas'],
+                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
+                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos'],
+                            ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações'],
+                            ['route' => 'secretaria.subjects.index',             'icon' => 'subject', 'label' => 'Matérias'],
+                            ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários'],
+                            ['route' => 'secretaria.config.index', 'icon' => 'config', 'label' => 'Configurações', 'active' => 'secretaria.config.*'],
+                        ];
+                    @endphp
+                @endhasrole
+
                 @hasanyrole(['coordenador', 'orientador'])
                     @php
                         $pendentesCount = \Illuminate\Support\Facades\Cache::remember(
@@ -278,30 +314,17 @@
                                 ->count()
                         );
                         $items = [
-                            ['route' => 'secretaria.dashboard',        'icon' => 'grid',     'label' => 'Painel'],
-                            ['route' => 'secretaria.turmas.index',     'icon' => 'academic', 'label' => 'Turmas'],
-                            ['route' => 'secretaria.alunos.index',     'icon' => 'users',    'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
-                            ['route' => 'secretaria.documentos.index',           'icon' => 'doc',    'label' => 'Documentos'],
-                            ['route' => 'secretaria.laudos.index',               'icon' => 'laudo',  'label' => 'Laudos'],
-                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina', 'label' => 'Rotina Docs'],
-                            ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina', 'label' => 'Adaptações'],
-                            ['route' => 'secretaria.subjects.index',         'icon' => 'subject','label' => 'Matérias'],
-                            ['route' => 'secretaria.usuarios.index',         'icon' => 'user',   'label' => 'Usuários'],
+                            ['route' => 'secretaria.dashboard',                'icon' => 'grid',    'label' => 'Painel'],
+                            ['route' => 'secretaria.turmas.index',             'icon' => 'academic','label' => 'Turmas'],
+                            ['route' => 'secretaria.alunos.index',             'icon' => 'users',   'label' => 'Alunos', 'badge' => $pendentesCount ?: null],
+                            ['route' => 'secretaria.documentos.index',         'icon' => 'doc',     'label' => 'Documentos'],
+                            ['route' => 'secretaria.laudos.index',             'icon' => 'laudo',   'label' => 'Laudos'],
+                            ['route' => 'secretaria.rotinas.documentos.index', 'icon' => 'rotina',  'label' => 'Rotina Docs'],
+                            ['route' => 'secretaria.rotinas.adaptacoes',       'icon' => 'rotina',  'label' => 'Adaptações'],
+                            ['route' => 'secretaria.subjects.index',           'icon' => 'subject', 'label' => 'Matérias'],
                         ];
                     @endphp
                 @endhasanyrole
-
-                @hasrole('secretaria')
-                    @php $items = [
-                        ['route' => 'secretaria.dashboard',          'icon' => 'grid',    'label' => 'Painel'],
-                        ['route' => 'secretaria.turmas.index',       'icon' => 'academic','label' => 'Turmas'],
-                        ['route' => 'secretaria.alunos.index',       'icon' => 'users',   'label' => 'Alunos'],
-                        ['route' => 'secretaria.rotinas.documentos.index', 'icon' => 'rotina', 'label' => 'Rotina Docs'],
-                        ['route' => 'secretaria.rotinas.adaptacoes',       'icon' => 'rotina', 'label' => 'Adaptações'],
-                        ['route' => 'secretaria.subjects.index',           'icon' => 'subject','label' => 'Matérias'],
-                        ['route' => 'secretaria.usuarios.index',           'icon' => 'user',   'label' => 'Usuários'],
-                    ]; @endphp
-                @endhasrole
 
                 @hasrole('professor')
                     @php $items = [
@@ -311,15 +334,10 @@
                     ]; @endphp
                 @endhasrole
 
-                @hasrole('pai')
-                    @php $items = [
-                        ['route' => 'pai.dashboard', 'icon' => 'grid', 'label' => 'Painel'],
-                    ]; @endphp
-                @endhasrole
-
-                @foreach($items ?? [] as $item)
+@foreach($items ?? [] as $item)
                     @php
-                        $isActive = request()->routeIs($item['route']) || request()->routeIs($item['route'] . '.*');
+                        $activePattern = $item['active'] ?? ($item['route'] . '.*');
+                        $isActive = request()->routeIs($item['route']) || request()->routeIs($activePattern);
                         $badge = $item['badge'] ?? null;
                     @endphp
                     <a href="{{ route($item['route']) }}"
@@ -358,11 +376,10 @@
                     <div style="font-size: 11px; color: #9CA3AF;">
                         @php
                             $roleLabels = [
-                                'secretaria'  => 'Secretaria',
+                                'admin'       => 'Administrador',
                                 'coordenador' => 'Coordenação',
                                 'orientador'  => 'Orientação Pedagógica',
                                 'professor'   => 'Professor',
-                                'pai'         => 'Responsável',
                             ];
                             echo $roleLabels[auth()->user()->getRoleNames()->first()] ?? auth()->user()->getRoleNames()->first();
                         @endphp
@@ -418,6 +435,52 @@
     </div>
 </div>
 
+{{-- ── MODAL DE CONFIRMAÇÃO GLOBAL ── --}}
+<div id="confirm-modal"
+     style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;">
+    {{-- Overlay --}}
+    <div id="confirm-overlay"
+         onclick="closeConfirm()"
+         style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);"></div>
+
+    {{-- Card --}}
+    <div style="position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;
+                padding:32px 28px;width:100%;max-width:380px;margin:0 16px;
+                box-shadow:0 20px 60px rgba(0,0,0,0.2);z-index:1;">
+
+        {{-- Ícone --}}
+        <div style="width:48px;height:48px;border-radius:14px;background:#FEF2F2;
+                    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6"/>
+                <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+            </svg>
+        </div>
+
+        <p id="confirm-title"
+           style="font-size:16px;font-weight:700;color:var(--text-1);text-align:center;margin:0 0 8px;"></p>
+        <p id="confirm-desc"
+           style="font-size:13px;color:var(--text-3);text-align:center;margin:0 0 28px;line-height:1.5;">
+            Esta ação não pode ser desfeita.
+        </p>
+
+        <div style="display:flex;gap:10px;">
+            <button onclick="closeConfirm()"
+                    style="flex:1;padding:11px;border-radius:8px;border:1px solid var(--border);
+                           background:transparent;color:var(--text-2);font-size:13px;font-weight:600;cursor:pointer;">
+                Cancelar
+            </button>
+            <button id="confirm-ok"
+                    style="flex:1;padding:11px;border-radius:8px;border:none;
+                           background:#EF4444;color:white;font-size:13px;font-weight:600;cursor:pointer;">
+                Remover
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
 // Cores da escola injetadas pelo servidor (usadas ao voltar para o tema claro)
 const SCHOOL_ACCENT    = @json($schoolTheme ?? null);
@@ -453,23 +516,23 @@ function applyHoverBehavior(theme) {
             _hoverStore.set(el, {
                 over: el.getAttribute('onmouseover'),
                 out:  el.getAttribute('onmouseout'),
+                bg:   el.style.background,
             });
+            el.setAttribute('data-hover-stored', '1');
             el.removeAttribute('onmouseover');
             el.removeAttribute('onmouseout');
-            // Limpa qualquer background inline que já tenha sido aplicado
-            if (el.style.background && el.style.background !== 'transparent') {
-                el.style.background = 'transparent';
-            }
         });
     } else {
-        // Restaura handlers ao voltar para o tema claro
-        document.querySelectorAll('tr, a, button').forEach(el => {
+        // Restaura handlers e backgrounds ao voltar para o tema claro
+        document.querySelectorAll('[data-hover-stored]').forEach(el => {
             const stored = _hoverStore.get(el);
             if (stored) {
-                el.setAttribute('onmouseover', stored.over);
-                if (stored.out) el.setAttribute('onmouseout', stored.out);
+                if (stored.over) el.setAttribute('onmouseover', stored.over);
+                if (stored.out)  el.setAttribute('onmouseout',  stored.out);
+                el.style.background = stored.bg;
                 _hoverStore.delete(el);
             }
+            el.removeAttribute('data-hover-stored');
         });
     }
 }
@@ -491,7 +554,44 @@ function toggleTheme() {
     updateIcons(next);
 }
 
-// Inicializa ao carregar
+// ── MODAL DE CONFIRMAÇÃO ──
+function openConfirm(title, desc, onOk) {
+    const modal = document.getElementById('confirm-modal');
+    document.getElementById('confirm-title').textContent = title;
+    const descEl = document.getElementById('confirm-desc');
+    descEl.textContent = desc || 'Esta ação não pode ser desfeita.';
+    const okBtn = document.getElementById('confirm-ok');
+    okBtn.onclick = function () { closeConfirm(); onOk(); };
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeConfirm() {
+    document.getElementById('confirm-modal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+// Intercepta todos os botões com data-confirm
+document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('[data-confirm]');
+        if (!btn) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const title = btn.getAttribute('data-confirm') || 'Confirmar remoção';
+        const form  = btn.closest('form');
+        openConfirm(title, 'Esta ação não pode ser desfeita.', function () {
+            if (form) form.submit();
+        });
+    }, true);
+});
+
+// Fecha com ESC
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeConfirm();
+});
+
+// ── INICIALIZA ──
 (function () {
     const saved       = localStorage.getItem('atrio-theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

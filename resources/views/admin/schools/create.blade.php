@@ -118,7 +118,7 @@
             </div>
 
             <div class="pt-2 border-t border-gray-100">
-                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">Secretaria inicial</p>
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">Administrador da escola</p>
 
                 <div class="space-y-3">
                     <div>

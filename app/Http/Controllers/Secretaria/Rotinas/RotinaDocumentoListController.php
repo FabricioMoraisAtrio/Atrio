@@ -38,20 +38,6 @@ class RotinaDocumentoListController extends Controller
             'multiplos'     => true,
             'view'          => 'secretaria.rotinas.documentos.atendimentos',
         ],
-        'adequacao_curricular' => [
-            'titulo'        => 'Adequação Curricular',
-            'tipo'          => 'adequacao_curricular',
-            'so_publico'    => true,
-            'multiplos'     => false,
-            'view'          => 'secretaria.rotinas.documentos.adequacao-curricular',
-        ],
-        'material_apoio' => [
-            'titulo'        => 'Material de Apoio',
-            'tipo'          => 'material_apoio',
-            'so_publico'    => false,
-            'multiplos'     => false,
-            'view'          => 'secretaria.rotinas.documentos.material-apoio',
-        ],
     ];
 
     public function __invoke(Request $request, string $tipo)

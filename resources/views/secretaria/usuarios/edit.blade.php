@@ -78,22 +78,6 @@
                 </div>
             @endif
 
-            @if($usuario->hasRole('pai'))
-                <div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                    <p style="font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 12px;">Filho(s) vinculado(s)</p>
-                    <div style="display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto;">
-                        @foreach($alunos as $aluno)
-                            <label style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; border: 1px solid #F3F4F6; cursor: pointer;"
-                                   onmouseover="this.style.borderColor='#009C8C'"
-                                   onmouseout="this.style.borderColor='#F3F4F6'">
-                                <input type="checkbox" name="student_ids[]" value="{{ $aluno->id }}"
-                                       {{ $usuario->children->contains($aluno->id) ? 'checked' : '' }}>
-                                <span style="font-size: 13px; color: #374151;">{{ $aluno->name }} — {{ $aluno->registration_number }}</span>
-                            </label>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
 
             <div style="display: flex; gap: 12px;">
                 <button type="submit"

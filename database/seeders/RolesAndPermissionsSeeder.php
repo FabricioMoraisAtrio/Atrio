@@ -22,26 +22,24 @@ class RolesAndPermissionsSeeder extends Seeder
             'estudo_caso.ver', 'estudo_caso.criar', 'estudo_caso.editar',
             'observacoes.criar',
             'relatorios.exportar',
+            'escola.configurar',
         ];
 
         foreach ($permissions as $perm) {
             Permission::firstOrCreate(['name' => $perm]);
         }
 
-        // Secretaria: apenas inclusão de alunos e controle de professores
-        $secretaria = Role::firstOrCreate(['name' => 'secretaria']);
-        $secretaria->syncPermissions([
-            'alunos.ver', 'alunos.criar', 'alunos.editar', 'alunos.deletar',
-            'usuarios.criar', 'usuarios.editar',
-        ]);
+        // Admin da escola: acesso completo + gestão de usuários
+        $admin = Role::firstOrCreate(['name' => 'admin']);
+        $admin->syncPermissions($permissions);
 
-        // Coordenador: acesso completo
+        // Coordenador: acesso completo (sem gestão de usuários)
         $coordenador = Role::firstOrCreate(['name' => 'coordenador']);
-        $coordenador->syncPermissions($permissions);
+        $coordenador->syncPermissions(array_diff($permissions, ['usuarios.criar', 'usuarios.editar']));
 
-        // Orientador pedagógico: acesso completo
+        // Orientador pedagógico: acesso completo (sem gestão de usuários)
         $orientador = Role::firstOrCreate(['name' => 'orientador']);
-        $orientador->syncPermissions($permissions);
+        $orientador->syncPermissions(array_diff($permissions, ['usuarios.criar', 'usuarios.editar']));
 
         // Professor: apenas PEI
         $professor = Role::firstOrCreate(['name' => 'professor']);
@@ -51,7 +49,5 @@ class RolesAndPermissionsSeeder extends Seeder
             'observacoes.criar',
         ]);
 
-        $pai = Role::firstOrCreate(['name' => 'pai']);
-        $pai->syncPermissions(['alunos.ver', 'pei.ver']);
     }
 }

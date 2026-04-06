@@ -59,7 +59,7 @@
                            style="font-size: 13px; color: #6B7280; text-decoration: none;">Editar</a>
                         <form method="POST" action="{{ route('secretaria.turmas.destroy', $turma) }}" style="display: inline;">
                             @csrf @method('DELETE')
-                            <button type="submit" onclick="return confirm('Remover turma?')"
+                            <button type="button" data-confirm="Remover turma?"
                                     style="font-size: 13px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 0;">
                                 Remover
                             </button>

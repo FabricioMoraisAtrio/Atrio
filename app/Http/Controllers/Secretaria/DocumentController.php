@@ -75,12 +75,6 @@ class DocumentController extends Controller
 
         return redirect()->route('secretaria.alunos.show', $aluno)
             ->with('success', strtoupper($type) . ' criado com sucesso.');
-
-                // Notifica pais do aluno
-        $aluno->load('parents');
-        foreach ($aluno->parents as $pai) {
-            $pai->notify(new \App\Notifications\NovoDocumentoPaiNotification($documento));
-        }
     }
 
     public function show(Document $documento)

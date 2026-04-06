@@ -41,10 +41,13 @@
                    style="background: #004B8D; color: white; text-decoration: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;">
                     Editar
                 </a>
-                <button type="button" onclick="abrirModalDelete()"
-                        style="background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                    Excluir
-                </button>
+                <form method="POST" action="{{ route('professor.documentos.destroy', $documento) }}" style="display:inline;">
+                    @csrf @method('DELETE')
+                    <button type="button" data-confirm="Excluir este PEI?"
+                            style="background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                        Excluir
+                    </button>
+                </form>
                 @endif
             </div>
         </div>
@@ -142,58 +145,5 @@
     </div>
 </div>
 
-@if($documento->type === 'pei' && $documento->author_id === auth()->id())
-{{-- Modal de exclusão --}}
-<div id="modal-delete"
-     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:#fff; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,0.18); padding:28px 32px; width:100%; max-width:400px; margin:0 16px;">
-
-        {{-- Ícone + título --}}
-        <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
-            <div style="width:44px; height:44px; border-radius:50%; background:#FEF2F2; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2">
-                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
-                    <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
-                </svg>
-            </div>
-            <div>
-                <p style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 2px;">Excluir PEI</p>
-                <p style="font-size: 13px; color: #6B7280; margin: 0;">Esta ação não pode ser desfeita.</p>
-            </div>
-        </div>
-
-        <p style="font-size: 13px; color: #374151; background: #F9FAFB; border-radius: 8px; padding: 12px 14px; margin: 0 0 24px; line-height: 1.6;">
-            O PEI de <strong>{{ $documento->student->name }}</strong> referente ao ano letivo <strong>{{ $documento->year }}</strong> será excluído permanentemente.
-        </p>
-
-        <form id="form-delete-pei" method="POST" action="{{ route('professor.documentos.destroy', $documento) }}">
-            @csrf @method('DELETE')
-        </form>
-
-        <div style="display:flex; gap:10px; justify-content:flex-end;">
-            <button type="button" onclick="fecharModalDelete()"
-                    style="padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #374151; background: #F3F4F6; border: 1px solid #E5E7EB; cursor: pointer;">
-                Cancelar
-            </button>
-            <button type="submit" form="form-delete-pei"
-                    style="padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #fff; background: #DC2626; border: none; cursor: pointer;">
-                Sim, excluir
-            </button>
-        </div>
-    </div>
-</div>
-
-<script>
-function abrirModalDelete() {
-    document.getElementById('modal-delete').style.display = 'flex';
-}
-function fecharModalDelete() {
-    document.getElementById('modal-delete').style.display = 'none';
-}
-document.getElementById('modal-delete').addEventListener('click', function(e) {
-    if (e.target === this) fecharModalDelete();
-});
-</script>
-@endif
 
 @endsection

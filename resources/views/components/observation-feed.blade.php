@@ -61,8 +61,8 @@
                     <form method="POST"
                           action="{{ route($role . '.observacoes.destroy', $obs) }}">
                         @csrf @method('DELETE')
-                        <button type="submit"
-                                onclick="return confirm('Remover observação?')"
+                        <button type="button"
+                                data-confirm="Remover observação?"
                                 class="text-xs text-red-400 hover:text-red-600 shrink-0">
                             Remover
                         </button>

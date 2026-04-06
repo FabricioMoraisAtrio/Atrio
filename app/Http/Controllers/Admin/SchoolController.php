@@ -64,7 +64,7 @@ class SchoolController extends Controller
             'theme_color'     => $data['theme_color'] ?? null,
         ]);
 
-        $secretaria = User::create([
+        $adminUser = User::create([
             'name'      => $data['admin_name'],
             'email'     => $data['admin_email'],
             'password'  => Hash::make($data['admin_password']),
@@ -72,7 +72,7 @@ class SchoolController extends Controller
             'is_active' => true,
         ]);
 
-        $secretaria->assignRole('secretaria');
+        $adminUser->assignRole('admin');
 
         return redirect()->route('admin.schools.index')
             ->with('success', 'Escola criada com sucesso.');
@@ -90,7 +90,7 @@ class SchoolController extends Controller
 
     public function edit(School $school)
     {
-        $secretaria = $school->users()->whereHas('roles', fn($q) => $q->where('name', 'secretaria'))->first();
+        $secretaria = $school->users()->whereHas('roles', fn($q) => $q->where('name', 'admin'))->first();
         return view('admin.schools.edit', compact('school', 'secretaria'));
     }
 

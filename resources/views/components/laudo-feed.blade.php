@@ -81,7 +81,7 @@
                 @if($role === 'secretaria')
                     <form method="POST" action="{{ route('secretaria.laudos.destroy', $laudo) }}" style="display: inline;">
                         @csrf @method('DELETE')
-                        <button type="submit" onclick="return confirm('Remover laudo?')"
+                        <button type="button" data-confirm="Remover laudo?"
                                 style="font-size: 12px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 0;">
                             Remover
                         </button>

@@ -2,11 +2,12 @@
     Partial compartilhado para listagem de documentos por tipo.
     Variáveis esperadas: $alunos, $turmas, $cfg, $rotaNome, $corPrincipal, $bgPrincipal
 --}}
+
 <div style="margin-bottom: 24px;">
     <a href="{{ route('secretaria.rotinas.documentos.index') }}"
        style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Rotina de Documentos
+        Documentos
     </a>
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
         <div>
@@ -95,12 +96,11 @@
             </thead>
             <tbody>
                 @foreach($alunos as $aluno)
-                    @php
-                        $turma = $aluno->schoolClasses->first();
-                    @endphp
+                    @php $turma = $aluno->schoolClasses->first(); @endphp
 
                     @if($cfg['multiplos'])
-                        {{-- Linha do aluno --}}
+
+                        {{-- ── MODO MÚLTIPLOS DOCUMENTOS (PEI / Atendimentos) ── --}}
                         <tr style="border-bottom: 1px solid #F3F4F6; background: #FAFAFA;">
                             <td style="padding: 12px 20px;" colspan="{{ $cfg['so_publico'] ? 3 : 4 }}">
                                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -122,13 +122,23 @@
                                 </div>
                             </td>
                             <td style="padding: 12px 20px; text-align: right;">
-                                <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => $cfg['tipo']]) }}"
-                                   style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 8px; background: {{ $corPrincipal }};">
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-                                    Novo
-                                </a>
+                                @if($cfg['tipo'] === 'pei')
+                                    {{-- PEI: botão para o consolidado, não para criar novo --}}
+                                    <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+                                       style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 8px; background: {{ $corPrincipal }};">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
+                                        PEI Consolidado
+                                    </a>
+                                @else
+                                    <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => $cfg['tipo']]) }}"
+                                       style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #fff; text-decoration: none; padding: 5px 12px; border-radius: 8px; background: {{ $corPrincipal }};">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                                        Novo
+                                    </a>
+                                @endif
                             </td>
                         </tr>
+
                         {{-- Documentos existentes --}}
                         @foreach($aluno->documents as $doc)
                         <tr style="border-bottom: 1px solid #F9FAFB;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
@@ -146,14 +156,15 @@
                                 </div>
                             </td>
                             <td style="padding: 10px 20px; text-align: right;">
-                                <a href="{{ route('secretaria.documentos.edit', $doc) }}"
-                                   style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: {{ $corPrincipal }}; text-decoration: none; padding: 4px 10px; border: 1px solid {{ $bgPrincipal }}; border-radius: 6px; background: {{ $bgPrincipal }};">
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                    Editar
-                                </a>
+                                @if($cfg['tipo'] === 'pei')
+                                    {{-- PEI individual: somente leitura, sem ações --}}
+                                @else
+                                    @include('secretaria.rotinas.documentos._visualizar_btn', ['doc' => $doc, 'corPrincipal' => $corPrincipal, 'bgPrincipal' => $bgPrincipal])
+                                @endif
                             </td>
                         </tr>
                         @endforeach
+
                         @if($aluno->documents->isEmpty())
                         <tr style="border-bottom: 1px solid #F9FAFB;">
                             <td colspan="{{ $cfg['so_publico'] ? 4 : 5 }}" style="padding: 8px 20px 8px 56px;">
@@ -163,7 +174,8 @@
                         @endif
 
                     @else
-                        {{-- Linha única (um doc por aluno) --}}
+
+                        {{-- ── MODO ÚNICO DOCUMENTO POR ALUNO ── --}}
                         @php $doc = $aluno->documents->first(); @endphp
                         <tr style="border-bottom: 1px solid #F9FAFB;" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background='transparent'">
 
@@ -216,11 +228,7 @@
 
                             <td style="padding: 14px 20px; text-align: right;">
                                 @if($doc)
-                                    <a href="{{ route('secretaria.documentos.edit', $doc) }}"
-                                       style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: {{ $corPrincipal }}; text-decoration: none; padding: 6px 14px; border: 1px solid {{ $bgPrincipal }}; border-radius: 8px; background: {{ $bgPrincipal }};">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                        Editar
-                                    </a>
+                                    @include('secretaria.rotinas.documentos._visualizar_btn', ['doc' => $doc, 'corPrincipal' => $corPrincipal, 'bgPrincipal' => $bgPrincipal])
                                 @else
                                     <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => $cfg['tipo']]) }}"
                                        style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 8px; background: {{ $corPrincipal }};">
@@ -230,6 +238,7 @@
                                 @endif
                             </td>
                         </tr>
+
                     @endif
                 @endforeach
             </tbody>

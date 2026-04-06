@@ -42,7 +42,7 @@
                 </a>
                 <form method="POST" action="{{ route('secretaria.documentos.destroy', $documento) }}" style="display: inline;">
                     @csrf @method('DELETE')
-                    <button type="submit" onclick="return confirm('Remover documento?')"
+                    <button type="button" data-confirm="Remover documento?"
                             style="padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid #FECACA; background: #FEF2F2; color: #EF4444; cursor: pointer;">
                         Remover
                     </button>

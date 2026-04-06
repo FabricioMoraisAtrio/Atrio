@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Secretaria;
 
 use App\Http\Controllers\Controller;
 use App\Models\SchoolClass;
+use App\Models\SchoolRole;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,34 @@ class UserController extends Controller
 {
     private function rolesPermitidos(): array
     {
-        return ['professor', 'pai', 'coordenador', 'orientador'];
+        $base = ['professor', 'coordenador', 'orientador', 'admin'];
+
+        // Inclui os spatie_roles de perfis customizados desta escola
+        $custom = SchoolRole::where('school_id', session('school_id'))
+            ->where('is_system', false)
+            ->pluck('spatie_role')
+            ->toArray();
+
+        return array_merge($base, $custom);
+    }
+
+    /** Retorna todas as roles disponíveis para atribuição (built-in + custom) */
+    private function rolesDisponiveis(): \Illuminate\Support\Collection
+    {
+        $schoolId = session('school_id');
+
+        // Roles built-in
+        $builtin = Role::whereIn('name', ['professor', 'coordenador', 'orientador', 'admin'])
+            ->get()
+            ->map(fn($r) => (object)['spatie_role' => $r->name, 'name' => ucfirst($r->name), 'is_system' => true]);
+
+        // Roles customizados da escola
+        $custom = SchoolRole::where('school_id', $schoolId)
+            ->where('is_system', false)
+            ->get()
+            ->map(fn($r) => (object)['spatie_role' => $r->spatie_role, 'name' => $r->name, 'is_system' => false]);
+
+        return $builtin->merge($custom);
     }
 
     public function index()
@@ -32,11 +60,10 @@ class UserController extends Controller
     public function create()
     {
         $turmas   = SchoolClass::where('year', date('Y'))->orderBy('name')->get();
-        $roles    = Role::whereIn('name', $this->rolesPermitidos())->get();
-        $alunos   = Student::orderBy('name')->get();
+        $roles    = $this->rolesDisponiveis();
         $subjects = Subject::orderBy('ordem')->get();
 
-        return view('secretaria.usuarios.create', compact('turmas', 'roles', 'alunos', 'subjects'));
+        return view('secretaria.usuarios.create', compact('turmas', 'roles', 'subjects'));
     }
 
     public function store(Request $request)
@@ -47,7 +74,11 @@ class UserController extends Controller
             'name'               => 'required|string|max:255',
             'email'              => 'required|email|unique:users,email',
             'admin_password'     => 'required|min:6',
-            'role'               => 'required|in:' . $rolesValidos,
+            'role'               => ['required', 'string', function ($attr, $value, $fail) {
+                if (! Role::where('name', $value)->exists()) {
+                    $fail('Perfil inválido.');
+                }
+            }],
             'school_class_ids'   => 'nullable|array',
             'school_class_ids.*' => 'exists:school_classes,id',
             'subject'            => 'nullable|exists:subjects,slug',
@@ -73,22 +104,17 @@ class UserController extends Controller
             $user->schoolClasses()->attach($turmas);
         }
 
-        if ($data['role'] === 'pai' && ! empty($data['student_ids'])) {
-            $user->children()->attach($data['student_ids']);
-        }
-
         return redirect()->route('secretaria.usuarios.index')
             ->with('success', 'Usuário criado com sucesso.');
     }
 
     public function edit(User $usuario)
     {
-        $usuario->load('roles', 'schoolClasses', 'children');
+        $usuario->load('roles', 'schoolClasses');
         $turmas   = SchoolClass::where('year', date('Y'))->orderBy('name')->get();
-        $alunos   = Student::orderBy('name')->get();
         $subjects = Subject::orderBy('ordem')->get();
 
-        return view('secretaria.usuarios.edit', compact('usuario', 'turmas', 'alunos', 'subjects'));
+        return view('secretaria.usuarios.edit', compact('usuario', 'turmas', 'subjects'));
     }
 
     public function update(Request $request, User $usuario)
@@ -123,10 +149,6 @@ class UserController extends Controller
                 $turmas[$classId] = ['subject' => $data['subject'] ?? null];
             }
             $usuario->schoolClasses()->sync($turmas);
-        }
-
-        if ($usuario->hasRole('pai')) {
-            $usuario->children()->sync($data['student_ids'] ?? []);
         }
 
         return redirect()->route('secretaria.usuarios.index')
