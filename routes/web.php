@@ -57,6 +57,14 @@ Route::post('/redefinir-senha', function (Request $request) {
         : back()->withErrors(['email' => 'Token inválido ou expirado.']);
 })->name('password.update');
 
+Route::get('/run-migrate', function () {
+    if (request('token') !== 'atrio2026migrate') {
+        abort(403);
+    }
+    \Artisan::call('migrate', ['--force' => true]);
+    return response('<pre>' . \Artisan::output() . '</pre>');
+});
+
 Route::get('/cron/notificacoes', function () {
     if (request('token') !== config('app.cron_token')) {
         abort(403);
