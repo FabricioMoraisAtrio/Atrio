@@ -57,38 +57,6 @@ Route::post('/redefinir-senha', function (Request $request) {
         : back()->withErrors(['email' => 'Token inválido ou expirado.']);
 })->name('password.update');
 
-Route::get('/run-migrate', function () {
-    if (request('token') !== 'atrio2026migrate') {
-        abort(403);
-    }
-
-    $fixLog = [];
-
-    // 1. Limpa cache de permissões do Spatie
-    app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-    \Artisan::call('permission:cache-reset');
-    $fixLog[] = 'Cache de permissões limpo';
-
-    // 2. Garante que todos os usuários sem role recebam admin
-    foreach (\App\Models\User::with('roles')->get() as $u) {
-        if ($u->roles->isEmpty()) {
-            $u->assignRole('admin');
-            $fixLog[] = "Role admin atribuído para: {$u->email}";
-        }
-    }
-
-    // 3. Estado atual
-    $users = \App\Models\User::with('roles')->get()->map(fn($u) => [
-        'id'    => $u->id,
-        'email' => $u->email,
-        'roles' => $u->roles->pluck('name'),
-    ]);
-
-    return response()->json([
-        'fix_log' => $fixLog,
-        'users'   => $users,
-    ], 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-});
 
 Route::get('/cron/notificacoes', function () {
     if (request('token') !== config('app.cron_token')) {
