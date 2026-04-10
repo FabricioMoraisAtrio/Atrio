@@ -10,6 +10,7 @@ use App\Http\Controllers\Professor\SchoolClassController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [DashboardController::class, '__invoke'])->name('dashboard');
+Route::get('/painel',    [DashboardController::class, 'painel'])->name('painel');
 
 Route::get('/turmas',        [SchoolClassController::class, 'index'])->name('turmas.index');
 Route::get('/turmas/{turma}',[SchoolClassController::class, 'show'])->name('turmas.show');

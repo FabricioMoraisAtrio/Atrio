@@ -351,7 +351,8 @@
 
                 @hasrole('professor')
                     @php $items = [
-                        ['route' => 'professor.dashboard',    'icon' => 'grid',     'label' => 'Painel'],
+                        ['route' => 'professor.dashboard',    'icon' => 'home',     'label' => 'Início'],
+                        ['route' => 'professor.painel',       'icon' => 'grid',     'label' => 'Painel'],
                         ['route' => 'professor.turmas.index', 'icon' => 'academic', 'label' => 'Turmas'],
                     ]; @endphp
                 @endhasrole
