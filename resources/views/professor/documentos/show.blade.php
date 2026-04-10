@@ -62,13 +62,13 @@
     {{-- Campos de texto simples --}}
     @php
         $camposSimples = collect($documento->content)->filter(fn($v, $k) =>
-            !in_array($k, ['habilidades_academicas', 'habilidades_socioemocionais', 'habilidades_funcionais'])
+            !in_array($k, ['habilidades_academicas', 'habilidades_socioemocionais', 'desenvolvimento_global'])
             && !empty($v)
         );
         $inventarios = [
-            'habilidades_academicas'     => 'Habilidades Acadêmicas',
-            'habilidades_socioemocionais' => 'Habilidades Socioemocionais',
-            'habilidades_funcionais'     => 'Habilidades Funcionais',
+            'habilidades_academicas'     => 'Objetivos Curriculares',
+            'habilidades_socioemocionais' => 'Desenvolvimento Socioemocional',
+            'desenvolvimento_global'     => 'Desenvolvimento Global',
         ];
     @endphp
 

@@ -28,7 +28,7 @@ class RotinaDocumentoListController extends Controller
             'titulo'        => 'PEI',
             'tipo'          => 'pei',
             'so_publico'    => true,
-            'multiplos'     => true,
+            'multiplos'     => false,
             'view'          => 'secretaria.rotinas.documentos.pei',
         ],
         'atendimento' => [
@@ -45,10 +45,14 @@ class RotinaDocumentoListController extends Controller
         $cfg    = $this->config[$tipo];
         $turmas = SchoolClass::where('year', date('Y'))->orderBy('name')->get(['id', 'name', 'shift']);
 
+        $types = $cfg['tipo'] === 'pei'
+            ? [$cfg['tipo'], 'pei_consolidado']
+            : [$cfg['tipo']];
+
         $query = Student::with([
             'schoolClasses' => fn($q) => $q->where('year', date('Y'))->select('school_classes.id', 'name', 'shift'),
             'documents'     => fn($q) => $q->where('year', date('Y'))
-                                           ->where('type', $cfg['tipo'])
+                                           ->whereIn('type', $types)
                                            ->with('author:id,name')
                                            ->select('id', 'student_id', 'author_id', 'type', 'status', 'updated_at'),
         ]);

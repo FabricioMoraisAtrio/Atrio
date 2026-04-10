@@ -58,20 +58,22 @@
 @endif
 
 {{-- Documentos --}}
-@if($aluno->documents->isNotEmpty())
+@php
+    $docsAluno = $aluno->documents; // já filtrados pelo controller (apenas pei do próprio professor)
+    $meuPei = $docsAluno->firstWhere('type', 'pei');
+@endphp
+@if($docsAluno->isNotEmpty() || true)
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 24px; margin-bottom: 16px;">
         <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 16px;">Documentos {{ date('Y') }}</h3>
         <div style="display: flex; flex-direction: column; gap: 4px;">
-            @foreach($aluno->documents->where('year', date('Y')) as $doc)
-                <a href="{{ route('professor.documentos.show', $doc) }}"
-                   style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none;"
-                   onmouseover="this.style.background='#F9FAFB'"
-                   onmouseout="this.style.background='transparent'">
+            {{-- Estudo de Caso e PAEE (somente leitura para o professor) --}}
+            @foreach($docsAluno->whereIn('type', ['estudo_caso', 'paee']) as $doc)
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <div style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-                            {{ $doc->type === 'pei' ? 'background: #E8F0F9;' : ($doc->type === 'paee' ? 'background: #E6F5F4;' : 'background: #F5EDE6;') }}">
+                            {{ $doc->type === 'paee' ? 'background: #E6F5F4;' : 'background: #F5EDE6;' }}">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                 stroke="{{ $doc->type === 'pei' ? '#004B8D' : ($doc->type === 'paee' ? '#009C8C' : '#7C3700') }}"
+                                 stroke="{{ $doc->type === 'paee' ? '#009C8C' : '#7C3700' }}"
                                  stroke-width="2">
                                 <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>
                             </svg>
@@ -83,12 +85,34 @@
                             <p style="font-size: 12px; color: #9CA3AF; margin: 0;">{{ $doc->updated_at->format('d/m/Y') }}</p>
                         </div>
                     </div>
-                    <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;
-                        {{ $doc->status === 'published' ? 'background: #ECFDF5; color: #065F46;' : 'background: #FEF3C7; color: #92400E;' }}">
-                        {{ $doc->status === 'published' ? 'Publicado' : 'Rascunho' }}
-                    </span>
-                </a>
+                </div>
             @endforeach
+
+            {{-- Meu PEI (registro privado do professor) --}}
+            <a href="{{ route('professor.alunos.pei.edit', $aluno) }}"
+               style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none;"
+               onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: #E8F0F9; display: flex; align-items: center; justify-content: center;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">Meu PEI</p>
+                        <p style="font-size: 12px; color: #9CA3AF; margin: 0;">
+                            {{ $meuPei ? $meuPei->updated_at->format('d/m/Y') : 'Não preenchido' }}
+                            <span style="color: #D1D5DB;"> · </span>
+                            <span style="font-style: italic; color: #9CA3AF;">registro privado</span>
+                        </p>
+                    </div>
+                </div>
+                @if($meuPei)
+                    <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; background: #ECFDF5; color: #065F46;">Preenchido</span>
+                @else
+                    <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; background: #FEF3C7; color: #92400E;">Pendente</span>
+                @endif
+            </a>
         </div>
     </div>
 @endif

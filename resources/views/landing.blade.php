@@ -600,6 +600,7 @@
             .features-grid { grid-template-columns: 1fr; }
             .docs-grid { grid-template-columns: 1fr; }
             .steps-grid { grid-template-columns: 1fr; }
+            .roles-grid { grid-template-columns: 1fr; }
             .stats-inner { grid-template-columns: 1fr 1fr; }
             .hero-actions { flex-direction: column; align-items: center; }
             .footer { flex-direction: column; text-align: center; }
@@ -672,11 +673,11 @@
 <div class="stats-bar">
     <div class="stats-inner">
         <div class="stat-item">
-            <div class="stat-number">4</div>
+            <div class="stat-number">3</div>
             <div class="stat-label">Tipos de documentos especializados</div>
         </div>
         <div class="stat-item">
-            <div class="stat-number">4</div>
+            <div class="stat-number">2</div>
             <div class="stat-label">Perfis de acesso distintos</div>
         </div>
         <div class="stat-item">
@@ -728,7 +729,7 @@
                 </div>
                 <div class="feature-title">Documentos Pedagógicos</div>
                 <div class="feature-desc">
-                    Criação e gestão de Estudo de Caso, PAEE, PEI e Atendimentos com exportação dos documentos oficiais em PDF.
+                    Criação e gestão de Estudo de Caso, PAEE e PEI com exportação dos documentos oficiais em PDF.
                 </div>
             </div>
 
@@ -819,13 +820,6 @@
                     <div class="doc-desc">Plano Educacional Individualizado consolidado</div>
                 </div>
             </div>
-            <div class="doc-pill">
-                <div class="doc-dot" style="background: #C77A00;"></div>
-                <div class="doc-info">
-                    <div class="doc-name">Atendimentos</div>
-                    <div class="doc-desc">Registros de atendimentos especializados</div>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -880,13 +874,11 @@
                 <div class="role-header">
                     <div class="role-icon" style="background: rgba(0,75,141,0.3);">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60CFCA" stroke-width="1.8">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                            <line x1="8" y1="21" x2="16" y2="21"/>
-                            <line x1="12" y1="17" x2="12" y2="21"/>
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                         </svg>
                     </div>
                     <div>
-                        <div class="role-name">Secretaria / Coordenação</div>
+                        <div class="role-name">Administrador</div>
                         <div class="role-sub">Gestão completa do sistema</div>
                     </div>
                 </div>
@@ -894,7 +886,7 @@
                     <li>Cadastro e gestão de alunos, turmas e usuários</li>
                     <li>Acesso a todos os documentos de todos os alunos</li>
                     <li>Gerenciamento de laudos e diagnósticos</li>
-                    <li>Rotinas de documentação com visão geral</li>
+                    <li>Elaboração do Estudo de Caso e PAEE</li>
                     <li>Exportação de documentos em PDF</li>
                 </ul>
             </div>
@@ -915,33 +907,11 @@
                 <ul class="role-features">
                     <li>Acesso ao perfil dos alunos da sua turma</li>
                     <li>Preenchimento do PEI com metas e objetivos</li>
-                    <li>Registros de atendimentos e material de apoio</li>
                     <li>Observações pedagógicas por aluno</li>
                     <li>Adequação curricular por disciplina</li>
+                    <li>Exportação do PEI em PDF</li>
                 </ul>
             </div>
-
-            <div class="role-card">
-                <div class="role-header">
-                    <div class="role-icon" style="background: rgba(0,156,140,0.2);">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60CFCA" stroke-width="1.8">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="role-name">Orientação / Especialista</div>
-                        <div class="role-sub">Suporte pedagógico especializado</div>
-                    </div>
-                </div>
-                <ul class="role-features">
-                    <li>Elaboração do Estudo de Caso</li>
-                    <li>Registro de atendimentos especializados</li>
-                    <li>Acesso ao histórico completo do aluno</li>
-                    <li>Criação de PAEE e material de apoio</li>
-                    <li>Acompanhamento das rotinas documentais</li>
-                </ul>
-            </div>
-
 
         </div>
     </div>
@@ -964,7 +934,7 @@
                     </svg>
                 </div>
                 <div class="cta-card-title">Acessar o Sistema</div>
-                <div class="cta-card-desc">Secretaria, professores, coordenação e orientação</div>
+                <div class="cta-card-desc">Administradores e professores</div>
                 <span class="cta-card-btn" style="background: white; color: #004B8D;">Entrar →</span>
             </a>
         </div>

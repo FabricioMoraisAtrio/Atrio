@@ -30,26 +30,26 @@ class DashboardController extends Controller
                     $q->where($filtroCid, true);
                 }
 
-                $q->with(['documents' => function ($d) use ($professorId) {
+                $q->with(['documents' => function ($d) {
                     $d->where('year', date('Y'))
-                      ->where(fn($q) => $q->where('type', 'estudo_caso')
-                          ->orWhere(fn($q2) => $q2->where('type', 'pei')->where('author_id', $professorId)));
+                      ->whereIn('type', ['estudo_caso', 'pei']);
                 }]);
             }])
             ->get();
 
-        // PEI pendente = este professor ainda não criou o seu para o aluno
+        // PEI pendente = existe Estudo de Caso mas professor ainda não preencheu sua seção
         $pendentes = collect();
         foreach ($turmas as $turma) {
+            $subjectSlugTurma = $turma->pivot->subject;
             foreach ($turma->students as $aluno) {
-                $tiposCriados  = $aluno->documents->where('type', 'pei')->pluck('type')->toArray();
-                $tiposFaltando = array_diff(['pei'], $tiposCriados);
+                $temEstudoCaso = $aluno->documents->contains('type', 'estudo_caso');
+                $pei           = $aluno->documents->firstWhere('type', 'pei');
+                $preencheu     = $pei && isset(($pei->content['subjects'] ?? [])[$subjectSlugTurma]);
 
-                if (!empty($tiposFaltando)) {
+                if ($temEstudoCaso && ! $preencheu) {
                     $pendentes->push([
-                        'aluno'    => $aluno,
-                        'turma'    => $turma,
-                        'faltando' => $tiposFaltando,
+                        'aluno' => $aluno,
+                        'turma' => $turma,
                     ]);
                 }
             }

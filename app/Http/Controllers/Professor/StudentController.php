@@ -18,7 +18,11 @@ class StudentController extends Controller
 
         if (! $temAcesso) abort(403);
 
-        $aluno->load('observations.user', 'documents');
+        $aluno->load([
+            'observations.user',
+            'documents' => fn($q) => $q->where('year', date('Y'))
+                ->where(fn($q2) => $q2->where('type', '!=', 'pei')->orWhere('author_id', auth()->id())),
+        ]);
 
         $subjectSlug = auth()->user()->schoolClasses()->first()?->pivot->subject;
         $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->first() : null;

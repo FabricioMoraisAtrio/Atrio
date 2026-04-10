@@ -173,13 +173,92 @@ $textarea = fn(string $name, string $label, int $rows = 3) =>
 
 <hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
 
-{{-- ═══ ELABORAÇÃO ═══ --}}
-{!! $section('Elaborado por') !!}
+{{-- ═══ DIAGNÓSTICO PEDAGÓGICO ═══ --}}
+{!! $section('Diagnóstico Pedagógico', 'Descrição das necessidades educacionais e perfil pedagógico do aluno.') !!}
+
+<div style="margin-bottom: 28px;">
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Descrição das necessidades educacionais</label>
+        <textarea name="diagnostico_pedagogico" rows="5"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('diagnostico_pedagogico') }}</textarea>
+    </div>
+</div>
+
+<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+
+{{-- ═══ OBJETIVOS DE APRENDIZAGEM ═══ --}}
+{!! $section('Objetivos de Aprendizagem', 'Metas estabelecidas para o período letivo.') !!}
+
+<div style="margin-bottom: 28px;">
+    @foreach([
+        'objetivos_curto_prazo'  => ['Curto prazo',  'Objetivos a serem alcançados nas próximas semanas / bimestre', 3],
+        'objetivos_medio_prazo'  => ['Médio prazo',  'Objetivos para o semestre letivo', 3],
+        'objetivos_longo_prazo'  => ['Longo prazo',  'Objetivos para o ano letivo completo', 3],
+    ] as $field => [$badge, $label, $rows])
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 4px;">
+            <span style="display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; background: #F3F4F6; color: #374151; margin-right: 6px;">{{ $badge }}</span>
+            {{ $label }}
+        </label>
+        <textarea name="{{ $field }}" rows="{{ $rows }}"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn($field) }}</textarea>
+    </div>
+    @endforeach
+</div>
+
+<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+
+{{-- ═══ ESTRATÉGIAS E AVALIAÇÃO (professor regente) ═══ --}}
+{!! $section('Estratégias e Avaliação', 'A ser preenchido pelo professor regente — será exibido no PEI para todos os professores.') !!}
+
+<div style="margin-bottom: 28px;">
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Estratégias Pedagógicas</label>
+        <p style="font-size: 12px; color: #9CA3AF; font-style: italic; margin: 0 0 8px;">Estratégias e metodologias a serem adotadas para este aluno pelo professor regente.</p>
+        <textarea name="estrategias_pedagogicas" rows="4"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('estrategias_pedagogicas') }}</textarea>
+    </div>
+    <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Critérios de Avaliação</label>
+        <p style="font-size: 12px; color: #9CA3AF; font-style: italic; margin: 0 0 8px;">Quais pontos serão avaliados durante o ano / período letivo.</p>
+        <textarea name="criterios_avaliacao" rows="4"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('criterios_avaliacao') }}</textarea>
+    </div>
+</div>
+
+<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+
+<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+
+{{-- ═══ EQUIPE RESPONSÁVEL ═══ --}}
+{!! $section('Equipe Responsável', 'Profissionais envolvidos no planejamento e acompanhamento do aluno.') !!}
 
 <div style="margin-bottom: 24px;">
-    <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Nome do(a) profissional responsável</label>
-    <input type="text" name="elaborado_por" value="{{ $fn('elaborado_por') }}"
-           placeholder="Nome e cargo"
-           style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
-           onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        @foreach([
+            'equipe_titular'        => 'Professor(a) Titular / Regente',
+            'equipe_soe'            => 'Orientador(a) Educacional (SOE)',
+            'equipe_scp'            => 'Psicólogo(a) Escolar (SCP)',
+            'equipe_saee'           => 'Coordenador(a) do SAEE',
+            'equipe_psicologo'      => 'Psicólogo(a) / Terapeuta Externo',
+            'equipe_psicopedagogo'  => 'Psicopedagogo(a)',
+            'equipe_fisioterapeuta' => 'Fisioterapeuta / Ed. Físico',
+            'equipe_at'             => 'Acompanhante Terapêutico (AT)',
+        ] as $field => $label)
+        <div>
+            <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px;">{{ $label }}</label>
+            <input type="text" name="{{ $field }}" value="{{ $fn($field) }}"
+                   placeholder="Nome completo"
+                   style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
+                   onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">
+        </div>
+        @endforeach
+    </div>
 </div>
+
+{{-- Elaborado por — preenchido automaticamente pelo usuário logado --}}
+<input type="hidden" name="elaborado_por" value="{{ auth()->user()->name }}">

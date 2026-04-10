@@ -12,6 +12,10 @@
         @include('pdf.partials.estudo_caso')
     @elseif($documento->type === 'pei_consolidado')
         @include('pdf.partials.pei_consolidado')
+    @elseif($documento->type === 'pei')
+        @include('pdf.partials.pei')
+    @elseif($documento->type === 'paee')
+        @include('pdf.partials.paee')
     @else
         @include('pdf.partials.generic')
     @endif

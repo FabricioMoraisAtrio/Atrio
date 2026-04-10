@@ -213,10 +213,20 @@
                             @endif
 
                             <td style="padding: 14px 16px; text-align: center;">
-                                @if($doc)
-                                    <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
-                                        {{ $doc->status === 'published' ? 'background: #ECFDF5; color: #065F46;' : 'background: #FEF3C7; color: #92400E;' }}">
-                                        {{ $doc->status === 'published' ? 'Publicado' : 'Rascunho' }}
+                                @if($cfg['tipo'] === 'pei')
+                                    @php $qtdProfessores = $aluno->documents->where('type', 'pei')->count(); @endphp
+                                    @if($qtdProfessores > 0)
+                                        <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: #ECFDF5; color: #065F46;">
+                                            {{ $qtdProfessores }} {{ $qtdProfessores === 1 ? 'professor' : 'professores' }}
+                                        </span>
+                                    @else
+                                        <span style="font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: #FEF2F2; color: #991B1B;">
+                                            Pendente
+                                        </span>
+                                    @endif
+                                @elseif($doc)
+                                    <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: #ECFDF5; color: #065F46;">
+                                        Preenchido
                                     </span>
                                     <p style="font-size: 10px; color: #9CA3AF; margin: 4px 0 0;">{{ $doc->updated_at->format('d/m/Y') }}</p>
                                 @else
@@ -227,7 +237,23 @@
                             </td>
 
                             <td style="padding: 14px 20px; text-align: right;">
-                                @if($doc)
+                                @if($cfg['tipo'] === 'pei')
+                                    @php $peiConsolidado = $aluno->documents->first(fn($d) => $d->type === 'pei_consolidado'); @endphp
+                                    <div style="display: inline-flex; align-items: center; gap: 6px;">
+                                        <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+                                           style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: {{ $corPrincipal }}; text-decoration: none; padding: 6px 14px; border-radius: 8px; border: 1px solid {{ $corPrincipal }};">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            Acessar
+                                        </a>
+                                        @if($peiConsolidado)
+                                        <a href="{{ route('secretaria.documentos.pdf', $peiConsolidado) }}"
+                                           style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #6B7280; text-decoration: none; padding: 6px 12px; border-radius: 8px; border: 1px solid #E5E7EB;">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                                            PDF
+                                        </a>
+                                        @endif
+                                    </div>
+                                @elseif($doc)
                                     @include('secretaria.rotinas.documentos._visualizar_btn', ['doc' => $doc, 'corPrincipal' => $corPrincipal, 'bgPrincipal' => $bgPrincipal])
                                 @else
                                     <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => $cfg['tipo']]) }}"

@@ -40,9 +40,9 @@
 @if($subject && $subject->inventoryItems->count())
 @php
     $categorias = [
-        'academica'      => ['label' => 'Habilidades Acadêmicas',      'cor' => '#004B8D', 'key' => 'habilidades_academicas'],
-        'socioemocional' => ['label' => 'Habilidades Socioemocionais',  'cor' => '#009C8C', 'key' => 'habilidades_socioemocionais'],
-        'funcional'      => ['label' => 'Habilidades Funcionais',       'cor' => '#7C3700', 'key' => 'habilidades_funcionais'],
+        'academica'      => ['label' => 'Objetivos Curriculares',      'cor' => '#004B8D', 'key' => 'habilidades_academicas'],
+        'socioemocional' => ['label' => 'Desenvolvimento Socioemocional',  'cor' => '#009C8C', 'key' => 'habilidades_socioemocionais'],
+        'global'         => ['label' => 'Desenvolvimento Global',        'cor' => '#6D28D9', 'key' => 'desenvolvimento_global'],
     ];
     $itensPorCategoria = $subject->inventoryItems->groupBy('categoria');
 @endphp

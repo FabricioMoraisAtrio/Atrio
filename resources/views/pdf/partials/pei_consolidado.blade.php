@@ -16,221 +16,374 @@
     $responsaveis = collect([$aluno->responsavel_nome, $aluno->responsavel_2_nome])
         ->filter()->implode(' / ');
 
-    $idade = $aluno->birth_date ? $aluno->birth_date->age . ' anos' : '';
+    $idade = $aluno->birth_date ? $aluno->birth_date->format('d/m/Y') . ' (' . $aluno->birth_date->age . ' anos)' : '—';
 
-    // Carrega todos os PEIs individuais dos professores
-    $peis = \App\Models\Document::where('student_id', $aluno->id)
+    // Documento PEI compartilhado
+    $peiDoc = \App\Models\Document::where('student_id', $aluno->id)
         ->where('year', $documento->year)
         ->where('type', 'pei')
-        ->with('author:id,name')
-        ->get();
+        ->first();
+    $peiContent  = $peiDoc?->content ?? [];
+    $peiGlobal   = $peiContent['global'] ?? [];
+    $peiSubjects = $peiContent['subjects'] ?? [];
 
-    $inventario = PeiConsolidadoController::consolidarInventario($peis);
+    $inventoryItems = PeiConsolidadoController::loadInventoryItems($peiSubjects);
+    $inventario     = PeiConsolidadoController::consolidarInventario($peiSubjects, $inventoryItems);
 
-    $hdr = '#A8BAD0';
-    $sub = '#D0DCE8';
-    $lbl = '#E8EEF4';
-    $brd = '#999';
-
-    $colunas = [
-        'realiza_sem_suporte' => 'Realiza sem suporte',
-        'realiza_com_apoio'   => 'Realiza com apoio',
-        'ainda_nao_realiza'   => 'Ainda não realiza',
-        'nao_observado'       => 'Não observado',
-    ];
+    $ec = \App\Models\Document::where('student_id', $aluno->id)
+        ->where('year', $documento->year)
+        ->where('type', 'estudo_caso')
+        ->value('content') ?? [];
 
     $val = fn($key) => $c[$key] ?? '';
+
+    $accent   = '#004B8D';
+    $accentBg = '#E8F0F9';
+
+    $grupos = [
+        'academica'      => 'Objetivos Curriculares',
+        'socioemocional' => 'Desenvolvimento Socioemocional',
+        'global'         => 'Desenvolvimento Global',
+    ];
+
+    $flagLabels = [
+        'autonomia'    => 'Com autonomia',
+        'suporte'      => 'Com suporte',
+        'nao_executa'  => 'Não executa',
+        'nao_observado'=> 'Não observado',
+    ];
+
+    $temInventario = collect($grupos)->keys()->some(fn($k) => !empty($inventario[$k]));
+
+    $equipeColegio = array_filter([
+        'Professor(a) Titular / Regente'  => $ec['equipe_titular']       ?? '',
+        'Orientador(a) Educacional (SOE)' => $ec['equipe_soe']           ?? '',
+        'Psicólogo(a) Escolar (SCP)'      => $ec['equipe_scp']           ?? '',
+        'Coordenador(a) do SAEE'          => $ec['equipe_saee']          ?? '',
+    ]);
+    $equipeMulti = array_filter([
+        'Psicólogo(a) / Terapeuta'        => $ec['equipe_psicologo']      ?? '',
+        'Psicopedagogo(a)'                => $ec['equipe_psicopedagogo']  ?? '',
+        'Fisioterapeuta / Ed. Físico'     => $ec['equipe_fisioterapeuta'] ?? '',
+        'Acompanhante Terapêutico'        => $ec['equipe_at']             ?? '',
+    ]);
+
+    $logoB64  = null;
+    $photoB64 = null;
+    if ($school?->logo) {
+        $p = storage_path('app/public/' . $school->logo);
+        if (file_exists($p)) $logoB64 = 'data:' . mime_content_type($p) . ';base64,' . base64_encode(file_get_contents($p));
+    }
+    if ($aluno->photo) {
+        $p = storage_path('app/public/' . $aluno->photo);
+        if (file_exists($p)) $photoB64 = 'data:' . mime_content_type($p) . ';base64,' . base64_encode(file_get_contents($p));
+    }
 @endphp
 
 <style>
-    body { font-family: DejaVu Sans, sans-serif; font-size: 9px; color: #111; padding: 28px 32px; }
-    .doc-title { text-align: center; font-size: 10.5px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px; }
-    table { width: 100%; border-collapse: collapse; }
-    td, th { border: 1px solid {{ $brd }}; vertical-align: top; padding: 3px 6px; }
-    .hdr { background: {{ $hdr }}; font-weight: bold; text-align: center; text-transform: uppercase; font-size: 8.5px; letter-spacing: 0.5px; padding: 5px 6px; }
-    .sub { background: {{ $sub }}; font-weight: bold; text-align: center; font-size: 8.5px; padding: 4px 6px; }
-    .lbl { background: {{ $lbl }}; font-weight: bold; font-size: 8.5px; white-space: nowrap; width: 1%; }
-    .val { font-size: 9px; min-height: 16px; }
-    .tall { min-height: 36px; }
-    .inv-th { background: #F5F5F5; font-weight: bold; font-size: 8px; text-align: center; padding: 4px 3px; }
-    .inv-meta { font-size: 8px; padding: 4px 6px; text-align: center; }
-    .inv-chk { text-align: center; padding: 4px 3px; font-size: 10px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a1a1a; line-height: 1.5; }
+    .page { padding: 0 36px 36px; }
+    .page-next { padding: 20px 36px 36px; }
     .page-break { page-break-after: always; }
-    .footer-bar { margin-top: 16px; border-top: 1px solid #aaa; padding-top: 6px; display: table; width: 100%; }
-    .footer-bar td { border: none; font-size: 8px; color: #555; padding: 0; }
+
+    .doc-header { display: table; width: 100%; border-bottom: 3px solid {{ $accent }}; padding-bottom: 12px; margin-bottom: 18px; }
+    .doc-header-left  { display: table-cell; vertical-align: middle; width: 60px; }
+    .doc-header-mid   { display: table-cell; vertical-align: middle; padding: 0 12px; }
+    .doc-header-right { display: table-cell; vertical-align: middle; text-align: right; width: 96px; }
+    .doc-school   { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+    .doc-subtitle { font-size: 8.5px; color: #666; margin-top: 2px; }
+    .doc-title    { font-size: 13px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; color: {{ $accent }}; margin-top: 6px; }
+    .school-logo   { width: 52px; height: 52px; object-fit: contain; }
+    .student-photo { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; }
+    .photo-placeholder { width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc; display: table; text-align: center; vertical-align: middle; }
+
+    .doc-header-sm { display: table; width: 100%; border-bottom: 1.5px solid {{ $accent }}; padding-bottom: 6px; margin-bottom: 16px; }
+    .doc-header-sm-l { display: table-cell; font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; }
+    .doc-header-sm-r { display: table-cell; text-align: right; font-size: 8px; color: #888; }
+
+    .id-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+    .id-table td { border: 1px solid #ddd; padding: 4px 8px; font-size: 9px; }
+    .id-label { background: {{ $accentBg }}; font-weight: bold; width: 130px; color: {{ $accent }}; white-space: nowrap; }
+
+    .section { margin-bottom: 12px; }
+    .section-header { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin-bottom: 8px; }
+    .section-title { font-size: 9.5px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: {{ $accent }}; }
+    .section-sub   { font-size: 8px; color: #888; font-style: italic; margin-top: 1px; }
+
+    .field-label { font-size: 8.5px; font-weight: bold; color: #555; margin-bottom: 3px; }
+    .field-value { font-size: 9.5px; color: #1a1a1a; border-bottom: 1px solid #ddd; padding: 3px 2px 6px; white-space: pre-wrap; word-break: break-word; }
+    .field-value.empty { color: #bbb; font-style: italic; min-height: 18px; }
+
+    .grid-2 { display: table; width: 100%; }
+    .grid-2 .col { display: table-cell; width: 50%; vertical-align: top; padding-right: 14px; }
+    .grid-2 .col:last-child { padding-right: 0; }
+
+    .inv-cat-hdr { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin: 8px 0 5px; }
+    .inv-cat-title { font-size: 8.5px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: {{ $accent }}; }
+    .inv-th   { background: {{ $accentBg }}; font-weight: bold; font-size: 8px; text-align: center; padding: 4px 3px; border: 1px solid #c5d8f0; }
+    .inv-meta { font-size: 8.5px; padding: 4px 6px; border: 1px solid #ddd; text-align: left; }
+    .inv-chk  { text-align: center; padding: 4px 3px; font-size: 9px; border: 1px solid #ddd; }
+    .inv-obs  { font-size: 8px; padding: 3px 5px; border: 1px solid #ddd; }
+
+    .sig-table { width: 100%; border-collapse: collapse; }
+    .sig-table td { border: 1px solid #ddd; padding: 6px 10px; vertical-align: top; }
+    .sig-role { font-size: 8.5px; font-weight: bold; color: {{ $accent }}; }
+    .sig-line { border-bottom: 1px solid #888; display: block; margin-top: 14px; width: 100%; }
+    .sig-date { font-size: 7.5px; color: #888; text-align: right; margin-top: 3px; }
+
+    hr.div { border: none; border-top: 1px solid #efefef; margin: 10px 0; }
 </style>
 
-<p class="doc-title">{{ $aluno->registration_number ?? '000000' }} PLANO EDUCACIONAL INDIVIDUALIZADO - PEI</p>
+{{-- ══ CONTEÚDO PRINCIPAL ══ --}}
+<div class="page">
 
-{{-- PÁGINA 1: Cabeçalho + Necessidades --}}
-<table>
-    <tr>
-        <td class="lbl" style="width: 90px;">Unidade:</td>
-        <td class="val" colspan="5">{{ $school?->name }}</td>
-    </tr>
-    <tr><td class="hdr" colspan="6">Dados de Identificação</td></tr>
-    <tr>
-        <td class="lbl">Estudante:</td>
-        <td class="val" colspan="5">{{ $aluno->name }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Data nascimento:</td>
-        <td class="val" colspan="2">{{ $aluno->birth_date ? $aluno->birth_date->format('d/m/Y') : '' }}</td>
-        <td class="lbl" style="width: 60px;">Idade:</td>
-        <td class="val" colspan="2">{{ $idade }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Diagnóstico:</td>
-        <td class="val" colspan="5">{{ $diagnostico }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Responsáveis:</td>
-        <td class="val" colspan="5">{{ $responsaveis }}</td>
-    </tr>
-    <tr>
-        <td class="lbl">Ano letivo:</td>
-        <td class="val">{{ $documento->year }}</td>
-        <td class="lbl" style="width: 40px;">Ano:</td>
-        <td class="val">{{ $turma ? explode('º', $turma->name)[0] . 'º' : '' }}</td>
-        <td class="lbl" style="width: 50px;">Turma:</td>
-        <td class="val">{{ $turma?->name }}</td>
-    </tr>
+{{-- Cabeçalho --}}
+<div class="doc-header">
+    <div class="doc-header-left">
+        @if($logoB64)
+            <img src="{{ $logoB64 }}" class="school-logo" alt="Logo">
+        @else
+            <div class="photo-placeholder"><span style="font-size:7px; color:#ccc;">Logo</span></div>
+        @endif
+    </div>
+    <div class="doc-header-mid">
+        <div class="doc-school">{{ $school?->name }}</div>
+        <div class="doc-subtitle">Plano Educacional Individualizado &nbsp;·&nbsp; Ano Letivo {{ $documento->year }}</div>
+        <div class="doc-title">PEI — Plano Educacional Individualizado</div>
+    </div>
+    <div class="doc-header-right">
+        @if($photoB64)
+            <img src="{{ $photoB64 }}" class="student-photo" alt="Foto">
+        @else
+            <div class="photo-placeholder"><span style="font-size:7px; color:#ccc;">Foto</span></div>
+        @endif
+    </div>
+</div>
 
-    {{-- Equipe do Colégio --}}
-    @php
-        $ec = \App\Models\Document::where('student_id', $aluno->id)
-            ->where('year', $documento->year)
-            ->where('type', 'estudo_caso')
-            ->value('content') ?? [];
-    @endphp
+{{-- Identificação --}}
+<table class="id-table">
     <tr>
-        <td class="lbl" rowspan="4" style="vertical-align: middle; text-align: center;">Equipe do<br>Colégio</td>
-        <td class="val" colspan="5">Professor Titular/Conselheiro: {{ $ec['professor_titular'] ?? '' }}</td>
+        <td class="id-label">Escola</td>
+        <td colspan="3">{{ $school?->name }}</td>
     </tr>
-    <tr><td class="val" colspan="5">SOE: {{ $ec['soe'] ?? '' }}</td></tr>
-    <tr><td class="val" colspan="5">SCP: {{ $ec['scp'] ?? '' }}</td></tr>
-    <tr><td class="val" colspan="5">SAEE: {{ $ec['saee'] ?? '' }}</td></tr>
     <tr>
-        <td class="lbl" rowspan="5" style="vertical-align: middle; text-align: center;">Equipe<br>Multidisciplinar</td>
-        <td class="val" colspan="5">Psicóloga: {{ $ec['psicologa'] ?? '' }}</td>
+        <td class="id-label">Aluno(a)</td>
+        <td colspan="3" style="font-weight: bold;">{{ $aluno->name }}</td>
     </tr>
-    <tr><td class="val" colspan="5">Psiquiatra: {{ $ec['psiquiatra'] ?? '' }}</td></tr>
-    <tr><td class="val" colspan="5">Psicopedagoga: {{ $ec['psicopedagoga'] ?? '' }}</td></tr>
-    <tr><td class="val" colspan="5">Fisioterapeuta-Educador Físico: {{ $ec['fisioterapeuta'] ?? '' }}</td></tr>
-    <tr><td class="val" colspan="5">AT: {{ $ec['at'] ?? '' }}</td></tr>
-
-    {{-- Trajetória --}}
-    <tr><td class="hdr" colspan="6">Trajetória Escolar do(a) Estudante</td></tr>
     <tr>
-        <td class="val tall" colspan="6" style="min-height: 50px; white-space: pre-wrap;">{{ $ec['historico'] ?? '' }}</td>
+        <td class="id-label">Data de Nascimento</td>
+        <td>{{ $idade }}</td>
+        <td class="id-label" style="width: 90px;">Matrícula</td>
+        <td>{{ $aluno->registration_number }}</td>
     </tr>
-
-    {{-- Necessidades Educacionais --}}
-    <tr><td class="hdr" colspan="6">Necessidades Educacionais Especiais do(a) Estudante</td></tr>
     <tr>
-        <td class="val tall" colspan="6" style="min-height: 80px; white-space: pre-wrap;">{{ $val('necessidades_educacionais') }}</td>
+        <td class="id-label">Turma / Turno</td>
+        <td>{{ $turma ? $turma->name . ' · ' . $turma->shift : '—' }}</td>
+        <td class="id-label">Ano Letivo</td>
+        <td>{{ $documento->year }}</td>
     </tr>
+    @if($diagnostico)
+    <tr>
+        <td class="id-label">Diagnóstico / Laudo</td>
+        <td colspan="3">{{ $diagnostico }}</td>
+    </tr>
+    @endif
+    @if($responsaveis)
+    <tr>
+        <td class="id-label">Responsável(is)</td>
+        <td colspan="3">{{ $responsaveis }}</td>
+    </tr>
+    @endif
 </table>
 
-<table style="margin-top: 16px; border: none;">
-    <tr style="border: none;">
-        <td style="border: none; font-size: 8px; color: #555;">Modelo PEI {{ $documento->year }}</td>
-        <td style="border: none; text-align: center; font-size: 8px; color: #555;">Página 1 de</td>
-        <td style="border: none; text-align: right; font-size: 8px; color: #555;">{{ now()->format('d/m/Y') }}</td>
-    </tr>
-</table>
+{{-- Equipe --}}
+@if($equipeColegio || $equipeMulti)
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Equipe Responsável</div>
+        <div class="section-sub">Profissionais envolvidos na elaboração e acompanhamento do PEI.</div>
+    </div>
+    <div class="grid-2">
+        @if($equipeColegio)
+        <div class="col">
+            <div class="field-label" style="margin-bottom: 5px;">Equipe do Colégio</div>
+            @foreach($equipeColegio as $cargo => $nome)
+            <div style="margin-bottom: 3px; font-size: 9px; color: #1a1a1a;">
+                <span style="color: #555; font-weight: bold; font-size: 8px;">{{ $cargo }}:</span> {{ $nome }}
+            </div>
+            @endforeach
+        </div>
+        @endif
+        @if($equipeMulti)
+        <div class="col">
+            <div class="field-label" style="margin-bottom: 5px;">Equipe Multidisciplinar</div>
+            @foreach($equipeMulti as $cargo => $nome)
+            <div style="margin-bottom: 3px; font-size: 9px; color: #1a1a1a;">
+                <span style="color: #555; font-weight: bold; font-size: 8px;">{{ $cargo }}:</span> {{ $nome }}
+            </div>
+            @endforeach
+        </div>
+        @endif
+    </div>
+</div>
+<hr class="div">
+@endif
 
-<div class="page-break"></div>
+{{-- Trajetória Escolar --}}
+@if(!empty($ec['historico_escolar']))
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Trajetória Escolar</div>
+    </div>
+    <div class="field-value" style="white-space: pre-wrap;">{{ $ec['historico_escolar'] }}</div>
+</div>
+<hr class="div">
+@endif
 
-{{-- PÁGINA 2: Inventário de Habilidades --}}
-<p class="doc-title">{{ $aluno->registration_number ?? '000000' }} PLANO EDUCACIONAL INDIVIDUALIZADO - PEI</p>
+{{-- Diagnóstico Pedagógico (do EC) --}}
+@php $diagnostico_peda = $ec['diagnostico_pedagogico'] ?? ''; @endphp
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Diagnóstico Pedagógico</div>
+        <div class="section-sub">Descrição das necessidades educacionais — extraído do Estudo de Caso.</div>
+    </div>
+    @if($diagnostico_peda)
+        <div class="field-value" style="white-space: pre-wrap;">{{ $diagnostico_peda }}</div>
+    @else
+        <div class="field-value empty" style="font-style: italic; color: #aaa;">Ainda não preenchido no Estudo de Caso.</div>
+    @endif
+</div>
+<hr class="div">
 
-<table>
-    <tr><td class="hdr" colspan="7">Inventário de Habilidades Escolares</td></tr>
+{{-- Objetivos de Aprendizagem (do PEI global) --}}
+@php
+$objCurto = $peiGlobal['objetivos_curto_prazo'] ?? '';
+$objMedio = $peiGlobal['objetivos_medio_prazo'] ?? '';
+$objLongo = $peiGlobal['objetivos_longo_prazo'] ?? '';
+@endphp
+@if($objCurto || $objMedio || $objLongo)
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Objetivos de Aprendizagem</div>
+    </div>
+    @foreach(['Curto Prazo' => $objCurto, 'Médio Prazo' => $objMedio, 'Longo Prazo' => $objLongo] as $label => $texto)
+    @if($texto)
+    <div style="margin-bottom: 6px; padding: 5px 8px; border-left: 3px solid {{ $accent }}; background: #f9fbfd;">
+        <div style="font-size: 8px; font-weight: bold; color: {{ $accent }}; text-transform: uppercase; margin-bottom: 2px;">{{ $label }}</div>
+        <div style="font-size: 9px; white-space: pre-wrap;">{{ $texto }}</div>
+    </div>
+    @endif
+    @endforeach
+</div>
+<hr class="div">
+@endif
 
-    @php
-        $grupos = [
-            'habilidades_academicas'      => 'Habilidades Acadêmicas',
-            'habilidades_socioemocionais' => 'Habilidades Socioemocionais',
-            'habilidades_funcionais'      => 'Habilidades Funcionais',
-        ];
-    @endphp
-
+{{-- Inventário de Habilidades --}}
+@if($temInventario)
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Inventário de Habilidades Escolares</div>
+        <div class="section-sub">Avaliação por disciplina — consolidado dos professores.</div>
+    </div>
     @foreach($grupos as $catKey => $catLabel)
         @php $itens = $inventario[$catKey] ?? []; @endphp
         @if(count($itens))
-        <tr><td class="sub" colspan="7">{{ $catLabel }}</td></tr>
-        <tr>
-            <td class="inv-th" style="width: 30%;">Metas/Objetivos</td>
-            <td class="inv-th" style="width: 9%;">Realiza sem suporte</td>
-            <td class="inv-th" style="width: 9%;">Realiza com apoio</td>
-            <td class="inv-th" style="width: 9%;">Ainda não realiza</td>
-            <td class="inv-th" style="width: 9%;">Não observado</td>
-            <td class="inv-th" style="width: 17%;">Responsável</td>
-            <td class="inv-th">Observações</td>
-        </tr>
-        @foreach($itens as $item)
-        <tr>
-            <td class="inv-meta" style="text-align: left;">{{ $item['meta'] }}</td>
-            @foreach(array_keys($colunas) as $col)
-            <td class="inv-chk">{{ !empty($item[$col]) ? 'X' : '' }}</td>
+        <div class="inv-cat-hdr">
+            <div class="inv-cat-title">{{ $catLabel }}</div>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; page-break-inside: avoid;">
+            <tr>
+                <th class="inv-th" style="text-align: left; width: 36%;">Metas / Objetivos</th>
+                <th class="inv-th" style="width: 20%;">Disciplina</th>
+                <th class="inv-th" style="width: 18%;">Avaliação</th>
+                <th class="inv-th">Observações</th>
+            </tr>
+            @foreach($itens as $item)
+            <tr>
+                <td class="inv-meta">{{ $item['meta'] }}</td>
+                <td class="inv-obs">{{ $item['subject_name'] }}</td>
+                <td class="inv-obs">{{ $flagLabels[$item['flag'] ?? ''] ?? '—' }}</td>
+                <td class="inv-obs">{{ $item['obs'] }}</td>
+            </tr>
             @endforeach
-            <td style="font-size: 8px; padding: 3px 5px;">{{ $item['responsavel'] ?? $item['_autor'] ?? '' }}</td>
-            <td style="font-size: 8px; padding: 3px 5px;">{{ $item['observacoes'] ?? '' }}</td>
-        </tr>
-        @endforeach
+        </table>
         @endif
     @endforeach
-</table>
+</div>
+<hr class="div">
+@endif
 
-{{-- Adaptações --}}
-<table style="margin-top: 8px;">
-    <tr><td class="hdr" colspan="1">Adaptações e/ou Adequações no Processo de Avaliação</td></tr>
-    <tr>
-        <td class="val" style="min-height: 40px; white-space: pre-wrap; font-size: 9px;">{{ $val('adaptacoes_avaliacao') }}</td>
-    </tr>
-    <tr><td class="hdr">Observações não contempladas ao longo do PEI</td></tr>
-    <tr>
-        <td class="val" style="min-height: 50px; white-space: pre-wrap; font-size: 9px;">{{ $val('observacoes') }}</td>
-    </tr>
-    <tr>
-        <td style="font-size: 8px; font-style: italic; padding: 6px; background: #f9f9f9; border: 1px solid {{ $brd }};">
-            <strong>Observação:</strong> Este Plano Educacional Individualizado (PEI) encontra-se EM CONSTRUÇÃO, por se configurar como um documento dinâmico e processual, sujeito a revisões sistemáticas, análise contínua dos processos e das práticas pedagógicas e ajustes ao longo do semestre. As informações, estratégias e encaminhamentos poderão ser atualizados com base em observações periódicas, registros pedagógicos e avaliações contínuas, assegurando sua efetividade e alinhamento às necessidades educacionais do(a) estudante.
-        </td>
-    </tr>
-</table>
+{{-- Estratégias Pedagógicas (do PEI global) --}}
+@php $estrategias = $peiGlobal['estrategias_pedagogicas'] ?? ''; @endphp
+@if($estrategias)
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Estratégias Pedagógicas</div>
+    </div>
+    <div class="field-value" style="white-space: pre-wrap;">{{ $estrategias }}</div>
+</div>
+<hr class="div">
+@endif
 
-{{-- Termo de Ciência --}}
-<table style="margin-top: 8px;">
-    <tr><td class="hdr" colspan="2">Termo de Ciência e Concordância por Parte dos Envolvidos</td></tr>
-    <tr>
-        <td colspan="2" style="font-size: 8px; text-align: center; padding: 4px; background: #f5f5f5; border: 1px solid {{ $brd }};">
-            Assinatura dos responsáveis pela elaboração do PEI e Responsáveis pelo estudante
-        </td>
-    </tr>
-    @foreach(['Orientador(a) Educacional', 'Profissional do AEE', 'Professor(a) Titular', 'Mãe/Responsável', 'Pai/Responsável', 'Terapeuta'] as $assinante)
-    <tr>
-        <td class="lbl" style="width: 160px; vertical-align: middle;">{{ $assinante }}</td>
-        <td style="padding: 7px 12px;">
-            <table style="width: 100%; border-collapse: collapse; border: none;">
-                <tr>
-                    <td style="border: none; width: 75%; padding: 0;">
-                        <span style="border-bottom: 1px solid #333; display: block; width: 92%; height: 16px;"></span>
-                    </td>
-                    <td style="border: none; text-align: right; padding: 0; font-size: 8px; color: #555;">
-                        ____/____/________
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    @endforeach
-</table>
+{{-- Adaptações Curriculares (do EC) --}}
+@php $adaptacoes = $ec['adaptacoes_necessarias'] ?? ''; @endphp
+@if($adaptacoes)
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Adaptações Curriculares</div>
+        <div class="section-sub">Extraído do Estudo de Caso.</div>
+    </div>
+    <div class="field-value" style="white-space: pre-wrap;">{{ $adaptacoes }}</div>
+</div>
+<hr class="div">
+@endif
 
-<table style="margin-top: 16px; border: none;">
-    <tr style="border: none;">
-        <td style="border: none; font-size: 8px; color: #555;">Modelo PEI {{ $documento->year }}</td>
-        <td style="border: none; text-align: center; font-size: 8px; color: #555;">Página 2 de</td>
-        <td style="border: none; text-align: right; font-size: 8px; color: #555;">{{ now()->format('d/m/Y') }}</td>
-    </tr>
-</table>
+{{-- Avaliação (do PEI global) --}}
+@php $avaliacao = $peiGlobal['criterios_avaliacao'] ?? ''; @endphp
+@if($avaliacao)
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Avaliação</div>
+        <div class="section-sub">Como será acompanhado o progresso do aluno.</div>
+    </div>
+    <div class="field-value" style="white-space: pre-wrap;">{{ $avaliacao }}</div>
+</div>
+<hr class="div">
+@endif
+
+{{-- Observações --}}
+@if($val('observacoes'))
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Observações não contempladas ao longo do PEI</div>
+    </div>
+    <div class="field-value" style="white-space: pre-wrap;">{{ $val('observacoes') }}</div>
+</div>
+<hr class="div">
+@endif
+
+
+{{-- Termo de Ciência e Concordância --}}
+<hr class="div">
+<div class="section">
+    <div class="section-header">
+        <div class="section-title">Termo de Ciência e Concordância por Parte dos Envolvidos</div>
+        <div class="section-sub">Assinatura dos responsáveis pela elaboração do PEI e Responsáveis pelo estudante.</div>
+    </div>
+    <table class="sig-table">
+        @foreach(['Orientador(a) Educacional', 'Profissional do AEE', 'Professor(a) Titular', 'Mãe/Responsável', 'Pai/Responsável', 'Terapeuta'] as $assinante)
+        <tr>
+            <td style="width: 170px; vertical-align: middle; background: {{ $accentBg }};">
+                <div class="sig-role">{{ $assinante }}</div>
+            </td>
+            <td>
+                <span class="sig-line"></span>
+                <div class="sig-date">____/____/________</div>
+            </td>
+        </tr>
+        @endforeach
+    </table>
+</div>
+
+</div>{{-- /page --}}

@@ -92,6 +92,20 @@
         [style*="background: #FEF3C7"],[style*="background:#FEF3C7"],
         [style*="background: #FFFBEB"],[style*="background:#FFFBEB"] { background: rgba(146,64,14,0.25) !important; }
 
+        /* ── CAIXAS INFO AZUIS (EFF6FF/BFDBFE/DBEAFE) ── */
+        [style*="background: #EFF6FF"],[style*="background:#EFF6FF"] { background: rgba(59,130,246,0.12) !important; }
+        [style*="background: #DBEAFE"],[style*="background:#DBEAFE"] { background: rgba(59,130,246,0.18) !important; }
+        [style*="background: #D1FAE5"],[style*="background:#D1FAE5"] { background: rgba(16,185,129,0.18) !important; }
+        [style*="border: 1px solid #BFDBFE"],[style*="border:1px solid #BFDBFE"] { border-color: rgba(59,130,246,0.35) !important; }
+        [style*="border-left: 2px solid #BFDBFE"],[style*="border-left:2px solid #BFDBFE"] { border-left-color: rgba(59,130,246,0.4) !important; }
+
+        /* ── CAIXAS INVENTÁRIO PEI (categorias) ── */
+        [style*="background: #F0EBF8"],[style*="background:#F0EBF8"] { background: rgba(109,40,217,0.18) !important; }
+        [style*="border: 1px solid #E8F0F9"],[style*="border:1px solid #E8F0F9"] { border-color: rgba(0,75,141,0.3) !important; }
+        [style*="border: 1px solid #E6F5F4"],[style*="border:1px solid #E6F5F4"] { border-color: rgba(0,156,140,0.3) !important; }
+        [style*="border: 1px solid #F0EBF8"],[style*="border:1px solid #F0EBF8"] { border-color: rgba(109,40,217,0.3) !important; }
+        [style*="border: 1px solid #C5D8F0"],[style*="border:1px solid #C5D8F0"] { border-color: var(--border) !important; }
+
         /* ── DARK: textos de badge com cor forte ── */
         [data-theme="dark"] [style*="color: #065F46"],[data-theme="dark"] [style*="color:#065F46"] { color: #6EDDB8 !important; }
         [data-theme="dark"] [style*="color: #991B1B"],[data-theme="dark"] [style*="color:#991B1B"] { color: #FCA5A5 !important; }
@@ -104,6 +118,8 @@
         [data-theme="dark"] [style*="color: #3D7A27"],[data-theme="dark"] [style*="color:#3D7A27"] { color: #86EFAC !important; }
         [data-theme="dark"] [style*="color: #B45309"],[data-theme="dark"] [style*="color:#B45309"] { color: #FCD34D !important; }
         [data-theme="dark"] [style*="color: #6D28D9"],[data-theme="dark"] [style*="color:#6D28D9"] { color: #C4B5FD !important; }
+        [data-theme="dark"] [style*="color: #1E40AF"],[data-theme="dark"] [style*="color:#1E40AF"] { color: #93C5FD !important; }
+        [data-theme="dark"] [style*="color: #1D4ED8"],[data-theme="dark"] [style*="color:#1D4ED8"] { color: #60A5FA !important; }
 
         /* ── BORDAS — com e sem espaço ── */
         [style*="border:1px solid #F3F4F6"],
@@ -202,12 +218,18 @@
             --accent:    {{ $schoolTheme }};
             --accent-bg: {{ $accentBg }};
         }
-        /* Override inline styles hardcoded com a cor padrão Átrio */
-        [style*="background: #004B8D"] { background: {{ $schoolTheme }} !important; }
-        [style*="color: #004B8D"]      { color: {{ $schoolTheme }} !important; }
-        [style*="background: #E8F0F9"] { background: {{ $accentBg }} !important; }
+        /* Restaura variáveis dark que foram sobrescritas pelo school theme */
+        [data-theme="dark"] {
+            --accent:    #4D9FFF;
+            --accent-bg: rgba(77,159,255,0.20);
+        }
+        /* Override inline styles — apenas no tema claro */
+        html:not([data-theme="dark"]) [style*="background: #004B8D"] { background: {{ $schoolTheme }} !important; }
+        html:not([data-theme="dark"]) [style*="background: #E8F0F9"] { background: {{ $accentBg }} !important; }
+        /* Cor do texto e borda aplicam em ambos os temas via variável */
+        [style*="color: #004B8D"]      { color: var(--accent) !important; }
         [style*="border-color: #004B8D"], [style*="border-bottom-color: #004B8D"] {
-            border-color: {{ $schoolTheme }} !important;
+            border-color: var(--accent) !important;
         }
     </style>
     @endif
@@ -329,9 +351,8 @@
 
                 @hasrole('professor')
                     @php $items = [
-                        ['route' => 'professor.dashboard',        'icon' => 'grid',     'label' => 'Painel'],
-                        ['route' => 'professor.turmas.index',     'icon' => 'academic', 'label' => 'Turmas'],
-                        ['route' => 'professor.documentos.index', 'icon' => 'doc',      'label' => 'Documentos'],
+                        ['route' => 'professor.dashboard',    'icon' => 'grid',     'label' => 'Painel'],
+                        ['route' => 'professor.turmas.index', 'icon' => 'academic', 'label' => 'Turmas'],
                     ]; @endphp
                 @endhasrole
 
@@ -581,6 +602,22 @@ function toggleTheme() {
     localStorage.setItem('atrio-theme', next);
     updateIcons(next);
 }
+
+// ── FOCUS DARK MODE — intercepta onfocus/onblur hardcoded ──
+document.addEventListener('focusin', function(e) {
+    const el = e.target;
+    if (!['INPUT','TEXTAREA','SELECT'].includes(el.tagName)) return;
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+        el.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    }
+});
+document.addEventListener('focusout', function(e) {
+    const el = e.target;
+    if (!['INPUT','TEXTAREA','SELECT'].includes(el.tagName)) return;
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+        el.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+    }
+});
 
 // ── MODAL DE CONFIRMAÇÃO ──
 function openConfirm(title, desc, onOk) {

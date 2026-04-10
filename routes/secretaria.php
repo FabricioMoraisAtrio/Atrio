@@ -11,7 +11,6 @@ use App\Http\Controllers\Secretaria\ObservationController;
 use App\Http\Controllers\Secretaria\DocumentWordController;
 use App\Http\Controllers\Secretaria\AllDocumentsController;
 use App\Http\Controllers\Secretaria\DocumentoFinalController;
-use App\Http\Controllers\Secretaria\PeiConsolidadoController;
 use App\Http\Controllers\Secretaria\LaudoController;
 use App\Http\Controllers\Secretaria\RotinaAdaptacoesController;
 use App\Http\Controllers\Secretaria\Rotinas\DocumentosHubController;
@@ -19,6 +18,7 @@ use App\Http\Controllers\Secretaria\Rotinas\RotinaDocumentoListController;
 use App\Http\Controllers\Secretaria\SubjectController;
 use App\Http\Controllers\Secretaria\Config\ConfigController;
 use App\Http\Controllers\Secretaria\Config\SchoolRoleController;
+use App\Http\Controllers\Secretaria\PeiConsolidadoController;
 
 
 
@@ -34,10 +34,6 @@ Route::middleware('can:escola.configurar')->prefix('config')->name('config.')->g
 });
 
 // ─── Turmas ───────────────────────────────────────────────────────────────────
-Route::middleware('can:turmas.ver')->group(function () {
-    Route::get('turmas',              [SchoolClassController::class, 'index'])->name('turmas.index');
-    Route::get('turmas/{turma}',      [SchoolClassController::class, 'show'])->name('turmas.show');
-});
 Route::middleware('can:turmas.gerenciar')->group(function () {
     Route::get('turmas/create',           [SchoolClassController::class, 'create'])->name('turmas.create');
     Route::post('turmas',                 [SchoolClassController::class, 'store'])->name('turmas.store');
@@ -46,15 +42,19 @@ Route::middleware('can:turmas.gerenciar')->group(function () {
     Route::patch('turmas/{turma}',        [SchoolClassController::class, 'update']);
     Route::delete('turmas/{turma}',       [SchoolClassController::class, 'destroy'])->name('turmas.destroy');
 });
+Route::middleware('can:turmas.ver')->group(function () {
+    Route::get('turmas',              [SchoolClassController::class, 'index'])->name('turmas.index');
+    Route::get('turmas/{turma}',      [SchoolClassController::class, 'show'])->name('turmas.show');
+});
 
 // ─── Alunos ───────────────────────────────────────────────────────────────────
-Route::middleware('can:alunos.ver')->group(function () {
-    Route::get('alunos',              [StudentController::class, 'index'])->name('alunos.index');
-    Route::get('alunos/{aluno}',      [StudentController::class, 'show'])->name('alunos.show');
-});
 Route::middleware('can:alunos.criar')->group(function () {
     Route::get('alunos/create',   [StudentController::class, 'create'])->name('alunos.create');
     Route::post('alunos',         [StudentController::class, 'store'])->name('alunos.store');
+});
+Route::middleware('can:alunos.ver')->group(function () {
+    Route::get('alunos',              [StudentController::class, 'index'])->name('alunos.index');
+    Route::get('alunos/{aluno}',      [StudentController::class, 'show'])->name('alunos.show');
 });
 Route::middleware('can:alunos.editar')->group(function () {
     Route::get('alunos/{aluno}/edit',  [StudentController::class, 'edit'])->name('alunos.edit');
@@ -76,18 +76,17 @@ Route::middleware('can:documentos.ver_todos')->group(function () {
     Route::get('rotinas/documentos/estudo-caso', [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'estudo_caso')->name('rotinas.documentos.estudo-caso');
     Route::get('rotinas/documentos/paee',         [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'paee')->name('rotinas.documentos.paee');
     Route::get('rotinas/documentos/pei',          [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'pei')->name('rotinas.documentos.pei');
-    Route::get('rotinas/documentos/atendimentos', [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'atendimento')->name('rotinas.documentos.atendimentos');
-    Route::get('alunos/{aluno}/documento-final',  DocumentoFinalController::class)->name('alunos.documento-final');
-    Route::get('alunos/{aluno}/pei-consolidado',  [PeiConsolidadoController::class, 'edit'])->name('alunos.pei-consolidado');
-    Route::post('alunos/{aluno}/pei-consolidado', [PeiConsolidadoController::class, 'update'])->name('alunos.pei-consolidado.update');
+    Route::get('alunos/{aluno}/documento-final', DocumentoFinalController::class)->name('alunos.documento-final');
+    Route::get('alunos/{aluno}/pei-consolidado', [PeiConsolidadoController::class, 'edit'])->name('alunos.pei-consolidado');
+    Route::put('alunos/{aluno}/pei-consolidado', [PeiConsolidadoController::class, 'update'])->name('alunos.pei-consolidado.update');
 });
 
 // Documentos por aluno — requer visualização de documentos
 Route::middleware('can:pei.ver')->group(function () {
+    Route::get('alunos/{aluno}/documentos/create',           [DocumentController::class, 'create'])->name('alunos.documentos.create');
     Route::get('alunos/{aluno}/documentos',                  [DocumentController::class, 'index'])->name('alunos.documentos.index');
     Route::get('alunos/{aluno}/documentos/{documento}',      [DocumentController::class, 'show'])->name('alunos.documentos.show');
     Route::get('documentos/{documento}',                     [DocumentController::class, 'show'])->name('documentos.show');
-    Route::get('alunos/{aluno}/documentos/create',           [DocumentController::class, 'create'])->name('alunos.documentos.create');
     Route::post('alunos/{aluno}/documentos',                 [DocumentController::class, 'store'])->name('alunos.documentos.store');
     Route::get('alunos/{aluno}/documentos/{documento}/edit', [DocumentController::class, 'edit'])->name('alunos.documentos.edit');
     Route::put('alunos/{aluno}/documentos/{documento}',      [DocumentController::class, 'update'])->name('alunos.documentos.update');

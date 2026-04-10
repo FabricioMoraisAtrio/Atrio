@@ -30,7 +30,9 @@
                 @include('secretaria.documentos.partials.paee')
             @endif
 
-            @include('secretaria.documentos.partials.observacoes_livres')
+            @if($documento->type !== 'pei')
+                @include('secretaria.documentos.partials.observacoes_livres')
+            @endif
 
             <div style="display: flex; gap: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #F3F4F6;">
                 <button type="submit"

@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Secretaria;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\Student;
+use App\Models\SubjectInventoryItem;
 use App\Services\DocumentContentService;
 use Illuminate\Http\Request;
 
 class PeiConsolidadoController extends Controller
 {
     /**
-     * Exibe o formulário de preenchimento/edição do PEI Consolidado.
-     * Carrega todos os PEIs individuais dos professores para exibição no form.
+     * Exibe o PEI Consolidado — lê dados do EC e do PEI compartilhado.
      */
     public function edit(Student $aluno)
     {
@@ -23,21 +23,32 @@ class PeiConsolidadoController extends Controller
             ->where('type', 'pei_consolidado')
             ->first();
 
-        // Todos os PEIs individuais dos professores
-        $peis = Document::where('student_id', $aluno->id)
+        // Documento PEI compartilhado (único por aluno/ano)
+        $peiDoc      = Document::where('student_id', $aluno->id)
             ->where('year', date('Y'))
             ->where('type', 'pei')
-            ->with('author:id,name')
-            ->get();
+            ->first();
 
-        // Consolida os inventários de todos os professores por categoria
-        $inventario = $this->consolidarInventario($peis);
+        $peiContent  = $peiDoc?->content ?? [];
+        $peiGlobal   = $peiContent['global'] ?? [];
+        $peiSubjects = $peiContent['subjects'] ?? [];
 
-        return view('secretaria.pei.consolidado', compact('aluno', 'peiConsolidado', 'peis', 'inventario'));
+        // Carrega itens do inventário referenciados no PEI
+        $inventoryItems = self::loadInventoryItems($peiSubjects);
+
+        // Conteúdo do Estudo de Caso
+        $ec = Document::where('student_id', $aluno->id)
+            ->where('year', date('Y'))
+            ->where('type', 'estudo_caso')
+            ->value('content') ?? [];
+
+        return view('secretaria.pei.consolidado', compact(
+            'aluno', 'peiConsolidado', 'peiGlobal', 'peiSubjects', 'inventoryItems', 'ec'
+        ));
     }
 
     /**
-     * Salva (cria ou atualiza) o PEI Consolidado.
+     * Salva apenas as "Observações" adicionais do PEI Consolidado.
      */
     public function update(Request $request, Student $aluno)
     {
@@ -52,35 +63,54 @@ class PeiConsolidadoController extends Controller
             ],
             [
                 'author_id' => auth()->id(),
-                'status'    => $request->input('status', 'draft'),
+                'status'    => 'published',
                 'content'   => $content,
             ]
         );
 
         return redirect()->route('secretaria.alunos.pei-consolidado', $aluno)
-            ->with('success', 'PEI Consolidado salvo com sucesso.');
+            ->with('success', 'Observações salvas com sucesso.');
     }
 
     /**
-     * Agrega habilidades de todos os PEIs individuais por categoria.
+     * Carrega SubjectInventoryItems referenciados nos subjects do PEI.
      */
-    public static function consolidarInventario($peis): array
+    public static function loadInventoryItems(array $peiSubjects): \Illuminate\Support\Collection
     {
-        $categorias = ['habilidades_academicas', 'habilidades_socioemocionais', 'habilidades_funcionais'];
-        $resultado  = array_fill_keys($categorias, []);
+        $ids = collect($peiSubjects)
+            ->flatMap(fn($s) => array_keys($s['metas'] ?? []))
+            ->map(fn($id) => (int) $id)
+            ->unique()->values()->all();
 
-        foreach ($peis as $pei) {
-            $content = $pei->content ?? [];
-            foreach ($categorias as $cat) {
-                if (!empty($content[$cat]) && is_array($content[$cat])) {
-                    foreach ($content[$cat] as $item) {
-                        if (!empty($item['meta'])) {
-                            $resultado[$cat][] = array_merge($item, [
-                                '_autor' => $pei->author->name ?? '—',
-                            ]);
-                        }
-                    }
-                }
+        return $ids
+            ? SubjectInventoryItem::withoutGlobalScopes()->whereIn('id', $ids)->get()->keyBy('id')
+            : collect();
+    }
+
+    /**
+     * Agrega metas de todos os subjects do PEI por categoria.
+     * Retorna: ['academica' => [...], 'socioemocional' => [...], 'global' => [...]]
+     * Cada item: ['meta', 'flag', 'obs', 'subject_name', 'teacher_name']
+     */
+    public static function consolidarInventario(array $peiSubjects, \Illuminate\Support\Collection $inventoryItems): array
+    {
+        $resultado = ['academica' => [], 'socioemocional' => [], 'global' => []];
+
+        foreach ($peiSubjects as $slug => $secao) {
+            foreach ($secao['metas'] ?? [] as $metaId => $dados) {
+                $item = $inventoryItems->get((int) $metaId);
+                if (! $item) continue;
+
+                $cat = $item->categoria; // 'academica' | 'socioemocional' | 'global'
+                if (! array_key_exists($cat, $resultado)) continue;
+
+                $resultado[$cat][] = [
+                    'meta'         => $item->meta,
+                    'flag'         => $dados['flag'] ?? null,
+                    'obs'          => $dados['obs'] ?? '',
+                    'subject_name' => $secao['subject_name'] ?? $slug,
+                    'teacher_name' => $secao['teacher_name'] ?? '',
+                ];
             }
         }
 

@@ -78,19 +78,21 @@ class SubjectController extends Controller
     public function saveItems(Request $request, Subject $subject)
     {
         $request->validate([
-            'metas'   => 'nullable|array',
-            'metas.*' => 'required|string|max:255',
+            'metas'               => 'nullable|array',
+            'metas.*.texto'       => 'required|string|max:255',
+            'metas.*.categoria'   => 'required|in:academica,socioemocional,global',
         ]);
 
         $schoolId = auth()->user()->school_id;
         $subject->inventoryItems()->delete();
 
         foreach (($request->metas ?? []) as $i => $meta) {
-            if (trim($meta) === '') continue;
+            if (trim($meta['texto']) === '') continue;
             SubjectInventoryItem::create([
                 'school_id'  => $schoolId,
                 'subject_id' => $subject->id,
-                'meta'       => trim($meta),
+                'meta'       => trim($meta['texto']),
+                'categoria'  => $meta['categoria'],
                 'ordem'      => $i + 1,
             ]);
         }

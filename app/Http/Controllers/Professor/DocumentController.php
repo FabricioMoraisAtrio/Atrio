@@ -11,144 +11,79 @@ use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
-    public function index()
+    private function verificarAcesso(int $studentId): void
     {
-        $documentos = Document::with('student')
-            ->where('author_id', auth()->id())
-            ->latest()
-            ->get()
-            ->groupBy('type');
+        $turmasDoProfesor = auth()->user()->schoolClasses()->pluck('school_classes.id');
 
-        return view('professor.documentos.index', compact('documentos'));
+        $alunoNaTurma = \App\Models\SchoolClass::withoutGlobalScopes()
+            ->whereIn('id', $turmasDoProfesor)
+            ->whereHas('students', fn($q) => $q->withoutGlobalScopes()->where('students.id', $studentId))
+            ->exists();
+
+        if (! $alunoNaTurma) {
+            abort(403);
+        }
     }
 
-private function verificarAcesso(int $studentId): void
-{
-    $turmasDoProfesor = auth()->user()->schoolClasses()->pluck('school_classes.id');
-
-    $alunoNaTurma = \App\Models\SchoolClass::withoutGlobalScopes()
-        ->whereIn('id', $turmasDoProfesor)
-        ->whereHas('students', fn($q) => $q->withoutGlobalScopes()->where('students.id', $studentId))
-        ->exists();
-
-    if (! $alunoNaTurma) {
-        abort(403);
+    /**
+     * Retorna a turma do professor que contém o aluno, com o pivot de subject.
+     */
+    private function turmaComAluno(int $studentId): ?\App\Models\SchoolClass
+    {
+        return auth()->user()->schoolClasses()
+            ->whereHas('students', fn($q) => $q->withoutGlobalScopes()->where('students.id', $studentId))
+            ->first();
     }
-}
-    public function create(Student $aluno, Request $request)
+
+    /**
+     * Exibe o formulário de preenchimento da seção do professor no PEI do aluno.
+     */
+    public function editPei(Student $aluno)
     {
         $this->verificarAcesso($aluno->id);
 
-        $type = 'pei';
+        $pei = Document::where('student_id', $aluno->id)
+            ->where('type', 'pei')
+            ->where('year', date('Y'))
+            ->first();
 
-        // Verifica se existe estudo de caso (qualquer autor)
-        $hasCase = Document::where('student_id', $aluno->id)
+        if (! $pei) {
+            return back()->withErrors(['documento' => 'O Estudo de Caso ainda não foi preenchido para este aluno.']);
+        }
+
+        $turma       = $this->turmaComAluno($aluno->id);
+        $subjectSlug = $turma?->pivot->subject;
+        $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->with(['inventoryItems' => fn($q) => $q->orderBy('ordem')])->first() : null;
+
+        // Dados já preenchidos pelo professor nesta matéria
+        $minha_secao = $pei->content['subjects'][$subjectSlug] ?? null;
+
+        // Estudo de Caso do aluno (para exibir dados de diagnóstico/objetivos como somente leitura)
+        $estudo_caso = \App\Models\Document::where('student_id', $aluno->id)
             ->where('type', 'estudo_caso')
             ->where('year', date('Y'))
-            ->exists();
+            ->value('content') ?? [];
 
-        if (! $hasCase) {
-            return back()->withErrors(['documento' => 'O Estudo de Caso ainda não foi preenchido para este aluno. Aguarde a coordenação ou orientação.']);
-        }
-
-        // Verifica se ESTE professor já criou o PEI para este aluno
-        $exists = Document::where('student_id', $aluno->id)
-            ->where('type', $type)
-            ->where('year', date('Y'))
-            ->where('author_id', auth()->id())
-            ->exists();
-
-        if ($exists) {
-            return back()->withErrors(['documento' => 'Você já preencheu o PEI para este aluno em ' . date('Y') . '.']);
-        }
-
-        // Busca a matéria vinculada ao professor (pelo slug no pivot)
-        $subjectSlug = auth()->user()->schoolClasses()->first()?->pivot->subject;
-        $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->with('inventoryItems')->first() : null;
-
-        return view('professor.documentos.create', compact('aluno', 'type', 'subject'));
+        return view('professor.documentos.pei_edit', compact('aluno', 'pei', 'subject', 'subjectSlug', 'minha_secao', 'estudo_caso'));
     }
 
-public function store(Student $aluno, Request $request)
-{
-    $this->verificarAcesso($aluno->id);
-
-    $request->validate([
-        'type' => 'required|in:pei',
-    ]);
-
-    $type = $request->input('type');
-
-    // Bloqueia se não há estudo de caso
-    $hasCase = Document::where('student_id', $aluno->id)
-        ->where('type', 'estudo_caso')
-        ->where('year', date('Y'))
-        ->exists();
-
-    if (! $hasCase) {
-        return back()->withErrors(['documento' => 'O Estudo de Caso ainda não foi preenchido para este aluno.']);
-    }
-
-    $content = DocumentContentService::buildContent($type, $request);
-
-    Document::create([
-        'school_id'  => session('school_id'),
-        'student_id' => $aluno->id,
-        'author_id'  => auth()->id(),
-        'type'       => $type,
-        'year'       => date('Y'),
-        'status'     => 'draft',
-        'content'    => $content,
-    ]);
-
-    if ($type === 'estudo_caso') {
-        $aluno->update(['has_case_study' => true]);
-    }
-
-    return redirect()->route('professor.dashboard')
-        ->with('success', strtoupper($type) . ' criado com sucesso.');
-}
-
-    public function show(Document $documento)
+    /**
+     * Salva a seção do professor no PEI compartilhado do aluno.
+     */
+    public function updatePei(Request $request, Student $aluno)
     {
-        $this->verificarAcesso($documento->student_id);
-        $documento->load('student', 'author');
-        return view('professor.documentos.show', compact('documento'));
+        $this->verificarAcesso($aluno->id);
+
+        $pei = Document::where('student_id', $aluno->id)
+            ->where('type', 'pei')
+            ->where('year', date('Y'))
+            ->firstOrFail();
+
+        $novoConteudo = DocumentContentService::mergePeiSubject($pei->content ?? [], $request);
+
+        $pei->update(['content' => $novoConteudo]);
+
+        return redirect()->route('professor.alunos.show', $aluno)
+            ->with('success', 'PEI atualizado com sucesso.');
     }
-
-public function edit(Document $documento)
-{
-    $this->verificarAcesso($documento->student_id);
-    $documento->load('student');
-
-    $subjectSlug = auth()->user()->schoolClasses()->first()?->pivot->subject;
-    $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->with('inventoryItems')->first() : null;
-
-    return view('professor.documentos.edit', compact('documento', 'subject'));
-}
-
-public function update(Request $request, Document $documento)
-{
-    $this->verificarAcesso($documento->student_id);
-
-    $content = DocumentContentService::buildContent($documento->type, $request);
-
-    $documento->update(['content' => $content]);
-
-    return redirect()->route('professor.documentos.show', $documento)
-        ->with('success', 'Documento atualizado.');
-}
-
-public function destroy(Document $documento)
-{
-    if ($documento->type !== 'pei' || $documento->author_id !== auth()->id()) {
-        abort(403);
-    }
-
-    $studentId = $documento->student_id;
-    $documento->delete();
-
-    return redirect()->route('professor.alunos.show', $studentId)
-        ->with('success', 'PEI excluído com sucesso.');
-}
 }

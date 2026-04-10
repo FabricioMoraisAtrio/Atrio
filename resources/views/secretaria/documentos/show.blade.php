@@ -91,14 +91,10 @@
         @endforeach
     </div>
 
-    <div style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="margin-top: 16px;">
         <p style="font-size: 12px; color: #9CA3AF; margin: 0;">
             Criado por {{ $documento->author->name }} · {{ $documento->created_at->format('d/m/Y') }}
         </p>
-        <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
-            {{ $documento->status === 'published' ? 'background: #ECFDF5; color: #065F46;' : 'background: #FEF3C7; color: #92400E;' }}">
-            {{ $documento->status === 'published' ? 'Publicado' : 'Rascunho' }}
-        </span>
     </div>
 </div>
 @endsection

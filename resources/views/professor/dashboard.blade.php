@@ -39,12 +39,10 @@
                         <span style="font-size: 12px; color: #9CA3AF; margin-left: 8px;">{{ $item['turma']->name }}</span>
                     </div>
                     <div style="display: flex; gap: 4px;">
-                        @foreach($item['faltando'] as $tipo)
-                            <a href="{{ route('professor.alunos.documentos.create', [$item['aluno'], 'type' => $tipo]) }}"
-                               style="background: #92400E; color: #fff; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; text-decoration: none;">
-                                + {{ strtoupper(str_replace('_', ' ', $tipo)) }}
-                            </a>
-                        @endforeach
+                        <a href="{{ route('professor.alunos.pei.edit', $item['aluno']) }}"
+                           style="background: #92400E; color: #fff; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; text-decoration: none;">
+                            Preencher PEI
+                        </a>
                     </div>
                 </div>
             @endforeach
@@ -224,23 +222,24 @@ document.addEventListener('click', function(e) {
                                 Ver perfil
                             </a>
                             @php
-                                // Apenas o PEI deste professor para este aluno
-                                $meuPei = $aluno->documents->firstWhere('type', 'pei');
+                                $pei           = $aluno->documents->firstWhere('type', 'pei');
                                 $temEstudoCaso = $aluno->documents->contains('type', 'estudo_caso');
+                                $subjectSlugTurma = $turma->pivot->subject ?? null;
+                                $preencheu     = $pei && isset(($pei->content['subjects'] ?? [])[$subjectSlugTurma]);
                             @endphp
-                            @if($meuPei)
-                                <a href="{{ route('professor.documentos.show', $meuPei) }}"
+                            @if($pei && $preencheu)
+                                <a href="{{ route('professor.alunos.pei.edit', $aluno) }}"
                                    style="font-size: 11px; background: #ECFDF5; color: #065F46; font-weight: 600; padding: 5px 10px; border-radius: 8px; text-decoration: none;">
                                     PEI ✓
                                 </a>
-                            @elseif(!$temEstudoCaso)
+                            @elseif(! $temEstudoCaso)
                                 <span style="font-size: 11px; background: #F3F4F6; color: #9CA3AF; font-weight: 500; padding: 5px 10px; border-radius: 8px;" title="Aguardando Estudo de Caso">
                                     PEI bloqueado
                                 </span>
                             @else
-                                <a href="{{ route('professor.alunos.documentos.create', [$aluno, 'type' => 'pei']) }}"
+                                <a href="{{ route('professor.alunos.pei.edit', $aluno) }}"
                                    style="font-size: 11px; background: #004B8D; color: #fff; font-weight: 600; padding: 5px 10px; border-radius: 8px; text-decoration: none;">
-                                    + PEI
+                                    Preencher PEI
                                 </a>
                             @endif
                         </div>

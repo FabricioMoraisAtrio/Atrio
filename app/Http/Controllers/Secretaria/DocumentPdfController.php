@@ -26,13 +26,54 @@ class DocumentPdfController extends Controller
             'accessed_at' => now(),
         ]);
 
-        $pdf = Pdf::loadView('pdf.documento', compact('documento'));
+        $pdf = Pdf::loadView('pdf.documento', compact('documento'))
+            ->setOptions(['margin_top' => 20, 'margin_bottom' => 20]);
+        $pdf->render();
 
-        $filename = strtoupper(str_replace('_', '-', $documento->type))
+        self::addFooter($pdf->getDomPDF(), $documento);
+
+        $typeLabels = [
+            'estudo_caso'     => 'ESTUDO-DE-CASO',
+            'paee'            => 'PAEE',
+            'pei'             => 'PEI',
+            'pei_consolidado' => 'PEI',
+        ];
+        $typeLabel = $typeLabels[$documento->type]
+            ?? strtoupper(str_replace('_', '-', $documento->type));
+
+        $filename = $typeLabel
             . '_' . str($documento->student->name)->slug()
             . '_' . $documento->year
             . '.pdf';
 
         return $pdf->download($filename);
+    }
+
+    private static function addFooter(\Dompdf\Dompdf $dompdf, \App\Models\Document $documento): void
+    {
+        $canvas = $dompdf->getCanvas();
+        $w      = $canvas->get_width();
+        $h      = $canvas->get_height();
+
+        $lightgray = [0.533, 0.533, 0.533];
+        $logoPath  = public_path('images/atrio-logo.png');
+
+        $yText  = $h - 18;
+        $logoSz = 16;
+        $logoX  = $w - 36 - $logoSz;
+        $logoY  = $yText - 3;
+        $labelX = $w - 36 - $logoSz - 125;
+        $copyX  = 36;
+
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics)
+            use ($yText, $lightgray, $logoPath, $logoX, $logoY, $logoSz, $labelX, $copyX)
+        {
+            $font = $fontMetrics->getFont('DejaVu Sans');
+            $canvas->text($copyX, $yText, "\xC2\xA9 Todos os direitos reservados", $font, 7.5, $lightgray);
+            $canvas->text($labelX, $yText, "Desenvolvido por \xC3\x81trio System", $font, 7.5, $lightgray);
+            if (file_exists($logoPath)) {
+                $canvas->image($logoPath, $logoX, $logoY, $logoSz, $logoSz);
+            }
+        });
     }
 }
