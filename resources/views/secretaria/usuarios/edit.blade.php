@@ -40,6 +40,22 @@
                 @error('password')<p style="font-size: 12px; color: #EF4444; margin-top: 4px;">{{ $message }}</p>@enderror
             </div>
 
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Perfil de acesso</label>
+                @php $roleAtual = old('role', $usuario->getRoleNames()->first()); @endphp
+                <select name="role" id="select-role"
+                        onchange="toggleTurmas(this.value)"
+                        style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
+                        onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">
+                    @foreach($roles as $role)
+                        <option value="{{ $role->spatie_role }}" {{ $roleAtual === $role->spatie_role ? 'selected' : '' }}>
+                            {{ $role->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('role')<p style="font-size: 12px; color: #EF4444; margin-top: 4px;">{{ $message }}</p>@enderror
+            </div>
+
             <div style="margin-bottom: 24px;">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <input type="checkbox" name="is_active" value="1"
@@ -48,8 +64,8 @@
                 </label>
             </div>
 
-            @if($usuario->hasRole('professor'))
-                <div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+            @php $isProfessor = old('role', $usuario->getRoleNames()->first()) === 'professor'; @endphp
+                <div id="bloco-professor" style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px; display: {{ $isProfessor ? 'block' : 'none' }};">
                     <p style="font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px;">Matéria</p>
                     @php $subjectAtual = old('subject', $usuario->schoolClasses->first()?->pivot->subject); @endphp
                     <select name="subject"
@@ -76,8 +92,6 @@
                         @endforeach
                     </div>
                 </div>
-            @endif
-
 
             <div style="display: flex; gap: 12px;">
                 <button type="submit"
@@ -92,4 +106,10 @@
         </form>
     </div>
 </div>
+
+<script>
+function toggleTurmas(role) {
+    document.getElementById('bloco-professor').style.display = role === 'professor' ? 'block' : 'none';
+}
+</script>
 @endsection

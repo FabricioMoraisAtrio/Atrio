@@ -113,8 +113,9 @@ class UserController extends Controller
         $usuario->load('roles', 'schoolClasses');
         $turmas   = SchoolClass::where('year', date('Y'))->orderBy('name')->get();
         $subjects = Subject::orderBy('ordem')->get();
+        $roles    = $this->rolesDisponiveis();
 
-        return view('secretaria.usuarios.edit', compact('usuario', 'turmas', 'subjects'));
+        return view('secretaria.usuarios.edit', compact('usuario', 'turmas', 'subjects', 'roles'));
     }
 
     public function update(Request $request, User $usuario)
@@ -123,6 +124,11 @@ class UserController extends Controller
             'name'               => 'required|string|max:255',
             'email'              => 'required|email|unique:users,email,' . $usuario->id,
             'password'           => 'nullable|min:6',
+            'role'               => ['nullable', 'string', function ($attr, $value, $fail) {
+                if ($value && ! Role::where('name', $value)->exists()) {
+                    $fail('Perfil inválido.');
+                }
+            }],
             'school_class_ids'   => 'nullable|array',
             'school_class_ids.*' => 'exists:school_classes,id',
             'subject'            => 'nullable|exists:subjects,slug',
@@ -143,12 +149,22 @@ class UserController extends Controller
 
         $usuario->update($updateData);
 
-        if ($usuario->hasRole('professor')) {
+        // Atualiza perfil se informado
+        if (! empty($data['role'])) {
+            $usuario->syncRoles([$data['role']]);
+        }
+
+        $novaRole = $data['role'] ?? $usuario->getRoleNames()->first();
+
+        if ($novaRole === 'professor') {
             $turmas = [];
             foreach ($data['school_class_ids'] ?? [] as $classId) {
                 $turmas[$classId] = ['subject' => $data['subject'] ?? null];
             }
             $usuario->schoolClasses()->sync($turmas);
+        } else {
+            // Se mudou de professor para outro perfil, remove vínculos de turma
+            $usuario->schoolClasses()->detach();
         }
 
         return redirect()->route('secretaria.usuarios.index')
