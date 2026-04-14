@@ -66,8 +66,20 @@
                 </p>
                 @if(is_array($valor))
                     @php $primeiroItem = reset($valor); @endphp
-                    @if(is_array($primeiroItem))
-                        {{-- Array de objetos (ex: habilidades_academicas) --}}
+                    @if($campo === 'equipe_participantes')
+                        {{-- Equipe: array de {nome, cargo} --}}
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            @foreach($valor as $p)
+                                @if(!empty($p['nome']))
+                                <div style="display: flex; gap: 12px; font-size: 13px; color: #374151;">
+                                    <span style="font-weight: 600; min-width: 180px;">{{ $p['nome'] }}</span>
+                                    <span style="color: #9CA3AF;">{{ $p['cargo'] ?? '' }}</span>
+                                </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @elseif(is_array($primeiroItem))
+                        {{-- Array de objetos com 'meta' --}}
                         <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                             @foreach($valor as $item)
                                 @if(!empty($item['meta']))
@@ -76,7 +88,7 @@
                             @endforeach
                         </div>
                     @else
-                        {{-- Array simples de strings (ex: adaptações) --}}
+                        {{-- Array simples de strings --}}
                         <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                             @foreach($valor as $tag)
                                 <span style="padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #E8F0F9; color: #004B8D;">{{ $tag }}</span>

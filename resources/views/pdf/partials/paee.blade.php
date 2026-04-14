@@ -51,63 +51,90 @@
 @endphp
 
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a1a1a; line-height: 1.5; }
+    * {
+        margin: 0;
+        padding: 0;
+    }
 
-    .page { padding: 0 36px 44px; }
-    .page-break { page-break-after: always; }
+    body {
+        font-family: DejaVu Sans, sans-serif;
+        font-size: 9.5px;
+        color: #1a1a1a;
+        line-height: 1.5;
+        background: #fff;
+    }
 
-    /* Cabeçalho */
-    .doc-header { display: table; width: 100%; border-bottom: 3px solid {{ $accent }}; padding-bottom: 12px; margin-bottom: 18px; }
+    /* Container principal que respeita o fluxo do dompdf */
+    .page {
+        width: 100%;
+    }
+
+    /* ── Cabeçalho principal ── */
+    .doc-header { 
+        display: table; 
+        width: 100%; 
+        table-layout: fixed; 
+        border-bottom: 3px solid {{ $accent }}; 
+        padding-bottom: 12px; 
+        margin-bottom: 18px; 
+    }
+    
     .doc-header-left  { display: table-cell; vertical-align: middle; width: 60px; }
     .doc-header-mid   { display: table-cell; vertical-align: middle; padding: 0 12px; }
     .doc-header-right { display: table-cell; vertical-align: middle; text-align: right; width: 96px; }
-    .doc-school   { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-    .doc-subtitle { font-size: 8.5px; color: #666; margin-top: 2px; }
-    .doc-title    { font-size: 13px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; color: {{ $accent }}; margin-top: 6px; }
-    .school-logo  { width: 52px; height: 52px; object-fit: contain; }
-    .student-photo { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; }
-    .photo-placeholder { width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc; display: table; text-align: center; }
 
-    /* Cabeçalho reduzido */
-    .doc-header-sm { display: table; width: 100%; border-bottom: 1.5px solid {{ $accent }}; padding-bottom: 6px; margin-bottom: 16px; }
-    .doc-header-sm-l { display: table-cell; font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; }
-    .doc-header-sm-r { display: table-cell; text-align: right; font-size: 8px; color: #888; }
-
-    /* Identificação */
-    .id-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
-    .id-table td { border: 1px solid #ddd; padding: 4px 8px; font-size: 9px; }
-    .id-label { background: {{ $accentBg }}; font-weight: bold; width: 130px; color: {{ $accent }}; white-space: nowrap; }
-
-    /* Seção */
-    .section { margin-bottom: 14px; page-break-inside: avoid; }
-    .section-header { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin-bottom: 8px; page-break-after: avoid; }
-    .section-title { font-size: 9.5px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: {{ $accent }}; }
-    .section-sub   { font-size: 8px; color: #888; font-style: italic; margin-top: 1px; }
-
-    /* Campo */
-    .field-value {
-        font-size: 9.5px; color: #1a1a1a; border-bottom: 1px solid #ddd;
-        padding: 3px 2px 6px; white-space: pre-wrap; word-break: break-word;
+    /* Forçar tabelas a não estourarem a largura da página */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed; /* Essencial no dompdf */
+        margin-bottom: 15px;
     }
 
-    /* Grid 3 colunas */
-    .grid-3 { display: table; width: 100%; margin-bottom: 14px; }
-    .grid-3 .col { display: table-cell; vertical-align: top; padding-right: 14px; }
-    .grid-3 .col:last-child { padding-right: 0; }
-    .inline-label { font-size: 8px; font-weight: bold; color: {{ $accent }}; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; }
-    .inline-value { font-size: 9px; color: #1a1a1a; border-bottom: 1px solid #ddd; padding-bottom: 4px; min-height: 20px; }
+    .id-table td { 
+        border: 1px solid #ddd; 
+        padding: 6px 8px; 
+        font-size: 9px; 
+        word-wrap: break-word; 
+    }
 
-    /* Assinaturas */
-    .sig-table { width: 100%; border-collapse: collapse; }
-    .sig-table td { border: 1px solid #ddd; padding: 6px 10px; vertical-align: top; }
-    .sig-role { font-size: 8.5px; font-weight: bold; color: #444; }
-    .sig-name { font-size: 9px; color: #1a1a1a; margin-top: 2px; }
-    .sig-line { border-bottom: 1px solid #888; display: block; margin-top: 14px; }
-    .sig-date { font-size: 7.5px; color: #888; text-align: right; margin-top: 3px; }
+    .id-label { 
+        background: {{ $accentBg }}; 
+        font-weight: bold; 
+        width: 120px; 
+        color: {{ $accent }}; 
+    }
 
-    hr.div { border: none; border-top: 1px solid #efefef; margin: 12px 0; }
-    .page-next { padding: 20px 36px 44px; }
+    /* Seções e Quebras */
+    .section { 
+        margin-bottom: 14px; 
+        width: 100%;
+        page-break-inside: avoid; 
+    }
+
+    .section-header { 
+        border-left: 3px solid {{ $accent }}; 
+        padding: 3px 0 3px 8px; 
+        margin-bottom: 8px; 
+    }
+
+    .field-value {
+        font-size: 9.5px; 
+        color: #1a1a1a; 
+        border-bottom: 1px solid #ddd;
+        padding: 5px 2px; 
+    }
+
+    hr.div { 
+        border: none; 
+        border-top: 1px solid #efefef; 
+        margin: 15px 0; 
+        width: 100%;
+    }
+
+    /* Ajuste de Imagens */
+    .school-logo { max-width: 52px; max-height: 52px; }
+    .student-photo { width: 80px; height: 80px; border-radius: 4px; border: 1px solid #ccc; }
 </style>
 
 {{-- Documento --}}
@@ -158,6 +185,12 @@
         <td class="id-label">Ano Letivo</td>
         <td>{{ $documento->year }}</td>
     </tr>
+    @if($aluno->responsavel_nome || $aluno->responsavel_2_nome)
+    <tr>
+        <td class="id-label">Responsável</td>
+        <td colspan="3">{{ collect([$aluno->responsavel_nome, $aluno->responsavel_2_nome])->filter()->implode(' / ') }}</td>
+    </tr>
+    @endif
     @if($diagnostico)
     <tr>
         <td class="id-label">Diagnóstico / Laudo</td>
@@ -166,100 +199,92 @@
     @endif
 </table>
 
+@php
+$checkCols = function(array $itens): string {
+    if (empty($itens)) return '<span style="color:#bbb;font-style:italic;font-size:9px;">(não preenchido)</span>';
+    $out = '';
+    foreach ($itens as $i => $item) {
+        $border = $i > 0 ? 'border-top:1px solid #D5EDEB;' : '';
+        $out .= '<div style="' . $border . 'padding:5px 4px;font-size:9px;color:#1a1a1a;">' . e($item) . '</div>';
+    }
+    return $out;
+};
+@endphp
+
 {{-- Diagnóstico / Perfil --}}
+@php $diagItens = (array)($c['diagnostico_perfil'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Diagnóstico / Perfil</div>
         <div class="section-sub">Necessidades educacionais e barreiras identificadas.</div>
     </div>
-    <div class="field-value taller">{!! $asList($val('diagnostico_perfil')) !!}</div>
+    {!! $checkCols($diagItens) !!}
+    @if($val('diagnostico_perfil_obs'))
+    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin: 6px 0 3px;">Observações</div>
+    <div class="field-value" style="white-space: pre-wrap; font-size: 9px;">{{ $val('diagnostico_perfil_obs') }}</div>
+    @endif
 </div>
 
 <hr class="div">
 
-{{-- Objetivos --}}
+{{-- Objetivos do AEE --}}
+@php $objItens = (array)($c['objetivos_aee'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Objetivos do AEE</div>
     </div>
-
-    <div style="margin-bottom: 6px; padding: 6px 10px; border-left: 3px solid {{ $accent }}; background: #f9fbfd;">
-        <div style="font-size: 8px; font-weight: bold; color: {{ $accent }}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Objetivo Geral</div>
-        <div style="font-size: 9px; white-space: pre-wrap;">{{ $val('objetivo_geral') ?: '(não preenchido)' }}</div>
-    </div>
-
-    <div style="margin-top: 8px;">
-        <div style="font-size: 8px; font-weight: bold; color: {{ $accent }}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Objetivos Específicos</div>
-        {!! $asList($val('objetivos_especificos')) !!}
-    </div>
+    {!! $checkCols($objItens) !!}
+    @if($val('objetivos_aee_obs'))
+    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin: 6px 0 3px;">Observações</div>
+    <div class="field-value" style="white-space: pre-wrap; font-size: 9px;">{{ $val('objetivos_aee_obs') }}</div>
+    @endif
 </div>
 
 <hr class="div">
 
 {{-- Recursos e Estratégias --}}
+@php $recItens = (array)($c['recursos_estrategias'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Recursos e Estratégias</div>
-        <div class="section-sub">Tecnologias assistivas, adaptações e metodologias utilizadas.</div>
     </div>
-
-    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin-bottom: 3px;">Tecnologias Assistivas</div>
-    <div class="field-value" style="margin-bottom: 10px;">{{ $val('tecnologias_assistivas') ?: '(não preenchido)' }}</div>
-
-    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin-bottom: 3px;">Adaptações Curriculares e de Material</div>
-    <div class="field-value tall" style="margin-bottom: 10px; white-space: pre-wrap;">{{ $val('adaptacoes') ?: '(não preenchido)' }}</div>
-
-    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin-bottom: 3px;">Metodologias e Estratégias Pedagógicas</div>
-    <div class="field-value tall" style="white-space: pre-wrap;">{{ $val('metodologias') ?: '(não preenchido)' }}</div>
+    {!! $checkCols($recItens) !!}
+    @if($val('recursos_estrategias_obs'))
+    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin: 6px 0 3px;">Observações</div>
+    <div class="field-value" style="white-space: pre-wrap; font-size: 9px;">{{ $val('recursos_estrategias_obs') }}</div>
+    @endif
 </div>
 
 <hr class="div">
 
 {{-- Organização do Atendimento --}}
+@php $orgItens = (array)($c['organizacao_atendimento'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Organização do Atendimento</div>
-        <div class="section-sub">Frequência, duração e local do atendimento especializado.</div>
     </div>
-    <div class="grid-3">
-        <div class="col">
-            <div class="inline-label">Frequência</div>
-            <div class="inline-value">{{ $val('frequencia') ?: '—' }}</div>
-        </div>
-        <div class="col">
-            <div class="inline-label">Duração</div>
-            <div class="inline-value">{{ $val('duracao') ?: '—' }}</div>
-        </div>
-        <div class="col">
-            <div class="inline-label">Local</div>
-            <div class="inline-value">{{ $val('local_atendimento') ?: '—' }}</div>
-        </div>
-    </div>
+    {!! $checkCols($orgItens) !!}
+    @if($val('organizacao_atendimento_obs'))
+    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin: 6px 0 3px;">Observações</div>
+    <div class="field-value" style="white-space: pre-wrap; font-size: 9px;">{{ $val('organizacao_atendimento_obs') }}</div>
+    @endif
 </div>
 
-</div>{{-- /page --}}
 
-<div class="page-break"></div>
-
-<div class="page-next">
-
-<div class="doc-header-sm">
-    <div class="doc-header-sm-l">{{ $school?->name }} &nbsp;·&nbsp; PAEE {{ $documento->year }}</div>
-    <div class="doc-header-sm-r">{{ $aluno->name }}</div>
-</div>
+<hr class="div">
 
 {{-- Avaliação e Monitoramento --}}
+@php $avalItens = (array)($c['avaliacao_monitoramento'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Avaliação e Monitoramento</div>
         <div class="section-sub">Critérios e periodicidade de avaliação do plano.</div>
     </div>
-
-    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin-bottom: 3px;">Critérios de Avaliação</div>
-    <div class="field-value tall" style="margin-bottom: 10px; white-space: pre-wrap;">{{ $val('criterios_avaliacao') ?: '(não preenchido)' }}</div>
-
-    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin-bottom: 3px;">Periodicidade de Avaliação e Atualização</div>
-    <div class="field-value" style="white-space: pre-wrap;">{{ $val('periodicidade_avaliacao') ?: '(não preenchido)' }}</div>
+    {!! $checkCols($avalItens) !!}
+    @if($val('avaliacao_monitoramento_obs'))
+    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin: 6px 0 3px;">Observações</div>
+    <div class="field-value" style="white-space: pre-wrap; font-size: 9px;">{{ $val('avaliacao_monitoramento_obs') }}</div>
+    @endif
 </div>
 
 <hr class="div">
@@ -281,32 +306,41 @@
         <div class="section-title">Responsáveis pela Elaboração do PAEE</div>
     </div>
     @php
-        $responsaveis = array_values(array_filter([
-            ['role' => 'Profissional do AEE',    'name' => $val('profissional_aee')],
-            ['role' => 'Equipe Colaborativa',    'name' => $val('equipe_colaborativa')],
-            ['role' => 'Professor(a) Titular',   'name' => ''],
-            ['role' => 'Orientador(a) Educacional', 'name' => ''],
-        ]));
-        $rows = array_chunk($responsaveis, 2);
+        $participantes = array_filter($c['equipe_participantes'] ?? [], fn($p) => !empty($p['nome']));
+        $assinantes = [];
+        foreach ($participantes as $p) {
+            $assinantes[] = ['role' => $p['cargo'] ?? 'Participante', 'name' => $p['nome']];
+        }
+        if (empty($assinantes)) {
+            $assinantes[] = ['role' => 'Profissional do AEE', 'name' => ''];
+        }
+        $assinantes[] = ['role' => 'Responsável pelo(a) estudante', 'name' => ''];
     @endphp
     <p style="font-size: 8px; color: #888; font-style: italic; margin-bottom: 8px;">
         Declaramos que este PAEE foi elaborado coletivamente, com base no Estudo de Caso, e que seu cumprimento será acompanhado ao longo do ano letivo.
     </p>
-    <table class="sig-table">
-        @foreach($rows as $row)
+    <table style="width:100%;border-collapse:collapse;">
+        @foreach($assinantes as $sig)
         <tr>
-            @foreach($row as $sig)
-            <td style="width: 50%;">
-                <div class="sig-role">{{ $sig['role'] }}</div>
-                @if($sig['name'])<div class="sig-name">{{ $sig['name'] }}</div>@endif
-                <span class="sig-line"></span>
-                <div class="sig-date">____/____/________</div>
+            <td style="width:40%;border:1px solid #ddd;padding:8px 10px;vertical-align:middle;">
+                <div style="font-size:8.5px;font-weight:bold;color:#444;text-transform:uppercase;letter-spacing:0.3px;">{{ $sig['role'] }}</div>
+                @if($sig['name'])<div style="font-size:9px;color:#1a1a1a;margin-top:3px;">{{ $sig['name'] }}</div>@endif
             </td>
-            @endforeach
-            @if(count($row) === 1)<td style="width:50%; border: 1px solid #ddd;"></td>@endif
+            <td style="width:60%;border:1px solid #ddd;padding:8px 14px;vertical-align:bottom;">
+                <div style="display:table;width:100%;">
+                    <div style="display:table-cell;vertical-align:bottom;padding-right:16px;">
+                        <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Assinatura</div>
+                        <div style="border-bottom:1px solid #888;min-height:18px;"></div>
+                    </div>
+                    <div style="display:table-cell;width:110px;vertical-align:bottom;">
+                        <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Data</div>
+                        <div style="border-bottom:1px solid #888;font-size:8px;color:#bbb;padding-bottom:2px;">____/____/________</div>
+                    </div>
+                </div>
+            </td>
         </tr>
         @endforeach
     </table>
 </div>
 
-</div>{{-- /page-next --}}
+</div>{{-- /page (único) --}}

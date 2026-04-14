@@ -61,6 +61,12 @@ $textarea = fn(string $name, string $label, int $rows = 3, string $placeholder =
             {{ $turma ? $turma->name . ' · ' . $turma->shift : '—' }}
         </div>
         <div><span style="color:#9CA3AF; font-weight:600;">Ano Letivo:</span> {{ $anoLetivo }}</div>
+        @if($aluno->responsavel_nome)
+        <div><span style="color:#9CA3AF; font-weight:600;">Responsável:</span> {{ $aluno->responsavel_nome }}</div>
+        @endif
+        @if($aluno->responsavel_2_nome)
+        <div><span style="color:#9CA3AF; font-weight:600;">Responsável 2:</span> {{ $aluno->responsavel_2_nome }}</div>
+        @endif
         @if($diagnostico)
         <div style="grid-column: 1 / -1;">
             <span style="color:#9CA3AF; font-weight:600;">Diagnóstico / Laudo:</span> {{ $diagnostico }}
@@ -69,111 +75,184 @@ $textarea = fn(string $name, string $label, int $rows = 3, string $placeholder =
     </div>
 </div>
 
-{{-- ═══ DIAGNÓSTICO / PERFIL (preenchido automaticamente do Estudo de Caso) ═══ --}}
-{!! $section('Diagnóstico / Perfil', 'Preenchido automaticamente a partir do Estudo de Caso.') !!}
+{{-- ═══ DIAGNÓSTICO / PERFIL ═══ --}}
+{!! $section('Diagnóstico / Perfil', 'Necessidades educacionais e barreiras identificadas.') !!}
 
+@php
+$diagOpcoes = [
+    'Deficiência intelectual',
+    'Transtorno do espectro autista (TEA)',
+    'TDAH',
+    'Deficiência física',
+    'Deficiência auditiva',
+    'Deficiência visual',
+    'Altas habilidades/superdotação',
+    'Dificuldades específicas de aprendizagem',
+];
+$diagSelected = old('diagnostico_perfil', $content['diagnostico_perfil'] ?? []);
+@endphp
 <div style="margin-bottom: 28px;">
-    <div style="display: inline-flex; align-items: center; gap: 6px; background: #E6F5F4; border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #009C8C; margin-bottom: 12px;">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-        Preenchido automaticamente pelo Estudo de Caso
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
+        @foreach($diagOpcoes as $opt)
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+            <input type="checkbox" name="diagnostico_perfil[]" value="{{ $opt }}"
+                   {{ in_array($opt, (array)$diagSelected) ? 'checked' : '' }}
+                   style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
+            {{ $opt }}
+        </label>
+        @endforeach
     </div>
-    @if($ec_diagnostico_perfil)
-        <div style="background: #F0FDFB; border: 1px solid #99E6E0; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #374151; white-space: pre-wrap; line-height: 1.7; min-height: 80px;">{{ $ec_diagnostico_perfil }}</div>
-    @else
-        <div style="background: #FFF7ED; border: 1px solid #FED7AA; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #92400E; font-style: italic;">
-            Campo não preenchido no Estudo de Caso. Preencha a seção "FAZ PARTE DO PAEE" no Estudo de Caso para auto-completar este campo.
-        </div>
-    @endif
-    <input type="hidden" name="diagnostico_perfil" value="{{ $ec_diagnostico_perfil }}">
+    <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <textarea name="diagnostico_perfil_obs" rows="3"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ old('diagnostico_perfil_obs', $content['diagnostico_perfil_obs'] ?? '') }}</textarea>
+    </div>
 </div>
 
 <hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
 
 {{-- ═══ OBJETIVOS DO AEE ═══ --}}
-{!! $section('Objetivos do AEE', 'Objetivos gerais e específicos do atendimento educacional especializado.') !!}
+{!! $section('Objetivos do AEE', 'Objetivos do atendimento educacional especializado.') !!}
 
+@php
+$objOpcoes = [
+    'Autonomia',
+    'Comunicação',
+    'Interação social',
+    'Leitura e escrita',
+    'Raciocínio lógico',
+    'Organização e rotina',
+    'Atenção e concentração',
+    'Uso de recursos assistivos',
+];
+$objSelected = old('objetivos_aee', $content['objetivos_aee'] ?? []);
+@endphp
 <div style="margin-bottom: 28px;">
-    {!! $textarea('objetivo_geral', 'Objetivo Geral', 3,
-        'Ex: Garantir o acesso ao currículo, a participação nas atividades escolares e o desenvolvimento da aprendizagem...') !!}
-    {!! $textarea('objetivos_especificos', 'Objetivos Específicos', 5,
-        'Liste os objetivos específicos do atendimento, separados por linha...') !!}
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
+        @foreach($objOpcoes as $opt)
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+            <input type="checkbox" name="objetivos_aee[]" value="{{ $opt }}"
+                   {{ in_array($opt, (array)$objSelected) ? 'checked' : '' }}
+                   style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
+            {{ $opt }}
+        </label>
+        @endforeach
+    </div>
+    <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <textarea name="objetivos_aee_obs" rows="3"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ old('objetivos_aee_obs', $content['objetivos_aee_obs'] ?? '') }}</textarea>
+    </div>
 </div>
 
 <hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
 
-{{-- ═══ RECURSOS E ESTRATÉGIAS (preenchido automaticamente do Estudo de Caso) ═══ --}}
-{!! $section('Recursos e Estratégias', 'Preenchido automaticamente a partir do Estudo de Caso.') !!}
+{{-- ═══ RECURSOS E ESTRATÉGIAS ═══ --}}
+{!! $section('Recursos e Estratégias', 'Recursos e estratégias utilizados no atendimento.') !!}
 
+@php
+$recOpcoes = [
+    'Material adaptado',
+    'Recursos visuais',
+    'Tecnologias assistivas',
+    'Jogos pedagógicos',
+    'Rotinas estruturadas',
+    'Comunicação alternativa',
+    'Atividades práticas',
+    'Ensino individualizado',
+];
+$recSelected = old('recursos_estrategias', $content['recursos_estrategias'] ?? []);
+@endphp
 <div style="margin-bottom: 28px;">
-    <div style="display: inline-flex; align-items: center; gap: 6px; background: #E6F5F4; border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #009C8C; margin-bottom: 16px;">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-        Preenchido automaticamente pelo Estudo de Caso
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
+        @foreach($recOpcoes as $opt)
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+            <input type="checkbox" name="recursos_estrategias[]" value="{{ $opt }}"
+                   {{ in_array($opt, (array)$recSelected) ? 'checked' : '' }}
+                   style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
+            {{ $opt }}
+        </label>
+        @endforeach
     </div>
-
-    <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Tecnologias Assistivas</label>
-        @if($ec_tecnologias_assistivas)
-            <div style="background: #F0FDFB; border: 1px solid #99E6E0; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #374151; white-space: pre-wrap; line-height: 1.7; min-height: 60px;">{{ $ec_tecnologias_assistivas }}</div>
-        @else
-            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #9CA3AF; font-style: italic;">Não preenchido no Estudo de Caso.</div>
-        @endif
-        <input type="hidden" name="tecnologias_assistivas" value="{{ $ec_tecnologias_assistivas }}">
-    </div>
-
-    <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Adaptações para o AEE</label>
-        @if($ec_adaptacoes)
-            <div style="background: #F0FDFB; border: 1px solid #99E6E0; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #374151; white-space: pre-wrap; line-height: 1.7; min-height: 60px;">{{ $ec_adaptacoes }}</div>
-        @else
-            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #9CA3AF; font-style: italic;">Não preenchido no Estudo de Caso.</div>
-        @endif
-        <input type="hidden" name="adaptacoes" value="{{ $ec_adaptacoes }}">
-    </div>
-
     <div>
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Metodologias e Estratégias para AEE</label>
-        @if($ec_metodologias)
-            <div style="background: #F0FDFB; border: 1px solid #99E6E0; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #374151; white-space: pre-wrap; line-height: 1.7; min-height: 60px;">{{ $ec_metodologias }}</div>
-        @else
-            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #9CA3AF; font-style: italic;">Não preenchido no Estudo de Caso.</div>
-        @endif
-        <input type="hidden" name="metodologias" value="{{ $ec_metodologias }}">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <textarea name="recursos_estrategias_obs" rows="3"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ old('recursos_estrategias_obs', $content['recursos_estrategias_obs'] ?? '') }}</textarea>
     </div>
 </div>
 
 <hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
 
 {{-- ═══ ORGANIZAÇÃO DO ATENDIMENTO ═══ --}}
-{!! $section('Organização do Atendimento', 'Frequência, duração e local do atendimento especializado.') !!}
+{!! $section('Organização do Atendimento', 'Formato e frequência do atendimento especializado.') !!}
 
+@php
+$orgOpcoes = [
+    'Atendimento individual',
+    'Atendimento em grupo',
+    '1 vez por semana',
+    '2 vezes por semana',
+    'Mais de 2 vezes por semana',
+    'No contraturno',
+    'No mesmo turno',
+];
+$orgSelected = old('organizacao_atendimento', $content['organizacao_atendimento'] ?? []);
+@endphp
 <div style="margin-bottom: 28px;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
-        @foreach([
-            'frequencia'        => 'Frequência',
-            'duracao'           => 'Duração',
-            'local_atendimento' => 'Local',
-        ] as $field => $label)
-        <div>
-            <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">{{ $label }}</label>
-            <input type="text" name="{{ $field }}" value="{{ $fn($field) }}"
-                   placeholder="{{ $field === 'frequencia' ? 'Ex: 2x por semana' : ($field === 'duracao' ? 'Ex: 50 minutos' : 'Ex: Sala de Recurso') }}"
-                   style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
-                   onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">
-        </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
+        @foreach($orgOpcoes as $opt)
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+            <input type="checkbox" name="organizacao_atendimento[]" value="{{ $opt }}"
+                   {{ in_array($opt, (array)$orgSelected) ? 'checked' : '' }}
+                   style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
+            {{ $opt }}
+        </label>
         @endforeach
+    </div>
+    <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <textarea name="organizacao_atendimento_obs" rows="2"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ old('organizacao_atendimento_obs', $content['organizacao_atendimento_obs'] ?? '') }}</textarea>
     </div>
 </div>
 
 <hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
 
 {{-- ═══ AVALIAÇÃO E MONITORAMENTO ═══ --}}
-{!! $section('Avaliação e Monitoramento', 'Critérios e periodicidade de avaliação do plano.') !!}
+{!! $section('Avaliação e Monitoramento', 'Critérios e periodicidade de avaliação.') !!}
 
+@php
+$avalOpcoes = [
+    'Observação contínua',
+    'Registros descritivos',
+    'Avaliações adaptadas',
+    'Relatórios periódicos',
+    'Reuniões com equipe pedagógica',
+    'Reuniões com família',
+];
+$avalSelected = old('avaliacao_monitoramento', $content['avaliacao_monitoramento'] ?? []);
+@endphp
 <div style="margin-bottom: 28px;">
-    {!! $textarea('criterios_avaliacao', 'Critérios de Avaliação', 4,
-        'Descreva como o progresso do estudante será avaliado...') !!}
-    {!! $textarea('periodicidade_avaliacao', 'Periodicidade de Avaliação e Atualização do Plano', 2,
-        'Ex: Bimestral, semestral, conforme necessidade...') !!}
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
+        @foreach($avalOpcoes as $opt)
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+            <input type="checkbox" name="avaliacao_monitoramento[]" value="{{ $opt }}"
+                   {{ in_array($opt, (array)$avalSelected) ? 'checked' : '' }}
+                   style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
+            {{ $opt }}
+        </label>
+        @endforeach
+    </div>
+    <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <textarea name="avaliacao_monitoramento_obs" rows="2"
+                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ old('avaliacao_monitoramento_obs', $content['avaliacao_monitoramento_obs'] ?? '') }}</textarea>
+    </div>
 </div>
 
 <hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
@@ -181,21 +260,70 @@ $textarea = fn(string $name, string $label, int $rows = 3, string $placeholder =
 {{-- ═══ EQUIPE RESPONSÁVEL ═══ --}}
 {!! $section('Equipe Responsável', 'Profissionais envolvidos na elaboração e acompanhamento do PAEE.') !!}
 
-<div style="margin-bottom: 28px;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+@php
+$equipeParticipantes = old('equipe_participantes', $content['equipe_participantes'] ?? [['nome' => '', 'cargo' => '']]);
+if (empty($equipeParticipantes)) $equipeParticipantes = [['nome' => '', 'cargo' => '']];
+@endphp
+
+<div id="equipe-lista" style="margin-bottom: 12px;">
+    @foreach($equipeParticipantes as $i => $p)
+    <div class="equipe-row" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: end; margin-bottom: 12px;">
         <div>
-            <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Profissional do AEE</label>
-            <input type="text" name="profissional_aee" value="{{ $fn('profissional_aee') }}"
+            @if($i === 0)<label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Nome completo</label>@endif
+            <input type="text" name="equipe_participantes[{{ $i }}][nome]"
+                   value="{{ $p['nome'] ?? '' }}"
                    placeholder="Nome completo"
                    style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
                    onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">
         </div>
         <div>
-            <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Equipe Colaborativa</label>
-            <input type="text" name="equipe_colaborativa" value="{{ $fn('equipe_colaborativa') }}"
-                   placeholder="Ex: Professor titular, psicólogo, terapeuta..."
+            @if($i === 0)<label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Cargo / Função</label>@endif
+            <input type="text" name="equipe_participantes[{{ $i }}][cargo]"
+                   value="{{ $p['cargo'] ?? '' }}"
+                   placeholder="Ex: Profissional do AEE"
                    style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
                    onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">
         </div>
+        <div style="{{ $i === 0 ? 'padding-top: 22px;' : '' }}">
+            <button type="button" onclick="removerParticipante(this)"
+                    style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 18px; line-height: 1; padding: 4px;" title="Remover">×</button>
+        </div>
     </div>
+    @endforeach
 </div>
+
+<button type="button" onclick="adicionarParticipante()"
+        style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: {{ $accent }}; background: none; border: 1px dashed {{ $accent }}; border-radius: 8px; padding: 8px 14px; cursor: pointer; margin-bottom: 28px;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    Adicionar participante
+</button>
+
+<script>
+(function() {
+    var accent = '{{ $accent }}';
+    var idx = {{ count($equipeParticipantes) }};
+
+    window.adicionarParticipante = function() {
+        var lista = document.getElementById('equipe-lista');
+        var row = document.createElement('div');
+        row.className = 'equipe-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: end; margin-bottom: 12px;';
+        row.innerHTML =
+            '<div><input type="text" name="equipe_participantes[' + idx + '][nome]" placeholder="Nome completo"' +
+            ' style="width:100%;border:none;border-bottom:2px solid #E5E7EB;padding:8px 0;font-size:14px;color:#111827;outline:none;background:transparent;box-sizing:border-box;"' +
+            ' onfocus="this.style.borderColor=\'' + accent + '\'" onblur="this.style.borderColor=\'#E5E7EB\'"></div>' +
+            '<div><input type="text" name="equipe_participantes[' + idx + '][cargo]" placeholder="Ex: Profissional do AEE"' +
+            ' style="width:100%;border:none;border-bottom:2px solid #E5E7EB;padding:8px 0;font-size:14px;color:#111827;outline:none;background:transparent;box-sizing:border-box;"' +
+            ' onfocus="this.style.borderColor=\'' + accent + '\'" onblur="this.style.borderColor=\'#E5E7EB\'"></div>' +
+            '<div><button type="button" onclick="removerParticipante(this)" style="background:none;border:none;cursor:pointer;color:#EF4444;font-size:18px;line-height:1;padding:4px;" title="Remover">×</button></div>';
+        lista.appendChild(row);
+        idx++;
+    };
+
+    window.removerParticipante = function(btn) {
+        var rows = document.querySelectorAll('.equipe-row');
+        if (rows.length <= 1) return;
+        btn.closest('.equipe-row').remove();
+    };
+})();
+</script>

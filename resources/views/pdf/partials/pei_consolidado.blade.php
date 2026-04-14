@@ -82,12 +82,10 @@
 
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a1a1a; line-height: 1.5; }
-    .page { padding: 0 36px 36px; }
-    .page-next { padding: 20px 36px 36px; }
+    body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a1a1a; margin: 0; padding: 0; line-height: 1.5; }
     .page-break { page-break-after: always; }
 
-    .doc-header { display: table; width: 100%; border-bottom: 3px solid {{ $accent }}; padding-bottom: 12px; margin-bottom: 18px; }
+    .doc-header { display: table; width: 100%; table-layout: fixed; border-bottom: 3px solid {{ $accent }}; padding-bottom: 12px; margin-bottom: 18px; }
     .doc-header-left  { display: table-cell; vertical-align: middle; width: 60px; }
     .doc-header-mid   { display: table-cell; vertical-align: middle; padding: 0 12px; }
     .doc-header-right { display: table-cell; vertical-align: middle; text-align: right; width: 96px; }
@@ -98,16 +96,16 @@
     .student-photo { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; }
     .photo-placeholder { width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc; display: table; text-align: center; vertical-align: middle; }
 
-    .doc-header-sm { display: table; width: 100%; border-bottom: 1.5px solid {{ $accent }}; padding-bottom: 6px; margin-bottom: 16px; }
+    .doc-header-sm { display: table; width: 100%; table-layout: fixed; border-bottom: 1.5px solid {{ $accent }}; padding-bottom: 6px; margin-bottom: 16px; }
     .doc-header-sm-l { display: table-cell; font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; }
     .doc-header-sm-r { display: table-cell; text-align: right; font-size: 8px; color: #888; }
 
-    .id-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
-    .id-table td { border: 1px solid #ddd; padding: 4px 8px; font-size: 9px; }
+    .id-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 18px; }
+    .id-table td { border: 1px solid #ddd; padding: 4px 8px; font-size: 9px; word-break: break-word; }
     .id-label { background: {{ $accentBg }}; font-weight: bold; width: 130px; color: {{ $accent }}; white-space: nowrap; }
 
-    .section { margin-bottom: 12px; }
-    .section-header { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin-bottom: 8px; }
+    .section { margin-bottom: 12px; page-break-inside: avoid; }
+    .section-header { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin-bottom: 8px; page-break-after: avoid; }
     .section-title { font-size: 9.5px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: {{ $accent }}; }
     .section-sub   { font-size: 8px; color: #888; font-style: italic; margin-top: 1px; }
 
@@ -115,19 +113,20 @@
     .field-value { font-size: 9.5px; color: #1a1a1a; border-bottom: 1px solid #ddd; padding: 3px 2px 6px; white-space: pre-wrap; word-break: break-word; }
     .field-value.empty { color: #bbb; font-style: italic; min-height: 18px; }
 
-    .grid-2 { display: table; width: 100%; }
+    .grid-2 { display: table; width: 100%; table-layout: fixed; }
     .grid-2 .col { display: table-cell; width: 50%; vertical-align: top; padding-right: 14px; }
     .grid-2 .col:last-child { padding-right: 0; }
 
-    .inv-cat-hdr { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin: 8px 0 5px; }
+    .inv-table    { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .inv-cat-hdr  { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin: 8px 0 5px; }
     .inv-cat-title { font-size: 8.5px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: {{ $accent }}; }
     .inv-th   { background: {{ $accentBg }}; font-weight: bold; font-size: 8px; text-align: center; padding: 4px 3px; border: 1px solid #c5d8f0; }
-    .inv-meta { font-size: 8.5px; padding: 4px 6px; border: 1px solid #ddd; text-align: left; }
+    .inv-meta { font-size: 8.5px; padding: 4px 6px; border: 1px solid #ddd; word-break: break-word; }
     .inv-chk  { text-align: center; padding: 4px 3px; font-size: 9px; border: 1px solid #ddd; }
     .inv-obs  { font-size: 8px; padding: 3px 5px; border: 1px solid #ddd; }
 
-    .sig-table { width: 100%; border-collapse: collapse; }
-    .sig-table td { border: 1px solid #ddd; padding: 6px 10px; vertical-align: top; }
+    .sig-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .sig-table td { border: 1px solid #ddd; padding: 6px 10px; vertical-align: top; word-break: break-word; }
     .sig-role { font-size: 8.5px; font-weight: bold; color: {{ $accent }}; }
     .sig-line { border-bottom: 1px solid #888; display: block; margin-top: 14px; width: 100%; }
     .sig-date { font-size: 7.5px; color: #888; text-align: right; margin-top: 3px; }

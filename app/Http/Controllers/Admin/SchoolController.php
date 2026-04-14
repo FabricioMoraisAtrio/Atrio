@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\School;
+use App\Models\SchoolSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -91,7 +92,31 @@ class SchoolController extends Controller
     public function edit(School $school)
     {
         $secretaria = $school->users()->whereHas('roles', fn($q) => $q->where('name', 'admin'))->first();
-        return view('admin.schools.edit', compact('school', 'secretaria'));
+        $availableModules = School::availableModules();
+        $settings = SchoolSetting::getAllForSchool($school->id);
+        return view('admin.schools.edit', compact('school', 'secretaria', 'availableModules', 'settings'));
+    }
+
+    public function updateTerminologias(Request $request, School $school)
+    {
+        $terms = [
+            'aluno', 'alunos', 'turma', 'turmas',
+            'laudo', 'laudos', 'professor', 'professores',
+            'coordenador', 'orientador', 'documento', 'documentos',
+            'publico_alvo', 'nao_publico_alvo',
+        ];
+
+        foreach ($terms as $term) {
+            $value = $request->input("term_{$term}", '');
+            if ($value !== '') {
+                SchoolSetting::setValue($school->id, "term_{$term}", trim($value));
+            } else {
+                SchoolSetting::where('school_id', $school->id)->where('key', "term_{$term}")->delete();
+            }
+        }
+
+        return redirect()->route('admin.schools.edit', $school)
+            ->with('success', 'Terminologias atualizadas.');
     }
 
     public function update(Request $request, School $school)
@@ -106,6 +131,8 @@ class SchoolController extends Controller
             'notes'             => 'nullable|string',
             'logo'              => 'nullable|file|mimes:svg,png,jpg,jpeg|max:2048',
             'theme_color'       => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
+            'modules'           => 'nullable|array',
+            'modules.*'         => 'string',
             'secretaria_name'   => 'nullable|string|max:255',
             'secretaria_email'  => 'nullable|email|unique:users,email,' . ($request->input('secretaria_id') ?: 'NULL'),
         ]);
@@ -120,6 +147,8 @@ class SchoolController extends Controller
         }
 
         $data['is_active'] = $request->boolean('is_active');
+        // null = todos os módulos habilitados; array vazio não é permitido
+        $data['modules'] = !empty($data['modules']) ? array_values($data['modules']) : null;
         $school->update(\Arr::except($data, ['secretaria_name', 'secretaria_email']));
 
         // Atualiza usuário secretaria se informado

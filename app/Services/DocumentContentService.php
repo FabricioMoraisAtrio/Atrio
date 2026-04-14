@@ -19,44 +19,26 @@ class DocumentContentService
                 'frequencia_assiduidade'    => $request->input('frequencia_assiduidade'),
 
                 // Observações Pedagógicas
-                'nivel_desenvolvimento'     => $request->input('nivel_desenvolvimento'),
-                'comportamento_sala'        => $request->input('comportamento_sala'),
-                'interacao_colegas'         => $request->input('interacao_colegas'),
+                'obs_pedagogicas'           => $request->input('obs_pedagogicas', []),
+                'obs_pedagogicas_obs'       => $request->input('obs_pedagogicas_obs'),
 
                 // Barreiras Identificadas
-                'desafios_conteudo'         => $request->input('desafios_conteudo'),
-                'barreiras_fisicas'         => $request->input('barreiras_fisicas'),
+                'barreiras'                 => $request->input('barreiras', []),
+                'barreiras_obs'             => $request->input('barreiras_obs'),
 
                 // Potencialidades
-                'interesses_motivacao'      => $request->input('interesses_motivacao'),
-                'habilidades_destaque'      => $request->input('habilidades_destaque'),
+                'potencialidades'           => $request->input('potencialidades', []),
+                'potencialidades_obs'       => $request->input('potencialidades_obs'),
 
                 // Encaminhamentos
-                'estrategias_sala'          => $request->input('estrategias_sala'),
-                'adaptacoes_necessarias'    => $request->input('adaptacoes_necessarias'),
-                'encaminhamentos_rede'      => $request->input('encaminhamentos_rede'),
+                'encaminhamentos'           => $request->input('encaminhamentos', []),
+                'encaminhamentos_obs'       => $request->input('encaminhamentos_obs'),
 
-                // Estratégias e Avaliação (professor regente)
-                'estrategias_pedagogicas'   => $request->input('estrategias_pedagogicas'),
-                'criterios_avaliacao'       => $request->input('criterios_avaliacao'),
-
-                // Diagnóstico Pedagógico → alimenta o PEI
-                'diagnostico_pedagogico'    => $request->input('diagnostico_pedagogico'),
-
-                // Objetivos de Aprendizagem
-                'objetivos_curto_prazo'     => $request->input('objetivos_curto_prazo'),
-                'objetivos_medio_prazo'     => $request->input('objetivos_medio_prazo'),
-                'objetivos_longo_prazo'     => $request->input('objetivos_longo_prazo'),
-
-                // Equipe responsável → alimenta o PEI
-                'equipe_titular'            => $request->input('equipe_titular'),
-                'equipe_soe'                => $request->input('equipe_soe'),
-                'equipe_scp'                => $request->input('equipe_scp'),
-                'equipe_saee'               => $request->input('equipe_saee'),
-                'equipe_psicologo'          => $request->input('equipe_psicologo'),
-                'equipe_psicopedagogo'      => $request->input('equipe_psicopedagogo'),
-                'equipe_fisioterapeuta'     => $request->input('equipe_fisioterapeuta'),
-                'equipe_at'                 => $request->input('equipe_at'),
+                // Equipe responsável
+                'equipe_participantes'      => array_values(array_filter(
+                    $request->input('equipe_participantes', []),
+                    fn($p) => !empty($p['nome'])
+                )),
 
                 'elaborado_por'             => \Illuminate\Support\Facades\Auth::user()?->name,
                 'data_elaboracao'           => date('Y-m-d'),
@@ -65,32 +47,27 @@ class DocumentContentService
             ],
 
             'paee' => [
-                // Diagnóstico / Perfil
-                'diagnostico_perfil'       => $request->input('diagnostico_perfil'),
+                'diagnostico_perfil'          => $request->input('diagnostico_perfil', []),
+                'diagnostico_perfil_obs'      => $request->input('diagnostico_perfil_obs'),
 
-                // Objetivos do AEE
-                'objetivo_geral'           => $request->input('objetivo_geral'),
-                'objetivos_especificos'    => $request->input('objetivos_especificos'),
+                'objetivos_aee'               => $request->input('objetivos_aee', []),
+                'objetivos_aee_obs'           => $request->input('objetivos_aee_obs'),
 
-                // Recursos e Estratégias
-                'tecnologias_assistivas'   => $request->input('tecnologias_assistivas'),
-                'adaptacoes'               => $request->input('adaptacoes'),
-                'metodologias'             => $request->input('metodologias'),
+                'recursos_estrategias'        => $request->input('recursos_estrategias', []),
+                'recursos_estrategias_obs'    => $request->input('recursos_estrategias_obs'),
 
-                // Organização do Atendimento
-                'frequencia'               => $request->input('frequencia'),
-                'duracao'                  => $request->input('duracao'),
-                'local_atendimento'        => $request->input('local_atendimento'),
+                'organizacao_atendimento'     => $request->input('organizacao_atendimento', []),
+                'organizacao_atendimento_obs' => $request->input('organizacao_atendimento_obs'),
 
-                // Avaliação e Monitoramento
-                'criterios_avaliacao'      => $request->input('criterios_avaliacao'),
-                'periodicidade_avaliacao'  => $request->input('periodicidade_avaliacao'),
+                'avaliacao_monitoramento'     => $request->input('avaliacao_monitoramento', []),
+                'avaliacao_monitoramento_obs' => $request->input('avaliacao_monitoramento_obs'),
 
-                // Equipe
-                'profissional_aee'         => $request->input('profissional_aee'),
-                'equipe_colaborativa'      => $request->input('equipe_colaborativa'),
+                'equipe_participantes'        => array_values(array_filter(
+                    $request->input('equipe_participantes', []),
+                    fn($p) => !empty($p['nome'])
+                )),
 
-                'observacoes_livres'       => $request->input('observacoes_livres'),
+                'observacoes_livres'          => $request->input('observacoes_livres'),
             ],
 
             'pei' => [

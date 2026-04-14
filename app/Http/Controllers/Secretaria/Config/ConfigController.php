@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Secretaria\Config;
 use App\Http\Controllers\Controller;
 use App\Models\School;
 use App\Models\SchoolSetting;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,8 +20,9 @@ class ConfigController extends Controller
     {
         $escola    = $this->escola();
         $settings  = SchoolSetting::getAllForSchool($escola->id);
+        $subjects  = Subject::withCount('inventoryItems')->orderBy('ordem')->get();
 
-        return view('secretaria.config.index', compact('escola', 'settings'));
+        return view('secretaria.config.index', compact('escola', 'settings', 'subjects'));
     }
 
     public function updateEscola(Request $request)

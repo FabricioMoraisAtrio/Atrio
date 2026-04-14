@@ -73,14 +73,10 @@
 
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a1a1a; line-height: 1.5; }
-
-    .page { padding: 0 36px 40px; }
-    .page-next { padding: 20px 36px 40px; }
-    .page-break { page-break-after: always; }
+    body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a1a1a; margin: 0; padding: 0; line-height: 1.5; }
 
     /* ── Cabeçalho principal ── */
-    .doc-header { display: table; width: 100%; border-bottom: 3px solid {{ $accent }}; padding-bottom: 12px; margin-bottom: 18px; }
+    .doc-header { display: table; width: 100%; table-layout: fixed; border-bottom: 3px solid {{ $accent }}; padding-bottom: 12px; margin-bottom: 18px; }
     .doc-header-left  { display: table-cell; vertical-align: middle; width: 60px; }
     .doc-header-mid   { display: table-cell; vertical-align: middle; padding: 0 12px; }
     .doc-header-right { display: table-cell; vertical-align: middle; text-align: right; width: 96px; }
@@ -91,19 +87,14 @@
     .student-photo  { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; }
     .photo-placeholder { width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc; display: table; text-align: center; }
 
-    /* ── Cabeçalho reduzido (continuação) ── */
-    .doc-header-sm { display: table; width: 100%; border-bottom: 1.5px solid {{ $accent }}; padding-bottom: 6px; margin-bottom: 16px; }
-    .doc-header-sm-l { display: table-cell; font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; }
-    .doc-header-sm-r { display: table-cell; text-align: right; font-size: 8px; color: #888; }
-
     /* ── Identificação ── */
-    .id-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
-    .id-table td { border: 1px solid #ddd; padding: 4px 8px; font-size: 9px; }
+    .id-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 18px; }
+    .id-table td { border: 1px solid #ddd; padding: 4px 8px; font-size: 9px; word-break: break-word; }
     .id-label { background: #E8F0F9; font-weight: bold; width: 130px; color: #004B8D; white-space: nowrap; }
 
     /* ── Seção ── */
-    .section { margin-bottom: 14px; }
-    .section-header { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin-bottom: 8px; }
+    .section { margin-bottom: 14px; page-break-inside: avoid; }
+    .section-header { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin-bottom: 8px; page-break-after: avoid; }
     .section-title { font-size: 9.5px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: {{ $accent }}; }
     .section-sub   { font-size: 8px; color: #888; font-style: italic; margin-top: 1px; }
 
@@ -118,26 +109,26 @@
     .field-value.empty  { color: #ccc; font-style: italic; }
 
     /* ── Grid ── */
-    .grid-3 { display: table; width: 100%; }
+    .grid-3 { display: table; width: 100%; table-layout: fixed; }
     .grid-3 .col { display: table-cell; width: 33.3%; vertical-align: top; padding-right: 14px; }
     .grid-3 .col:last-child { padding-right: 0; }
 
     /* ── Inventário (tabela por matéria) ── */
+    .inv-table   { width: 100%; border-collapse: collapse; table-layout: fixed; }
     .inv-subject { background: #E8F0F9; font-weight: bold; font-size: 9px; padding: 5px 8px; border: 1px solid #bcd; }
     .inv-cat     { background: #F5F8FC; font-weight: bold; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 8px; border: 1px solid #ddd; color: {{ $accent }}; }
-    .inv-th      { background: #f0f0f0; font-weight: bold; font-size: 8px; text-align: center; padding: 4px 4px; border: 1px solid #ddd; }
-    .inv-meta    { font-size: 8.5px; padding: 4px 6px; border: 1px solid #ddd; text-align: left; }
+    .inv-th      { background: #f0f0f0; font-weight: bold; font-size: 8px; text-align: center; padding: 4px; border: 1px solid #ddd; }
+    .inv-meta    { font-size: 8.5px; padding: 4px 6px; border: 1px solid #ddd; }
     .inv-chk     { text-align: center; padding: 4px 3px; font-size: 10px; border: 1px solid #ddd; }
     .inv-obs     { font-size: 8px; padding: 3px 5px; border: 1px solid #ddd; }
 
     /* ── Assinaturas ── */
-    .sig-table { width: 100%; border-collapse: collapse; }
-    .sig-table td { border: 1px solid #ddd; padding: 6px 10px; vertical-align: top; }
+    .sig-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .sig-table td { border: 1px solid #ddd; padding: 6px 10px; vertical-align: top; word-break: break-word; }
     .sig-role { font-size: 8.5px; font-weight: bold; color: #444; }
     .sig-name { font-size: 9px; color: #1a1a1a; margin-top: 2px; }
     .sig-line { border-bottom: 1px solid #888; display: block; margin-top: 14px; }
     .sig-date { font-size: 7.5px; color: #888; text-align: right; margin-top: 3px; }
-
 
     hr.div { border: none; border-top: 1px solid #efefef; margin: 12px 0; }
 </style>
@@ -190,6 +181,12 @@
         <td class="id-label">Ano Letivo</td>
         <td>{{ $documento->year }}</td>
     </tr>
+    @if($aluno->responsavel_nome || $aluno->responsavel_2_nome)
+    <tr>
+        <td class="id-label">Responsável</td>
+        <td colspan="3">{{ collect([$aluno->responsavel_nome, $aluno->responsavel_2_nome])->filter()->implode(' / ') }}</td>
+    </tr>
+    @endif
     @if($diagnostico)
     <tr>
         <td class="id-label">Diagnóstico / Laudo</td>
@@ -235,19 +232,10 @@
     @endforeach
 </div>
 
-</div>{{-- /page --}}
 
 {{-- ══ INVENTÁRIOS por Disciplina ══ --}}
 @foreach($subjects as $slug => $secao)
-@if(!$loop->first)
-<div class="page-break"></div>
-@endif
-<div class="page-next">
-
-<div class="doc-header-sm">
-    <div class="doc-header-sm-l">{{ $school?->name }} &nbsp;·&nbsp; PEI {{ $documento->year }}</div>
-    <div class="doc-header-sm-r">{{ $aluno->name }}</div>
-</div>
+<div style="{{ !$loop->first ? 'page-break-before: always;' : '' }}">
 
 <div class="section">
     <div class="section-header">
@@ -304,21 +292,13 @@
     @endif
 </div>
 
-</div>{{-- /page-next --}}
+</div>{{-- /disciplina --}}
 @endforeach
 
-<div class="page-break"></div>
-
-{{-- ══ PÁGINA FINAL — Estratégias + Adaptações + Avaliação + Equipe + Assinaturas ══ --}}
-<div class="page-next">
-
-<div class="doc-header-sm">
-    <div class="doc-header-sm-l">{{ $school?->name }} &nbsp;·&nbsp; PEI {{ $documento->year }}</div>
-    <div class="doc-header-sm-r">{{ $aluno->name }}</div>
-</div>
+{{-- ══ SEÇÃO FINAL — Estratégias + Adaptações + Avaliação + Equipe + Assinaturas ══ --}}
 
 {{-- Estratégias --}}
-<div class="section">
+<div class="section" style="page-break-before: always;">
     <div class="section-header">
         <div class="section-title">Estratégias Pedagógicas</div>
         <div class="section-sub">Metodologias e adaptações definidas no PEI.</div>

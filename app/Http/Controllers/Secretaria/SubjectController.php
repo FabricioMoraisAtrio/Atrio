@@ -70,7 +70,7 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         $subject->delete();
-        return redirect()->route('secretaria.subjects.index')
+        return redirect()->route('secretaria.config.index', ['tab' => 'materias'])
             ->with('success', 'Matéria removida.');
     }
 

@@ -76,7 +76,7 @@ Route::middleware(['auth', 'school.active'])->group(function () {
     Route::put('/perfil', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     Route::middleware('school.member')
-        ->prefix('secretaria')->name('secretaria.')
+        ->prefix('portal')->name('secretaria.')
         ->group(base_path('routes/secretaria.php'));
 
     Route::middleware('role:professor')
@@ -98,5 +98,6 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, '__invoke'])->name('admin.dashboard');
         Route::resource('schools', \App\Http\Controllers\Admin\SchoolController::class)->names('admin.schools');
         Route::post('schools/{school}/reset-password/{user}', [\App\Http\Controllers\Admin\SchoolController::class, 'resetPassword'])->name('admin.schools.resetPassword');
+        Route::put('schools/{school}/terminologias', [\App\Http\Controllers\Admin\SchoolController::class, 'updateTerminologias'])->name('admin.schools.terminologias.update');
     });
 });

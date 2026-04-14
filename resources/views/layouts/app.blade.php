@@ -298,106 +298,117 @@
             </a>
         </div>
 
-        <nav style="flex: 1; padding: 16px 12px;">
+        <nav style="flex: 1; padding: 16px 12px; overflow-y: auto;">
             @auth
-                @hasrole('admin')
+                @php
+                    $school     = auth()->user()->school;
+                    $hasModule  = fn(string $k) => !$school || $school->hasModule($k);
+                    $pendCacheKey = 'pendentes_count_' . session('school_id');
+                    $pendentesCount = 0;
+                @endphp
+
+                @hasanyrole(['admin','coordenador','orientador'])
                     @php
                         $pendentesCount = \Illuminate\Support\Facades\Cache::remember(
-                            'pendentes_count_' . session('school_id'),
-                            now()->addMinutes(5),
+                            $pendCacheKey, now()->addMinutes(5),
                             fn() => \App\Models\Student::where('is_atypical', true)
                                 ->with(['documents' => fn($q) => $q->where('year', date('Y'))->select('id','student_id','type')])
                                 ->get()
                                 ->filter(fn($a) => count(array_diff(['estudo_caso','pei','paee'], $a->documents->pluck('type')->toArray())) > 0)
                                 ->count()
                         );
+                        $isAdmin = auth()->user()->hasRole('admin');
                         $items = [
                             ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
-                            ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel'],
-                            ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas')],
-                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => term('alunos'), 'badge' => $pendentesCount ?: null],
-                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => term('documentos')],
-                            ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações'],
-                            ['route' => 'secretaria.subjects.index',             'icon' => 'subject', 'label' => 'Matérias'],
-                            ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários'],
-                            ['route' => 'secretaria.config.index',               'icon' => 'config',  'label' => 'Configurações', 'active' => 'secretaria.config.*'],
+                            ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel de Acompanhamento', 'module' => 'painel'],
+                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => term('alunos'),        'module' => 'alunos',      'badge' => $pendentesCount ?: null],
+                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos'],
+                            ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),        'module' => 'turmas'],
+                            ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],
+                            ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários',            'module' => 'usuarios'],
+                            [
+                                'route'    => 'secretaria.config.index',
+                                'icon'     => 'config',
+                                'label'    => 'Configurações',
+                                'active'   => 'secretaria.config.*',
+                                'module'   => 'configuracoes',
+                            ],
                         ];
-                    @endphp
-                @endhasrole
-
-                @hasanyrole(['coordenador', 'orientador'])
-                    @php
-                        $pendentesCount = \Illuminate\Support\Facades\Cache::remember(
-                            'pendentes_count_' . session('school_id'),
-                            now()->addMinutes(5),
-                            fn() => \App\Models\Student::where('is_atypical', true)
-                                ->with(['documents' => fn($q) => $q->where('year', date('Y'))->select('id','student_id','type')])
-                                ->get()
-                                ->filter(fn($a) => count(array_diff(['estudo_caso','pei','paee'], $a->documents->pluck('type')->toArray())) > 0)
-                                ->count()
-                        );
-                        $items = [
-                            ['route' => 'secretaria.dashboard',                'icon' => 'home',    'label' => 'Início'],
-                            ['route' => 'secretaria.painel',                   'icon' => 'grid',    'label' => 'Painel'],
-                            ['route' => 'secretaria.turmas.index',             'icon' => 'academic','label' => term('turmas')],
-                            ['route' => 'secretaria.alunos.index',             'icon' => 'users',   'label' => term('alunos'), 'badge' => $pendentesCount ?: null],
-                            ['route' => 'secretaria.rotinas.documentos.index', 'icon' => 'rotina',  'label' => term('documentos')],
-                            ['route' => 'secretaria.rotinas.adaptacoes',       'icon' => 'rotina',  'label' => 'Adaptações'],
-                            ['route' => 'secretaria.subjects.index',           'icon' => 'subject', 'label' => 'Matérias'],
-                            ['route' => 'secretaria.usuarios.index',           'icon' => 'user',    'label' => 'Usuários'],
-                        ];
+                        // Coordenador/orientador não vê Configurações
+                        if (!$isAdmin) {
+                            $items = array_filter($items, fn($i) => ($i['module'] ?? '') !== 'configuracoes');
+                        }
                     @endphp
                 @endhasanyrole
 
                 @hasrole('professor')
                     @php $items = [
                         ['route' => 'professor.dashboard',    'icon' => 'home',     'label' => 'Início'],
-                        ['route' => 'professor.painel',       'icon' => 'grid',     'label' => 'Painel'],
+                        ['route' => 'professor.painel',       'icon' => 'grid',     'label' => 'Painel de Acompanhamento'],
                         ['route' => 'professor.turmas.index', 'icon' => 'academic', 'label' => 'Turmas'],
                     ]; @endphp
                 @endhasrole
 
                 @php
-                    // Perfis customizados da escola (ex: s1_psicólogo)
                     if (!isset($items) && auth()->check()) {
                         $schoolId = session('school_id');
-                        $hasCustomRole = auth()->user()->roles()
-                            ->where('name', 'like', "s{$schoolId}_%")
-                            ->exists();
-                        if ($hasCustomRole) {
+                        if (auth()->user()->roles()->where('name', 'like', "s{$schoolId}_%")->exists()) {
                             $items = [
                                 ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
-                                ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel'],
-                                ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas')],
-                                ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => term('alunos')],
-                                ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => term('documentos')],
-                                ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações'],
-                                ['route' => 'secretaria.subjects.index',             'icon' => 'subject', 'label' => 'Matérias'],
-                                ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários'],
+                                ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel de Acompanhamento', 'module' => 'painel'],
+                                ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => term('alunos'),       'module' => 'alunos'],
+                                ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos'],
+                                ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),       'module' => 'turmas'],
+                                ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],
+                                ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários',           'module' => 'usuarios'],
                             ];
                         }
                     }
                 @endphp
 
-@foreach($items ?? [] as $item)
+                @foreach($items ?? [] as $item)
                     @php
+                        if (isset($item['module']) && !$hasModule($item['module'])) continue;
                         $activePattern = $item['active'] ?? ($item['route'] . '.*');
-                        $isActive = request()->routeIs($item['route']) || request()->routeIs($activePattern);
-                        $badge = $item['badge'] ?? null;
+                        $children      = $item['children'] ?? [];
+                        $childActive   = collect($children)->contains(fn($c) => request()->routeIs($c['route']) || request()->routeIs($c['active'] ?? ($c['route'] . '.*')));
+                        $isActive      = request()->routeIs($item['route']) || request()->routeIs($activePattern) || $childActive;
+                        $badge         = $item['badge'] ?? null;
+                        $hasChildren   = !empty($children);
                     @endphp
                     <a href="{{ route($item['route']) }}"
                        style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 8px; margin-bottom: 2px; font-size: 14px; font-weight: 500; text-decoration: none;
-                           {{ $isActive ? 'background: #E8F0F9; color: #004B8D;' : 'color: #6B7280;' }}">
+                              {{ $isActive ? 'background: var(--accent-bg,#E8F0F9); color: var(--accent,#004B8D);' : 'color: #6B7280;' }}">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             @include('layouts.partials.icon', ['icon' => $item['icon'], 'active' => $isActive])
                             {{ $item['label'] }}
                         </div>
                         @if($badge)
-                            <span style="background: #EF4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px;">
-                                {{ $badge }}
-                            </span>
+                            <span style="background: #EF4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px;">{{ $badge }}</span>
+                        @elseif($hasChildren)
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 style="{{ $isActive ? 'transform:rotate(90deg);' : '' }} transition: transform 0.15s;">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
                         @endif
                     </a>
+
+                    @if($hasChildren && $isActive)
+                        @foreach($children as $child)
+                            @php
+                                if (isset($child['module']) && !$hasModule($child['module'])) continue;
+                                $childActivePattern = $child['active'] ?? ($child['route'] . '.*');
+                                $childIsActive = request()->routeIs($child['route']) || request()->routeIs($childActivePattern);
+                                $childHref = route($child['route'], $child['params'] ?? []);
+                            @endphp
+                            <a href="{{ $childHref }}"
+                               style="display: flex; align-items: center; gap: 10px; padding: 8px 12px 8px 36px; border-radius: 8px; margin-bottom: 2px; font-size: 13px; font-weight: 500; text-decoration: none;
+                                      {{ $childIsActive ? 'background: var(--accent-bg,#E8F0F9); color: var(--accent,#004B8D);' : 'color: #9CA3AF;' }}">
+                                @include('layouts.partials.icon', ['icon' => $child['icon'], 'active' => $childIsActive])
+                                {{ $child['label'] }}
+                            </a>
+                        @endforeach
+                    @endif
                 @endforeach
             @endauth
         </nav>

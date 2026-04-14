@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: DejaVu Sans, sans-serif; font-size: 10px; color: #111; }
+        body { margin: 0; padding: 0; }
+        /* Margens via wrapper — única abordagem confiável nesta versão do DomPDF */
+        .doc-wrapper {
+            padding: 56px 43px 51px 43px; /* topo:2cm, lat:1.5cm, base:1.8cm em pt (1cm=28.35pt) */
+        }
     </style>
 </head>
 <body>
+<div class="doc-wrapper">
     @if($documento->type === 'estudo_caso')
         @include('pdf.partials.estudo_caso')
     @elseif($documento->type === 'pei_consolidado')
@@ -19,5 +24,6 @@
     @else
         @include('pdf.partials.generic')
     @endif
+</div>
 </body>
 </html>

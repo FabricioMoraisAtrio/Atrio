@@ -29,7 +29,7 @@ class DocumentPdfController extends Controller
         ]);
 
         $pdf = Pdf::loadView('pdf.documento', compact('documento'))
-            ->setOptions(['margin_top' => 20, 'margin_bottom' => 20]);
+            ->setOptions(['isRemoteEnabled' => true]);
         $pdf->render();
 
         if (in_array($documento->type, ['pei', 'paee'])) {
@@ -53,12 +53,14 @@ class DocumentPdfController extends Controller
         $lightgray = [0.533, 0.533, 0.533];
         $logoPath  = public_path('images/atrio-logo.png');
 
+        // 1.5cm = ~42.5pt (72pt/in × 1.5/2.54)
+        $margin = 43;
         $yText  = $h - 18;
         $logoSz = 16;
-        $logoX  = $w - 36 - $logoSz;
+        $logoX  = $w - $margin - $logoSz;
         $logoY  = $yText - 3;
-        $labelX = $w - 36 - $logoSz - 125;
-        $copyX  = 36;
+        $labelX = $w - $margin - $logoSz - 125;
+        $copyX  = $margin;
 
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) use ($yText, $lightgray, $logoPath, $logoX, $logoY, $logoSz, $labelX, $copyX) {
             $font = $fontMetrics->getFont('DejaVu Sans');

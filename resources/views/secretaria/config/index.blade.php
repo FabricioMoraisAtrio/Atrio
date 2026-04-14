@@ -14,7 +14,7 @@
 
     {{-- Tabs --}}
     <div style="display: flex; gap: 4px; border-bottom: 2px solid #F3F4F6; margin-bottom: 28px;">
-        @foreach(['escola' => 'Escola', 'terminologias' => 'Terminologias', 'perfis' => 'Perfis de Acesso'] as $t => $label)
+        @foreach(['escola' => 'Escola', 'perfis' => 'Perfis de Acesso', 'materias' => 'Matérias'] as $t => $label)
             @if($t === 'perfis')
                 <a href="{{ route('secretaria.config.perfis.index') }}"
                    style="padding: 10px 18px; font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px;
@@ -22,7 +22,7 @@
                     {{ $label }}
                 </a>
             @else
-                <a href="{{ route('secretaria.config.index') }}?tab={{ $t }}"
+                <a href="{{ route('secretaria.config.index', ['tab' => $t]) }}"
                    style="padding: 10px 18px; font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px;
                           {{ $tab === $t ? 'color:#004B8D; border-bottom-color:#004B8D;' : 'color:#9CA3AF;' }}">
                     {{ $label }}
@@ -110,57 +110,76 @@
         </div>
     @endif
 
-    {{-- Tab: Terminologias --}}
-    @if($tab === 'terminologias')
-        <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 28px;">
-            <h2 style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 6px;">Terminologias</h2>
-            <p style="font-size: 13px; color: #6B7280; margin: 0 0 24px;">Personalize como o sistema chama cada elemento. Deixe em branco para usar o padrão.</p>
 
-            <form method="POST" action="{{ route('secretaria.config.terminologias.update') }}">
-                @csrf @method('PUT')
 
-                @php
-                    $termDefs = [
-                        ['key' => 'aluno',       'singular' => true,  'label' => 'Aluno (singular)',      'default' => 'Aluno'],
-                        ['key' => 'alunos',      'singular' => false, 'label' => 'Aluno (plural)',        'default' => 'Alunos'],
-                        ['key' => 'turma',       'singular' => true,  'label' => 'Turma (singular)',      'default' => 'Turma'],
-                        ['key' => 'turmas',      'singular' => false, 'label' => 'Turma (plural)',        'default' => 'Turmas'],
-                        ['key' => 'laudo',       'singular' => true,  'label' => 'Laudo (singular)',      'default' => 'Laudo'],
-                        ['key' => 'laudos',      'singular' => false, 'label' => 'Laudo (plural)',        'default' => 'Laudos'],
-                        ['key' => 'professor',   'singular' => true,  'label' => 'Professor (singular)',  'default' => 'Professor'],
-                        ['key' => 'professores', 'singular' => false, 'label' => 'Professor (plural)',    'default' => 'Professores'],
-                        ['key' => 'coordenador', 'singular' => true,  'label' => 'Coordenador',          'default' => 'Coordenador'],
-                        ['key' => 'orientador',  'singular' => true,  'label' => 'Orientador',           'default' => 'Orientador'],
-                        ['key' => 'documento',        'singular' => true,  'label' => 'Documento (singular)',  'default' => 'Documento'],
-                        ['key' => 'documentos',       'singular' => false, 'label' => 'Documento (plural)',    'default' => 'Documentos'],
-                        ['key' => 'publico_alvo',     'singular' => true,  'label' => 'Público Alvo',          'default' => 'Público Alvo'],
-                        ['key' => 'nao_publico_alvo', 'singular' => true,  'label' => 'Não Público Alvo',      'default' => 'Não público alvo'],
-                    ];
-                @endphp
+    {{-- Tab: Matérias --}}
+    @if($tab === 'materias')
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <p style="font-size:13px;color:#6B7280;margin:0;">{{ $subjects->count() }} matéria(s) cadastrada(s)</p>
+            <a href="{{ route('secretaria.subjects.create') }}"
+               style="background:#004B8D;color:white;text-decoration:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                Nova matéria
+            </a>
+        </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    @foreach($termDefs as $t)
-                        <div>
-                            <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">
-                                {{ $t['label'] }}
-                                <span style="font-weight: 400; text-transform: none; letter-spacing: 0; color: #9CA3AF;">  padrão: {{ $t['default'] }}</span>
-                            </label>
-                            <input type="text" name="term_{{ $t['key'] }}"
-                                   value="{{ old('term_'.$t['key'], $settings['term_'.$t['key']] ?? '') }}"
-                                   placeholder="{{ $t['default'] }}"
-                                   style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
-                                   onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">
-                        </div>
-                    @endforeach
-                </div>
-
-                <div style="margin-top: 28px;">
-                    <button type="submit"
-                            style="background: #004B8D; color: white; border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                        Salvar Terminologias
-                    </button>
-                </div>
-            </form>
+        <div style="background:#fff;border-radius:12px;border:1px solid #F3F4F6;overflow:hidden;">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#F9FAFB;">
+                        <th style="text-align:left;padding:12px 20px;font-size:11px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.5px;">Ordem</th>
+                        <th style="text-align:left;padding:12px 20px;font-size:11px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.5px;">Matéria</th>
+                        <th style="text-align:left;padding:12px 20px;font-size:11px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.5px;">Label Responsável</th>
+                        <th style="text-align:left;padding:12px 20px;font-size:11px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.5px;">Tipo</th>
+                        <th style="text-align:center;padding:12px 20px;font-size:11px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.5px;">Metas</th>
+                        <th style="padding:12px 20px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($subjects as $subject)
+                    <tr style="border-top:1px solid #F9FAFB;"
+                        onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background='transparent'">
+                        <td style="padding:14px 20px;font-size:13px;color:#9CA3AF;">{{ $subject->ordem }}</td>
+                        <td style="padding:14px 20px;">
+                            <div style="font-size:14px;font-weight:600;color:#111827;">{{ $subject->name }}</div>
+                            <div style="font-size:11px;color:#9CA3AF;">{{ $subject->slug }}</div>
+                        </td>
+                        <td style="padding:14px 20px;font-size:13px;color:#374151;">{{ $subject->label_responsavel }}</td>
+                        <td style="padding:14px 20px;">
+                            @if($subject->tipo === 'regente')
+                                <span style="background:#E6F5F4;color:#009C8C;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;">Regente</span>
+                            @else
+                                <span style="background:#E8F0F9;color:#004B8D;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;">Disciplina</span>
+                            @endif
+                        </td>
+                        <td style="padding:14px 20px;text-align:center;">
+                            <span style="font-size:13px;font-weight:600;color:#374151;">{{ $subject->inventory_items_count }}</span>
+                        </td>
+                        <td style="padding:14px 20px;text-align:right;">
+                            <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;">
+                                <a href="{{ route('secretaria.subjects.show', $subject) }}"
+                                   style="font-size:13px;color:#004B8D;text-decoration:none;font-weight:500;">Metas</a>
+                                <a href="{{ route('secretaria.subjects.edit', $subject) }}"
+                                   style="font-size:13px;color:#6B7280;text-decoration:none;">Editar</a>
+                                <form method="POST" action="{{ route('secretaria.subjects.destroy', $subject) }}" style="display:inline;">
+                                    @csrf @method('DELETE')
+                                    <button type="button" data-confirm="Remover matéria?"
+                                            style="font-size:13px;color:#EF4444;background:none;border:none;cursor:pointer;padding:0;">
+                                        Remover
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" style="padding:48px;text-align:center;color:#9CA3AF;font-size:14px;">
+                            Nenhuma matéria cadastrada.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     @endif
 

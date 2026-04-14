@@ -62,6 +62,17 @@
         'global'         => 'Desenvolvimento Global',
     ];
 
+    // Helper: renderiza array de itens como lista separada por linhas
+    $renderBoxes = function(array $itens): string {
+        if (empty($itens)) return '<span style="color:#bbb;font-style:italic;font-size:9px;">(não preenchido)</span>';
+        $out = '';
+        foreach ($itens as $i => $item) {
+            $border = $i > 0 ? 'border-top:1px solid #F0E8DF;' : '';
+            $out .= '<div style="' . $border . 'padding:5px 4px;font-size:9px;color:#1a1a1a;">' . e($item) . '</div>';
+        }
+        return $out;
+    };
+
     // Helper: renderiza textarea como lista de itens (uma linha = um bullet)
     $asList = function(string $text): string {
         $lines = array_filter(array_map('trim', explode("\n", $text)));
@@ -88,9 +99,7 @@
     }
 
     /* ── Layout de página ── */
-    .page { padding: 0 36px 20px; }
-    .page-next { padding: 20px 36px 20px; }
-    .page-break { page-break-after: always; }
+    .page { width: 100%; }
 
     /* ── Cabeçalho ── */
     .doc-header {
@@ -132,7 +141,7 @@
     .id-label { background: #f5f0ea; font-weight: bold; width: 120px; color: #444; white-space: nowrap; }
 
     /* ── Seção ── */
-    .section { margin-bottom: 16px; }
+    .section { margin-bottom: 16px; page-break-inside: avoid; }
     .section-header { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin-bottom: 10px; }
     .section-title { font-size: 9.5px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: {{ $accent }}; }
     .section-sub { font-size: 8px; color: #888; font-style: italic; margin-top: 1px; }
@@ -224,6 +233,12 @@
         <td class="id-label">Ano Letivo</td>
         <td>{{ $documento->year }}</td>
     </tr>
+    @if($aluno->responsavel_nome || $aluno->responsavel_2_nome)
+    <tr>
+        <td class="id-label">Responsável</td>
+        <td colspan="3">{{ collect([$aluno->responsavel_nome, $aluno->responsavel_2_nome])->filter()->implode(' / ') }}</td>
+    </tr>
+    @endif
     @if($diagnostico)
     <tr>
         <td class="id-label">Diagnóstico / Laudo</td>
@@ -257,182 +272,148 @@
 <hr class="div">
 
 {{-- Observações Pedagógicas --}}
+@php $obsItens = (array)($c['obs_pedagogicas'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Observações Pedagógicas</div>
         <div class="section-sub">Comportamento, aprendizagem e interação.</div>
     </div>
+    {!! $renderBoxes($obsItens) !!}
+    @if($val('obs_pedagogicas_obs'))
     <div class="field">
-        <div class="field-label">Nível de desenvolvimento e aprendizagem atual</div>
-        <div class="field-value tall {{ !$val('nivel_desenvolvimento') ? 'empty' : '' }}">{{ $val('nivel_desenvolvimento') ?: ' ' }}</div>
+        <div class="field-label">Observações complementares</div>
+        <div class="field-value" style="white-space: pre-wrap;">{{ $val('obs_pedagogicas_obs') }}</div>
     </div>
-    <div class="field">
-        <div class="field-label">Comportamento em sala de aula e rotina</div>
-        <div class="field-value tall {{ !$val('comportamento_sala') ? 'empty' : '' }}">{{ $val('comportamento_sala') ?: ' ' }}</div>
-    </div>
-    <div class="field">
-        <div class="field-label">Como interage com colegas, professores e equipe</div>
-        <div class="field-value {{ !$val('interacao_colegas') ? 'empty' : '' }}">{{ $val('interacao_colegas') ?: ' ' }}</div>
-    </div>
+    @endif
+    @if(!$obsItens && !$val('obs_pedagogicas_obs'))
+    <div class="field-value empty"> </div>
+    @endif
 </div>
 
-</div>{{-- /page --}}
 
-
-<div class="page-break"></div>
-
-{{-- ══════════════════════════════════════════════ --}}
-{{-- PÁGINA 2 --}}
-{{-- ══════════════════════════════════════════════ --}}
-<div class="page-next">
-
-<div class="doc-header-sm">
-    <div class="doc-header-sm-l">{{ $school?->name }} &nbsp;·&nbsp; Estudo de Caso {{ $documento->year }}</div>
-    <div class="doc-header-sm-r">{{ $aluno->name }}</div>
-</div>
+<hr class="div">
 
 {{-- Barreiras Identificadas --}}
+@php $barreiraItens = (array)($c['barreiras'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Barreiras Identificadas</div>
         <div class="section-sub">Dificuldades e limitações encontradas.</div>
     </div>
+    {!! $renderBoxes($barreiraItens) !!}
+    @if($val('barreiras_obs'))
     <div class="field">
-        <div class="field-label">Desafios na assimilação de conteúdos</div>
-        <div class="field-value tall {{ !$val('desafios_conteudo') ? 'empty' : '' }}">{{ $val('desafios_conteudo') ?: ' ' }}</div>
+        <div class="field-label">Observações complementares</div>
+        <div class="field-value" style="white-space: pre-wrap;">{{ $val('barreiras_obs') }}</div>
     </div>
-    <div class="field">
-        <div class="field-label">Barreiras físicas, de comunicação ou atitudinais</div>
-        <div class="field-value {{ !$val('barreiras_fisicas') ? 'empty' : '' }}">{{ $val('barreiras_fisicas') ?: ' ' }}</div>
-    </div>
+    @endif
+    @if(!$barreiraItens && !$val('barreiras_obs'))
+    <div class="field-value empty"> </div>
+    @endif
 </div>
 
 <hr class="div">
 
 {{-- Potencialidades --}}
+@php $potItens = (array)($c['potencialidades'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Potencialidades</div>
         <div class="section-sub">Habilidades e pontos fortes.</div>
     </div>
+    {!! $renderBoxes($potItens) !!}
+    @if($val('potencialidades_obs'))
     <div class="field">
-        <div class="field-label">Áreas de maior interesse e motivação</div>
-        <div class="field-value tall {{ !$val('interesses_motivacao') ? 'empty' : '' }}">{{ $val('interesses_motivacao') ?: ' ' }}</div>
+        <div class="field-label">Observações complementares</div>
+        <div class="field-value" style="white-space: pre-wrap;">{{ $val('potencialidades_obs') }}</div>
     </div>
-    <div class="field">
-        <div class="field-label">Habilidades cognitivas, motoras e sociais de destaque</div>
-        <div class="field-value {{ !$val('habilidades_destaque') ? 'empty' : '' }}">{{ $val('habilidades_destaque') ?: ' ' }}</div>
-    </div>
+    @endif
+    @if(!$potItens && !$val('potencialidades_obs'))
+    <div class="field-value empty"> </div>
+    @endif
 </div>
 
 <hr class="div">
 
 {{-- Encaminhamentos --}}
+@php $encItens = (array)($c['encaminhamentos'] ?? []); @endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Encaminhamentos</div>
         <div class="section-sub">Sugestões e ações pedagógicas.</div>
     </div>
+    {!! $renderBoxes($encItens) !!}
+    @if($val('encaminhamentos_obs'))
     <div class="field">
-        <div class="field-label">Estratégias e metodologias a serem adotadas em sala de aula</div>
-        <div class="field-value tall {{ !$val('estrategias_sala') ? 'empty' : '' }}">{{ $val('estrategias_sala') ?: ' ' }}</div>
+        <div class="field-label">Observações complementares</div>
+        <div class="field-value" style="white-space: pre-wrap;">{{ $val('encaminhamentos_obs') }}</div>
     </div>
-    <div class="field">
-        <div class="field-label">Necessidade de adaptações curriculares ou materiais específicos</div>
-        <div class="field-value {{ !$val('adaptacoes_necessarias') ? 'empty' : '' }}">{{ $val('adaptacoes_necessarias') ?: ' ' }}</div>
-    </div>
-    <div class="field">
-        <div class="field-label">Encaminhamentos para redes de apoio</div>
-        <div class="field-value {{ !$val('encaminhamentos_rede') ? 'empty' : '' }}">{{ $val('encaminhamentos_rede') ?: ' ' }}</div>
-    </div>
+    @endif
+    @if(!$encItens && !$val('encaminhamentos_obs'))
+    <div class="field-value empty"> </div>
+    @endif
 </div>
 
-</div>{{-- /page --}}
-
-
-<div class="page-break"></div>
-
-{{-- ══════════════════════════════════════════════ --}}
-{{-- PÁGINA 3 —  Diagnóstico Pedagógico + Objetivos --}}
-{{-- ══════════════════════════════════════════════ --}}
-<div class="page-next">
-
-<div class="doc-header-sm">
-    <div class="doc-header-sm-l">{{ $school?->name }} &nbsp;·&nbsp; Estudo de Caso {{ $documento->year }}</div>
-    <div class="doc-header-sm-r">{{ $aluno->name }}</div>
-</div>
-
-{{-- Diagnóstico Pedagógico --}}
-<div class="section">
-    <div class="section-header">
-        <div class="section-title">Diagnóstico Pedagógico</div>
-        <div class="section-sub">Descrição das necessidades educacionais e perfil pedagógico do aluno.</div>
-    </div>
-    <div class="field">
-        <div class="field-value taller {{ !$val('diagnostico_pedagogico') ? 'empty' : '' }}" style="white-space: pre-wrap;">{{ $val('diagnostico_pedagogico') ?: ' ' }}</div>
-    </div>
-</div>
 
 <hr class="div">
 
-{{-- Objetivos de Aprendizagem --}}
+{{-- Equipe Responsável --}}
+@php
+    $participantes = array_filter($c['equipe_participantes'] ?? [], fn($p) => !empty($p['nome']));
+    // Sempre inclui "Elaborado por" como primeiro assinante
+    $assinantes = [['cargo' => 'Elaborado por', 'nome' => $val('elaborado_por')]];
+    foreach ($participantes as $p) {
+        $assinantes[] = ['cargo' => $p['cargo'] ?? '', 'nome' => $p['nome'] ?? ''];
+    }
+    // Responsáveis sempre ao final
+    $assinantes[] = ['cargo' => 'Responsável pelo(a) estudante', 'nome' => ''];
+    $assinantes[] = ['cargo' => 'Responsável 2', 'nome' => ''];
+    $rows = array_chunk($assinantes, 2);
+@endphp
+
+@if(count($participantes) > 0)
 <div class="section">
     <div class="section-header">
-        <div class="section-title">Objetivos de Aprendizagem</div>
-        <div class="section-sub">Metas estabelecidas para o período letivo.</div>
+        <div class="section-title">Equipe Responsável</div>
+        <div class="section-sub">Profissionais envolvidos na formulação deste documento.</div>
     </div>
-    @foreach([
-        'objetivos_curto_prazo' => 'Curto Prazo',
-        'objetivos_medio_prazo' => 'Médio Prazo',
-        'objetivos_longo_prazo' => 'Longo Prazo',
-    ] as $field => $label)
-    @php $texto = $val($field); @endphp
-    <div style="margin-bottom: 10px;">
-        <div class="field-label" style="margin-bottom: 4px;">{{ $label }}</div>
-        @if($texto)
-            <div style="border-left: 2px solid {{ $accent }}; padding-left: 8px;">
-                {!! $asList($texto) !!}
-            </div>
-        @else
-            <div class="field-value empty"> </div>
-        @endif
-    </div>
-    @endforeach
+    <table class="equipe-table">
+        @foreach($participantes as $p)
+        <tr>
+            <td class="equipe-label">{{ $p['cargo'] ?? '—' }}</td>
+            <td>{{ $p['nome'] ?? '—' }}</td>
+        </tr>
+        @endforeach
+    </table>
 </div>
 
 <hr class="div">
-
+@endif
 
 {{-- Assinaturas --}}
 <div class="section">
     <div class="section-header">
         <div class="section-title">Termo de Ciência e Concordância</div>
     </div>
-    @php
-        $assinantes = array_filter([
-            ['role' => 'Elaborado por', 'name' => $val('elaborado_por')],
-            ['role' => 'Professor(a) Titular / Regente', 'name' => $val('equipe_titular')],
-            ['role' => 'Orientador(a) Educacional', 'name' => $val('equipe_soe')],
-            ['role' => 'Psicólogo(a) Escolar', 'name' => $val('equipe_scp')],
-            ['role' => 'Psicólogo(a) / Terapeuta', 'name' => $val('equipe_psicologo')],
-            ['role' => 'Psicopedagogo(a)', 'name' => $val('equipe_psicopedagogo')],
-            ['role' => 'Responsável pelo(a) estudante', 'name' => ''],
-            ['role' => 'Responsável 2', 'name' => ''],
-        ]);
-        $rows = array_chunk($assinantes, 2);
-    @endphp
-    <table class="sig-table">
-        @foreach($rows as $row)
+    <table style="width:100%;border-collapse:collapse;">
+        @foreach($assinantes as $sig)
         <tr>
-            @foreach($row as $sig)
-            <td style="width: 50%;">
-                <div class="sig-role">{{ $sig['role'] }}</div>
-                @if($sig['name'])<div class="sig-name">{{ $sig['name'] }}</div>@endif
-                <span class="sig-line"></span>
-                <div class="sig-date">____/____/________</div>
+            <td style="width:40%;border:1px solid #ddd;padding:8px 10px;vertical-align:middle;">
+                <div style="font-size:8.5px;font-weight:bold;color:#444;text-transform:uppercase;letter-spacing:0.3px;">{{ $sig['cargo'] }}</div>
+                @if($sig['nome'])<div style="font-size:9px;color:#1a1a1a;margin-top:3px;">{{ $sig['nome'] }}</div>@endif
             </td>
-            @endforeach
-            @if(count($row) === 1)<td style="width:50%; border: 1px solid #ddd;"></td>@endif
+            <td style="width:60%;border:1px solid #ddd;padding:8px 14px;vertical-align:bottom;">
+                <div style="display:table;width:100%;">
+                    <div style="display:table-cell;vertical-align:bottom;padding-right:16px;">
+                        <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Assinatura</div>
+                        <div style="border-bottom:1px solid #888;min-height:18px;"></div>
+                    </div>
+                    <div style="display:table-cell;width:110px;vertical-align:bottom;">
+                        <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Data</div>
+                        <div style="border-bottom:1px solid #888;font-size:8px;color:#bbb;padding-bottom:2px;">____/____/________</div>
+                    </div>
+                </div>
+            </td>
         </tr>
         @endforeach
     </table>
@@ -443,5 +424,5 @@
     Elaborado em {{ $dataElab }} &nbsp;·&nbsp; Gerado em {{ now()->format('d/m/Y H:i') }}
 </div>
 
-</div>{{-- /page --}}
+</div>{{-- /page (único) --}}
 

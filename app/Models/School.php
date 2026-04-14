@@ -9,7 +9,7 @@ class School extends Model
 {
     protected $fillable = [
         'name', 'slug', 'is_active', 'plan', 'plan_status',
-        'plan_expires_at', 'max_students', 'notes', 'logo', 'theme_color',
+        'plan_expires_at', 'max_students', 'notes', 'logo', 'theme_color', 'modules',
     ];
 
     protected function casts(): array
@@ -17,6 +17,30 @@ class School extends Model
         return [
             'is_active'       => 'boolean',
             'plan_expires_at' => 'date',
+            'modules'         => 'array',
+        ];
+    }
+
+    /** Retorna true se o módulo está habilitado para esta escola.
+     *  null = todos habilitados (retrocompatível). */
+    public function hasModule(string $key): bool
+    {
+        if ($this->modules === null) return true;
+        return in_array($key, $this->modules, true);
+    }
+
+    /** Lista dos módulos disponíveis no sistema. */
+    public static function availableModules(): array
+    {
+        return [
+            'painel'      => 'Painel de Controle',
+            'alunos'      => 'Alunos',
+            'documentos'  => 'Documentos de Inclusão',
+            'turmas'      => 'Turmas',
+            'adaptacoes'  => 'Adaptações para Prova',
+            'materias'    => 'Matérias',
+            'usuarios'    => 'Usuários',
+            'configuracoes' => 'Configurações',
         ];
     }
 
