@@ -55,6 +55,7 @@ class RotinaDocumentoListController extends Controller
                                            ->whereIn('type', $types)
                                            ->with('author:id,name')
                                            ->select('id', 'student_id', 'author_id', 'type', 'status', 'updated_at'),
+            'laudos',
         ]);
 
         if ($cfg['so_publico']) {

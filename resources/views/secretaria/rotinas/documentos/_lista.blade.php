@@ -87,9 +87,7 @@
                 <tr style="background: #F9FAFB; border-bottom: 1px solid #F3F4F6;">
                     <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
                     <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
-                    @if(!$cfg['so_publico'])
                     <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
-                    @endif
                     <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">{{ $cfg['titulo'] }}</th>
                     <th style="text-align: right; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Ação</th>
                 </tr>
@@ -102,8 +100,8 @@
 
                         {{-- ── MODO MÚLTIPLOS DOCUMENTOS (PEI / Atendimentos) ── --}}
                         <tr style="border-bottom: 1px solid #F3F4F6; background: #FAFAFA;">
-                            <td style="padding: 12px 20px;" colspan="{{ $cfg['so_publico'] ? 3 : 4 }}">
-                                <div style="display: flex; align-items: center; gap: 10px;">
+                            <td style="padding: 12px 20px;" colspan="4">
+                                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                                     <div style="width: 30px; height: 30px; border-radius: 50%; background: {{ $bgPrincipal }}; color: {{ $corPrincipal }}; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                         {{ strtoupper(substr($aluno->name, 0, 1)) }}
                                     </div>
@@ -116,8 +114,12 @@
                                     @if($turma)
                                         <span style="font-size: 11px; color: #6B7280; padding: 2px 8px; background: #F3F4F6; border-radius: 20px;">{{ $turma->name }} · {{ $turma->shift }}</span>
                                     @endif
-                                    @if(!$cfg['so_publico'] && $aluno->is_atypical)
-                                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+                                    @if($aluno->is_atypical)
+                                        @if($aluno->is_publico_alvo)
+                                            <span style="background: #F3E8FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+                                        @else
+                                            <span style="background: #FEF3C7; color: #92400E; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">Atípico</span>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
@@ -142,7 +144,7 @@
                         {{-- Documentos existentes --}}
                         @foreach($aluno->documents as $doc)
                         <tr style="border-bottom: 1px solid #F9FAFB;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
-                            <td style="padding: 10px 20px 10px 56px; color: #374151; font-size: 12px;" colspan="{{ $cfg['so_publico'] ? 3 : 4 }}">
+                            <td style="padding: 10px 20px 10px 56px; color: #374151; font-size: 12px;" colspan="4">
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{ $corPrincipal }}" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                                     @if($doc->author)
@@ -167,7 +169,7 @@
 
                         @if($aluno->documents->isEmpty())
                         <tr style="border-bottom: 1px solid #F9FAFB;">
-                            <td colspan="{{ $cfg['so_publico'] ? 4 : 5 }}" style="padding: 8px 20px 8px 56px;">
+                            <td colspan="5" style="padding: 8px 20px 8px 56px;">
                                 <span style="font-size: 11px; color: #9CA3AF; font-style: italic;">Nenhum documento registrado</span>
                             </td>
                         </tr>
@@ -189,6 +191,16 @@
                                         @if($aluno->registration_number)
                                             <p style="font-size: 11px; color: #9CA3AF; margin: 0;">Mat. {{ $aluno->registration_number }}</p>
                                         @endif
+                                        @php
+                                            $siglas = collect(config('transtornos'))->filter(fn($v, $k) => $aluno->$k)->map(fn($v) => $v[0]);
+                                        @endphp
+                                        @if($siglas->isNotEmpty())
+                                        <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
+                                            @foreach($siglas as $sigla)
+                                                <span style="font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 20px; background: #F3F4F6; color: #374151;">{{ $sigla }}</span>
+                                            @endforeach
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
@@ -202,7 +214,6 @@
                                 @endif
                             </td>
 
-                            @if(!$cfg['so_publico'])
                             <td style="padding: 14px 16px; text-align: center;">
                                 @if($aluno->is_atypical)
                                     @if($aluno->is_publico_alvo)
@@ -214,7 +225,6 @@
                                     <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
                                 @endif
                             </td>
-                            @endif
 
                             <td style="padding: 14px 16px; text-align: center;">
                                 @if($cfg['tipo'] === 'pei')
