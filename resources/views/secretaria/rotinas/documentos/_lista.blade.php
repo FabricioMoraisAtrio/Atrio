@@ -88,7 +88,7 @@
                     <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
                     <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
                     @if(!$cfg['so_publico'])
-                    <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">{{ term('publico_alvo') }}</th>
+                    <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
                     @endif
                     <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">{{ $cfg['titulo'] }}</th>
                     <th style="text-align: right; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Ação</th>
@@ -205,9 +205,13 @@
                             @if(!$cfg['so_publico'])
                             <td style="padding: 14px 16px; text-align: center;">
                                 @if($aluno->is_atypical)
-                                    <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">Sim</span>
+                                    @if($aluno->is_publico_alvo)
+                                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+                                    @else
+                                        <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">Atípico</span>
+                                    @endif
                                 @else
-                                    <span style="background: #F3F4F6; color: #9CA3AF; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px;">Não</span>
+                                    <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
                                 @endif
                             </td>
                             @endif
