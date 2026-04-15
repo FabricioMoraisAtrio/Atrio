@@ -14,7 +14,7 @@ class User extends Authenticatable
     use HasRoles, Notifiable;
 protected $fillable = [
     'name', 'email', 'password', 'school_id', 'is_active',
-    'avatar', 'notify_document_pending', 'notify_plan_expiring',
+    'avatar', 'notify_document_pending', 'notify_plan_expiring', 'pdf_preview',
 ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -27,6 +27,7 @@ protected $fillable = [
         'email_verified_at'        => 'datetime',
         'notify_document_pending'  => 'boolean',
         'notify_plan_expiring'     => 'boolean',
+        'pdf_preview'              => 'boolean',
     ];
 }
 

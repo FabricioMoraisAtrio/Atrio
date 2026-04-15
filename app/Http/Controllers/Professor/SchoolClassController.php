@@ -9,8 +9,16 @@ class SchoolClassController extends Controller
 {
     public function index()
     {
+        $year   = date('Y');
         $turmas = SchoolClass::where('school_id', session('school_id'))
             ->withCount('students')
+            ->with([
+                'students' => fn($q) => $q->orderBy('name')->with([
+                    'documents' => fn($d) => $d->whereYear('created_at', $year)
+                        ->whereIn('type', ['estudo_caso', 'paee', 'pei', 'pei_consolidado']),
+                    'laudos',
+                ]),
+            ])
             ->orderBy('name')
             ->get();
 

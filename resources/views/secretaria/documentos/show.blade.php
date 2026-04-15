@@ -4,10 +4,14 @@
 @section('content')
 <div style="max-width: 1000px;">
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('secretaria.alunos.show', $documento->student) }}"
+        @php
+            $backUrl   = request('back') ? urldecode(request('back')) : route('secretaria.alunos.show', $documento->student);
+            $backLabel = request('back') ? 'Voltar' : 'Voltar para ' . $documento->student->name;
+        @endphp
+        <a href="{{ $backUrl }}"
            style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Voltar para {{ $documento->student->name }}
+            {{ $backLabel }}
         </a>
 
         <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -21,21 +25,34 @@
                     <p style="font-size: 12px; color: #9CA3AF; margin: 0;">Ano letivo {{ $documento->year }}</p>
                 </div>
             </div>
-            <div style="display: flex; gap: 8px;">
-                <a href="{{ route('secretaria.documentos.pdf', $documento) }}" target="_blank"
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                {{-- Visualizar (abre inline no navegador) --}}
+                <a href="{{ route('secretaria.documentos.preview', $documento) }}" target="_blank"
+                   style="display: flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid #E5E7EB; color: #374151;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    Visualizar
+                </a>
+                {{-- Baixar PDF --}}
+                @if(auth()->user()->pdf_preview)
+                <button type="button"
+                        onclick="abrirPreview()"
+                        style="display: flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid #E5E7EB; color: #374151; background: #fff; cursor: pointer;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                    </svg>
+                    Baixar PDF
+                </button>
+                @else
+                <a href="{{ route('secretaria.documentos.pdf', $documento) }}"
                    style="display: flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid #E5E7EB; color: #374151;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
                     </svg>
-                    PDF
+                    Baixar PDF
                 </a>
-                <a href="{{ route('secretaria.documentos.word', $documento) }}"
-   style="display: flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid #E5E7EB; color: #374151;">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
-    </svg>
-    Word
-</a>
+                @endif
                 <a href="{{ route('secretaria.documentos.edit', $documento) }}"
                    style="background: #004B8D; color: white; text-decoration: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;">
                     Editar
@@ -109,4 +126,82 @@
         </p>
     </div>
 </div>
+
+@if(auth()->user()->pdf_preview)
+{{-- Modal preview PDF --}}
+<div id="modal-pdf-preview"
+     style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; padding: 24px;">
+    <div style="background: #fff; border-radius: 16px; width: 100%; max-width: 900px; height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
+        {{-- Header --}}
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #F3F4F6; flex-shrink: 0;">
+            <div>
+                <p style="font-size: 14px; font-weight: 700; color: #111827; margin: 0;">
+                    {{ strtoupper(str_replace('_', ' ', $documento->type)) }} — {{ $documento->student->name }}
+                </p>
+                <p style="font-size: 12px; color: #9CA3AF; margin: 0;">Pré-visualização do documento</p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <a href="{{ route('secretaria.documentos.pdf', $documento) }}"
+                   style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; background: #004B8D; color: #fff;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                    </svg>
+                    Baixar
+                </a>
+                <button type="button" onclick="fecharPreview()"
+                        style="background: #F3F4F6; border: none; cursor: pointer; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6B7280;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
+        {{-- Preview container --}}
+        <div id="pdf-preview-container" style="flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <p style="font-size: 13px; color: #9CA3AF;">Carregando pré-visualização...</p>
+        </div>
+    </div>
+</div>
+<script>
+const _previewUrl = '{{ route('secretaria.documentos.preview', $documento) }}';
+let _previewLoaded = false;
+let _previewBlobUrl = null;
+
+function abrirPreview() {
+    document.getElementById('modal-pdf-preview').style.display = 'flex';
+    if (_previewLoaded) return;
+    _previewLoaded = true;
+
+    const container = document.getElementById('pdf-preview-container');
+    container.innerHTML = '<p style="font-size:13px;color:#9CA3AF;">Carregando pré-visualização...</p>';
+
+    fetch(_previewUrl, { credentials: 'same-origin' })
+        .then(function(res) {
+            if (!res.ok) throw new Error('Erro ' + res.status);
+            return res.blob();
+        })
+        .then(function(blob) {
+            _previewBlobUrl = URL.createObjectURL(blob);
+            container.innerHTML = '';
+            var iframe = document.createElement('iframe');
+            iframe.src = _previewBlobUrl;
+            iframe.style.cssText = 'flex:1;width:100%;height:100%;border:none;';
+            container.appendChild(iframe);
+        })
+        .catch(function(err) {
+            container.innerHTML =
+                '<div style="text-align:center;padding:32px;">' +
+                '<p style="font-size:13px;color:#EF4444;margin-bottom:12px;">Não foi possível carregar a pré-visualização.</p>' +
+                '<a href="' + _previewUrl + '" target="_blank" style="font-size:13px;color:#004B8D;text-decoration:underline;">Abrir em nova aba</a>' +
+                '</div>';
+        });
+}
+
+function fecharPreview() {
+    document.getElementById('modal-pdf-preview').style.display = 'none';
+}
+
+document.getElementById('modal-pdf-preview').addEventListener('click', function(e) {
+    if (e.target === this) fecharPreview();
+});
+</script>
+@endif
 @endsection

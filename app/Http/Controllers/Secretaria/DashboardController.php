@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Secretaria;
 use App\Http\Controllers\Controller;
 use App\Models\SchoolClass;
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Builder;
 
 class DashboardController extends Controller
 {
@@ -22,7 +23,7 @@ class DashboardController extends Controller
             ->orderBy('name')
             ->get()
             ->map(function ($turma) {
-                $atipicos = $turma->students->where('is_atypical', true);
+                $atipicos = $turma->students->filter(fn($a) => $a->is_publico_alvo);
                 $pendentes = $atipicos->filter(function ($aluno) {
                     $criados = $aluno->documents->pluck('type')->toArray();
                     return count(array_diff(['estudo_caso', 'pei', 'paee'], $criados)) > 0;
@@ -54,7 +55,9 @@ class DashboardController extends Controller
                 ];
             });
 
-        $totalPendentes = Student::where('is_atypical', true)
+        $totalPendentes = Student::where(function ($q) {
+                foreach (Student::PUBLICO_ALVO_FIELDS as $f) { $q->orWhere($f, true); }
+            })
             ->with(['documents' => fn($q) => $q->where('year', $ano)->select('id', 'student_id', 'type')])
             ->get()
             ->filter(function ($aluno) {
@@ -104,7 +107,7 @@ class DashboardController extends Controller
             ->orderBy('name')
             ->get()
             ->map(function ($turma) {
-                $atipicos = $turma->students->where('is_atypical', true);
+                $atipicos = $turma->students->filter(fn($a) => $a->is_publico_alvo);
                 $pendentes = $atipicos->filter(function ($aluno) {
                     $criados = $aluno->documents->pluck('type')->toArray();
                     return count(array_diff(['estudo_caso', 'pei', 'paee'], $criados)) > 0;
@@ -126,13 +129,15 @@ class DashboardController extends Controller
                     'turma'                 => $turma,
                     'total'                 => $turma->students->count(),
                     'atipicos'              => $atipicos->count(),
-                    'atipicos_list'         => $atipicos->take(5)->values(),
                     'pendentes'             => $pendentes->count(),
                     'professores_pendentes' => $professoresPendentes->unique()->values(),
+                    'professor_regente'     => $turma->teachers->first(),
                 ];
             });
 
-        $totalPendentes = Student::where('is_atypical', true)
+        $totalPendentes = Student::where(function ($q) {
+                foreach (Student::PUBLICO_ALVO_FIELDS as $f) { $q->orWhere($f, true); }
+            })
             ->with(['documents' => fn($q) => $q->where('year', $ano)->select('id', 'student_id', 'type')])
             ->get()
             ->filter(function ($aluno) {

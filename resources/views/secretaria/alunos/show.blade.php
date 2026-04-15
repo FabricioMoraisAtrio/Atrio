@@ -3,10 +3,14 @@
 
 @section('content')
 <div style="margin-bottom: 24px;">
-    <a href="{{ route('secretaria.alunos.index') }}"
+    @php
+        $backUrl   = request('back') ? urldecode(request('back')) : route('secretaria.alunos.index');
+        $backLabel = request('back') ? 'Voltar' : 'Voltar para ' . strtolower(term('alunos'));
+    @endphp
+    <a href="{{ $backUrl }}"
        style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Voltar para {{ strtolower(term('alunos')) }}
+        {{ $backLabel }}
     </a>
 
     <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -50,19 +54,24 @@
 
 {{-- Responsáveis --}}
 @if($aluno->responsavel_nome || $aluno->responsavel_2_nome)
-<div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 16px 20px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 24px;">
-    @if($aluno->responsavel_nome)
+<div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px; margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    @foreach([
+        ['label' => 'Responsável',    'nome' => $aluno->responsavel_nome,    'email' => $aluno->responsavel_email,    'tel' => $aluno->responsavel_telefone],
+        ['label' => '2º Responsável', 'nome' => $aluno->responsavel_2_nome,  'email' => $aluno->responsavel_2_email,  'tel' => $aluno->responsavel_2_telefone],
+    ] as $resp)
+    @if($resp['nome'])
     <div>
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">Responsável</p>
-        <p style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">{{ $aluno->responsavel_nome }}</p>
+        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">{{ $resp['label'] }}</p>
+        <p style="font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 4px;">{{ $resp['nome'] }}</p>
+        @if($resp['email'])
+        <a href="mailto:{{ $resp['email'] }}" style="font-size: 12px; color: #004B8D; text-decoration: none; display: block; margin-bottom: 2px;">{{ $resp['email'] }}</a>
+        @endif
+        @if($resp['tel'])
+        <a href="tel:{{ preg_replace('/\D/', '', $resp['tel']) }}" style="font-size: 12px; color: #6B7280; text-decoration: none;">{{ $resp['tel'] }}</a>
+        @endif
     </div>
     @endif
-    @if($aluno->responsavel_2_nome)
-    <div>
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">2º Responsável</p>
-        <p style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">{{ $aluno->responsavel_2_nome }}</p>
-    </div>
-    @endif
+    @endforeach
 </div>
 @endif
 
@@ -75,7 +84,11 @@
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
         <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Perfil</p>
         @if($aluno->is_atypical)
-            <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+            @if($aluno->is_publico_alvo)
+                <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+            @else
+                <span style="background: #FEF3C7; color: #92400E; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Atípico</span>
+            @endif
             @if($aluno->condition)
                 <p style="font-size: 13px; color: #6B7280; margin: 6px 0 0;">{{ $aluno->condition }}</p>
             @endif
@@ -104,50 +117,17 @@
     </div>
 </div>
 
-{{-- Turmas --}}
-<div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 24px; margin-bottom: 16px;">
-    <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 16px;">Turmas</h3>
-
-    @if($aluno->schoolClasses->isEmpty())
-        <p style="font-size: 13px; color: #9CA3AF;">Nenhuma turma vinculada.</p>
-    @else
-        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
-            @foreach($aluno->schoolClasses as $turma)
-                <span style="background: #E8F0F9; color: #004B8D; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px;">
-                    {{ $turma->name }} — {{ $turma->shift }} {{ $turma->year }}
-                </span>
-            @endforeach
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('secretaria.alunos.attachClass', $aluno) }}"
-          style="display: flex; gap: 10px; align-items: center;">
-        @csrf
-        <select name="school_class_id"
-                style="border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
-            <option value="">Vincular turma</option>
-            @foreach($turmas as $turma)
-                <option value="{{ $turma->id }}">{{ $turma->name }} — {{ $turma->shift }}</option>
-            @endforeach
-        </select>
-        <button type="submit"
-                style="background: #111827; color: white; border: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-            Vincular
-        </button>
-    </form>
-</div>
-
 {{-- Documentos --}}
 @php
     $docsAno    = $aluno->documents->where('year', date('Y'));
-    $docsVisiveis = $docsAno->whereIn('type', ['estudo_caso', 'paee', 'pei_consolidado']);
+    $docsVisiveis = $docsAno->whereIn('type', ['paee', 'pei_consolidado']);
     $peiConsolidadoDoc = $docsAno->firstWhere('type', 'pei_consolidado');
 @endphp
 <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 24px; margin-bottom: 16px;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Documentos {{ date('Y') }}</h3>
         <div style="display: flex; gap: 8px;">
-            @foreach(['estudo_caso' => 'Estudo de Caso', 'paee' => 'PAEE'] as $tipo => $label)
+            @foreach(['paee' => 'PAEE'] as $tipo => $label)
                 @unless($docsVisiveis->where('type', $tipo)->count())
                     <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => $tipo]) }}"
                        style="font-size: 12px; background: #F3F4F6; color: #374151; font-weight: 600; padding: 6px 12px; border-radius: 8px; text-decoration: none;">
@@ -164,9 +144,9 @@
         </div>
     @endif
 
-    {{-- Estudo de Caso e PAEE --}}
-    @foreach($docsVisiveis->whereIn('type', ['estudo_caso', 'paee']) as $doc)
-        <a href="{{ route('secretaria.documentos.show', $doc) }}"
+    {{-- PAEE --}}
+    @foreach($docsVisiveis->whereIn('type', ['paee']) as $doc)
+        <a href="{{ route('secretaria.documentos.show', $doc) }}?back={{ urlencode(url()->current()) }}"
            style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none; margin-bottom: 4px;"
            onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
             <div style="display: flex; align-items: center; gap: 10px;">
@@ -201,7 +181,7 @@
         @endunless
     </a>
 
-    @if($docsVisiveis->whereIn('type', ['estudo_caso', 'paee'])->isEmpty() && !$peiConsolidadoDoc)
+    @if($docsVisiveis->whereIn('type', ['paee'])->isEmpty() && !$peiConsolidadoDoc)
         <p style="font-size: 13px; color: #9CA3AF;">Nenhum documento criado para {{ date('Y') }}.</p>
     @endif
 </div>

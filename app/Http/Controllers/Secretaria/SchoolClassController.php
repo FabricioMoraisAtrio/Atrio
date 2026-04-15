@@ -10,7 +10,18 @@ class SchoolClassController extends Controller
 {
     public function index()
     {
-        $turmas = SchoolClass::withCount('students')->latest()->get();
+        $year   = date('Y');
+        $turmas = SchoolClass::where('school_id', session('school_id'))
+            ->withCount('students')
+            ->with([
+                'students' => fn($q) => $q->orderBy('name')->with([
+                    'documents' => fn($d) => $d->whereYear('created_at', $year)
+                        ->whereIn('type', ['estudo_caso', 'paee', 'pei', 'pei_consolidado']),
+                    'laudos',
+                ]),
+            ])
+            ->orderBy('name')
+            ->get();
         return view('secretaria.turmas.index', compact('turmas'));
     }
 
@@ -65,8 +76,14 @@ class SchoolClassController extends Controller
             ->with('success', 'Turma removida.');
     }
     public function show(SchoolClass $turma)
-{
-    $turma->load(['students', 'teachers']);
-    return view('secretaria.turmas.show', compact('turma'));
-}
+    {
+        $year = date('Y');
+        $turma->load([
+            'teachers',
+            'students.documents' => fn($q) => $q->whereYear('created_at', $year)
+                ->whereIn('type', ['estudo_caso', 'paee', 'pei', 'pei_consolidado']),
+            'students.laudos',
+        ]);
+        return view('secretaria.turmas.show', compact('turma'));
+    }
 }

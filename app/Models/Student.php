@@ -10,12 +10,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends Model
 {
+    /** Condições que enquadram o aluno como Público Alvo da Educação Especial. */
+    public const PUBLICO_ALVO_FIELDS = [
+        'cid_autismo', 'cid_tgd', 'cid_down', 'cid_ahsd',
+        'cid_deficiencia_intelectual', 'cid_deficiencia_visual',
+        'cid_deficiencia_auditiva', 'cid_dfm',
+    ];
+
 protected $fillable = [
     'school_id', 'name', 'photo', 'registration_number',
-    'birth_date', 'responsavel_nome', 'responsavel_2_nome',
+    'birth_date',
+    'responsavel_nome', 'responsavel_email', 'responsavel_telefone',
+    'responsavel_2_nome', 'responsavel_2_email', 'responsavel_2_telefone',
     'is_atypical', 'condition', 'has_case_study',
     'tea_nivel_suporte',
-    'cid_autismo', 'cid_tdah', 'cid_down',
+    'cid_autismo', 'cid_tgd', 'cid_tdah', 'cid_down',
     'cid_deficiencia_intelectual', 'cid_deficiencia_visual',
     'cid_deficiencia_auditiva', 'cid_outros',
     'cid_ahsd', 'cid_dalt', 'cid_dfm', 'cid_disl', 'cid_epile',
@@ -29,6 +38,7 @@ protected function casts(): array
         'is_atypical'                 => 'boolean',
         'has_case_study'              => 'boolean',
         'cid_autismo'                 => 'boolean',
+        'cid_tgd'                     => 'boolean',
         'cid_tdah'                    => 'boolean',
         'cid_down'                    => 'boolean',
         'cid_deficiencia_intelectual' => 'boolean',
@@ -53,6 +63,15 @@ protected function casts(): array
         'cid_th'                      => 'boolean',
     ];
 }
+
+    /** Retorna true se o aluno se enquadra como Público Alvo da Educação Especial. */
+    public function getIsPublicoAlvoAttribute(): bool
+    {
+        foreach (self::PUBLICO_ALVO_FIELDS as $field) {
+            if ($this->$field) return true;
+        }
+        return false;
+    }
 
     protected static function booted(): void
     {

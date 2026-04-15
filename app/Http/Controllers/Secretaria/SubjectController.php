@@ -37,7 +37,7 @@ class SubjectController extends Controller
             'ordem'     => $data['ordem'] ?? 0,
         ]));
 
-        return redirect()->route('secretaria.subjects.show', $subject)
+        return redirect()->route('secretaria.config.index', ['tab' => 'materias'])
             ->with('success', 'Matéria criada com sucesso.');
     }
 
@@ -63,7 +63,7 @@ class SubjectController extends Controller
 
         $subject->update(array_merge($data, ['ordem' => $data['ordem'] ?? $subject->ordem]));
 
-        return redirect()->route('secretaria.subjects.show', $subject)
+        return redirect()->route('secretaria.config.index', ['tab' => 'materias'])
             ->with('success', 'Matéria atualizada.');
     }
 

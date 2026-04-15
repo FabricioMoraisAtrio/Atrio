@@ -3,8 +3,8 @@
 
 @section('content')
 <div style="margin-bottom: 28px;">
-    <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 6px;">Documentos</h1>
-    <p style="font-size: 14px; color: #9CA3AF; margin: 0;">Acesse e gerencie os documentos por tipo em uma visão consolidada.</p>
+    <h1 style="font-size: 24px; font-weight: 700; color: var(--text-1); margin: 0 0 6px;">Documentos</h1>
+    <p style="font-size: 14px; color: var(--text-4); margin: 0;">Acesse e gerencie os documentos por tipo em uma visão consolidada.</p>
 </div>
 
 @php
@@ -38,20 +38,20 @@ $cards = [
 
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
     @foreach($cards as $card)
-    <a href="{{ route($card['route']) }}" style="text-decoration: none;">
-        <div style="background: #fff; border-radius: 14px; border: 1px solid #F3F4F6; padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; height: 100%; transition: box-shadow 0.15s;"
-             onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'; this.style.borderColor='#E5E7EB';"
-             onmouseout="this.style.boxShadow='none'; this.style.borderColor='#F3F4F6';">
+    <a href="{{ route($card['route']) }}" style="text-decoration: none; display: flex;">
+        <div style="background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border); padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; width: 100%;"
+             onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.09)'; this.style.borderColor='{{ $card['cor'] }}55';"
+             onmouseout="this.style.boxShadow='none'; this.style.borderColor='var(--border)';">
 
-            <div style="width: 44px; height: 44px; border-radius: 12px; background: {{ $card['bg'] }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $card['cor'] }}" stroke-width="2">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: {{ $card['bg'] }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ $card['cor'] }}" stroke-width="2">
                     {!! $card['icon'] !!}
                 </svg>
             </div>
 
             <div style="flex: 1;">
-                <p style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 6px;">{{ $card['label'] }}</p>
-                <p style="font-size: 13px; color: #9CA3AF; margin: 0; line-height: 1.5;">{{ $card['descricao'] }}</p>
+                <p style="font-size: 15px; font-weight: 700; color: var(--text-1); margin: 0 0 6px;">{{ $card['label'] }}</p>
+                <p style="font-size: 13px; color: var(--text-3); margin: 0; line-height: 1.5;">{{ $card['descricao'] }}</p>
             </div>
 
             <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: {{ $card['cor'] }};">

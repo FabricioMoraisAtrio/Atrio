@@ -3,7 +3,7 @@
 
 @section('content')
 <div style="margin-bottom:24px;">
-    <a href="{{ route('secretaria.subjects.index') }}"
+    <a href="{{ route('secretaria.config.index', ['tab' => 'materias']) }}"
        style="font-size:13px;color:#9CA3AF;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Voltar para matérias

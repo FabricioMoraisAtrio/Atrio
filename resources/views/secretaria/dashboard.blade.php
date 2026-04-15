@@ -24,9 +24,9 @@ $cards = [
         'role'     => null,
         'module'   => 'painel',
     ],
-    // 2. Alunos
+    // 2. Cadastro de Alunos
     [
-        'label'    => term('alunos'),
+        'label'    => 'Cadastro de ' . strtolower(term('alunos')),
         'descricao'=> 'Cadastro completo dos alunos, diagnósticos e histórico.',
         'route'    => 'secretaria.alunos.index',
         'cor'      => '#009C8C',
@@ -35,18 +35,7 @@ $cards = [
         'role'     => null,
         'module'   => 'alunos',
     ],
-    // 3. Documentos de Inclusão
-    [
-        'label'    => 'Documentos de Inclusão',
-        'descricao'=> 'Estudo de Caso, PAEE, PEI e registros de atendimentos.',
-        'route'    => 'secretaria.rotinas.documentos.index',
-        'cor'      => '#7C3700',
-        'bg'       => '#F5EDE6',
-        'icon'     => '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15h6"/>',
-        'role'     => null,
-        'module'   => 'documentos',
-    ],
-    // 4. Turmas
+    // 3. Turmas
     [
         'label'    => term('turmas'),
         'descricao'=> 'Gerencie as turmas e os alunos matriculados no ano letivo.',
@@ -56,6 +45,17 @@ $cards = [
         'icon'     => '<path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
         'role'     => null,
         'module'   => 'turmas',
+    ],
+    // 4. Documentos de Inclusão
+    [
+        'label'    => 'Documentos de Inclusão',
+        'descricao'=> 'PAEE, PEI e registros de atendimentos dos alunos.',
+        'route'    => 'secretaria.rotinas.documentos.index',
+        'cor'      => '#7C3700',
+        'bg'       => '#F5EDE6',
+        'icon'     => '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15h6"/>',
+        'role'     => null,
+        'module'   => 'documentos',
     ],
     // 5. Adaptações para Prova
     [

@@ -31,7 +31,7 @@
             </div>
             <div>
                 <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0 0 4px;">E-mail</p>
-                <a href="mailto:suporte@atrio.com.br" style="font-size: 14px; color: #004B8D; text-decoration: none;">suporte@atrio.com.br</a>
+                <a href="mailto:suporte@atrio.com.br" style="font-size: 14px; color: #004B8D; text-decoration: none;">suporte@atriosystem.com.br</a>
             </div>
         </div>
 
@@ -43,7 +43,7 @@
             </div>
             <div>
                 <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0 0 4px;">WhatsApp</p>
-                <a href="https://wa.me/5500000000000" target="_blank" style="font-size: 14px; color: #009C8C; text-decoration: none;">(00) 00000-0000</a>
+                <a href="https://wa.me/5542988423965" target="_blank" style="font-size: 14px; color: #009C8C; text-decoration: none;">(42) 9 8842-3965</a>
             </div>
         </div>
 

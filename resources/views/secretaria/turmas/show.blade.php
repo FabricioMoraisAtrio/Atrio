@@ -61,7 +61,10 @@
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">{{ term('aluno') }}</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Matrícula</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
-                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Est. Caso</th>
+                <th style="text-align: center; padding: 12px 12px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Est. Caso</th>
+                <th style="text-align: center; padding: 12px 12px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">PAEE</th>
+                <th style="text-align: center; padding: 12px 12px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">PEI</th>
+                <th style="text-align: center; padding: 12px 12px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Laudo</th>
                 <th style="padding: 12px 20px;"></th>
             </tr>
         </thead>
@@ -81,18 +84,36 @@
                 <td style="padding: 14px 20px; font-size: 13px; color: #6B7280;">{{ $aluno->registration_number }}</td>
                 <td style="padding: 14px 20px;">
                     @if($aluno->is_atypical)
-                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">Atípico</span>
+                        @if($aluno->is_publico_alvo)
+                            <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+                        @else
+                            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">Atípico</span>
+                        @endif
                     @else
                         <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; padding: 3px 8px; border-radius: 20px;">Típico</span>
                     @endif
                 </td>
-                <td style="padding: 14px 20px;">
-                    @if($aluno->has_case_study)
-                        <span style="background: #ECFDF5; color: #065F46; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">✓ Preenchido</span>
+                @php
+                    $docs = $aluno->documents;
+                    $temEC    = $docs->whereIn('type', ['estudo_caso'])->isNotEmpty();
+                    $temPAEE  = $docs->whereIn('type', ['paee'])->isNotEmpty();
+                    $temPEI   = $docs->whereIn('type', ['pei', 'pei_consolidado'])->isNotEmpty();
+                    $temLaudo = $aluno->laudos->isNotEmpty();
+                @endphp
+                @foreach([
+                    ['ok' => $temEC,    'label' => 'EC'],
+                    ['ok' => $temPAEE,  'label' => 'PAEE'],
+                    ['ok' => $temPEI,   'label' => 'PEI'],
+                    ['ok' => $temLaudo, 'label' => 'Laudo'],
+                ] as $col)
+                <td style="padding: 14px 12px; text-align: center;">
+                    @if($col['ok'])
+                        <span style="background: #ECFDF5; color: #065F46; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; white-space: nowrap;">✓ Preenchido</span>
                     @else
-                        <span style="background: #FEF2F2; color: #991B1B; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">Pendente</span>
+                        <span style="background: #F3F4F6; color: #9CA3AF; font-size: 11px; padding: 3px 8px; border-radius: 20px; white-space: nowrap;">Pendente</span>
                     @endif
                 </td>
+                @endforeach
                 <td style="padding: 14px 20px; text-align: right;">
                     <a href="{{ route('secretaria.alunos.show', $aluno) }}"
                        style="font-size: 13px; color: #004B8D; text-decoration: none; font-weight: 500;">Ver</a>
@@ -100,7 +121,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" style="padding: 48px; text-align: center; color: #9CA3AF; font-size: 14px;">
+                <td colspan="7" style="padding: 48px; text-align: center; color: #9CA3AF; font-size: 14px;">
                     Nenhum {{ strtolower(term('aluno')) }} matriculado nesta {{ strtolower(term('turma')) }}.
                 </td>
             </tr>

@@ -321,7 +321,7 @@
                         $items = [
                             ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
                             ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel de Acompanhamento', 'module' => 'painel'],
-                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => term('alunos'),        'module' => 'alunos',      'badge' => $pendentesCount ?: null],
+                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Cadastro de ' . term('alunos'), 'module' => 'alunos', 'badge' => $pendentesCount ?: null],
                             ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos'],
                             ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),        'module' => 'turmas'],
                             ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],
@@ -333,10 +333,13 @@
                                 'active'   => 'secretaria.config.*',
                                 'module'   => 'configuracoes',
                             ],
+                            ['route' => 'secretaria.logs.index', 'icon' => 'log', 'label' => 'Registro de Acessos', 'admin_only' => true],
                         ];
-                        // Coordenador/orientador não vê Configurações
+                        // Coordenador/orientador não vê Configurações nem Logs
                         if (!$isAdmin) {
-                            $items = array_filter($items, fn($i) => ($i['module'] ?? '') !== 'configuracoes');
+                            $items = array_filter($items, fn($i) =>
+                                ($i['module'] ?? '') !== 'configuracoes' && empty($i['admin_only'])
+                            );
                         }
                     @endphp
                 @endhasanyrole
@@ -356,7 +359,7 @@
                             $items = [
                                 ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
                                 ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel de Acompanhamento', 'module' => 'painel'],
-                                ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => term('alunos'),       'module' => 'alunos'],
+                                ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Cadastro de ' . term('alunos'), 'module' => 'alunos'],
                                 ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos'],
                                 ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),       'module' => 'turmas'],
                                 ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],

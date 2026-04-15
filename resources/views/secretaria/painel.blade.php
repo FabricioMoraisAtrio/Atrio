@@ -104,14 +104,13 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
             default  => ['bg' => '#F3E8FF', 'text' => '#7C3AED']
         };
     @endphp
-    <a href="{{ route('secretaria.turmas.show', $turma) }}"
-       style="background: #fff; border: 1px solid #F3F4F6; border-radius: 14px; padding: 20px; text-decoration: none; display: block;"
-       onmouseover="this.style.borderColor='#004B8D'; this.style.boxShadow='0 4px 16px rgba(0,75,141,0.08)'"
-       onmouseout="this.style.borderColor='#F3F4F6'; this.style.boxShadow='none'">
+    <a href="{{ route('secretaria.turmas.index') }}?open={{ $turma->id }}"
+       style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: block; text-decoration: none; transition: border-color 0.15s;"
+       onmouseover="this.style.borderColor='#004B8D'" onmouseout="this.style.borderColor='var(--border)'">
 
         <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px;">
             <div>
-                <div style="font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 4px;">{{ $turma->name }}</div>
+                <div style="font-size: 16px; font-weight: 700; color: var(--text-1); margin-bottom: 6px;">{{ $turma->name }}</div>
                 <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; background: {{ $corTurno['bg'] }}; color: {{ $corTurno['text'] }};">
                     {{ $turno }}
                 </span>
@@ -125,44 +124,34 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
 
         <div style="display: flex; gap: 20px; margin-bottom: 16px;">
             <div>
-                <div style="font-size: 20px; font-weight: 700; color: #111827;">{{ $item['total'] }}</div>
-                <div style="font-size: 11px; color: #9CA3AF;">alunos</div>
+                <div style="font-size: 22px; font-weight: 700; color: var(--text-1); line-height: 1;">{{ $item['total'] }}</div>
+                <div style="font-size: 11px; color: var(--text-4); margin-top: 2px;">alunos</div>
             </div>
-            @if($item['atipicos'] > 0)
-            <div>
-                <div style="font-size: 20px; font-weight: 700; color: #004B8D;">{{ $item['atipicos'] }}</div>
-                <div style="font-size: 11px; color: #9CA3AF;">{{ strtolower(term('publico_alvo')) }}</div>
-            </div>
-            @endif
             @if($item['pendentes'] > 0)
             <div>
-                <div style="font-size: 20px; font-weight: 700; color: #92400E;">{{ $item['pendentes'] }}</div>
-                <div style="font-size: 11px; color: #9CA3AF;">pendentes</div>
+                <div style="font-size: 22px; font-weight: 700; color: #92400E; line-height: 1;">{{ $item['pendentes'] }}</div>
+                <div style="font-size: 11px; color: var(--text-4); margin-top: 2px;">pendentes</div>
             </div>
             @endif
         </div>
 
-        @if($item['atipicos_list']->isNotEmpty())
-        <div style="display: flex; align-items: center;">
-            @foreach($item['atipicos_list'] as $i => $aluno)
-            <div title="{{ $aluno->name }}"
-                 style="width: 28px; height: 28px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; margin-left: {{ $i > 0 ? '-8px' : '0' }}; z-index: {{ 10 - $i }}; position: relative;">
-                {{ strtoupper(substr($aluno->name, 0, 1)) }}
+        {{-- Professor regente --}}
+        @if($item['professor_regente'])
+        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--bg-2, rgba(0,75,141,0.06)); border-radius: 8px;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #004B8D; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                {{ strtoupper(substr($item['professor_regente']->name, 0, 1)) }}
             </div>
-            @endforeach
-            @if($item['atipicos'] > 5)
-            <div style="width: 28px; height: 28px; border-radius: 50%; background: #F3F4F6; color: #6B7280; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; margin-left: -8px; position: relative;">
-                +{{ $item['atipicos'] - 5 }}
+            <div>
+                <div style="font-size: 12px; font-weight: 600; color: var(--text-1); line-height: 1.2;">{{ $item['professor_regente']->name }}</div>
+                <div style="font-size: 10px; color: var(--text-4);">Professor regente</div>
             </div>
-            @endif
-            <span style="font-size: 11px; color: #9CA3AF; margin-left: 10px;">{{ strtolower(term('publico_alvo')) }}</span>
         </div>
         @else
-        <div style="font-size: 12px; color: #9CA3AF;">Sem {{ strtolower(term('alunos')) }} {{ strtolower(term('publico_alvo')) }}</div>
+        <div style="font-size: 12px; color: var(--text-4); font-style: italic;">Sem professor regente</div>
         @endif
 
         @if($item['pendentes'] > 0 || $item['professores_pendentes']->isNotEmpty())
-        <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #F9FAFB;">
+        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
             @if($item['pendentes'] > 0)
             <span style="font-size: 11px; font-weight: 600; color: #92400E; background: #FEF3C7; padding: 4px 10px; border-radius: 20px;">
                 ⚠ {{ $item['pendentes'] }} com docs incompletos
@@ -170,7 +159,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
             @endif
             @if($item['professores_pendentes']->isNotEmpty())
             <div style="margin-top: 8px;">
-                <p style="font-size: 10px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">Faltam preencher PEI:</p>
+                <p style="font-size: 10px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">Faltam preencher PEI:</p>
                 @foreach($item['professores_pendentes'] as $prof)
                     <span style="font-size: 11px; font-weight: 500; color: #DC2626; background: #FEF2F2; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-right: 4px; margin-bottom: 4px;">{{ $prof }}</span>
                 @endforeach

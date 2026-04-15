@@ -90,7 +90,7 @@
             </label>
 
             @hasrole('secretaria')
-            <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
+            <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin-bottom: 16px;">
                 <input type="checkbox" name="notify_plan_expiring" value="1"
                        {{ $user->notify_plan_expiring ? 'checked' : '' }}
                        style="margin-top: 2px; flex-shrink: 0;">
@@ -100,6 +100,19 @@
                 </div>
             </label>
             @endhasrole
+
+            <div style="border-top: 1px solid #F3F4F6; padding-top: 16px; margin-top: 4px;">
+                <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0 0 12px;">Preferências de documentos</p>
+                <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
+                    <input type="checkbox" name="pdf_preview" value="1"
+                           {{ $user->pdf_preview ? 'checked' : '' }}
+                           style="margin-top: 2px; flex-shrink: 0;">
+                    <div>
+                        <p style="font-size: 13px; font-weight: 500; color: #111827; margin: 0 0 2px;">Preview antes de baixar PDF</p>
+                        <p style="font-size: 12px; color: #9CA3AF; margin: 0;">Exibe uma pré-visualização do documento em pop-up antes do download</p>
+                    </div>
+                </label>
+            </div>
         </div>
 
         <button type="submit"

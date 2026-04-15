@@ -36,16 +36,20 @@
                 style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
             <option value="">Todos os perfis</option>
             <optgroup label="Perfil geral">
-                <option value="atipico"  {{ request('perfil') === 'atipico'  ? 'selected' : '' }}>{{ term('publico_alvo') }}</option>
-                <option value="tipico"   {{ request('perfil') === 'tipico'   ? 'selected' : '' }}>{{ term('nao_publico_alvo') }}</option>
+                <option value="atipico"      {{ request('perfil') === 'atipico'      ? 'selected' : '' }}>Atípico (qualquer condição)</option>
+                <option value="publico_alvo" {{ request('perfil') === 'publico_alvo' ? 'selected' : '' }}>{{ term('publico_alvo') }} (habilitam PEI)</option>
+                <option value="tipico"       {{ request('perfil') === 'tipico'       ? 'selected' : '' }}>{{ term('nao_publico_alvo') }}</option>
             </optgroup>
-            <optgroup label="Condição específica">
+            <optgroup label="Público Alvo — condição específica">
                 <option value="tea"         {{ request('perfil') === 'tea'         ? 'selected' : '' }}>TEA (Autismo)</option>
-                <option value="tdah"        {{ request('perfil') === 'tdah'        ? 'selected' : '' }}>TDAH</option>
+                <option value="tgd"         {{ request('perfil') === 'tgd'         ? 'selected' : '' }}>TGD</option>
                 <option value="down"        {{ request('perfil') === 'down'        ? 'selected' : '' }}>Síndrome de Down</option>
                 <option value="intelectual" {{ request('perfil') === 'intelectual' ? 'selected' : '' }}>D. Intelectual</option>
                 <option value="visual"      {{ request('perfil') === 'visual'      ? 'selected' : '' }}>D. Visual</option>
                 <option value="auditiva"    {{ request('perfil') === 'auditiva'    ? 'selected' : '' }}>D. Auditiva</option>
+            </optgroup>
+            <optgroup label="Outras condições">
+                <option value="tdah"        {{ request('perfil') === 'tdah'        ? 'selected' : '' }}>TDAH</option>
             </optgroup>
         </select>
     </div>
@@ -95,7 +99,10 @@
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Matrícula</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">{{ term('turma') }}</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
-                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Est. Caso</th>
+                <th style="text-align: center; padding: 12px 10px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Est. Caso</th>
+                <th style="text-align: center; padding: 12px 10px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">PAEE</th>
+                <th style="text-align: center; padding: 12px 10px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">PEI</th>
+                <th style="text-align: center; padding: 12px 10px; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Laudo</th>
                 <th style="padding: 12px 20px;"></th>
             </tr>
         </thead>
@@ -139,23 +146,39 @@
                 </td>
                 <td style="padding: 14px 20px;">
                     @if($aluno->is_atypical)
-                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">
-                            {{ term('publico_alvo') }}
-                        </span>
+                        @if($aluno->is_publico_alvo)
+                            <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; display: inline-block;">{{ term('publico_alvo') }}</span>
+                        @else
+                            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; display: inline-block;">Atípico</span>
+                        @endif
                     @else
                         <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; padding: 3px 8px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
                     @endif
                 </td>
-                <td style="padding: 14px 20px;">
-                    @if($aluno->has_case_study)
-                        <span style="background: #ECFDF5; color: #065F46; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">✓ Preenchido</span>
+                @php
+                    $docs     = $aluno->documents;
+                    $temEC    = $docs->firstWhere('type', 'estudo_caso');
+                    $temPAEE  = $docs->firstWhere('type', 'paee');
+                    $temPEI   = $docs->whereIn('type', ['pei','pei_consolidado'])->first();
+                    $temLaudo = $aluno->laudos->isNotEmpty();
+                @endphp
+                @foreach([
+                    ['ok' => $temEC,    'label' => 'EC'],
+                    ['ok' => $temPAEE,  'label' => 'PAEE'],
+                    ['ok' => $temPEI,   'label' => 'PEI'],
+                    ['ok' => $temLaudo, 'label' => 'Laudo'],
+                ] as $col)
+                <td style="padding: 14px 10px; text-align: center;">
+                    @if($col['ok'])
+                        <span style="background: #ECFDF5; color: #065F46; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; white-space: nowrap;">✓ Preenchido</span>
                     @else
-                        <span style="background: #FEF2F2; color: #991B1B; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">Pendente</span>
+                        <span style="background: #F3F4F6; color: #9CA3AF; font-size: 11px; padding: 3px 8px; border-radius: 20px; white-space: nowrap;">Pendente</span>
                     @endif
                 </td>
+                @endforeach
                 <td style="padding: 14px 20px; text-align: right;">
                     <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px;">
-                        <a href="{{ route('secretaria.alunos.show', $aluno) }}"
+                        <a href="{{ route('secretaria.alunos.show', $aluno) }}?back={{ urlencode(url()->current()) }}"
                            style="font-size: 13px; color: #004B8D; text-decoration: none; font-weight: 500;">Ver</a>
                         <a href="{{ route('secretaria.alunos.edit', $aluno) }}"
                            style="font-size: 13px; color: #6B7280; text-decoration: none;">Editar</a>
@@ -171,7 +194,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="6" style="padding: 48px; text-align: center; color: #9CA3AF; font-size: 14px;">
+                <td colspan="9" style="padding: 48px; text-align: center; color: #9CA3AF; font-size: 14px;">
                     Nenhum {{ strtolower(term('aluno')) }} cadastrado.
                 </td>
             </tr>

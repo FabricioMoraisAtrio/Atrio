@@ -23,6 +23,7 @@ class ProfileController extends Controller
             'password'                 => 'nullable|min:6|confirmed',
             'notify_document_pending'  => 'boolean',
             'notify_plan_expiring'     => 'boolean',
+            'pdf_preview'              => 'boolean',
         ]);
 
         // Avatar
@@ -45,6 +46,7 @@ class ProfileController extends Controller
         // Notificações
         $user->notify_document_pending = $request->boolean('notify_document_pending');
         $user->notify_plan_expiring    = $request->boolean('notify_plan_expiring');
+        $user->pdf_preview             = $request->boolean('pdf_preview');
 
         $user->save();
 
