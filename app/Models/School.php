@@ -40,7 +40,8 @@ class School extends Model
             'adaptacoes'  => 'Adaptações para Prova',
             'materias'    => 'Matérias',
             'usuarios'    => 'Usuários',
-            'configuracoes' => 'Configurações',
+            'configuracoes'  => 'Configurações',
+            'seletividade'   => 'Jornada Alimentar',
         ];
     }
 

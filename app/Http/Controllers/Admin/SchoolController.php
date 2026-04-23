@@ -63,6 +63,7 @@ class SchoolController extends Controller
             'is_active'       => true,
             'logo'            => $logoPath,
             'theme_color'     => $data['theme_color'] ?? null,
+            'modules'         => [],
         ]);
 
         $adminUser = User::create([
@@ -94,7 +95,11 @@ class SchoolController extends Controller
         $secretaria = $school->users()->whereHas('roles', fn($q) => $q->where('name', 'admin'))->first();
         $availableModules = School::availableModules();
         $settings = SchoolSetting::getAllForSchool($school->id);
-        return view('admin.schools.edit', compact('school', 'secretaria', 'availableModules', 'settings'));
+        $subjects = \App\Models\Subject::withoutGlobalScope(\App\Scopes\SchoolScope::class)
+            ->where('school_id', $school->id)
+            ->orderBy('ordem')
+            ->get();
+        return view('admin.schools.edit', compact('school', 'secretaria', 'availableModules', 'settings', 'subjects'));
     }
 
     public function updateTerminologias(Request $request, School $school)
@@ -147,8 +152,7 @@ class SchoolController extends Controller
         }
 
         $data['is_active'] = $request->boolean('is_active');
-        // null = todos os módulos habilitados; array vazio não é permitido
-        $data['modules'] = !empty($data['modules']) ? array_values($data['modules']) : null;
+        $data['modules'] = !empty($data['modules']) ? array_values($data['modules']) : [];
         $school->update(\Arr::except($data, ['secretaria_name', 'secretaria_email']));
 
         // Atualiza usuário secretaria se informado

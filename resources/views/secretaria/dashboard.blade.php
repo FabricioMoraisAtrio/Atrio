@@ -79,7 +79,18 @@ $cards = [
         'role'     => null,
         'module'   => 'usuarios',
     ],
-    // 7. Configurações
+    // 7. Jornada Alimentar
+    [
+        'label'    => 'Jornada Alimentar',
+        'descricao'=> 'Perfil alimentar dos alunos: alimentos aceitos, tolerados e recusados.',
+        'route'    => 'secretaria.seletividade.index',
+        'cor'      => '#0F766E',
+        'bg'       => '#CCFBF1',
+        'icon'     => '<path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+        'role'     => null,
+        'module'   => 'seletividade',
+    ],
+    // 8. Configurações
     [
         'label'    => 'Configurações',
         'descricao'=> 'Dados da escola, terminologias e perfis de acesso.',

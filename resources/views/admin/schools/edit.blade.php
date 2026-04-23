@@ -13,6 +13,7 @@
             'aparencia'      => 'Aparência',
             'modulos'        => 'Módulos',
             'terminologias'  => 'Terminologias',
+            'materias'       => 'Matérias',
         ] as $id => $label)
         <button type="button" onclick="switchTab('{{ $id }}')" id="tab-{{ $id }}"
                 style="padding: 9px 18px; font-size: 13px; font-weight: 600; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; color: #6B7280; transition: color .15s;">
@@ -213,6 +214,79 @@
 
     </form>
 
+    {{-- ══ ABA: MATÉRIAS (form separado) ══ --}}
+    <div id="panel-materias" class="tab-panel" style="display:none;">
+        <div class="bg-white rounded-b-xl rounded-tr-xl border border-t-0 border-gray-200 p-6">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Matérias</p>
+            <p class="text-xs text-gray-400 mb-4">Disciplinas e componentes curriculares configurados para esta escola.</p>
+
+            {{-- Lista de matérias existentes --}}
+            @if($subjects->isEmpty())
+                <p style="font-size: 13px; color: #9CA3AF; font-style: italic; margin-bottom: 24px;">Nenhuma matéria cadastrada.</p>
+            @else
+            <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden; margin-bottom: 24px;">
+                @foreach($subjects as $subject)
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; {{ !$loop->last ? 'border-bottom: 1px solid #F3F4F6;' : '' }}">
+                    <div>
+                        <span style="font-size: 13px; font-weight: 600; color: #111827;">{{ $subject->name }}</span>
+                        <span style="font-size: 11px; color: #9CA3AF; margin-left: 8px;">{{ $subject->slug }}</span>
+                        <span style="font-size: 11px; color: #6B7280; margin-left: 6px; background: #F3F4F6; padding: 1px 6px; border-radius: 4px;">{{ $subject->tipo }}</span>
+                        <span style="font-size: 11px; color: #9CA3AF; margin-left: 6px;">ordem {{ $subject->ordem }}</span>
+                    </div>
+                    <form method="POST" action="{{ route('admin.schools.materias.destroy', [$school, $subject]) }}"
+                          onsubmit="return confirm('Remover \'{{ addslashes($subject->name) }}\'?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" style="font-size: 12px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px;"
+                                onmouseover="this.style.background='#FEF2F2'" onmouseout="this.style.background='none'">
+                            Remover
+                        </button>
+                    </form>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
+            {{-- Formulário de nova matéria --}}
+            <form method="POST" action="{{ route('admin.schools.materias.store', $school) }}">
+                @csrf
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Nova matéria</p>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">Nome</label>
+                        <input type="text" name="name" placeholder="Ex: Matemática"
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">Slug</label>
+                        <input type="text" name="slug" placeholder="Ex: matematica"
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">Rótulo do responsável</label>
+                        <input type="text" name="label_responsavel" placeholder="Ex: Professor(a)"
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">Tipo</label>
+                        <select name="tipo" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                            <option value="disciplina">Disciplina</option>
+                            <option value="regente">Regente</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">Ordem</label>
+                        <input type="number" name="ordem" value="0" min="0"
+                               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                    </div>
+                </div>
+                <button type="submit"
+                        class="bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg px-4 py-2 transition">
+                    Adicionar matéria
+                </button>
+            </form>
+        </div>
+    </div>
+
     {{-- ══ ABA: TERMINOLOGIAS (form separado) ══ --}}
     <form id="panel-terminologias" class="tab-panel" style="display:none;"
           method="POST" action="{{ route('admin.schools.terminologias.update', $school) }}">
@@ -268,7 +342,7 @@
 </div>
 
 <script>
-const TABS = ['escola', 'aparencia', 'modulos', 'terminologias'];
+const TABS = ['escola', 'aparencia', 'modulos', 'terminologias', 'materias'];
 
 function switchTab(active) {
     TABS.forEach(id => {
@@ -281,9 +355,9 @@ function switchTab(active) {
         tab.style.borderColor = isActive ? '#111827' : 'transparent';
     });
 
-    // Oculta botão de salvar principal na aba de terminologias
+    // Oculta botão de salvar principal em abas com form próprio
     const saveMain = document.getElementById('save-main');
-    if (saveMain) saveMain.style.display = active === 'terminologias' ? 'none' : 'flex';
+    if (saveMain) saveMain.style.display = ['terminologias', 'materias'].includes(active) ? 'none' : 'flex';
 
     sessionStorage.setItem('schoolTab', active);
 }

@@ -108,4 +108,9 @@ protected function casts(): array
         return $this->hasMany(Laudo::class)->latest();
     }
 
+    public function foodItems(): HasMany
+    {
+        return $this->hasMany(StudentFoodItem::class);
+    }
+
 }

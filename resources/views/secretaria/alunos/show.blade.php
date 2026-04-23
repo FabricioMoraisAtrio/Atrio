@@ -186,6 +186,65 @@
     @endif
 </div>
 
+{{-- Jornada Alimentar --}}
+@php
+    $school = auth()->user()->school;
+    $temModuloAlimentar = !$school || $school->hasModule('seletividade');
+    $foodItems = $aluno->foodItems ?? collect();
+@endphp
+@if($temModuloAlimentar && $foodItems->isNotEmpty())
+<div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); padding: 24px; margin-bottom: 16px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h3 style="font-size: 14px; font-weight: 600; color: var(--text-1); margin: 0;">Jornada Alimentar</h3>
+        <a href="{{ route('secretaria.seletividade.show', $aluno) }}"
+           style="font-size: 12px; color: #004B8D; text-decoration: none; font-weight: 500;">Gerenciar →</a>
+    </div>
+    @php
+        $statuses = \App\Models\StudentFoodItem::STATUSES;
+        $categories = \App\Models\StudentFoodItem::CATEGORIES;
+        $byCategory = $foodItems->groupBy('category');
+    @endphp
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <thead>
+            <tr style="background: var(--bg-sidebar);">
+                <th style="text-align: left; padding: 8px 14px; font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Categoria</th>
+                <th style="text-align: left; padding: 8px 14px; font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Alimentos</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($byCategory as $catKey => $items)
+            <tr style="border-top: 1px solid var(--border);">
+                <td style="padding: 10px 14px; font-size: 12px; font-weight: 600; color: var(--text-2); white-space: nowrap; vertical-align: top;">
+                    {{ $categories[$catKey] ?? ucfirst($catKey) }}
+                </td>
+                <td style="padding: 10px 14px;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                        @foreach($items as $item)
+                        @php $s = $statuses[$item->status]; @endphp
+                        <span style="font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; background: {{ $s['bg'] }}; color: {{ $s['color'] }};" title="{{ $s['label'] }}">
+                            {{ $item->name }}
+                        </span>
+                        @endforeach
+                    </div>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <div style="display: flex; gap: 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+        @foreach($statuses as $key => $s)
+        @php $count = $foodItems->where('status', $key)->count(); @endphp
+        @if($count > 0)
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $s['color'] }}; display: inline-block; flex-shrink: 0;"></span>
+            <span style="font-size: 11px; color: var(--text-3);">{{ $s['label'] }}: <strong style="color: var(--text-1);">{{ $count }}</strong></span>
+        </div>
+        @endif
+        @endforeach
+    </div>
+</div>
+@endif
+
 {{-- Mural --}}
 <x-observation-feed :aluno="$aluno" role="secretaria" />
 

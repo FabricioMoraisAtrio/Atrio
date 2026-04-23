@@ -16,11 +16,11 @@ use App\Http\Controllers\Secretaria\LaudoController;
 use App\Http\Controllers\Secretaria\RotinaAdaptacoesController;
 use App\Http\Controllers\Secretaria\Rotinas\DocumentosHubController;
 use App\Http\Controllers\Secretaria\Rotinas\RotinaDocumentoListController;
-use App\Http\Controllers\Secretaria\SubjectController;
 use App\Http\Controllers\Secretaria\Config\ConfigController;
 use App\Http\Controllers\Secretaria\Config\SchoolRoleController;
 use App\Http\Controllers\Secretaria\PeiConsolidadoController;
 use App\Http\Controllers\Secretaria\LogController;
+use App\Http\Controllers\Secretaria\SeletividadeController;
 
 
 
@@ -117,7 +117,7 @@ Route::middleware(['school.module:alunos', 'can:laudos.anexar'])->group(function
 });
 
 // ─── Observações ──────────────────────────────────────────────────────────────
-Route::middleware('can:observacoes.criar')->group(function () {
+Route::middleware(['school.module:alunos', 'can:observacoes.criar'])->group(function () {
     Route::post('alunos/{aluno}/observacoes',       [ObservationController::class, 'store'])->name('alunos.observacoes.store');
     Route::delete('observacoes/{observation}',      [ObservationController::class, 'destroy'])->name('observacoes.destroy');
 });
@@ -141,20 +141,27 @@ Route::middleware('school.module:usuarios')->group(function () {
     });
 });
 
-// ─── Matérias ─────────────────────────────────────────────────────────────────
-Route::middleware(['school.module:materias', 'can:materias.gerenciar'])->group(function () {
-    Route::resource('materias', SubjectController::class)
-        ->names('subjects')
-        ->parameters(['materias' => 'subject']);
-    Route::post('materias/{subject}/metas', [SubjectController::class, 'saveItems'])->name('subjects.saveItems');
-});
 
 // ─── Adaptações para Prova ────────────────────────────────────────────────────
-Route::middleware('school.module:adaptacoes')->group(function () {
+Route::middleware(['school.module:adaptacoes', 'can:adaptacoes.ver'])->group(function () {
     Route::get('rotinas/adaptacoes-prova', RotinaAdaptacoesController::class)->name('rotinas.adaptacoes');
 });
 
 // ─── Logs de acesso ───────────────────────────────────────────────────────────
-Route::middleware('can:escola.configurar')->group(function () {
+Route::middleware(['school.module:configuracoes', 'can:escola.configurar'])->group(function () {
     Route::get('logs', [LogController::class, 'index'])->name('logs.index');
+});
+
+// ─── Seletividade Alimentar ───────────────────────────────────────────────────
+Route::middleware('school.module:seletividade')->group(function () {
+    Route::middleware('can:seletividade.ver')->group(function () {
+        Route::get('seletividade',                         [SeletividadeController::class, 'index'])->name('seletividade.index');
+        Route::get('seletividade/exportar',                [SeletividadeController::class, 'export'])->name('seletividade.export');
+        Route::get('alunos/{aluno}/seletividade',          [SeletividadeController::class, 'show'])->name('seletividade.show');
+        Route::get('alunos/{aluno}/seletividade/exportar', [SeletividadeController::class, 'exportIndividual'])->name('seletividade.export.individual');
+    });
+    Route::middleware('can:seletividade.gerenciar')->group(function () {
+        Route::post('alunos/{aluno}/seletividade',         [SeletividadeController::class, 'store'])->name('seletividade.store');
+        Route::delete('seletividade/{item}',               [SeletividadeController::class, 'destroy'])->name('seletividade.destroy');
+    });
 });

@@ -47,11 +47,15 @@ class SchoolRoleController extends Controller
                 'usuarios.editar' => 'Editar usuários',
                 'usuarios.deletar'=> 'Remover usuários',
             ],
-            'Matérias' => [
-                'materias.gerenciar' => 'Criar, editar e remover matérias',
+            'Jornada Alimentar' => [
+                'seletividade.ver'      => 'Visualizar perfis alimentares',
+                'seletividade.gerenciar'=> 'Registrar e remover alimentos',
+            ],
+            'Adaptações para Prova' => [
+                'adaptacoes.ver' => 'Visualizar adaptações para prova',
             ],
             'Relatórios & Configuração' => [
-                'relatorios.exportar' => 'Exportar relatórios',
+                'relatorios.exportar' => 'Exportar relatórios gerais',
                 'escola.configurar'   => 'Configurar escola',
             ],
         ];

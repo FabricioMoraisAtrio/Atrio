@@ -109,6 +109,7 @@ public function show(Student $aluno)
         'schoolClasses:id,name,shift,year',
         'documents' => fn($q) => $q->where('year', date('Y'))->with('author:id,name'),
         'observations' => fn($q) => $q->with('user:id,name')->latest()->take(20),
+        'foodItems',
     ]);
 
     $turmas = SchoolClass::where('year', date('Y'))->orderBy('name')->get(['id','name','shift']);

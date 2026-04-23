@@ -252,10 +252,8 @@
 
         /* ── STATS ── */
         .stats-bar {
-            background: var(--blue-pale);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            padding: 36px 40px;
+            background: linear-gradient(180deg, #003972 0%, #002D5A 100%);
+            padding: 40px 40px;
         }
         .stats-inner {
             max-width: 1100px;
@@ -269,12 +267,12 @@
         .stat-number {
             font-size: 36px;
             font-weight: 800;
-            color: var(--blue);
+            color: #60CFCA;
             letter-spacing: -1px;
         }
         .stat-label {
             font-size: 12px;
-            color: var(--muted);
+            color: rgba(255,255,255,0.55);
             letter-spacing: 0.5px;
             margin-top: 4px;
         }
@@ -706,24 +704,49 @@
         /* ── RESPONSIVE ── */
         @media (max-width: 900px) {
             .nav-links { display: none; }
+            section { padding: 72px 28px; }
+            .stats-bar { padding: 32px 28px; }
             .features-grid { grid-template-columns: 1fr 1fr; }
             .docs-grid { grid-template-columns: 1fr 1fr; }
             .steps-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
             .steps-grid::before { display: none; }
             .roles-grid { grid-template-columns: 1fr; }
             .stats-inner { grid-template-columns: repeat(2, 1fr); }
+            /* legislação */
+            .leg-intro { grid-template-columns: 1fr; gap: 32px; margin-bottom: 40px; }
+            .leg-cards { grid-template-columns: 1fr 1fr; gap: 14px; }
+            .leg-card { padding: 20px 18px; }
+            .leg-card-desc { display: none; }
+            .cta-cards { flex-direction: column; align-items: center; }
         }
         @media (max-width: 580px) {
-            section { padding: 64px 20px; }
-            .nav { padding: 0 20px; }
+            section { padding: 56px 16px; }
+            .stats-bar { padding: 28px 16px; }
+            .nav { padding: 0 16px; }
+            .hero { padding: 64px 16px 80px; }
             .features-grid { grid-template-columns: 1fr; }
             .docs-grid { grid-template-columns: 1fr; }
-            .steps-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr 1fr; }
             .roles-grid { grid-template-columns: 1fr; }
-            .stats-inner { grid-template-columns: 1fr 1fr; }
+            .stats-inner { grid-template-columns: 1fr 1fr; gap: 16px; }
+            .stat-number { font-size: 28px; }
             .hero-actions { flex-direction: column; align-items: center; }
-            .footer { flex-direction: column; text-align: center; }
+            .footer { flex-direction: column; text-align: center; padding: 28px 16px; }
             .footer-links { justify-content: center; }
+            /* legislação mobile */
+            .leg-intro { grid-template-columns: 1fr; gap: 24px; margin-bottom: 28px; }
+            .leg-cards { grid-template-columns: 1fr; gap: 10px; }
+            .leg-card { padding: 16px 16px; border-radius: 10px; }
+            .leg-card-desc { display: none; }
+            .leg-card-title { font-size: 13px; margin-bottom: 8px; }
+            .leg-card-law { font-size: 10px; }
+            .leg-card-items { gap: 5px; }
+            .leg-card-items li { font-size: 11px; }
+            .leg-pill { padding: 10px 14px; gap: 10px; }
+            .leg-pill-text { font-size: 11px; }
+            .section-title { font-size: clamp(22px, 6vw, 32px); }
+            .section-lead { font-size: 14px; margin-bottom: 36px; }
+            .cta-card { width: 100%; max-width: 320px; padding: 24px 28px; }
         }
     </style>
 </head>

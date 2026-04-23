@@ -27,8 +27,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'observacoes.criar',
             // Usuários
             'usuarios.ver', 'usuarios.criar', 'usuarios.editar', 'usuarios.deletar',
-            // Matérias
-            'materias.gerenciar',
+            // Jornada Alimentar
+            'seletividade.ver',
+            'seletividade.gerenciar',
+            // Adaptações para Prova
+            'adaptacoes.ver',
             // Relatórios & Configuração
             'relatorios.exportar',
             'escola.configurar',
@@ -49,22 +52,24 @@ class RolesAndPermissionsSeeder extends Seeder
             'escola.configurar',
         ]));
 
-        // Orientador: foco pedagógico — sem usuários e sem turmas/matérias
+        // Orientador: foco pedagógico — sem usuários, sem turmas, sem configuração
         $orientador = Role::firstOrCreate(['name' => 'orientador']);
         $orientador->syncPermissions(array_diff($permissions, [
             'usuarios.ver', 'usuarios.criar', 'usuarios.editar', 'usuarios.deletar',
             'turmas.gerenciar',
-            'materias.gerenciar',
             'escola.configurar',
+            'relatorios.exportar',
         ]));
 
-        // Professor: apenas visualizar alunos, criar/editar PEI e observações
+        // Professor: visualizar alunos/turmas, PEI, observações e leitura de Jornada/Adaptações
         $professor = Role::firstOrCreate(['name' => 'professor']);
         $professor->syncPermissions([
             'alunos.ver',
             'turmas.ver',
             'pei.ver', 'pei.criar', 'pei.editar',
             'observacoes.criar',
+            'seletividade.ver',
+            'adaptacoes.ver',
         ]);
 
     }
