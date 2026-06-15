@@ -11,7 +11,7 @@
 
 <div style="max-width: 720px; margin: 0 auto; padding: 48px 24px;">
     <div style="margin-bottom: 32px;">
-        <a href="{{ route('login') }}" style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+        <a href="{{ route('home') }}" style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Voltar
         </a>
