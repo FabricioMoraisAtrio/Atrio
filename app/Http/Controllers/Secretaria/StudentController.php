@@ -73,6 +73,14 @@ public function index(\Illuminate\Http\Request $request)
             'laudo_arquivo'               => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
+        $school = \App\Models\School::find(session('school_id'));
+        $currentCount = \App\Models\Student::count();
+        if ($currentCount >= $school->max_students) {
+            return back()->withErrors([
+                'limit' => "Limite de {$school->max_students} alunos atingido para o plano {$school->plan}."
+            ]);
+        }
+
         $data['school_id'] = session('school_id');
 
         if ($request->hasFile('photo')) {
@@ -88,14 +96,6 @@ public function index(\Illuminate\Http\Request $request)
         }
         // is_atypical = true se qualquer CID marcado ou checkbox manual
         $data['is_atypical'] = $anyCid || $request->boolean('is_atypical');
-
-        $school = \App\Models\School::find(session('school_id'));
-        $currentCount = \App\Models\Student::count();
-        if ($currentCount >= $school->max_students) {
-            return back()->withErrors([
-                'limit' => "Limite de {$school->max_students} alunos atingido para o plano {$school->plan}."
-            ]);
-        }
 
         unset($data['laudo_tipo'], $data['laudo_data_laudo'], $data['laudo_descricao'], $data['laudo_arquivo']);
 
