@@ -81,6 +81,9 @@
         [style*="background: #F5EDE6"],[style*="background:#F5EDE6"] { background: rgba(124,55,0,0.18) !important; }
         [style*="background: #F3E8FF"],[style*="background:#F3E8FF"] { background: rgba(139,92,246,0.18) !important; }
         [style*="background: #EDE9FE"],[style*="background:#EDE9FE"] { background: rgba(109,40,217,0.18) !important; }
+        [style*="background: #F5F3FF"],[style*="background:#F5F3FF"] { background: rgba(139,92,246,0.18) !important; }
+        [style*="background: #FAFAFF"],[style*="background:#FAFAFF"] { background: rgba(139,92,246,0.08) !important; }
+        [style*="background: #F8FAFF"],[style*="background:#F8FAFF"] { background: var(--bg-hover) !important; }
         [style*="background: #EFF6E8"],[style*="background:#EFF6E8"] { background: rgba(61,122,39,0.15) !important; }
         [style*="background: #FFF4E6"],[style*="background:#FFF4E6"] { background: rgba(199,122,0,0.15) !important; }
         [style*="background: #F0F5FF"],[style*="background:#F0F5FF"] { background: rgba(59,91,219,0.15) !important; }
@@ -105,6 +108,9 @@
         [style*="border: 1px solid #E6F5F4"],[style*="border:1px solid #E6F5F4"] { border-color: rgba(0,156,140,0.3) !important; }
         [style*="border: 1px solid #F0EBF8"],[style*="border:1px solid #F0EBF8"] { border-color: rgba(109,40,217,0.3) !important; }
         [style*="border: 1px solid #C5D8F0"],[style*="border:1px solid #C5D8F0"] { border-color: var(--border) !important; }
+        [style*="border: 1.5px solid #D8B4FE"],[style*="border:1.5px solid #D8B4FE"] { border-color: rgba(139,92,246,0.35) !important; }
+        [style*="border-bottom: 1px solid #D8B4FE"],[style*="border-bottom:1px solid #D8B4FE"] { border-color: rgba(139,92,246,0.35) !important; }
+        [style*="border: 1px solid #EDE9FE"],[style*="border:1px solid #EDE9FE"] { border-color: rgba(139,92,246,0.25) !important; }
 
         /* ── DARK: textos de badge com cor forte ── */
         [data-theme="dark"] [style*="color: #065F46"],[data-theme="dark"] [style*="color:#065F46"] { color: #6EDDB8 !important; }
@@ -118,6 +124,7 @@
         [data-theme="dark"] [style*="color: #3D7A27"],[data-theme="dark"] [style*="color:#3D7A27"] { color: #86EFAC !important; }
         [data-theme="dark"] [style*="color: #B45309"],[data-theme="dark"] [style*="color:#B45309"] { color: #FCD34D !important; }
         [data-theme="dark"] [style*="color: #6D28D9"],[data-theme="dark"] [style*="color:#6D28D9"] { color: #C4B5FD !important; }
+        [data-theme="dark"] [style*="color: #5B21B6"],[data-theme="dark"] [style*="color:#5B21B6"] { color: #C4B5FD !important; }
         [data-theme="dark"] [style*="color: #1E40AF"],[data-theme="dark"] [style*="color:#1E40AF"] { color: #93C5FD !important; }
         [data-theme="dark"] [style*="color: #1D4ED8"],[data-theme="dark"] [style*="color:#1D4ED8"] { color: #60A5FA !important; }
 
@@ -298,7 +305,7 @@
             </a>
         </div>
 
-        <nav style="flex: 1; padding: 16px 12px; overflow-y: auto;">
+        <nav style="flex: 1; padding: 16px 12px; overflow-y: auto; display: flex; flex-direction: column;">
             @auth
                 @php
                     $school     = auth()->user()->school;
@@ -321,11 +328,13 @@
                         $items = [
                             ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
                             ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel de Acompanhamento', 'module' => 'painel'],
+                            ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),        'module' => 'turmas'],
                             ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Cadastro de ' . term('alunos'), 'module' => 'alunos', 'badge' => $pendentesCount ?: null],
                             ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos'],
-                            ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),        'module' => 'turmas'],
                             ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],
                             ['route' => 'secretaria.seletividade.index',         'icon' => 'food',    'label' => 'Jornada Alimentar', 'module' => 'seletividade'],
+                        ];
+                        $footerItems = [
                             ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários',            'module' => 'usuarios'],
                             [
                                 'route'    => 'secretaria.config.index',
@@ -338,7 +347,7 @@
                         ];
                         // Coordenador/orientador não vê Configurações nem Logs
                         if (!$isAdmin) {
-                            $items = array_filter($items, fn($i) =>
+                            $footerItems = array_filter($footerItems, fn($i) =>
                                 ($i['module'] ?? '') !== 'configuracoes' && empty($i['admin_only'])
                             );
                         }
@@ -346,11 +355,14 @@
                 @endhasanyrole
 
                 @hasrole('professor')
-                    @php $items = [
-                        ['route' => 'professor.dashboard',    'icon' => 'home',     'label' => 'Início'],
-                        ['route' => 'professor.painel',       'icon' => 'grid',     'label' => 'Painel de Acompanhamento'],
-                        ['route' => 'professor.turmas.index', 'icon' => 'academic', 'label' => 'Turmas'],
-                    ]; @endphp
+                    @php
+                        $items = [
+                            ['route' => 'professor.dashboard',    'icon' => 'home',     'label' => 'Início'],
+                            ['route' => 'professor.painel',       'icon' => 'grid',     'label' => 'Painel de Acompanhamento'],
+                            ['route' => 'professor.turmas.index', 'icon' => 'academic', 'label' => 'Turmas'],
+                        ];
+                        $footerItems = [];
+                    @endphp
                 @endhasrole
 
                 @php
@@ -360,11 +372,13 @@
                             $items = [
                                 ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
                                 ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel de Acompanhamento', 'module' => 'painel'],
+                                ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),       'module' => 'turmas'],
                                 ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Cadastro de ' . term('alunos'), 'module' => 'alunos'],
                                 ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos'],
-                                ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),       'module' => 'turmas'],
                                 ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],
                                 ['route' => 'secretaria.seletividade.index',         'icon' => 'food',    'label' => 'Jornada Alimentar', 'module' => 'seletividade'],
+                            ];
+                            $footerItems = [
                                 ['route' => 'secretaria.usuarios.index',             'icon' => 'user',    'label' => 'Usuários',           'module' => 'usuarios'],
                             ];
                         }
@@ -372,49 +386,18 @@
                 @endphp
 
                 @foreach($items ?? [] as $item)
-                    @php
-                        if (isset($item['module']) && !$hasModule($item['module'])) continue;
-                        $activePattern = $item['active'] ?? ($item['route'] . '.*');
-                        $children      = $item['children'] ?? [];
-                        $childActive   = collect($children)->contains(fn($c) => request()->routeIs($c['route']) || request()->routeIs($c['active'] ?? ($c['route'] . '.*')));
-                        $isActive      = request()->routeIs($item['route']) || request()->routeIs($activePattern) || $childActive;
-                        $badge         = $item['badge'] ?? null;
-                        $hasChildren   = !empty($children);
-                    @endphp
-                    <a href="{{ route($item['route']) }}"
-                       style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 8px; margin-bottom: 2px; font-size: 14px; font-weight: 500; text-decoration: none;
-                              {{ $isActive ? 'background: var(--accent-bg,#E8F0F9); color: var(--accent,#004B8D);' : 'color: #6B7280;' }}">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            @include('layouts.partials.icon', ['icon' => $item['icon'], 'active' => $isActive])
-                            {{ $item['label'] }}
-                        </div>
-                        @if($badge)
-                            <span style="background: #EF4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px;">{{ $badge }}</span>
-                        @elseif($hasChildren)
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                 style="{{ $isActive ? 'transform:rotate(90deg);' : '' }} transition: transform 0.15s;">
-                                <polyline points="9 18 15 12 9 6"/>
-                            </svg>
-                        @endif
-                    </a>
-
-                    @if($hasChildren && $isActive)
-                        @foreach($children as $child)
-                            @php
-                                if (isset($child['module']) && !$hasModule($child['module'])) continue;
-                                $childActivePattern = $child['active'] ?? ($child['route'] . '.*');
-                                $childIsActive = request()->routeIs($child['route']) || request()->routeIs($childActivePattern);
-                                $childHref = route($child['route'], $child['params'] ?? []);
-                            @endphp
-                            <a href="{{ $childHref }}"
-                               style="display: flex; align-items: center; gap: 10px; padding: 8px 12px 8px 36px; border-radius: 8px; margin-bottom: 2px; font-size: 13px; font-weight: 500; text-decoration: none;
-                                      {{ $childIsActive ? 'background: var(--accent-bg,#E8F0F9); color: var(--accent,#004B8D);' : 'color: #9CA3AF;' }}">
-                                @include('layouts.partials.icon', ['icon' => $child['icon'], 'active' => $childIsActive])
-                                {{ $child['label'] }}
-                            </a>
-                        @endforeach
-                    @endif
+                    @continue(isset($item['module']) && !$hasModule($item['module']))
+                    @include('layouts.partials.sidebar-item', ['item' => $item, 'hasModule' => $hasModule])
                 @endforeach
+
+                @if(!empty($footerItems))
+                    <div style="margin-top: auto;">
+                        @foreach($footerItems as $item)
+                            @continue(isset($item['module']) && !$hasModule($item['module']))
+                            @include('layouts.partials.sidebar-item', ['item' => $item, 'hasModule' => $hasModule])
+                        @endforeach
+                    </div>
+                @endif
             @endauth
         </nav>
 
@@ -494,6 +477,12 @@
                 <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
                     {{ session('success') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div style="background: #FEF2F2; border: 1px solid #FCA5A5; color: #991B1B; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    {{ session('error') }}
                 </div>
             @endif
             @yield('content')
