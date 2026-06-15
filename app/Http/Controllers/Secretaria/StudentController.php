@@ -67,6 +67,10 @@ public function index(\Illuminate\Http\Request $request)
             'school_class_id'             => 'nullable|exists:school_classes,id',
             'tea_nivel_suporte'           => 'nullable|in:1,2,3',
             'photo'                       => 'nullable|image|max:2048',
+            'laudo_tipo'                  => 'required_with:laudo_arquivo|nullable|in:medico,psicologico,fonoaudiologico,neuropediatrico,outro',
+            'laudo_data_laudo'            => 'required_with:laudo_arquivo|nullable|date',
+            'laudo_descricao'             => 'nullable|string|max:255',
+            'laudo_arquivo'               => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $data['school_id'] = session('school_id');
@@ -93,10 +97,26 @@ public function index(\Illuminate\Http\Request $request)
             ]);
         }
 
+        unset($data['laudo_tipo'], $data['laudo_data_laudo'], $data['laudo_descricao'], $data['laudo_arquivo']);
+
         $aluno = Student::create($data);
 
         if ($request->filled('school_class_id')) {
             $aluno->schoolClasses()->attach($request->school_class_id);
+        }
+
+        if ($request->hasFile('laudo_arquivo')) {
+            $laudoPath = $request->file('laudo_arquivo')->store('laudos/' . $aluno->id, 'private');
+
+            \App\Models\Laudo::create([
+                'school_id'   => session('school_id'),
+                'student_id'  => $aluno->id,
+                'uploaded_by' => auth()->id(),
+                'tipo'        => $request->input('laudo_tipo'),
+                'descricao'   => $request->input('laudo_descricao'),
+                'arquivo'     => $laudoPath,
+                'data_laudo'  => $request->input('laudo_data_laudo'),
+            ]);
         }
 
         return redirect()->route('secretaria.alunos.index')
