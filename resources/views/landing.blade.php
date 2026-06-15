@@ -1254,5 +1254,27 @@
     <div class="footer-copy">© {{ date('Y') }} Sistema Átrio</div>
 </footer>
 
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            var hash = this.getAttribute('href');
+            var navHeight = document.querySelector('.nav').offsetHeight;
+
+            if (hash.length <= 1) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            var target = document.querySelector(hash);
+            if (target) {
+                e.preventDefault();
+                var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                window.scrollTo({ top: top, behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
