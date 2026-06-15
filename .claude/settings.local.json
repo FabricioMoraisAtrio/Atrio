@@ -4,7 +4,9 @@
       "Bash(php artisan *)",
       "Bash(xargs grep *)",
       "Bash(cat app/Http/Middleware/AdminAuth.php)",
-      "Bash(find app/ -name \"AdminAuth*\" -o -name \"admin.auth*\")"
+      "Bash(find app/ -name \"AdminAuth*\" -o -name \"admin.auth*\")",
+      "Bash(php -v)",
+      "Bash(php -r \"echo PHP_VERSION;\")"
     ]
   }
 }
