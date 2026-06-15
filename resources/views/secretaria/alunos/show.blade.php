@@ -17,7 +17,7 @@
         <div style="display: flex; align-items: center; gap: 16px;">
             <div style="position: relative; width: 110px; height: 110px; flex-shrink: 0;">
                 @if($aluno->photo)
-                    <img src="{{ asset('storage/' . $aluno->photo) }}" alt="{{ $aluno->name }}"
+                    <img src="{{ route('alunos.foto', $aluno) }}" alt="{{ $aluno->name }}"
                          style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #E5E7EB;">
                 @else
                     <div style="width: 110px; height: 110px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 36px; font-weight: 700; display: flex; align-items: center; justify-content: center;">

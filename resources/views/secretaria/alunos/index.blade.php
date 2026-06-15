@@ -114,7 +114,7 @@
                 <td style="padding: 14px 20px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         @if($aluno->photo)
-                            <img src="{{ asset('storage/' . $aluno->photo) }}" alt="{{ $aluno->name }}"
+                            <img src="{{ route('alunos.foto', $aluno) }}" alt="{{ $aluno->name }}"
                                  style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid #E5E7EB; flex-shrink: 0;">
                         @else
                             <div style="width: 34px; height: 34px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">

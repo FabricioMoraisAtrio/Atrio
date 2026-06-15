@@ -20,7 +20,7 @@
             <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
                 <div style="width: 64px; height: 64px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid #E5E7EB; background: #E8F0F9; display: flex; align-items: center; justify-content: center;">
                     @if($aluno->photo)
-                        <img id="foto-preview" src="{{ asset('storage/' . $aluno->photo) }}" style="width:100%; height:100%; object-fit:cover;" alt="">
+                        <img id="foto-preview" src="{{ route('alunos.foto', $aluno) }}" style="width:100%; height:100%; object-fit:cover;" alt="">
                     @else
                         <img id="foto-preview" src="" style="display:none; width:100%; height:100%; object-fit:cover;" alt="">
                         <span id="foto-inicial" style="font-size: 24px; font-weight: 700; color: #004B8D;">{{ strtoupper(substr($aluno->name, 0, 1)) }}</span>

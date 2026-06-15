@@ -75,6 +75,9 @@ Route::middleware(['auth', 'school.active'])->group(function () {
     Route::get('/perfil', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/perfil', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
+    // Foto do aluno — servida diretamente do disco (independe do link public/storage)
+    Route::get('/alunos/{aluno}/foto', \App\Http\Controllers\StudentPhotoController::class)->name('alunos.foto');
+
     Route::middleware('school.member')
         ->prefix('portal')->name('secretaria.')
         ->group(base_path('routes/secretaria.php'));
