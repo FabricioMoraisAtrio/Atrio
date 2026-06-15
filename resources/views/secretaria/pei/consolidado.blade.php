@@ -48,10 +48,10 @@
 @endphp
 
 <div style="margin-bottom: 24px;">
-    <a href="{{ route('secretaria.alunos.show', $aluno) }}"
+    <a href="{{ route('secretaria.rotinas.documentos.pei') }}"
        style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Voltar para {{ $aluno->name }}
+        Voltar para listagem de PEI
     </a>
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
         <div>
@@ -234,7 +234,7 @@ $equipePreenchida = collect($equipeFields)->keys()->filter(fn($k) => !empty($ec[
                 style="background: #004B8D; color: white; border: none; padding: 11px 28px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
             Salvar
         </button>
-        <a href="{{ route('secretaria.alunos.show', $aluno) }}"
+        <a href="{{ route('secretaria.rotinas.documentos.pei') }}"
            style="padding: 11px 20px; border-radius: 8px; font-size: 13px; color: #6B7280; text-decoration: none; border: 1px solid #E5E7EB;">
             Cancelar
         </a>

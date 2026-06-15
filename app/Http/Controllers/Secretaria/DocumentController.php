@@ -96,7 +96,11 @@ class DocumentController extends Controller
             );
         }
 
-        return redirect()->route('secretaria.alunos.show', $aluno)
+        $listRoute = $type === 'paee'
+            ? 'secretaria.rotinas.documentos.paee'
+            : 'secretaria.rotinas.documentos.estudo-caso';
+
+        return redirect()->route($listRoute)
             ->with('success', strtoupper($type) . ' criado com sucesso.');
     }
 
@@ -161,10 +165,17 @@ class DocumentController extends Controller
             Document::where('student_id', $student->id)
                 ->where('type', 'pei')
                 ->where('year', date('Y'))
-                ->delete();
+                ->get()
+                ->each(fn($pei) => $pei->delete());
         }
 
-        return redirect()->route('secretaria.alunos.show', $student)
+        $listRoute = match ($type) {
+            'paee' => 'secretaria.rotinas.documentos.paee',
+            'pei'  => 'secretaria.rotinas.documentos.pei',
+            default => 'secretaria.rotinas.documentos.estudo-caso',
+        };
+
+        return redirect()->route($listRoute)
             ->with('success', 'Documento removido.');
     }
 }
