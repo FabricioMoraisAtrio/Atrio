@@ -76,6 +76,14 @@ protected function casts(): array
     protected static function booted(): void
     {
         static::addGlobalScope(new SchoolScope());
+
+        static::saved(function ($student) {
+            \Illuminate\Support\Facades\Cache::forget('pendentes_count_' . $student->school_id);
+        });
+
+        static::deleted(function ($student) {
+            \Illuminate\Support\Facades\Cache::forget('pendentes_count_' . $student->school_id);
+        });
     }
 
     public function school(): BelongsTo
