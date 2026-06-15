@@ -33,6 +33,8 @@
             <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Ação</label>
             <select name="acao" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--text-1); background: var(--bg-card); outline: none;">
                 <option value="">Todas</option>
+                <option value="created"  {{ request('acao') === 'created'  ? 'selected' : '' }}>Incluído</option>
+                <option value="deleted"  {{ request('acao') === 'deleted'  ? 'selected' : '' }}>Removido</option>
                 <option value="exported" {{ request('acao') === 'exported' ? 'selected' : '' }}>Exportado (PDF/Word)</option>
                 <option value="edited"   {{ request('acao') === 'edited'   ? 'selected' : '' }}>Editado</option>
                 <option value="viewed"   {{ request('acao') === 'viewed'   ? 'selected' : '' }}>Visualizado</option>
@@ -85,13 +87,15 @@
             @foreach($logs as $log)
             @php
                 $actionConfig = match($log->action) {
+                    'created'  => ['label' => 'Incluído',     'bg' => '#ECFDF5', 'color' => '#065F46'],
+                    'deleted'  => ['label' => 'Removido',     'bg' => '#FEF2F2', 'color' => '#991B1B'],
                     'exported' => ['label' => 'Exportado',    'bg' => '#E8F0F9', 'color' => '#004B8D'],
                     'edited'   => ['label' => 'Editado',      'bg' => '#FEF3C7', 'color' => '#92400E'],
                     'viewed'   => ['label' => 'Visualizado',  'bg' => '#F3F4F6', 'color' => '#374151'],
                     default    => ['label' => ucfirst($log->action), 'bg' => '#F3F4F6', 'color' => '#374151'],
                 };
-                $docType = $log->document ? strtoupper(str_replace('_', ' ', $log->document->type)) : '—';
-                $studentName = $log->document?->student?->name ?? '—';
+                $docType = $log->document_type ? strtoupper(str_replace('_', ' ', $log->document_type)) : '—';
+                $studentName = $log->student_name ?? '—';
                 $userName    = $log->user?->name ?? '—';
             @endphp
             <tr style="border-top: 1px solid var(--border);"
@@ -110,10 +114,10 @@
                     @if($log->document)
                         <a href="{{ route('secretaria.documentos.show', $log->document) }}"
                            style="font-size: 13px; color: #004B8D; text-decoration: none; font-weight: 500;">
-                            {{ $docType }} · {{ $log->document->year }}
+                            {{ $docType }} · {{ $log->document_year }}
                         </a>
                     @else
-                        <span style="font-size: 13px; color: var(--text-3);">Documento removido</span>
+                        <span style="font-size: 13px; color: var(--text-3);">{{ $docType }} · {{ $log->document_year }} <span style="font-style: italic;">(removido)</span></span>
                     @endif
                 </td>
                 <td style="padding: 14px 20px; text-align: center;">

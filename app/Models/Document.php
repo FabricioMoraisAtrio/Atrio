@@ -29,6 +29,36 @@ class Document extends Model
     static::deleted(function ($doc) {
         \Illuminate\Support\Facades\Cache::forget('pendentes_count_' . $doc->school_id);
     });
+
+    static::created(function ($doc) {
+        DocumentAccessLog::create([
+            'school_id'     => $doc->school_id,
+            'document_id'   => $doc->id,
+            'student_id'    => $doc->student_id,
+            'user_id'       => auth()->id(),
+            'action'        => 'created',
+            'document_type' => $doc->type,
+            'document_year' => $doc->year,
+            'student_name'  => $doc->student?->name,
+            'ip'            => request()->ip(),
+            'accessed_at'   => now(),
+        ]);
+    });
+
+    static::deleting(function ($doc) {
+        DocumentAccessLog::create([
+            'school_id'     => $doc->school_id,
+            'document_id'   => $doc->id,
+            'student_id'    => $doc->student_id,
+            'user_id'       => auth()->id(),
+            'action'        => 'deleted',
+            'document_type' => $doc->type,
+            'document_year' => $doc->year,
+            'student_name'  => $doc->student?->name,
+            'ip'            => request()->ip(),
+            'accessed_at'   => now(),
+        ]);
+    });
 }
     public function school(): BelongsTo
     {

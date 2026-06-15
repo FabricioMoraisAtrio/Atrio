@@ -14,8 +14,8 @@ class LogController extends Controller
         $schoolId = session('school_id');
 
         $query = DocumentAccessLog::query()
-            ->with(['document.student', 'user'])
-            ->whereHas('document', fn($q) => $q->where('school_id', $schoolId))
+            ->with(['document', 'user'])
+            ->where('school_id', $schoolId)
             ->orderByDesc('accessed_at');
 
         if ($request->filled('usuario')) {
@@ -35,9 +35,7 @@ class LogController extends Controller
         }
 
         if ($request->filled('aluno')) {
-            $query->whereHas('document.student', fn($q) =>
-                $q->where('name', 'like', '%' . $request->input('aluno') . '%')
-            );
+            $query->where('student_name', 'like', '%' . $request->input('aluno') . '%');
         }
 
         $logs = $query->paginate(50)->withQueryString();
