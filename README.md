@@ -1,59 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Átrio
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema Átrio — SaaS multi-escola (multitenancy) para gestão de inclusão escolar: PEI, PAEE, Estudo de Caso, Laudos, Observações, Jornada Alimentar/Seletividade e Adaptações para Prova.
 
-## About Laravel
+**Stack:** Laravel 12 (PHP 8.2) · Blade · Tailwind CSS 4 · Vite · SQLite (dev)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requisitos
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.2+
+- Composer
+- Node.js + npm
+- SQLite (ou outro driver suportado pelo Laravel)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Instalação
 
-## Learning Laravel
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+npm install
+npm run build
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Ou, de uma vez:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+composer run setup
+```
 
-## Laravel Sponsors
+## Ambiente de desenvolvimento
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# Server + queue + logs + vite, tudo junto
+composer dev
 
-### Premium Partners
+# Apenas assets (modo watch)
+npm run dev
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Testes
 
-## Contributing
+```bash
+php artisan test
+php artisan test --filter NomeDoTeste
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Limpa config antes de testar
+composer test
+```
 
-## Code of Conduct
+O ambiente de teste (`phpunit.xml`) usa SQLite em memória, fila `sync` e e-mail `array`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Banco de dados
 
-## Security Vulnerabilities
+```bash
+php artisan migrate
+php artisan migrate:fresh --seed
+php artisan db:seed
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Fila (driver database)
 
-## License
+```bash
+php artisan queue:work --sleep=3 --tries=3
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Notificações diárias
+
+Rodam via scheduler às 07:00, ou manualmente:
+
+```bash
+php artisan atrio:notificacoes-diarias
+```
+
+Também disponível via `/cron/notificacoes` (com token).
+
+## Code style
+
+```bash
+vendor/bin/pint
+```
+
+Preset `laravel`, com a regra `no_unused_imports` desabilitada.
+
+## Arquitetura
+
+### Multitenancy
+
+Toda tabela de dados tem `school_id`. O global scope `App\Scopes\SchoolScope` filtra automaticamente por `session('school_id')` — aplicado em `School`, `SchoolClass`, `Student`, `Document`, `PeiSection`, `Subject`, `SubjectInventoryItem`, `Laudo`, `Observation`, `DocumentAccessLog`. O model `User` **não** usa o scope (conflita com queries internas do Spatie Permission). `session('school_id')` é gravado no login.
+
+### Roles, permissões e módulos
+
+- Permissões/roles via `spatie/laravel-permission`, seedadas em `database/seeders/RolesAndPermissionsSeeder.php`.
+- Roles built-in: `admin`, `coordenador`, `orientador` (acesso ao "portal") e `professor`.
+- Cada escola pode criar **roles customizados** via `App\Models\SchoolRole`, mapeados para roles Spatie com prefixo `s{school_id}_` e permissões próprias.
+- Rotas de portal usam middleware `can:<permissao>` (ex.: `can:alunos.ver`, `can:documentos.ver_todos`).
+- `EnsureSchoolMember` (`school.member`) libera acesso ao portal para roles built-in ou para qualquer role `s{school_id}_*`.
+- `EnsureSchoolHasModule` (`school.module:<chave>`) bloqueia rotas se o módulo não estiver habilitado em `School.modules`. Módulos disponíveis: `painel`, `alunos`, `documentos`, `turmas`, `adaptacoes`, `materias`, `usuarios`, `configuracoes`, `seletividade`.
+- `EnsureSchoolIsActive` (`school.active`) faz logout se a escola estiver inativa ou com plano vencido.
+- Guard separado `admin` (`AdminUser`) para o painel SaaS em `/superadmin`.
+
+### Rotas
+
+- `routes/web.php`: rotas públicas (login, reset de senha, landing, termos) + grupo `auth + school.active` que carrega:
+  - `routes/secretaria.php` (prefixo `/portal`, nome `secretaria.*`, middleware `school.member`);
+  - `routes/professor.php` (prefixo `/professor`, nome `professor.*`, middleware `role:professor`).
+- `/superadmin/*` é guard `admin`, fora do middleware de auth padrão.
+
+### Terminologia customizável
+
+`term('chave')` (em `app/Helpers/helpers.php`) retorna o termo customizado da escola (`SchoolSetting`, prefixo `term_*`) ou um default do sistema, permitindo que cada escola renomeie conceitos.
+
+### Módulo de Documentos / PEI
+
+- `Document` (`school_id`, `student_id`, `author_id`, `type`, `year`, `status`, `content` JSON) cobre os tipos `estudo_caso` e `paee`. Estudo de Caso é pré-requisito para PAEE; um documento por tipo/aluno/ano.
+- `App\Services\DocumentContentService::buildContent(type, request)` centraliza a montagem do `content`.
+- O **PEI** é por matéria, no model `PeiSection` (`student_id`, `subject_id`, `author_id`, `year`, `content` JSON). Cada professor edita a seção da sua matéria; a secretaria consolida via `Secretaria\PeiConsolidadoController`.
+- `Subject` (matérias da escola) tem `inventoryItems` (`SubjectInventoryItem`) e `peiSections`.
+- Exportação: PDF via `barryvdh/laravel-dompdf`, Word via `phpoffice/phpword`.
+
+### Outros módulos
+
+- `Laudo`: laudos médicos/psicológicos anexados ao aluno.
+- `Observation`: mural de observações por aluno; urgência `critico` dispara notificação.
+- `StudentFoodItem` (Jornada Alimentar / Seletividade): aceitação alimentar por categoria e status.
+- `Student`: flags `cid_*`; `PUBLICO_ALVO_FIELDS` define quais condições enquadram o aluno como Público Alvo da Educação Especial.
+
+### Notificações
+
+Todas implementam `ShouldQueue`: `DocumentosPendentesNotification`, `ObservacaoCriticaNotification`, `NovoDocumentoPaiNotification`, `PlanoVencendoNotification`. Preferências por usuário: `notify_document_pending`, `notify_plan_expiring`.
+
+## Documentação adicional
+
+`ARQUITETURA_E_ROTAS.md`, `DOCUMENTACAO_TECNICA.md`, `GUIA_IMPLANTACAO.md` e `MANUAL_USUARIO.md` trazem visão geral e detalhes de deploy, mas podem descrever versões anteriores do sistema — o modelo de roles/permissões/módulos e o PEI por matéria descritos acima é o vigente.
