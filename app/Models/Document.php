@@ -45,6 +45,21 @@ class Document extends Model
         ]);
     });
 
+    static::updated(function ($doc) {
+        DocumentAccessLog::create([
+            'school_id'     => $doc->school_id,
+            'document_id'   => $doc->id,
+            'student_id'    => $doc->student_id,
+            'user_id'       => auth()->id(),
+            'action'        => 'edited',
+            'document_type' => $doc->type,
+            'document_year' => $doc->year,
+            'student_name'  => $doc->student?->name,
+            'ip'            => request()->ip(),
+            'accessed_at'   => now(),
+        ]);
+    });
+
     static::deleting(function ($doc) {
         DocumentAccessLog::create([
             'school_id'     => $doc->school_id,
