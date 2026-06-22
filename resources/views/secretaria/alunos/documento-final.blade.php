@@ -141,7 +141,7 @@
 
             @if(!empty($pc['adaptacoes']))
             <div style="margin-bottom: 14px;">
-                <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Adaptações Curriculares</p>
+                <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Adaptações e/ou Adequações Curriculares</p>
                 <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                     @foreach($pc['adaptacoes'] as $tag)
                         <span style="background: #E8F0F9; color: #004B8D; font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 20px;">{{ $tag }}</span>

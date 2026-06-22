@@ -9,12 +9,13 @@
     $turma = $aluno->schoolClasses->first();
     $accent = '#004B8D';
 
-    $inventario = PeiConsolidadoController::consolidarInventario($peiSubjects, $inventoryItems);
+    $inventario = PeiConsolidadoController::consolidarInventario($peiSubjects, $inventoryItems, $peiGlobal);
 
     $categorias = [
-        'academica'      => ['label' => 'Objetivos Curriculares',        'cor' => '#004B8D'],
-        'socioemocional' => ['label' => 'Desenvolvimento Socioemocional', 'cor' => '#009C8C'],
-        'global'         => ['label' => 'Desenvolvimento Global',         'cor' => '#6D28D9'],
+        'academica'      => ['label' => 'Metas Acadêmicas',       'cor' => '#004B8D'],
+        'socioemocional' => ['label' => 'Metas Socioemocionais',  'cor' => '#009C8C'],
+        'funcional'      => ['label' => 'Metas Funcionais',       'cor' => '#6D28D9'],
+        'global'         => ['label' => 'Desenvolvimento Global', 'cor' => '#6D28D9'],
     ];
 
     $flagLabels = [
@@ -65,6 +66,13 @@
             </p>
         </div>
         <div style="display: flex; gap: 8px;">
+            @can('pei.metas_gerenciar')
+            <a href="{{ route('secretaria.alunos.metas-academicas.edit', $aluno) }}"
+               style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; background: #004B8D; color: #fff;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>
+                Personalizar Metas
+            </a>
+            @endcan
             @if($peiConsolidado)
             <a href="{{ route('secretaria.documentos.pdf', $peiConsolidado) }}"
                style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid #E5E7EB; color: #374151;">
@@ -117,7 +125,7 @@
 {{-- ═══ INVENTÁRIO DE HABILIDADES ═══ --}}
 @if($temInventario)
 <div style="margin-bottom: 20px;">
-    <p style="font-size: 11px; font-weight: 700; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Inventário de Habilidades — preenchido pelos professores</p>
+    <p style="font-size: 11px; font-weight: 700; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Metas de Habilidades — preenchido pelos professores</p>
 
     @foreach($categorias as $catKey => $cat)
     @php $itens = $inventario[$catKey] ?? []; @endphp
@@ -162,7 +170,17 @@
     @endforeach
 </div>
 @else
-    {!! $emptyBlock('Inventário de Habilidades', 'Nenhum professor preencheu o inventário de metas ainda.') !!}
+    <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
+        <p style="font-size: 11px; font-weight: 700; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Metas de Habilidades</p>
+        <p style="font-size: 12px; color: #9CA3AF; font-style: italic; margin: 0;">Nenhum professor preencheu as metas de habilidades ainda.</p>
+        @can('pei.metas_gerenciar')
+        <a href="{{ route('secretaria.alunos.metas-academicas.edit', $aluno) }}"
+           style="display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 600; color: #004B8D; text-decoration: none;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Personalizar metas acadêmicas que os professores irão preencher
+        </a>
+        @endcan
+    </div>
 @endif
 
 {{-- ═══ ESTRATÉGIAS PEDAGÓGICAS ═══ --}}
@@ -172,9 +190,9 @@
 
 {{-- ═══ ADAPTAÇÕES CURRICULARES ═══ --}}
 @if(!empty($ec['adaptacoes_necessarias']))
-    {!! $infoBlock('Adaptações Curriculares', 'Extraído do Estudo de Caso.', $ec['adaptacoes_necessarias']) !!}
+    {!! $infoBlock('Adaptações e/ou Adequações Curriculares', 'Extraído do Estudo de Caso.', $ec['adaptacoes_necessarias']) !!}
 @else
-    {!! $emptyBlock('Adaptações Curriculares', 'Preencha o campo "Necessidade de adaptações curriculares" no Estudo de Caso.') !!}
+    {!! $emptyBlock('Adaptações e/ou Adequações Curriculares', 'Preencha o campo "Necessidade de adaptações curriculares" no Estudo de Caso.') !!}
 @endif
 
 {{-- ═══ AVALIAÇÃO ═══ --}}

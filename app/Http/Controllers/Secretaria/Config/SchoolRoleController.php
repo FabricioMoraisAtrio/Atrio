@@ -30,6 +30,7 @@ class SchoolRoleController extends Controller
                 'pei.ver'                 => 'Visualizar PEI',
                 'pei.criar'               => 'Criar PEI',
                 'pei.editar'              => 'Editar PEI',
+                'pei.metas_gerenciar'     => 'Gerenciar metas do PEI (acadêmicas por aluno)',
                 'paee.ver'                => 'Visualizar PAEE',
                 'paee.criar'              => 'Criar PAEE',
                 'paee.editar'             => 'Editar PAEE',

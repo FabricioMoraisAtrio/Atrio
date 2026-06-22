@@ -181,6 +181,23 @@
         @endunless
     </a>
 
+    {{-- Metas Acadêmicas (PEI) --}}
+    @can('pei.metas_gerenciar')
+    <a href="{{ route('secretaria.alunos.metas-academicas.edit', $aluno) }}"
+       style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none; margin-bottom: 4px;"
+       onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: #E8F0F9; display: flex; align-items: center; justify-content: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            </div>
+            <div>
+                <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">Metas Acadêmicas</p>
+                <p style="font-size: 12px; color: #9CA3AF; margin: 0;">Metas do PEI por matéria</p>
+            </div>
+        </div>
+    </a>
+    @endcan
+
     @if($docsVisiveis->whereIn('type', ['paee'])->isEmpty() && !$peiConsolidadoDoc)
         <p style="font-size: 13px; color: #9CA3AF;">Nenhum documento criado para {{ date('Y') }}.</p>
     @endif

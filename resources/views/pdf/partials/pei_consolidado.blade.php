@@ -28,7 +28,7 @@
     $peiSubjects = $peiContent['subjects'] ?? [];
 
     $inventoryItems = PeiConsolidadoController::loadInventoryItems($peiSubjects);
-    $inventario     = PeiConsolidadoController::consolidarInventario($peiSubjects, $inventoryItems);
+    $inventario     = PeiConsolidadoController::consolidarInventario($peiSubjects, $inventoryItems, $peiGlobal);
 
     $ec = \App\Models\Document::where('student_id', $aluno->id)
         ->where('year', $documento->year)
@@ -41,8 +41,9 @@
     $accentBg = '#E8F0F9';
 
     $grupos = [
-        'academica'      => 'Objetivos Curriculares',
-        'socioemocional' => 'Desenvolvimento Socioemocional',
+        'academica'      => 'Metas Acadêmicas',
+        'socioemocional' => 'Metas Socioemocionais',
+        'funcional'      => 'Metas Funcionais',
         'global'         => 'Desenvolvimento Global',
     ];
 
@@ -282,8 +283,8 @@ $objLongo = $peiGlobal['objetivos_longo_prazo'] ?? '';
 @if($temInventario)
 <div class="section">
     <div class="section-header">
-        <div class="section-title">Inventário de Habilidades Escolares</div>
-        <div class="section-sub">Avaliação por disciplina — consolidado dos professores.</div>
+        <div class="section-title">Metas de Habilidades</div>
+        <div class="section-sub">Consolidado das metas preenchidas pelos professores.</div>
     </div>
     @foreach($grupos as $catKey => $catLabel)
         @php $itens = $inventario[$catKey] ?? []; @endphp
@@ -330,7 +331,7 @@ $objLongo = $peiGlobal['objetivos_longo_prazo'] ?? '';
 @if($adaptacoes)
 <div class="section">
     <div class="section-header">
-        <div class="section-title">Adaptações Curriculares</div>
+        <div class="section-title">Adaptações e/ou Adequações Curriculares</div>
         <div class="section-sub">Extraído do Estudo de Caso.</div>
     </div>
     <div class="field-value" style="white-space: pre-wrap;">{{ $adaptacoes }}</div>

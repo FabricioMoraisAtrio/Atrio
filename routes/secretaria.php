@@ -21,6 +21,7 @@ use App\Http\Controllers\Secretaria\Config\SchoolRoleController;
 use App\Http\Controllers\Secretaria\PeiConsolidadoController;
 use App\Http\Controllers\Secretaria\LogController;
 use App\Http\Controllers\Secretaria\SeletividadeController;
+use App\Http\Controllers\Secretaria\SubjectController;
 
 
 
@@ -36,6 +37,16 @@ Route::middleware(['school.module:configuracoes', 'can:escola.configurar'])->pre
     Route::put('/terminologias', [ConfigController::class, 'updateTerminologias'])->name('terminologias.update');
     Route::resource('perfis', SchoolRoleController::class)->except(['show'])->parameters(['perfis' => 'perfil']);
 });
+
+// Matérias da grade curricular — gerenciadas na aba Configurações → Matérias
+Route::middleware(['school.module:configuracoes', 'can:escola.configurar'])
+    ->prefix('config/materias')->name('subjects.')->group(function () {
+        Route::get('/create',         [SubjectController::class, 'create'])->name('create');
+        Route::post('/',              [SubjectController::class, 'store'])->name('store');
+        Route::get('/{subject}/edit', [SubjectController::class, 'edit'])->name('edit');
+        Route::put('/{subject}',      [SubjectController::class, 'update'])->name('update');
+        Route::delete('/{subject}',   [SubjectController::class, 'destroy'])->name('destroy');
+    });
 
 // ─── Turmas ───────────────────────────────────────────────────────────────────
 Route::middleware('school.module:turmas')->group(function () {
@@ -88,6 +99,12 @@ Route::middleware('school.module:documentos')->group(function () {
         Route::get('alunos/{aluno}/documento-final', DocumentoFinalController::class)->name('alunos.documento-final');
         Route::get('alunos/{aluno}/pei-consolidado', [PeiConsolidadoController::class, 'edit'])->name('alunos.pei-consolidado');
         Route::put('alunos/{aluno}/pei-consolidado', [PeiConsolidadoController::class, 'update'])->name('alunos.pei-consolidado.update');
+    });
+
+    // Metas acadêmicas customizadas do aluno (cadastradas pelo admin/perfis com permissão, usadas no PEI)
+    Route::middleware('can:pei.metas_gerenciar')->group(function () {
+        Route::get('alunos/{aluno}/metas-academicas', [\App\Http\Controllers\Secretaria\StudentAcademicGoalController::class, 'edit'])->name('alunos.metas-academicas.edit');
+        Route::put('alunos/{aluno}/metas-academicas', [\App\Http\Controllers\Secretaria\StudentAcademicGoalController::class, 'update'])->name('alunos.metas-academicas.update');
     });
 
     // Documentos por aluno — requer visualização de documentos

@@ -53,7 +53,18 @@ class DocumentController extends Controller
 
         $turma       = $this->turmaComAluno($aluno->id);
         $subjectSlug = $turma?->pivot->subject;
-        $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->with(['inventoryItems' => fn($q) => $q->orderBy('ordem')])->first() : null;
+        $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->first() : null;
+
+        $isRegente = $subject?->tipo === 'regente';
+
+        // Disciplina: metas acadêmicas customizadas do aluno nesta matéria (cadastradas pelo admin)
+        $metasAcademicas = ($subject && ! $isRegente)
+            ? $aluno->academicGoals()
+                ->where('subject_id', $subject->id)
+                ->where('year', date('Y'))
+                ->orderBy('ordem')
+                ->get()
+            : collect();
 
         // Dados já preenchidos pelo professor nesta matéria
         $minha_secao = $pei->content['subjects'][$subjectSlug] ?? null;
@@ -64,7 +75,7 @@ class DocumentController extends Controller
             ->where('year', date('Y'))
             ->value('content') ?? [];
 
-        return view('professor.documentos.pei_edit', compact('aluno', 'pei', 'subject', 'subjectSlug', 'minha_secao', 'estudo_caso'));
+        return view('professor.documentos.pei_edit', compact('aluno', 'pei', 'subject', 'subjectSlug', 'isRegente', 'metasAcademicas', 'minha_secao', 'estudo_caso'));
     }
 
     /**
@@ -83,7 +94,7 @@ class DocumentController extends Controller
 
         $pei->update(['content' => $novoConteudo]);
 
-        return redirect()->route('professor.alunos.show', $aluno)
-            ->with('success', 'PEI atualizado com sucesso.');
+        return redirect()->route('professor.painel')
+            ->with('success', 'PEI de ' . $aluno->name . ' preenchido com sucesso.');
     }
 }

@@ -75,12 +75,12 @@
 {{-- ═══ ADAPTAÇÕES CURRICULARES — somente leitura (vem do Estudo de Caso) ═══ --}}
 @if(!empty($ec['adaptacoes_necessarias']))
     {!! $readonlyBlock(
-        'Adaptações Curriculares — extraído do Estudo de Caso',
+        'Adaptações e/ou Adequações Curriculares — extraído do Estudo de Caso',
         'Necessidades de adaptações curriculares ou materiais específicos.',
         $ec['adaptacoes_necessarias']
     ) !!}
 @else
-    {!! $emptyReadonly('Adaptações Curriculares', 'Será preenchido automaticamente a partir do Estudo de Caso.') !!}
+    {!! $emptyReadonly('Adaptações e/ou Adequações Curriculares', 'Será preenchido automaticamente a partir do Estudo de Caso.') !!}
 @endif
 
 <hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">

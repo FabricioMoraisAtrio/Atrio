@@ -20,6 +20,7 @@ class RolesAndPermissionsSeeder extends Seeder
             // Documentos
             'documentos.ver_todos',
             'pei.ver', 'pei.criar', 'pei.editar',
+            'pei.metas_gerenciar',
             'paee.ver', 'paee.criar', 'paee.editar',
             'estudo_caso.ver', 'estudo_caso.criar', 'estudo_caso.editar',
             // Laudos & Observações

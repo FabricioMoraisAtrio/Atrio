@@ -89,28 +89,69 @@ class PeiConsolidadoController extends Controller
 
     /**
      * Agrega metas de todos os subjects do PEI por categoria.
-     * Retorna: ['academica' => [...], 'socioemocional' => [...], 'global' => [...]]
+     * Retorna: ['academica' => [...], 'socioemocional' => [...], 'funcional' => [...], 'global' => [...]]
      * Cada item: ['meta', 'flag', 'obs', 'subject_name', 'teacher_name']
+     *
+     * - Metas acadêmicas (disciplinas): avaliadas com flag/obs. No novo formato o texto
+     *   da meta vem embutido em $dados['texto']; no formato legado é resolvido via
+     *   SubjectInventoryItem, respeitando a categoria antiga (academica/socioemocional/global).
+     * - Metas socioemocionais e funcionais (regente): texto livre, sem flag.
      */
-    public static function consolidarInventario(array $peiSubjects, \Illuminate\Support\Collection $inventoryItems): array
+    public static function consolidarInventario(array $peiSubjects, \Illuminate\Support\Collection $inventoryItems, array $peiGlobal = []): array
     {
-        $resultado = ['academica' => [], 'socioemocional' => [], 'global' => []];
+        $resultado = ['academica' => [], 'socioemocional' => [], 'funcional' => [], 'global' => []];
+
+        // Metas socioemocionais/funcionais preenchidas pelos perfis com acesso (PEI global)
+        foreach (['socioemocional' => 'metas_socioemocionais', 'funcional' => 'metas_funcionais'] as $cat => $campo) {
+            if (! empty($peiGlobal[$campo])) {
+                $resultado[$cat][] = [
+                    'meta'         => $peiGlobal[$campo],
+                    'flag'         => null,
+                    'obs'          => '',
+                    'subject_name' => 'Equipe / Coordenação',
+                    'teacher_name' => '',
+                ];
+            }
+        }
 
         foreach ($peiSubjects as $slug => $secao) {
-            foreach ($secao['metas'] ?? [] as $metaId => $dados) {
-                $item = $inventoryItems->get((int) $metaId);
-                if (! $item) continue;
+            $subjectName = $secao['subject_name'] ?? $slug;
+            $teacherName = $secao['teacher_name'] ?? '';
 
-                $cat = $item->categoria; // 'academica' | 'socioemocional' | 'global'
+            foreach ($secao['metas'] ?? [] as $metaId => $dados) {
+                $texto = trim($dados['texto'] ?? '');
+                $cat   = 'academica';
+
+                if ($texto === '') {
+                    // Formato legado: resolve via inventário e respeita a categoria antiga
+                    $item = $inventoryItems->get((int) $metaId);
+                    if (! $item) continue;
+                    $texto = $item->meta;
+                    $cat   = $item->categoria;
+                }
+
                 if (! array_key_exists($cat, $resultado)) continue;
 
                 $resultado[$cat][] = [
-                    'meta'         => $item->meta,
+                    'meta'         => $texto,
                     'flag'         => $dados['flag'] ?? null,
                     'obs'          => $dados['obs'] ?? '',
-                    'subject_name' => $secao['subject_name'] ?? $slug,
-                    'teacher_name' => $secao['teacher_name'] ?? '',
+                    'subject_name' => $subjectName,
+                    'teacher_name' => $teacherName,
                 ];
+            }
+
+            // Texto livre do regente
+            foreach (['socioemocional' => 'metas_socioemocionais', 'funcional' => 'metas_funcionais'] as $cat => $campo) {
+                if (! empty($secao[$campo])) {
+                    $resultado[$cat][] = [
+                        'meta'         => $secao[$campo],
+                        'flag'         => null,
+                        'obs'          => '',
+                        'subject_name' => $subjectName,
+                        'teacher_name' => $teacherName,
+                    ];
+                }
             }
         }
 

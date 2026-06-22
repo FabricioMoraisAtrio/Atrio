@@ -227,21 +227,6 @@ $checkCols = function(array $itens): string {
 
 <hr class="div">
 
-{{-- Objetivos do AEE --}}
-@php $objItens = (array)($c['objetivos_aee'] ?? []); @endphp
-<div class="section">
-    <div class="section-header">
-        <div class="section-title">Objetivos do AEE</div>
-    </div>
-    {!! $checkCols($objItens) !!}
-    @if($val('objetivos_aee_obs'))
-    <div style="font-size: 8.5px; font-weight: bold; color: #555; margin: 6px 0 3px;">Observações</div>
-    <div class="field-value" style="white-space: pre-wrap; font-size: 9px;">{{ $val('objetivos_aee_obs') }}</div>
-    @endif
-</div>
-
-<hr class="div">
-
 {{-- Recursos e Estratégias --}}
 @php $recItens = (array)($c['recursos_estrategias'] ?? []); @endphp
 <div class="section">

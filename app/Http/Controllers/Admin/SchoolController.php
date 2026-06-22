@@ -76,6 +76,9 @@ class SchoolController extends Controller
 
         $adminUser->assignRole('admin');
 
+        // Semeia a grade curricular padrão (BNCC + professor regente)
+        \App\Models\Subject::seedDefaultsForSchool($school->id);
+
         return redirect()->route('admin.schools.index')
             ->with('success', 'Escola criada com sucesso.');
     }

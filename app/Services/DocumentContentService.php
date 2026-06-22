@@ -50,9 +50,6 @@ class DocumentContentService
                 'diagnostico_perfil'          => $request->input('diagnostico_perfil', []),
                 'diagnostico_perfil_obs'      => $request->input('diagnostico_perfil_obs'),
 
-                'objetivos_aee'               => $request->input('objetivos_aee', []),
-                'objetivos_aee_obs'           => $request->input('objetivos_aee_obs'),
-
                 'recursos_estrategias'        => $request->input('recursos_estrategias', []),
                 'recursos_estrategias_obs'    => $request->input('recursos_estrategias_obs'),
 
@@ -108,22 +105,28 @@ class DocumentContentService
         $subjects = $existing['subjects'] ?? [];
         $slug     = $request->input('subject_slug');
 
-        // Avaliações por meta: [meta_id => ['flag' => 'autonomia', 'obs' => '...']]
+        // Avaliações por meta: [meta_id => ['texto' => '...', 'flag' => 'autonomia', 'obs' => '...']]
+        // O texto da meta é salvo junto para o conteúdo ser auto-contido (independe de lookup posterior).
         $metas = [];
         foreach ($request->input('metas', []) as $metaId => $dados) {
             $metas[(int) $metaId] = [
-                'flag' => $dados['flag'] ?? null,
-                'obs'  => trim($dados['obs'] ?? ''),
+                'texto' => trim($dados['texto'] ?? ''),
+                'flag'  => $dados['flag'] ?? null,
+                'obs'   => trim($dados['obs'] ?? ''),
             ];
         }
 
         $subjects[$slug] = [
-            'subject_name'       => $request->input('subject_name'),
-            'teacher_id'         => auth()->id(),
-            'teacher_name'       => auth()->user()->name,
-            'updated_at'         => now()->toDateTimeString(),
-            'metas'              => $metas,
-            'observacoes_livres' => $request->input('observacoes_livres'),
+            'subject_name'          => $request->input('subject_name'),
+            'subject_tipo'          => $request->input('subject_tipo'),
+            'teacher_id'            => auth()->id(),
+            'teacher_name'          => auth()->user()->name,
+            'updated_at'            => now()->toDateTimeString(),
+            'metas'                 => $metas,
+            // Campos de texto livre preenchidos pelo regente (Metas de Habilidades)
+            'metas_socioemocionais' => $request->input('metas_socioemocionais'),
+            'metas_funcionais'      => $request->input('metas_funcionais'),
+            'observacoes_livres'    => $request->input('observacoes_livres'),
         ];
 
         return ['subjects' => $subjects, 'global' => $existing['global'] ?? []];

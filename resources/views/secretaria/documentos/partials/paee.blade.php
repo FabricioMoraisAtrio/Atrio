@@ -112,43 +112,6 @@ $diagSelected = old('diagnostico_perfil', $content['diagnostico_perfil'] ?? []);
 
 <hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
 
-{{-- ═══ OBJETIVOS DO AEE ═══ --}}
-{!! $section('Objetivos do AEE', 'Objetivos do atendimento educacional especializado.') !!}
-
-@php
-$objOpcoes = [
-    'Autonomia',
-    'Comunicação',
-    'Interação social',
-    'Leitura e escrita',
-    'Raciocínio lógico',
-    'Organização e rotina',
-    'Atenção e concentração',
-    'Uso de recursos assistivos',
-];
-$objSelected = old('objetivos_aee', $content['objetivos_aee'] ?? []);
-@endphp
-<div style="margin-bottom: 28px;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
-        @foreach($objOpcoes as $opt)
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
-            <input type="checkbox" name="objetivos_aee[]" value="{{ $opt }}"
-                   {{ in_array($opt, (array)$objSelected) ? 'checked' : '' }}
-                   style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
-            {{ $opt }}
-        </label>
-        @endforeach
-    </div>
-    <div>
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
-        <textarea name="objetivos_aee_obs" rows="3"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ old('objetivos_aee_obs', $content['objetivos_aee_obs'] ?? '') }}</textarea>
-    </div>
-</div>
-
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
-
 {{-- ═══ RECURSOS E ESTRATÉGIAS ═══ --}}
 {!! $section('Recursos e Estratégias', 'Recursos e estratégias utilizados no atendimento.') !!}
 

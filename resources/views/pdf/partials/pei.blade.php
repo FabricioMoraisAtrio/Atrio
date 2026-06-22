@@ -239,7 +239,7 @@
 
 <div class="section">
     <div class="section-header">
-        <div class="section-title">Inventário de Habilidades</div>
+        <div class="section-title">Metas de Habilidades</div>
         <div class="section-sub">
             {{ $secao['subject_name'] ?? $slug }}
             @if(!empty($secao['teacher_name'])) &nbsp;·&nbsp; {{ $secao['teacher_name'] }} @endif
@@ -247,48 +247,57 @@
         </div>
     </div>
 
-    @php $metas = $secao['metas'] ?? []; @endphp
+    @php
+        $metas = $secao['metas'] ?? [];
+        $isReg = ($secao['subject_tipo'] ?? '') === 'regente'
+            || !empty($secao['metas_socioemocionais']) || !empty($secao['metas_funcionais']);
+    @endphp
 
-    @if(empty($metas))
+    @if($isReg)
+        {{-- Regente: metas socioemocionais e funcionais (texto livre) --}}
+        @if(empty($secao['metas_socioemocionais']) && empty($secao['metas_funcionais']))
+            <div class="field-value empty">Seção ainda não preenchida.</div>
+        @else
+            @if(!empty($secao['metas_socioemocionais']))
+            <div class="inv-cat">Metas Socioemocionais</div>
+            <div class="field-value" style="white-space: pre-wrap; margin-bottom: 10px;">{{ $secao['metas_socioemocionais'] }}</div>
+            @endif
+            @if(!empty($secao['metas_funcionais']))
+            <div class="inv-cat">Metas Funcionais</div>
+            <div class="field-value" style="white-space: pre-wrap; margin-bottom: 10px;">{{ $secao['metas_funcionais'] }}</div>
+            @endif
+        @endif
+    @elseif(empty($metas))
         <div class="field-value empty">Seção ainda não preenchida.</div>
     @else
-        @foreach($categorias as $catKey => $catLabel)
-            @php
-                $metasDaCat = collect($metas)->filter(function($dados, $metaId) use ($inventoryItems, $catKey) {
-                    $item = $inventoryItems->get((int) $metaId);
-                    return $item && $item->categoria === $catKey;
-                });
-            @endphp
-            @if($metasDaCat->isNotEmpty())
-            <div class="inv-cat">{{ $catLabel }}</div>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-                <tr>
-                    <th class="inv-th" style="width: 38%; text-align: left;">Meta / Objetivo</th>
-                    <th class="inv-th" style="width: 10%;">Autonomia</th>
-                    <th class="inv-th" style="width: 10%;">Com suporte</th>
-                    <th class="inv-th" style="width: 10%;">Não executa</th>
-                    <th class="inv-th" style="width: 10%;">Não observado</th>
-                    <th class="inv-th">Observações</th>
-                </tr>
-                @foreach($metasDaCat as $metaId => $dados)
-                @php $item = $inventoryItems->get((int) $metaId); @endphp
-                <tr>
-                    <td class="inv-meta">{{ $item?->meta ?? "Meta #{$metaId}" }}</td>
-                    <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'autonomia'     ? 'X' : '' }}</td>
-                    <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'suporte'       ? 'X' : '' }}</td>
-                    <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'nao_executa'   ? 'X' : '' }}</td>
-                    <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'nao_observado' ? 'X' : '' }}</td>
-                    <td class="inv-obs">{{ $dados['obs'] ?? '' }}</td>
-                </tr>
-                @endforeach
-            </table>
-            @endif
-        @endforeach
+        {{-- Disciplina: metas acadêmicas avaliadas --}}
+        <div class="inv-cat">Metas Acadêmicas</div>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+            <tr>
+                <th class="inv-th" style="width: 38%; text-align: left;">Meta / Objetivo</th>
+                <th class="inv-th" style="width: 10%;">Autonomia</th>
+                <th class="inv-th" style="width: 10%;">Com suporte</th>
+                <th class="inv-th" style="width: 10%;">Não executa</th>
+                <th class="inv-th" style="width: 10%;">Não observado</th>
+                <th class="inv-th">Observações</th>
+            </tr>
+            @foreach($metas as $metaId => $dados)
+            @php $texto = trim($dados['texto'] ?? '') ?: ($inventoryItems->get((int) $metaId)?->meta ?? "Meta #{$metaId}"); @endphp
+            <tr>
+                <td class="inv-meta">{{ $texto }}</td>
+                <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'autonomia'     ? 'X' : '' }}</td>
+                <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'suporte'       ? 'X' : '' }}</td>
+                <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'nao_executa'   ? 'X' : '' }}</td>
+                <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'nao_observado' ? 'X' : '' }}</td>
+                <td class="inv-obs">{{ $dados['obs'] ?? '' }}</td>
+            </tr>
+            @endforeach
+        </table>
+    @endif
 
-        @if(!empty($secao['observacoes_livres']))
-        <div class="field-label" style="margin-top: 8px;">Observações Adicionais</div>
-        <div class="field-value" style="white-space: pre-wrap;">{{ $secao['observacoes_livres'] }}</div>
-        @endif
+    @if(!empty($secao['observacoes_livres']))
+    <div class="field-label" style="margin-top: 8px;">Observações Adicionais</div>
+    <div class="field-value" style="white-space: pre-wrap;">{{ $secao['observacoes_livres'] }}</div>
     @endif
 </div>
 
@@ -311,7 +320,7 @@
 {{-- Adaptações --}}
 <div class="section">
     <div class="section-header">
-        <div class="section-title">Adaptações Curriculares</div>
+        <div class="section-title">Adaptações e/ou Adequações Curriculares</div>
         <div class="section-sub">Extraído do Estudo de Caso.</div>
     </div>
     <div class="field-value tall {{ !$adaptacoes ? 'empty' : '' }}" style="white-space: pre-wrap;">{{ $adaptacoes ?: '(não preenchido no Estudo de Caso)' }}</div>
