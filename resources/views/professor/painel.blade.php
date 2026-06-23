@@ -21,11 +21,7 @@
     </div>
 </div>
 
-@if(session('success'))
-    <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
-        {{ session('success') }}
-    </div>
-@endif
+{{-- A mensagem de sucesso já é exibida globalmente pelo layout (app.blade.php) --}}
 
 @if($pendentes->isNotEmpty())
     <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
