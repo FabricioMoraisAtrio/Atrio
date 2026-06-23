@@ -65,6 +65,27 @@ Route::get('/cron/notificacoes', function () {
     \Artisan::call('atrio:notificacoes-diarias');
     return response()->json(['ok' => true]);
 });
+
+// Executa migrations pendentes via URL (hospedagem compartilhada sem SSH).
+// Exige token NÃO-VAZIO definido em CRON_TOKEN, para não ficar exposta.
+Route::get('/cron/migrate', function () {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    \Artisan::call('migrate', ['--force' => true]);
+
+    return response('<pre>' . e(\Artisan::output()) . '</pre>');
+});
+
+// Mostra o status das migrations (quais já rodaram / pendentes). Mesmo token.
+Route::get('/cron/migrate-status', function () {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    \Artisan::call('migrate:status');
+
+    return response('<pre>' . e(\Artisan::output()) . '</pre>');
+});
 Route::get('/', fn() => view('landing'))->name('home');
 Route::get('/entrar', [LoginController::class, 'create'])->name('login');
 Route::post('/entrar', [LoginController::class, 'store'])->name('login.store');

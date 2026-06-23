@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Token de rotas operacionais (/cron/*)
+    |--------------------------------------------------------------------------
+    |
+    | Protege as rotas operacionais acessadas por URL (cron de notificações e
+    | execução de migrations), úteis em hospedagem compartilhada sem SSH.
+    | Defina CRON_TOKEN no .env de produção.
+    |
+    */
+
+    'cron_token' => env('CRON_TOKEN'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
