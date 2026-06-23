@@ -66,32 +66,60 @@ Route::get('/cron/notificacoes', function () {
     return response()->json(['ok' => true]);
 });
 
+// Cabeçalhos para impedir cache das respostas /cron/* (HostGator/LiteSpeed
+// costuma cachear GET, o que confunde o diagnóstico).
+$noStore = fn ($response) => $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
 // Executa migrations pendentes via URL (hospedagem compartilhada sem SSH).
 // Exige token NÃO-VAZIO definido em CRON_TOKEN, para não ficar exposta.
-Route::get('/cron/migrate', function () {
+Route::get('/cron/migrate', function () use ($noStore) {
     $token = config('app.cron_token');
     abort_if(! $token || request('token') !== $token, 403);
 
     try {
-        \Artisan::call('migrate', ['--force' => true]);
+        \Artisan::call('migrate', ['--force' => true, '--no-interaction' => true]);
 
-        return response('<pre>' . e(\Artisan::output()) . '</pre>');
+        return $noStore(response('<pre>' . e(\Artisan::output()) . '</pre>'));
     } catch (\Throwable $e) {
-        return response(
+        return $noStore(response(
             '<pre>ERRO ao migrar:' . "\n" . e($e->getMessage()) . "\n\n--- saída parcial ---\n" . e(\Artisan::output()) . '</pre>',
             500
-        );
+        ));
     }
 });
 
 // Mostra o status das migrations (quais já rodaram / pendentes). Mesmo token.
-Route::get('/cron/migrate-status', function () {
+Route::get('/cron/migrate-status', function () use ($noStore) {
     $token = config('app.cron_token');
     abort_if(! $token || request('token') !== $token, 403);
 
     \Artisan::call('migrate:status');
 
-    return response('<pre>' . e(\Artisan::output()) . '</pre>');
+    return $noStore(response('<pre>' . e(\Artisan::output()) . '</pre>'));
+});
+
+// Diagnóstico autoritativo: lê direto o banco (ignora formatação/cache do status).
+Route::get('/cron/db-info', function () use ($noStore) {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    $temLogs = \Illuminate\Support\Facades\Schema::hasTable('document_access_logs');
+
+    $info = [
+        'connection'                  => config('database.default'),
+        'database'                    => \Illuminate\Support\Facades\DB::connection()->getDatabaseName(),
+        'TABELA student_academic_goals' => \Illuminate\Support\Facades\Schema::hasTable('student_academic_goals') ? 'EXISTE' : 'NAO EXISTE',
+        'COLUNA document_access_logs.school_id' => ($temLogs && \Illuminate\Support\Facades\Schema::hasColumn('document_access_logs', 'school_id')) ? 'EXISTE' : 'NAO EXISTE',
+        'TABELA document_access_logs_old (residuo)' => \Illuminate\Support\Facades\Schema::hasTable('document_access_logs_old') ? 'EXISTE' : 'nao existe',
+        'migrations registradas (2026_06)' => \Illuminate\Support\Facades\DB::table('migrations')
+            ->where('migration', 'like', '%2026_06_15%')
+            ->orWhere('migration', 'like', '%2026_06_22%')
+            ->pluck('migration')->all(),
+        'total de logs de acesso'     => $temLogs ? \Illuminate\Support\Facades\DB::table('document_access_logs')->count() : 'n/a',
+        'total de materias'           => \Illuminate\Support\Facades\Schema::hasTable('subjects') ? \Illuminate\Support\Facades\DB::table('subjects')->count() : 'n/a',
+    ];
+
+    return $noStore(response('<pre>' . e(json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</pre>'));
 });
 Route::get('/', fn() => view('landing'))->name('home');
 Route::get('/entrar', [LoginController::class, 'create'])->name('login');
