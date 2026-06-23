@@ -94,7 +94,9 @@
                     'viewed'   => ['label' => 'Visualizado',  'bg' => '#F3F4F6', 'color' => '#374151'],
                     default    => ['label' => ucfirst($log->action), 'bg' => '#F3F4F6', 'color' => '#374151'],
                 };
-                $docType = $log->document_type ? strtoupper(str_replace('_', ' ', $log->document_type)) : '—';
+                $entidades   = ['aluno' => 'Cadastro de aluno', 'laudo' => 'Laudo', 'usuario' => 'Usuário'];
+                $isEntidade  = array_key_exists($log->document_type, $entidades);
+                $docType     = $log->document_type ? strtoupper(str_replace('_', ' ', $log->document_type)) : '—';
                 $studentName = $log->student_name ?? '—';
                 $userName    = $log->user?->name ?? '—';
             @endphp
@@ -111,7 +113,9 @@
                     <p style="font-size: 13px; color: var(--text-1); margin: 0;">{{ $studentName }}</p>
                 </td>
                 <td style="padding: 14px 20px;">
-                    @if($log->document)
+                    @if($isEntidade)
+                        <span style="font-size: 13px; color: var(--text-1);">{{ $entidades[$log->document_type] }}</span>
+                    @elseif($log->document)
                         <a href="{{ route('secretaria.documentos.show', $log->document) }}"
                            style="font-size: 13px; color: #004B8D; text-decoration: none; font-weight: 500;">
                             {{ $docType }} · {{ $log->document_year }}

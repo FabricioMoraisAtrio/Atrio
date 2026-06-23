@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Secretaria;
 
 use App\Http\Controllers\Controller;
+use App\Models\DocumentAccessLog;
 use App\Models\SchoolClass;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -105,6 +106,12 @@ public function index(\Illuminate\Http\Request $request)
             $aluno->schoolClasses()->attach($request->school_class_id);
         }
 
+        DocumentAccessLog::record('created', [
+            'student_id'    => $aluno->id,
+            'student_name'  => $aluno->name,
+            'document_type' => 'aluno',
+        ]);
+
         if ($request->hasFile('laudo_arquivo')) {
             $laudoPath = $request->file('laudo_arquivo')->store('laudos/' . $aluno->id, 'private');
 
@@ -116,6 +123,12 @@ public function index(\Illuminate\Http\Request $request)
                 'descricao'   => $request->input('laudo_descricao'),
                 'arquivo'     => $laudoPath,
                 'data_laudo'  => $request->input('laudo_data_laudo'),
+            ]);
+
+            DocumentAccessLog::record('created', [
+                'student_id'    => $aluno->id,
+                'student_name'  => $aluno->name,
+                'document_type' => 'laudo',
             ]);
         }
 
@@ -194,6 +207,12 @@ public function show(Student $aluno)
             $aluno->schoolClasses()->sync([$classId]);
         }
 
+        DocumentAccessLog::record('edited', [
+            'student_id'    => $aluno->id,
+            'student_name'  => $aluno->name,
+            'document_type' => 'aluno',
+        ]);
+
         return redirect()->route('secretaria.alunos.index')
             ->with('success', 'Aluno atualizado com sucesso.');
     }
@@ -203,6 +222,13 @@ public function show(Student $aluno)
         if ($aluno->documents()->exists() || $aluno->laudos()->exists()) {
             return back()->with('error', 'Não é possível remover o aluno pois ele possui documentos ou laudos cadastrados.');
         }
+
+        // Registra antes de excluir (student_id ainda válido para a FK)
+        DocumentAccessLog::record('deleted', [
+            'student_id'    => $aluno->id,
+            'student_name'  => $aluno->name,
+            'document_type' => 'aluno',
+        ]);
 
         $aluno->delete();
         return redirect()->route('secretaria.alunos.index')

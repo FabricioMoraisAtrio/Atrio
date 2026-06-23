@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Secretaria;
 
 use App\Http\Controllers\Controller;
+use App\Models\DocumentAccessLog;
 use App\Models\Laudo;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -31,6 +32,12 @@ class LaudoController extends Controller
             'data_laudo'  => $request->data_laudo,
         ]);
 
+        DocumentAccessLog::record('created', [
+            'student_id'    => $aluno->id,
+            'student_name'  => $aluno->name,
+            'document_type' => 'laudo',
+        ]);
+
         return back()->with('success', 'Laudo enviado com sucesso.');
     }
 
@@ -47,6 +54,12 @@ class LaudoController extends Controller
     public function destroy(Laudo $laudo)
     {
         abort_unless($laudo->school_id === session('school_id'), 403);
+
+        DocumentAccessLog::record('deleted', [
+            'student_id'    => $laudo->student_id,
+            'student_name'  => $laudo->student?->name,
+            'document_type' => 'laudo',
+        ]);
 
         Storage::disk('private')->delete($laudo->arquivo);
         $laudo->delete();

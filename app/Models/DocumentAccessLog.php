@@ -20,6 +20,30 @@ class DocumentAccessLog extends Model
         static::addGlobalScope(new SchoolScope());
     }
 
+    /**
+     * Registra um evento de auditoria para entidades que não são documentos
+     * (alunos, laudos, usuários). Eventos de documento continuam sendo gravados
+     * pelos hooks do Document e pelos controllers de exportação.
+     *
+     * $attributes informa o alvo: student_id, student_name e document_type
+     * (marcador da entidade: 'aluno' | 'laudo' | 'usuario').
+     */
+    public static function record(string $action, array $attributes = []): void
+    {
+        static::create(array_merge([
+            'school_id'     => session('school_id'),
+            'document_id'   => null,
+            'student_id'    => null,
+            'user_id'       => auth()->id(),
+            'action'        => $action,
+            'document_type' => null,
+            'document_year' => null,
+            'student_name'  => null,
+            'ip'            => request()->ip(),
+            'accessed_at'   => now(),
+        ], $attributes));
+    }
+
     protected function casts(): array
     {
         return ['accessed_at' => 'datetime'];

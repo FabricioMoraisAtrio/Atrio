@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Secretaria;
 
 use App\Http\Controllers\Controller;
+use App\Models\DocumentAccessLog;
 use App\Models\SchoolClass;
 use App\Models\SchoolRole;
 use App\Models\User;
@@ -104,6 +105,11 @@ class UserController extends Controller
             $user->schoolClasses()->attach($turmas);
         }
 
+        DocumentAccessLog::record('created', [
+            'student_name'  => $user->name,
+            'document_type' => 'usuario',
+        ]);
+
         return redirect()->route('secretaria.usuarios.index')
             ->with('success', 'Usuário criado com sucesso.');
     }
@@ -167,12 +173,22 @@ class UserController extends Controller
             $usuario->schoolClasses()->detach();
         }
 
+        DocumentAccessLog::record('edited', [
+            'student_name'  => $usuario->name,
+            'document_type' => 'usuario',
+        ]);
+
         return redirect()->route('secretaria.usuarios.index')
             ->with('success', 'Usuário atualizado com sucesso.');
     }
 
     public function destroy(User $usuario)
     {
+        DocumentAccessLog::record('deleted', [
+            'student_name'  => $usuario->name,
+            'document_type' => 'usuario',
+        ]);
+
         $usuario->schoolClasses()->detach();
         $usuario->delete();
 
