@@ -56,22 +56,30 @@ class Subject extends Model
     ];
 
     /**
-     * Semeia as matérias padrão para uma escola que ainda não possui matérias.
+     * Garante as matérias padrão para a escola: cria apenas as que faltam
+     * (comparando por slug), preservando as já cadastradas. Idempotente — pode
+     * rodar várias vezes sem duplicar. Em escola nova (sem matérias) cria todas.
      */
     public static function seedDefaultsForSchool(int $schoolId): void
     {
-        $existe = static::withoutGlobalScope(SchoolScope::class)
+        $existentes = static::withoutGlobalScope(SchoolScope::class)
             ->where('school_id', $schoolId)
-            ->exists();
+            ->pluck('slug')
+            ->all();
 
-        if ($existe) {
-            return;
-        }
+        $ordem = (int) static::withoutGlobalScope(SchoolScope::class)
+            ->where('school_id', $schoolId)
+            ->max('ordem');
 
-        foreach (self::DEFAULTS as $i => $materia) {
+        foreach (self::DEFAULTS as $materia) {
+            if (in_array($materia['slug'], $existentes, true)) {
+                continue;
+            }
+
+            $ordem++;
             static::withoutGlobalScope(SchoolScope::class)->create(array_merge($materia, [
                 'school_id' => $schoolId,
-                'ordem'     => $i + 1,
+                'ordem'     => $ordem,
             ]));
         }
     }
