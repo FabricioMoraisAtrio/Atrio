@@ -121,6 +121,35 @@ Route::get('/cron/db-info', function () use ($noStore) {
 
     return $noStore(response('<pre>' . e(json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</pre>'));
 });
+
+// Rotina pós-deploy completa numa chamada só (hospedagem compartilhada sem SSH):
+// limpa config (para .env novo valer), roda migrations e limpa os demais caches.
+// Idempotente e seguro de repetir. Exige CRON_TOKEN.
+Route::get('/cron/deploy', function () use ($noStore) {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    $passos = [
+        'config:clear' => [],
+        'migrate'      => ['--force' => true],
+        'route:clear'  => [],
+        'view:clear'   => [],
+        'cache:clear'  => [],
+    ];
+
+    $resultado = [];
+    foreach ($passos as $comando => $args) {
+        try {
+            \Artisan::call($comando, $args);
+            $resultado[$comando] = trim(\Artisan::output()) ?: 'ok';
+        } catch (\Throwable $e) {
+            $resultado[$comando] = 'ERRO: ' . $e->getMessage();
+        }
+    }
+
+    return $noStore(response('<pre>' . e(json_encode($resultado, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</pre>'));
+});
+
 Route::get('/', fn() => view('landing'))->name('home');
 Route::get('/entrar', [LoginController::class, 'create'])->name('login');
 Route::post('/entrar', [LoginController::class, 'store'])->name('login.store');
