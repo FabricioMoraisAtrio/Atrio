@@ -72,9 +72,16 @@ Route::get('/cron/migrate', function () {
     $token = config('app.cron_token');
     abort_if(! $token || request('token') !== $token, 403);
 
-    \Artisan::call('migrate', ['--force' => true]);
+    try {
+        \Artisan::call('migrate', ['--force' => true]);
 
-    return response('<pre>' . e(\Artisan::output()) . '</pre>');
+        return response('<pre>' . e(\Artisan::output()) . '</pre>');
+    } catch (\Throwable $e) {
+        return response(
+            '<pre>ERRO ao migrar:' . "\n" . e($e->getMessage()) . "\n\n--- saída parcial ---\n" . e(\Artisan::output()) . '</pre>',
+            500
+        );
+    }
 });
 
 // Mostra o status das migrations (quais já rodaram / pendentes). Mesmo token.

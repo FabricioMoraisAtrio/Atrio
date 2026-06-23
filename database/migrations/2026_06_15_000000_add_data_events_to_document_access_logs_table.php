@@ -8,61 +8,106 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Adiciona colunas de snapshot ao log de acesso (LGPD) e remove o cascade
+     * de document_id/user_id para preservar o histórico após exclusões.
+     *
+     * Reescrita para ser idempotente e compatível com MySQL e SQLite. A versão
+     * anterior usava rename + recriação de tabela, que falhava no MySQL
+     * (colisão de nomes de foreign key) e podia deixar a tabela
+     * "document_access_logs_old" como resíduo de tentativas com erro.
      */
     public function up(): void
     {
-        Schema::rename('document_access_logs', 'document_access_logs_old');
+        $hasNew = Schema::hasTable('document_access_logs');
+        $hasOld = Schema::hasTable('document_access_logs_old');
 
-        Schema::create('document_access_logs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('school_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('document_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('student_id')->nullable()->constrained('students')->nullOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('action'); // viewed | edited | exported | created | deleted
-            $table->string('document_type')->nullable();
-            $table->unsignedSmallInteger('document_year')->nullable();
-            $table->string('student_name')->nullable();
-            $table->string('ip')->nullable();
-            $table->timestamp('accessed_at');
+        // Recupera estado de tentativa anterior em que o rename ocorreu mas a
+        // recriação falhou (sobrou apenas a tabela _old com os dados originais).
+        if (! $hasNew && $hasOld) {
+            Schema::rename('document_access_logs_old', 'document_access_logs');
+            $hasNew = true;
+            $hasOld = false;
+        }
+
+        // Ambiente novo: cria já no schema final (sem FKs, para evitar colisões).
+        if (! $hasNew) {
+            Schema::create('document_access_logs', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('school_id')->nullable();
+                $table->unsignedBigInteger('document_id')->nullable();
+                $table->unsignedBigInteger('student_id')->nullable();
+                $table->unsignedBigInteger('user_id')->nullable();
+                $table->string('action'); // viewed | edited | exported | created | deleted
+                $table->string('document_type')->nullable();
+                $table->unsignedSmallInteger('document_year')->nullable();
+                $table->string('student_name')->nullable();
+                $table->string('ip')->nullable();
+                $table->timestamp('accessed_at');
+            });
+
+            Schema::dropIfExists('document_access_logs_old');
+
+            return;
+        }
+
+        // Adiciona as colunas novas, se faltarem (idempotente, cross-DB).
+        Schema::table('document_access_logs', function (Blueprint $table) {
+            if (! Schema::hasColumn('document_access_logs', 'school_id'))     $table->unsignedBigInteger('school_id')->nullable()->after('id');
+            if (! Schema::hasColumn('document_access_logs', 'student_id'))    $table->unsignedBigInteger('student_id')->nullable();
+            if (! Schema::hasColumn('document_access_logs', 'document_type')) $table->string('document_type')->nullable();
+            if (! Schema::hasColumn('document_access_logs', 'document_year')) $table->unsignedSmallInteger('document_year')->nullable();
+            if (! Schema::hasColumn('document_access_logs', 'student_name'))  $table->string('student_name')->nullable();
         });
 
-        DB::statement('
-            INSERT INTO document_access_logs
-                (id, school_id, document_id, student_id, user_id, action, document_type, document_year, student_name, ip, accessed_at)
-            SELECT o.id, d.school_id, o.document_id, d.student_id, o.user_id, o.action, d.type, d.year, s.name, o.ip, o.accessed_at
-            FROM document_access_logs_old o
-            JOIN documents d ON d.id = o.document_id
-            LEFT JOIN students s ON s.id = d.student_id
-        ');
+        // Remove o cascade de document_id/user_id para preservar logs após a
+        // exclusão de documentos/usuários (best-effort: pode não existir).
+        foreach (['document_id', 'user_id'] as $col) {
+            try {
+                Schema::table('document_access_logs', function (Blueprint $table) use ($col) {
+                    $table->dropForeign([$col]);
+                });
+            } catch (\Throwable $e) {
+                // Constraint inexistente, nome diferente ou driver sem suporte — ignora.
+            }
+        }
 
+        // Remove resíduo de tentativa anterior.
         Schema::dropIfExists('document_access_logs_old');
+
+        // Backfill das colunas novas a partir dos documentos (apenas onde vazio).
+        DB::table('document_access_logs')
+            ->whereNull('school_id')
+            ->whereNotNull('document_id')
+            ->orderBy('id')
+            ->chunkById(500, function ($logs) {
+                foreach ($logs as $log) {
+                    $doc = DB::table('documents')->where('id', $log->document_id)->first();
+                    if (! $doc) {
+                        continue;
+                    }
+                    $studentName = $doc->student_id
+                        ? DB::table('students')->where('id', $doc->student_id)->value('name')
+                        : null;
+
+                    DB::table('document_access_logs')->where('id', $log->id)->update([
+                        'school_id'     => $doc->school_id,
+                        'student_id'    => $doc->student_id,
+                        'document_type' => $doc->type,
+                        'document_year' => $doc->year,
+                        'student_name'  => $studentName,
+                    ]);
+                }
+            });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::create('document_access_logs_old', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('document_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('action');
-            $table->string('ip')->nullable();
-            $table->timestamp('accessed_at');
-        });
-
-        DB::statement('
-            INSERT INTO document_access_logs_old (id, document_id, user_id, action, ip, accessed_at)
-            SELECT id, document_id, user_id, action, ip, accessed_at
-            FROM document_access_logs
-            WHERE document_id IS NOT NULL AND user_id IS NOT NULL
-        ');
-
-        Schema::dropIfExists('document_access_logs');
-
-        Schema::rename('document_access_logs_old', 'document_access_logs');
+        foreach (['school_id', 'student_id', 'document_type', 'document_year', 'student_name'] as $col) {
+            if (Schema::hasColumn('document_access_logs', $col)) {
+                Schema::table('document_access_logs', function (Blueprint $table) use ($col) {
+                    $table->dropColumn($col);
+                });
+            }
+        }
     }
 };
