@@ -57,14 +57,27 @@ class DocumentController extends Controller
 
         $isRegente = $subject?->tipo === 'regente';
 
-        // Disciplina: metas acadêmicas customizadas do aluno nesta matéria (cadastradas pelo admin)
-        $metasAcademicas = ($subject && ! $isRegente)
-            ? $aluno->academicGoals()
-                ->where('subject_id', $subject->id)
-                ->where('year', date('Y'))
-                ->orderBy('ordem')
-                ->get()
-            : collect();
+        // Metas customizadas do aluno (cadastradas pelo admin):
+        // - disciplina: metas acadêmicas da matéria;
+        // - regente: metas socioemocionais e funcionais (sem matéria).
+        if ($isRegente) {
+            $metasAcademicas = collect();
+            $metasSocio = $aluno->academicGoals()
+                ->where('categoria', 'socioemocional')->where('year', date('Y'))->orderBy('ordem')->get();
+            $metasFuncionais = $aluno->academicGoals()
+                ->where('categoria', 'funcional')->where('year', date('Y'))->orderBy('ordem')->get();
+        } else {
+            $metasSocio = collect();
+            $metasFuncionais = collect();
+            $metasAcademicas = $subject
+                ? $aluno->academicGoals()
+                    ->where('categoria', 'academica')
+                    ->where('subject_id', $subject->id)
+                    ->where('year', date('Y'))
+                    ->orderBy('ordem')
+                    ->get()
+                : collect();
+        }
 
         // Dados já preenchidos pelo professor nesta matéria
         $minha_secao = $pei->content['subjects'][$subjectSlug] ?? null;
@@ -75,7 +88,7 @@ class DocumentController extends Controller
             ->where('year', date('Y'))
             ->value('content') ?? [];
 
-        return view('professor.documentos.pei_edit', compact('aluno', 'pei', 'subject', 'subjectSlug', 'isRegente', 'metasAcademicas', 'minha_secao', 'estudo_caso'));
+        return view('professor.documentos.pei_edit', compact('aluno', 'pei', 'subject', 'subjectSlug', 'isRegente', 'metasAcademicas', 'metasSocio', 'metasFuncionais', 'minha_secao', 'estudo_caso'));
     }
 
     /**

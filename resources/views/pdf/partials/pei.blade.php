@@ -249,50 +249,54 @@
 
     @php
         $metas = $secao['metas'] ?? [];
-        $isReg = ($secao['subject_tipo'] ?? '') === 'regente'
-            || !empty($secao['metas_socioemocionais']) || !empty($secao['metas_funcionais']);
+        $catLabels = ['academica' => 'Metas Acadêmicas', 'socioemocional' => 'Metas Socioemocionais', 'funcional' => 'Metas Funcionais', 'global' => 'Desenvolvimento Global'];
+        $porCat = [];
+        foreach ($metas as $metaId => $dados) {
+            $texto = trim($dados['texto'] ?? '') ?: ($inventoryItems->get((int) $metaId)?->meta ?? "Meta #{$metaId}");
+            $cat   = $dados['cat'] ?? ($inventoryItems->get((int) $metaId)?->categoria ?? 'academica');
+            $porCat[$cat][] = ['texto' => $texto, 'flag' => $dados['flag'] ?? '', 'obs' => $dados['obs'] ?? ''];
+        }
+        $temLegado = !empty($secao['metas_socioemocionais']) || !empty($secao['metas_funcionais']);
     @endphp
 
-    @if($isReg)
-        {{-- Regente: metas socioemocionais e funcionais (texto livre) --}}
-        @if(empty($secao['metas_socioemocionais']) && empty($secao['metas_funcionais']))
-            <div class="field-value empty">Seção ainda não preenchida.</div>
-        @else
-            @if(!empty($secao['metas_socioemocionais']))
-            <div class="inv-cat">Metas Socioemocionais</div>
-            <div class="field-value" style="white-space: pre-wrap; margin-bottom: 10px;">{{ $secao['metas_socioemocionais'] }}</div>
-            @endif
-            @if(!empty($secao['metas_funcionais']))
-            <div class="inv-cat">Metas Funcionais</div>
-            <div class="field-value" style="white-space: pre-wrap; margin-bottom: 10px;">{{ $secao['metas_funcionais'] }}</div>
-            @endif
-        @endif
-    @elseif(empty($metas))
+    @if(empty($porCat) && ! $temLegado)
         <div class="field-value empty">Seção ainda não preenchida.</div>
     @else
-        {{-- Disciplina: metas acadêmicas avaliadas --}}
-        <div class="inv-cat">Metas Acadêmicas</div>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-            <tr>
-                <th class="inv-th" style="width: 38%; text-align: left;">Meta / Objetivo</th>
-                <th class="inv-th" style="width: 10%;">Autonomia</th>
-                <th class="inv-th" style="width: 10%;">Com suporte</th>
-                <th class="inv-th" style="width: 10%;">Não executa</th>
-                <th class="inv-th" style="width: 10%;">Não observado</th>
-                <th class="inv-th">Observações</th>
-            </tr>
-            @foreach($metas as $metaId => $dados)
-            @php $texto = trim($dados['texto'] ?? '') ?: ($inventoryItems->get((int) $metaId)?->meta ?? "Meta #{$metaId}"); @endphp
-            <tr>
-                <td class="inv-meta">{{ $texto }}</td>
-                <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'autonomia'     ? 'X' : '' }}</td>
-                <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'suporte'       ? 'X' : '' }}</td>
-                <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'nao_executa'   ? 'X' : '' }}</td>
-                <td class="inv-chk">{{ ($dados['flag'] ?? '') === 'nao_observado' ? 'X' : '' }}</td>
-                <td class="inv-obs">{{ $dados['obs'] ?? '' }}</td>
-            </tr>
-            @endforeach
-        </table>
+        @foreach(['academica', 'socioemocional', 'funcional', 'global'] as $cat)
+            @if(!empty($porCat[$cat]))
+            <div class="inv-cat">{{ $catLabels[$cat] }}</div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+                <tr>
+                    <th class="inv-th" style="width: 38%; text-align: left;">Meta / Objetivo</th>
+                    <th class="inv-th" style="width: 10%;">Autonomia</th>
+                    <th class="inv-th" style="width: 10%;">Com suporte</th>
+                    <th class="inv-th" style="width: 10%;">Não executa</th>
+                    <th class="inv-th" style="width: 10%;">Não observado</th>
+                    <th class="inv-th">Observações</th>
+                </tr>
+                @foreach($porCat[$cat] as $m)
+                <tr>
+                    <td class="inv-meta">{{ $m['texto'] }}</td>
+                    <td class="inv-chk">{{ $m['flag'] === 'autonomia'     ? 'X' : '' }}</td>
+                    <td class="inv-chk">{{ $m['flag'] === 'suporte'       ? 'X' : '' }}</td>
+                    <td class="inv-chk">{{ $m['flag'] === 'nao_executa'   ? 'X' : '' }}</td>
+                    <td class="inv-chk">{{ $m['flag'] === 'nao_observado' ? 'X' : '' }}</td>
+                    <td class="inv-obs">{{ $m['obs'] }}</td>
+                </tr>
+                @endforeach
+            </table>
+            @endif
+        @endforeach
+
+        {{-- Compatibilidade: texto livre socio/funcional do formato anterior --}}
+        @if(!empty($secao['metas_socioemocionais']))
+        <div class="inv-cat">Metas Socioemocionais</div>
+        <div class="field-value" style="white-space: pre-wrap; margin-bottom: 10px;">{{ $secao['metas_socioemocionais'] }}</div>
+        @endif
+        @if(!empty($secao['metas_funcionais']))
+        <div class="inv-cat">Metas Funcionais</div>
+        <div class="field-value" style="white-space: pre-wrap; margin-bottom: 10px;">{{ $secao['metas_funcionais'] }}</div>
+        @endif
     @endif
 
     @if(!empty($secao['observacoes_livres']))

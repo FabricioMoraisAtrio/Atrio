@@ -135,93 +135,21 @@ $accent = '#004B8D';
             <div style="padding: 24px; display: flex; flex-direction: column; gap: 20px;">
 
                 @if($isRegente)
-                    {{-- ─── Regente: Metas socioemocionais e funcionais (texto livre) ─── --}}
-                    <div>
-                        <label style="display: block; font-size: 11px; font-weight: 700; color: #007A6E; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">
-                            Metas Socioemocionais
-                        </label>
-                        <textarea name="metas_socioemocionais" rows="5"
-                            placeholder="Descreva as metas socioemocionais para o aluno (regulação emocional, interação social, autonomia...)."
-                            style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.6;"
-                            onfocus="this.style.borderColor='#007A6E'" onblur="this.style.borderColor='#E5E7EB'">{{ old('metas_socioemocionais', $minha_secao['metas_socioemocionais'] ?? '') }}</textarea>
-                    </div>
-
-                    <div>
-                        <label style="display: block; font-size: 11px; font-weight: 700; color: #6D28D9; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">
-                            Metas Funcionais
-                        </label>
-                        <textarea name="metas_funcionais" rows="5"
-                            placeholder="Descreva as metas funcionais para o aluno (atividades de vida diária, autocuidado, mobilidade, comunicação funcional...)."
-                            style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.6;"
-                            onfocus="this.style.borderColor='#6D28D9'" onblur="this.style.borderColor='#E5E7EB'">{{ old('metas_funcionais', $minha_secao['metas_funcionais'] ?? '') }}</textarea>
-                    </div>
+                    {{-- ─── Regente: avalia metas socioemocionais e funcionais ─── --}}
+                    @include('professor.documentos.partials.metas-flag-table', [
+                        'metas' => $metasSocio, 'accent' => '#007A6E', 'bg' => '#E6F5F4',
+                        'label' => 'Metas Socioemocionais', 'cat' => 'socioemocional', 'metasSalvas' => $metasSalvas,
+                    ])
+                    @include('professor.documentos.partials.metas-flag-table', [
+                        'metas' => $metasFuncionais, 'accent' => '#6D28D9', 'bg' => '#F0EBF8',
+                        'label' => 'Metas Funcionais', 'cat' => 'funcional', 'metasSalvas' => $metasSalvas,
+                    ])
                 @else
-                    {{-- ─── Disciplina: Metas acadêmicas customizadas do aluno ─── --}}
-                    <div style="border: 1px solid #E8F0F9; border-radius: 10px; overflow: hidden;">
-                        <div style="padding: 12px 18px; background: #E8F0F9;">
-                            <p style="font-size: 11px; font-weight: 700; color: #004B8D; letter-spacing: 1px; text-transform: uppercase; margin: 0;">Metas Acadêmicas</p>
-                        </div>
-
-                        @if($metasAcademicas->isEmpty())
-                            <div style="padding: 16px 18px;">
-                                <p style="font-size: 12px; color: #9CA3AF; font-style: italic; margin: 0;">
-                                    Nenhuma meta acadêmica cadastrada para este aluno nesta matéria.
-                                    O administrador/coordenação cadastra as metas na ficha do aluno (Metas Acadêmicas).
-                                </p>
-                            </div>
-                        @else
-                            <div style="overflow-x: auto;">
-                                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                                    <thead>
-                                        <tr style="background: #F9FAFB; border-bottom: 1px solid #F0F0F0;">
-                                            <th style="text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 600; color: #6B7280; width: 35%;">Meta / Objetivo</th>
-                                            @foreach($opcoes as $rotulo)
-                                                <th style="text-align: center; padding: 10px 8px; font-size: 10px; font-weight: 600; color: #6B7280; white-space: nowrap;">{{ $rotulo }}</th>
-                                            @endforeach
-                                            <th style="text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 600; color: #6B7280; width: 28%;">Observações <span style="font-weight: 400; color: #9CA3AF;">(opcional)</span></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($metasAcademicas as $item)
-                                            @php
-                                                $salvos    = old("metas.{$item->id}", $metasSalvas[$item->id] ?? []);
-                                                $flagSalva = is_array($salvos) ? ($salvos['flag'] ?? null) : $salvos;
-                                                $obsSalva  = is_array($salvos) ? ($salvos['obs']  ?? '') : '';
-                                            @endphp
-                                            <tr style="border-top: 1px solid #F3F4F6; {{ $loop->even ? 'background:#FAFAFA;' : '' }}">
-                                                <td style="padding: 12px 16px; color: #374151; font-size: 13px; font-weight: 500; line-height: 1.4;">
-                                                    <input type="hidden" name="metas[{{ $item->id }}][texto]" value="{{ $item->meta }}">
-                                                    {{ $item->meta }}
-                                                </td>
-                                                @foreach($opcoes as $valor => $rotulo)
-                                                    <td style="text-align: center; padding: 12px 8px;">
-                                                        <label style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; border: 2px solid {{ $flagSalva === $valor ? '#004B8D' : '#D1D5DB' }}; background: {{ $flagSalva === $valor ? '#004B8D' : 'transparent' }}; cursor: pointer; transition: all 0.15s;">
-                                                            <input type="radio"
-                                                                   name="metas[{{ $item->id }}][flag]"
-                                                                   value="{{ $valor }}"
-                                                                   {{ $flagSalva === $valor ? 'checked' : '' }}
-                                                                   style="display: none;"
-                                                                   onchange="atualizarLinha(this, '#004B8D')">
-                                                            @if($flagSalva === $valor)
-                                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                                            @endif
-                                                        </label>
-                                                    </td>
-                                                @endforeach
-                                                <td style="padding: 10px 16px; vertical-align: top;">
-                                                    <textarea name="metas[{{ $item->id }}][obs]"
-                                                              rows="3"
-                                                              placeholder="Observação..."
-                                                              style="width: 100%; border: 1px solid #E5E7EB; border-radius: 6px; padding: 7px 10px; font-size: 12px; color: #374151; outline: none; background: transparent; box-sizing: border-box; resize: vertical; font-family: inherit; line-height: 1.5;"
-                                                              onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">{{ $obsSalva }}</textarea>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
-                    </div>
+                    {{-- ─── Disciplina: avalia metas acadêmicas ─── --}}
+                    @include('professor.documentos.partials.metas-flag-table', [
+                        'metas' => $metasAcademicas, 'accent' => '#004B8D', 'bg' => '#E8F0F9',
+                        'label' => 'Metas Acadêmicas', 'cat' => 'academica', 'metasSalvas' => $metasSalvas,
+                    ])
                 @endif
 
                 {{-- Observações livres --}}

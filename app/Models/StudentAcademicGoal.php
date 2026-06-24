@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class StudentAcademicGoal extends Model
 {
     protected $fillable = [
-        'school_id', 'student_id', 'subject_id', 'year', 'meta', 'ordem',
+        'school_id', 'student_id', 'subject_id', 'categoria', 'year', 'meta', 'ordem',
     ];
 
     protected static function booted(): void

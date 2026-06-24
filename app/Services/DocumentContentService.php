@@ -105,28 +105,26 @@ class DocumentContentService
         $subjects = $existing['subjects'] ?? [];
         $slug     = $request->input('subject_slug');
 
-        // Avaliações por meta: [meta_id => ['texto' => '...', 'flag' => 'autonomia', 'obs' => '...']]
-        // O texto da meta é salvo junto para o conteúdo ser auto-contido (independe de lookup posterior).
+        // Avaliações por meta: [meta_id => ['texto'=>'...', 'cat'=>'academica', 'flag'=>'autonomia', 'obs'=>'...']]
+        // Texto e categoria são salvos junto para o conteúdo ser auto-contido (independe de lookup posterior).
         $metas = [];
         foreach ($request->input('metas', []) as $metaId => $dados) {
             $metas[(int) $metaId] = [
                 'texto' => trim($dados['texto'] ?? ''),
+                'cat'   => $dados['cat'] ?? 'academica',
                 'flag'  => $dados['flag'] ?? null,
                 'obs'   => trim($dados['obs'] ?? ''),
             ];
         }
 
         $subjects[$slug] = [
-            'subject_name'          => $request->input('subject_name'),
-            'subject_tipo'          => $request->input('subject_tipo'),
-            'teacher_id'            => auth()->id(),
-            'teacher_name'          => auth()->user()->name,
-            'updated_at'            => now()->toDateTimeString(),
-            'metas'                 => $metas,
-            // Campos de texto livre preenchidos pelo regente (Metas de Habilidades)
-            'metas_socioemocionais' => $request->input('metas_socioemocionais'),
-            'metas_funcionais'      => $request->input('metas_funcionais'),
-            'observacoes_livres'    => $request->input('observacoes_livres'),
+            'subject_name'       => $request->input('subject_name'),
+            'subject_tipo'       => $request->input('subject_tipo'),
+            'teacher_id'         => auth()->id(),
+            'teacher_name'       => auth()->user()->name,
+            'updated_at'         => now()->toDateTimeString(),
+            'metas'              => $metas,
+            'observacoes_livres' => $request->input('observacoes_livres'),
         ];
 
         return ['subjects' => $subjects, 'global' => $existing['global'] ?? []];

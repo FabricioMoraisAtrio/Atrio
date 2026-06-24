@@ -120,16 +120,19 @@ class PeiConsolidadoController extends Controller
 
             foreach ($secao['metas'] ?? [] as $metaId => $dados) {
                 $texto = trim($dados['texto'] ?? '');
-                $cat   = 'academica';
+                $cat   = $dados['cat'] ?? '';
 
-                if ($texto === '') {
-                    // Formato legado: resolve via inventário e respeita a categoria antiga
+                if ($cat === '') {
+                    // Formato legado: sem categoria salva — resolve via inventário (categoria
+                    // antiga) ou assume acadêmica.
                     $item = $inventoryItems->get((int) $metaId);
-                    if (! $item) continue;
-                    $texto = $item->meta;
-                    $cat   = $item->categoria;
+                    $cat  = $item->categoria ?? 'academica';
+                    if ($texto === '' && $item) {
+                        $texto = $item->meta;
+                    }
                 }
 
+                if ($texto === '') continue;
                 if (! array_key_exists($cat, $resultado)) continue;
 
                 $resultado[$cat][] = [
@@ -141,7 +144,7 @@ class PeiConsolidadoController extends Controller
                 ];
             }
 
-            // Texto livre do regente
+            // Compatibilidade: texto livre socio/funcional preenchido no formato anterior
             foreach (['socioemocional' => 'metas_socioemocionais', 'funcional' => 'metas_funcionais'] as $cat => $campo) {
                 if (! empty($secao[$campo])) {
                     $resultado[$cat][] = [
