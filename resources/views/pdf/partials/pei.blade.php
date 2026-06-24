@@ -93,7 +93,7 @@
     .id-label { background: #E8F0F9; font-weight: bold; width: 130px; color: #004B8D; white-space: nowrap; }
 
     /* ── Seção ── */
-    .section { margin-bottom: 14px; page-break-inside: avoid; }
+    .section { margin-bottom: 18px; page-break-inside: avoid; }
     .section-header { border-left: 3px solid {{ $accent }}; padding: 3px 0 3px 8px; margin-bottom: 8px; page-break-after: avoid; }
     .section-title { font-size: 9.5px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: {{ $accent }}; }
     .section-sub   { font-size: 8px; color: #888; font-style: italic; margin-top: 1px; }

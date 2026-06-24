@@ -106,10 +106,10 @@
     }
 
     /* Seções e Quebras */
-    .section { 
-        margin-bottom: 14px; 
+    .section {
+        margin-bottom: 18px;
         width: 100%;
-        page-break-inside: avoid; 
+        page-break-inside: avoid;
     }
 
     .section-header { 

@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { margin: 0; padding: 0; }
-        /* Margens via wrapper — única abordagem confiável nesta versão do DomPDF */
-        .doc-wrapper {
-            padding: 56px 43px 51px 43px; /* topo:2cm, lat:1.5cm, base:1.8cm em pt (1cm=28.35pt) */
+        /* Margens aplicadas em TODAS as páginas (topo, laterais e base).
+           A base reserva espaço para o rodapé desenhado em cada página. */
+        @page {
+            margin: 1.7cm 1.4cm 1.9cm 1.4cm;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
     </style>
 </head>
 <body>
-<div class="doc-wrapper">
     @if($documento->type === 'estudo_caso')
         @include('pdf.partials.estudo_caso')
     @elseif($documento->type === 'pei_consolidado')
@@ -24,6 +24,5 @@
     @else
         @include('pdf.partials.generic')
     @endif
-</div>
 </body>
 </html>
