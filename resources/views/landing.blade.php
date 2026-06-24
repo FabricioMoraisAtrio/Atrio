@@ -24,7 +24,9 @@
             --white:     #FFFFFF;
         }
 
-        html { scroll-behavior: smooth; }
+        /* O scroll suave é feito via JS (requestAnimationFrame) para funcionar em
+           todas as máquinas, inclusive com "Reduzir movimento" ligado. Por isso
+           NÃO usamos scroll-behavior: smooth aqui (ele respeita reduce-motion). */
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -1255,22 +1257,42 @@
 </footer>
 
 <script>
+    // Scroll suave próprio (requestAnimationFrame) — funciona em todas as máquinas,
+    // inclusive com a opção "Reduzir movimento" do sistema ligada (que desativa o
+    // smooth nativo e causava o "teletransporte").
+    function atrioSmoothScroll(targetY, duration) {
+        var startY = window.pageYOffset || document.documentElement.scrollTop;
+        var diff = targetY - startY;
+        if (Math.abs(diff) < 2) { window.scrollTo(0, targetY); return; }
+        var startTime = null;
+        function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+        function step(now) {
+            if (startTime === null) startTime = now;
+            var elapsed = now - startTime;
+            var p = Math.min(elapsed / duration, 1);
+            window.scrollTo(0, Math.round(startY + diff * easeInOutQuad(p)));
+            if (elapsed < duration) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+
     document.querySelectorAll('a[href^="#"]').forEach(function (link) {
         link.addEventListener('click', function (e) {
             var hash = this.getAttribute('href');
-            var navHeight = document.querySelector('.nav').offsetHeight;
+            var nav  = document.querySelector('.nav');
+            var navHeight = nav ? nav.offsetHeight : 0;
 
             if (hash.length <= 1) {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                atrioSmoothScroll(0, 600);
                 return;
             }
 
             var target = document.querySelector(hash);
             if (target) {
                 e.preventDefault();
-                var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-                window.scrollTo({ top: top, behavior: 'smooth' });
+                var top = target.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - navHeight;
+                atrioSmoothScroll(top, 600);
             }
         });
     });
