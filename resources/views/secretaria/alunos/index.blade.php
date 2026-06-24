@@ -20,11 +20,7 @@
     </a>
 </div>
 
-@if(session('success'))
-    <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
-        {{ session('success') }}
-    </div>
-@endif
+{{-- A mensagem de sucesso já é exibida globalmente pelo layout --}}
 
 {{-- Filtros --}}
 <form method="GET" action="{{ route('secretaria.alunos.index') }}"

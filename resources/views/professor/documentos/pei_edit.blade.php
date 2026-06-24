@@ -62,14 +62,6 @@ $accent = '#004B8D';
         </div>
     </div>
 
-    {{-- ═══ LEITURA: Diagnóstico Pedagógico (do Estudo de Caso) ═══ --}}
-    @if(!empty($ec['diagnostico_pedagogico']))
-    <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-        <p style="font-size: 11px; font-weight: 700; color: #004B8D; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 10px;">Diagnóstico Pedagógico — extraído do Estudo de Caso</p>
-        <p style="font-size: 13px; color: #374151; white-space: pre-wrap; margin: 0; line-height: 1.6;">{{ $ec['diagnostico_pedagogico'] }}</p>
-    </div>
-    @endif
-
     {{-- ═══ LEITURA: Objetivos de Aprendizagem (do PEI) ═══ --}}
     @php $peiGlobal = $pei->content['global'] ?? []; @endphp
     @if(!empty($peiGlobal['objetivos_curto_prazo']) || !empty($peiGlobal['objetivos_medio_prazo']) || !empty($peiGlobal['objetivos_longo_prazo']))

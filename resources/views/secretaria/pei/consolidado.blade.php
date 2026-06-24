@@ -84,18 +84,7 @@
     </div>
 </div>
 
-@if(session('success'))
-<div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
-    {{ session('success') }}
-</div>
-@endif
-
-{{-- ═══ DIAGNÓSTICO PEDAGÓGICO ═══ --}}
-@if(!empty($ec['diagnostico_pedagogico']))
-    {!! $infoBlock('Diagnóstico Pedagógico', 'Extraído do Estudo de Caso.', $ec['diagnostico_pedagogico']) !!}
-@else
-    {!! $emptyBlock('Diagnóstico Pedagógico', 'Preencha o campo "Diagnóstico Pedagógico" no Estudo de Caso.') !!}
-@endif
+{{-- A mensagem de sucesso já é exibida globalmente pelo layout --}}
 
 {{-- ═══ OBJETIVOS DE APRENDIZAGEM — extraído do Estudo de Caso ═══ --}}
 @php

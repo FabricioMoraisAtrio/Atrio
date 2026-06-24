@@ -20,18 +20,6 @@
         </div>';
 @endphp
 
-{{-- ═══ DIAGNÓSTICO PEDAGÓGICO — somente leitura (vem do Estudo de Caso) ═══ --}}
-@if(!empty($ec['diagnostico_pedagogico']))
-    {!! $readonlyBlock(
-        'Diagnóstico Pedagógico — extraído do Estudo de Caso',
-        'Descrição das necessidades educacionais.',
-        $ec['diagnostico_pedagogico']
-    ) !!}
-@else
-    {!! $emptyReadonly('Diagnóstico Pedagógico', 'Será preenchido automaticamente a partir do Estudo de Caso.') !!}
-@endif
-
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
 
 {{-- ═══ OBJETIVOS DE APRENDIZAGEM — preenchido pelo responsável ═══ --}}
 <div style="margin-bottom: 28px;">

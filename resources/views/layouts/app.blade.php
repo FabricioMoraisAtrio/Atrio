@@ -78,6 +78,8 @@
         /* ── FUNDOS COLORIDOS — com e sem espaço ── */
         [style*="background: #E8F0F9"],[style*="background:#E8F0F9"] { background: var(--accent-bg) !important; }
         [style*="background: #E6F5F4"],[style*="background:#E6F5F4"] { background: rgba(0,156,140,0.15) !important; }
+        [style*="background: #F0FDFB"],[style*="background:#F0FDFB"] { background: rgba(0,156,140,0.10) !important; }
+        [style*="border: 1px solid #CCECE9"],[style*="border:1px solid #CCECE9"] { border-color: rgba(0,156,140,0.30) !important; }
         [style*="background: #F5EDE6"],[style*="background:#F5EDE6"] { background: rgba(124,55,0,0.18) !important; }
         [style*="background: #F3E8FF"],[style*="background:#F3E8FF"] { background: rgba(139,92,246,0.18) !important; }
         [style*="background: #EDE9FE"],[style*="background:#EDE9FE"] { background: rgba(109,40,217,0.18) !important; }
@@ -162,6 +164,9 @@
         input, textarea, select { color: var(--text-1) !important; }
         [data-theme="dark"] input  { background: transparent !important; }
         [data-theme="dark"] textarea { background: var(--bg-subtle) !important; border-color: var(--border) !important; }
+        /* No dark mode a textarea ganha fundo (vira caixa); garante respiro horizontal
+           para o texto não colar na borda. */
+        [data-theme="dark"] textarea { padding-left: 12px !important; padding-right: 12px !important; border-radius: 8px; }
         [data-theme="dark"] select { background: var(--bg-subtle) !important; border-color: var(--border) !important; }
         [data-theme="dark"] input[type="date"] { background: var(--bg-subtle) !important; color-scheme: dark; }
         [data-theme="dark"] input::placeholder,
@@ -329,8 +334,8 @@
                             ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
                             ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel de Acompanhamento', 'module' => 'painel'],
                             ['route' => 'secretaria.turmas.index',               'icon' => 'academic','label' => term('turmas'),        'module' => 'turmas'],
-                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Cadastro de ' . term('alunos'), 'module' => 'alunos', 'badge' => $pendentesCount ?: null],
-                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos'],
+                            ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Cadastro de ' . term('alunos'), 'module' => 'alunos'],
+                            ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos', 'badge' => $pendentesCount ?: null],
                             ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],
                             ['route' => 'secretaria.seletividade.index',         'icon' => 'food',    'label' => 'Jornada Alimentar', 'module' => 'seletividade'],
                         ];

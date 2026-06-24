@@ -10,6 +10,17 @@ use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
+    /** Rótulo amigável do tipo de documento para mensagens ao usuário. */
+    private static function tipoLabel(string $type): string
+    {
+        return [
+            'estudo_caso'      => 'Estudo de Caso',
+            'paee'             => 'PAEE',
+            'pei'              => 'PEI',
+            'pei_consolidado'  => 'PEI',
+        ][$type] ?? ucfirst(str_replace('_', ' ', $type));
+    }
+
     public function create(Student $aluno, Request $request)
     {
         $type = $request->query('type', 'estudo_caso');
@@ -32,7 +43,7 @@ class DocumentController extends Controller
             ->exists();
 
         if ($exists) {
-            return back()->withErrors(['documento' => 'Já existe um ' . strtoupper($type) . ' para este aluno em ' . date('Y') . '.']);
+            return back()->withErrors(['documento' => 'Já existe um ' . self::tipoLabel($type) . ' para este aluno em ' . date('Y') . '.']);
         }
 
         $estudo_caso_content = [];
@@ -101,7 +112,7 @@ class DocumentController extends Controller
             : 'secretaria.rotinas.documentos.estudo-caso';
 
         return redirect()->route($listRoute)
-            ->with('success', strtoupper($type) . ' criado com sucesso.');
+            ->with('success', self::tipoLabel($type) . ' criado com sucesso.');
     }
 
     public function show(Document $documento)
