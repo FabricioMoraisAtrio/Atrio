@@ -19,6 +19,11 @@ return Application::configure(basePath: dirname(__DIR__))
         'school.member'  => \App\Http\Middleware\EnsureSchoolMember::class,
         'school.module'  => \App\Http\Middleware\EnsureSchoolHasModule::class,
     ]);
+
+    // Páginas HTML nunca são cacheadas (navegador/LiteSpeed) — assets com hash mantêm cache.
+    $middleware->web(append: [
+        \App\Http\Middleware\NoHtmlCache::class,
+    ]);
 })
 
 
