@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Secretaria;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\DocumentPdfRenderer;
 
 class DocumentPreviewController extends Controller
 {
@@ -16,10 +16,7 @@ class DocumentPreviewController extends Controller
             'schoolClasses' => fn($q) => $q->where('year', $documento->year),
         ]);
 
-        $pdf = Pdf::loadView('pdf.documento', compact('documento'))
-            ->setOptions(['isRemoteEnabled' => true]);
-
-        $output = $pdf->output();
+        $output = DocumentPdfRenderer::render($documento);
 
         return response($output, 200, [
             'Content-Type'        => 'application/pdf',
