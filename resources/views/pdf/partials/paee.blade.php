@@ -36,10 +36,10 @@
         if (empty($lines)) return '<span style="color:#bbb; font-style:italic; font-size:9px;">(não preenchido)</span>';
         $out = '';
         foreach ($lines as $line) {
-            $out .= '<div style="display:table;width:100%;margin-bottom:3px;">'
-                  . '<span style="display:table-cell;width:12px;font-size:9px;color:' . $accent . ';">•</span>'
-                  . '<span style="display:table-cell;font-size:9px;color:#1a1a1a;">' . e($line) . '</span>'
-                  . '</div>';
+            $out .= '<table style="width:100%; border-collapse:collapse; margin-bottom:3px;"><tr>'
+                  . '<td style="width:12px; font-size:9px; color:' . $accent . '; vertical-align:top;">•</td>'
+                  . '<td style="font-size:9px; color:#1a1a1a; vertical-align:top;">' . e($line) . '</td>'
+                  . '</tr></table>';
         }
         return $out;
     };
@@ -70,18 +70,17 @@
     }
 
     /* ── Cabeçalho principal ── */
-    .doc-header { 
-        display: table; 
-        width: 100%; 
-        table-layout: fixed; 
-        border-bottom: 3px solid {{ $accent }}; 
-        padding-bottom: 12px; 
-        margin-bottom: 18px; 
+    .doc-header {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        border-bottom: 3px solid {{ $accent }};
+        margin-bottom: 18px;
     }
-    
-    .doc-header-left  { display: table-cell; vertical-align: middle; width: 60px; }
-    .doc-header-mid   { display: table-cell; vertical-align: middle; padding: 0 12px; }
-    .doc-header-right { display: table-cell; vertical-align: middle; text-align: right; width: 96px; }
+
+    .doc-header-left  { vertical-align: middle; width: 60px; padding-bottom: 12px; }
+    .doc-header-mid   { vertical-align: middle; padding: 0 12px 12px; }
+    .doc-header-right { vertical-align: middle; text-align: right; width: 96px; padding-bottom: 12px; }
 
     /* Forçar tabelas a não estourarem a largura da página */
     table {
@@ -141,27 +140,27 @@
 <div class="page">
 
 {{-- Cabeçalho --}}
-<div class="doc-header">
-    <div class="doc-header-left">
+<table class="doc-header"><tr>
+    <td class="doc-header-left">
         @if($logoB64)
             <img src="{{ $logoB64 }}" class="school-logo" alt="Logo">
         @else
             <div class="photo-placeholder" style="width:52px;height:52px;"><span style="font-size:7px;color:#ccc;">Logo</span></div>
         @endif
-    </div>
-    <div class="doc-header-mid">
+    </td>
+    <td class="doc-header-mid">
         <div class="doc-school">{{ $school?->name }}</div>
         <div class="doc-subtitle">Plano de Atendimento Educacional Especializado &nbsp;·&nbsp; Ano Letivo {{ $documento->year }}</div>
         <div class="doc-title">PAEE — Plano de Atendimento Educacional Especializado</div>
-    </div>
-    <div class="doc-header-right">
+    </td>
+    <td class="doc-header-right">
         @if($photoB64)
             <img src="{{ $photoB64 }}" class="student-photo" alt="Foto">
         @else
             <div class="photo-placeholder"><span style="font-size:7px;color:#ccc;">Foto</span></div>
         @endif
-    </div>
-</div>
+    </td>
+</tr></table>
 
 {{-- Identificação --}}
 <table class="id-table">
@@ -312,16 +311,16 @@ $checkCols = function(array $itens): string {
                 @if($sig['name'])<div style="font-size:9px;color:#1a1a1a;margin-top:3px;">{{ $sig['name'] }}</div>@endif
             </td>
             <td style="width:60%;border:1px solid #ddd;padding:8px 14px;vertical-align:bottom;">
-                <div style="display:table;width:100%;">
-                    <div style="display:table-cell;vertical-align:bottom;padding-right:16px;">
+                <table style="width:100%; border-collapse:collapse;"><tr>
+                    <td style="vertical-align:bottom; padding-right:16px;">
                         <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Assinatura</div>
                         <div style="border-bottom:1px solid #888;min-height:18px;"></div>
-                    </div>
-                    <div style="display:table-cell;width:110px;vertical-align:bottom;">
+                    </td>
+                    <td style="width:110px; vertical-align:bottom;">
                         <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Data</div>
                         <div style="border-bottom:1px solid #888;font-size:8px;color:#bbb;padding-bottom:2px;">____/____/________</div>
-                    </div>
-                </div>
+                    </td>
+                </tr></table>
             </td>
         </tr>
         @endforeach

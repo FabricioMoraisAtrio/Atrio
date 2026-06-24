@@ -86,20 +86,20 @@
     body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a1a1a; margin: 0; padding: 0; line-height: 1.5; }
     .page-break { page-break-after: always; }
 
-    .doc-header { display: table; width: 100%; table-layout: fixed; border-bottom: 3px solid {{ $accent }}; padding-bottom: 12px; margin-bottom: 18px; }
-    .doc-header-left  { display: table-cell; vertical-align: middle; width: 60px; }
-    .doc-header-mid   { display: table-cell; vertical-align: middle; padding: 0 12px; }
-    .doc-header-right { display: table-cell; vertical-align: middle; text-align: right; width: 96px; }
+    .doc-header { width: 100%; table-layout: fixed; border-collapse: collapse; border-bottom: 3px solid {{ $accent }}; margin-bottom: 18px; }
+    .doc-header-left  { vertical-align: middle; width: 60px; padding-bottom: 12px; }
+    .doc-header-mid   { vertical-align: middle; padding: 0 12px 12px; }
+    .doc-header-right { vertical-align: middle; text-align: right; width: 96px; padding-bottom: 12px; }
     .doc-school   { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
     .doc-subtitle { font-size: 8.5px; color: #666; margin-top: 2px; }
     .doc-title    { font-size: 13px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; color: {{ $accent }}; margin-top: 6px; }
     .school-logo   { width: 52px; height: 52px; object-fit: contain; }
     .student-photo { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; }
-    .photo-placeholder { width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc; display: table; text-align: center; vertical-align: middle; }
+    .photo-placeholder { width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc; text-align: center; vertical-align: middle; }
 
-    .doc-header-sm { display: table; width: 100%; table-layout: fixed; border-bottom: 1.5px solid {{ $accent }}; padding-bottom: 6px; margin-bottom: 16px; }
-    .doc-header-sm-l { display: table-cell; font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; }
-    .doc-header-sm-r { display: table-cell; text-align: right; font-size: 8px; color: #888; }
+    .doc-header-sm { width: 100%; table-layout: fixed; border-collapse: collapse; border-bottom: 1.5px solid {{ $accent }}; margin-bottom: 16px; }
+    .doc-header-sm-l { font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; padding-bottom: 6px; }
+    .doc-header-sm-r { text-align: right; font-size: 8px; color: #888; padding-bottom: 6px; }
 
     .id-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 18px; }
     .id-table td { border: 1px solid #ddd; padding: 4px 8px; font-size: 9px; word-break: break-word; }
@@ -114,8 +114,8 @@
     .field-value { font-size: 9.5px; color: #1a1a1a; border-bottom: 1px solid #ddd; padding: 3px 2px 6px; white-space: pre-wrap; word-break: break-word; }
     .field-value.empty { color: #bbb; font-style: italic; min-height: 18px; }
 
-    .grid-2 { display: table; width: 100%; table-layout: fixed; }
-    .grid-2 .col { display: table-cell; width: 50%; vertical-align: top; padding-right: 14px; }
+    .grid-2 { width: 100%; table-layout: fixed; border-collapse: collapse; }
+    .grid-2 .col { width: 50%; vertical-align: top; padding-right: 14px; }
     .grid-2 .col:last-child { padding-right: 0; }
 
     .inv-table    { width: 100%; border-collapse: collapse; table-layout: fixed; }
@@ -139,27 +139,27 @@
 <div class="page">
 
 {{-- Cabeçalho --}}
-<div class="doc-header">
-    <div class="doc-header-left">
+<table class="doc-header"><tr>
+    <td class="doc-header-left">
         @if($logoB64)
             <img src="{{ $logoB64 }}" class="school-logo" alt="Logo">
         @else
             <div class="photo-placeholder"><span style="font-size:7px; color:#ccc;">Logo</span></div>
         @endif
-    </div>
-    <div class="doc-header-mid">
+    </td>
+    <td class="doc-header-mid">
         <div class="doc-school">{{ $school?->name }}</div>
         <div class="doc-subtitle">Plano Educacional Individualizado &nbsp;·&nbsp; Ano Letivo {{ $documento->year }}</div>
         <div class="doc-title">PEI — Plano Educacional Individualizado</div>
-    </div>
-    <div class="doc-header-right">
+    </td>
+    <td class="doc-header-right">
         @if($photoB64)
             <img src="{{ $photoB64 }}" class="student-photo" alt="Foto">
         @else
             <div class="photo-placeholder"><span style="font-size:7px; color:#ccc;">Foto</span></div>
         @endif
-    </div>
-</div>
+    </td>
+</tr></table>
 
 {{-- Identificação --}}
 <table class="id-table">
@@ -204,28 +204,28 @@
         <div class="section-title">Equipe Responsável</div>
         <div class="section-sub">Profissionais envolvidos na elaboração e acompanhamento do PEI.</div>
     </div>
-    <div class="grid-2">
+    <table class="grid-2"><tr>
         @if($equipeColegio)
-        <div class="col">
+        <td class="col">
             <div class="field-label" style="margin-bottom: 5px;">Equipe do Colégio</div>
             @foreach($equipeColegio as $cargo => $nome)
             <div style="margin-bottom: 3px; font-size: 9px; color: #1a1a1a;">
                 <span style="color: #555; font-weight: bold; font-size: 8px;">{{ $cargo }}:</span> {{ $nome }}
             </div>
             @endforeach
-        </div>
+        </td>
         @endif
         @if($equipeMulti)
-        <div class="col">
+        <td class="col">
             <div class="field-label" style="margin-bottom: 5px;">Equipe Multidisciplinar</div>
             @foreach($equipeMulti as $cargo => $nome)
             <div style="margin-bottom: 3px; font-size: 9px; color: #1a1a1a;">
                 <span style="color: #555; font-weight: bold; font-size: 8px;">{{ $cargo }}:</span> {{ $nome }}
             </div>
             @endforeach
-        </div>
+        </td>
         @endif
-    </div>
+    </tr></table>
 </div>
 <hr class="div">
 @endif

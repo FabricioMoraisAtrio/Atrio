@@ -76,16 +76,16 @@
     body { font-family: DejaVu Sans, sans-serif; font-size: 9.5px; color: #1a1a1a; margin: 0; padding: 0; line-height: 1.5; }
 
     /* ── Cabeçalho principal ── */
-    .doc-header { display: table; width: 100%; table-layout: fixed; border-bottom: 3px solid {{ $accent }}; padding-bottom: 12px; margin-bottom: 18px; }
-    .doc-header-left  { display: table-cell; vertical-align: middle; width: 60px; }
-    .doc-header-mid   { display: table-cell; vertical-align: middle; padding: 0 12px; }
-    .doc-header-right { display: table-cell; vertical-align: middle; text-align: right; width: 96px; }
+    .doc-header { width: 100%; table-layout: fixed; border-collapse: collapse; border-bottom: 3px solid {{ $accent }}; margin-bottom: 18px; }
+    .doc-header-left  { vertical-align: middle; width: 60px; padding-bottom: 12px; }
+    .doc-header-mid   { vertical-align: middle; padding: 0 12px 12px; }
+    .doc-header-right { vertical-align: middle; text-align: right; width: 96px; padding-bottom: 12px; }
     .doc-school   { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
     .doc-subtitle { font-size: 8.5px; color: #666; margin-top: 2px; }
     .doc-title    { font-size: 13px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; color: {{ $accent }}; margin-top: 6px; }
     .school-logo    { width: 52px; height: 52px; object-fit: contain; }
     .student-photo  { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; }
-    .photo-placeholder { width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc; display: table; text-align: center; }
+    .photo-placeholder { width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc; text-align: center; }
 
     /* ── Identificação ── */
     .id-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 18px; }
@@ -137,27 +137,27 @@
 <div class="page">
 
 {{-- Cabeçalho principal --}}
-<div class="doc-header">
-    <div class="doc-header-left">
+<table class="doc-header"><tr>
+    <td class="doc-header-left">
         @if($logoB64)
             <img src="{{ $logoB64 }}" class="school-logo" alt="Logo">
         @else
             <div class="photo-placeholder"><span style="font-size:7px; color:#ccc;">Logo</span></div>
         @endif
-    </div>
-    <div class="doc-header-mid">
+    </td>
+    <td class="doc-header-mid">
         <div class="doc-school">{{ $school?->name }}</div>
         <div class="doc-subtitle">Plano Educacional Individualizado &nbsp;·&nbsp; Ano Letivo {{ $documento->year }}</div>
         <div class="doc-title">PEI — Plano Educacional Individualizado</div>
-    </div>
-    <div class="doc-header-right">
+    </td>
+    <td class="doc-header-right">
         @if($photoB64)
             <img src="{{ $photoB64 }}" class="student-photo" alt="Foto">
         @else
             <div class="photo-placeholder"><span style="font-size:7px; color:#ccc;">Foto</span></div>
         @endif
-    </div>
-</div>
+    </td>
+</tr></table>
 
 {{-- Identificação --}}
 <table class="id-table">

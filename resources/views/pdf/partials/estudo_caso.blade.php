@@ -79,10 +79,10 @@
         if (empty($lines)) return '';
         $out = '';
         foreach ($lines as $line) {
-            $out .= '<div style="display:table;width:100%;margin-bottom:2px;">'
-                  . '<span style="display:table-cell;width:10px;font-size:9px;">•</span>'
-                  . '<span style="display:table-cell;font-size:9px;color:#1a1a1a;">' . e($line) . '</span>'
-                  . '</div>';
+            $out .= '<table style="width:100%; border-collapse:collapse; margin-bottom:2px;"><tr>'
+                  . '<td style="width:10px; font-size:9px; vertical-align:top;">•</td>'
+                  . '<td style="font-size:9px; color:#1a1a1a; vertical-align:top;">' . e($line) . '</td>'
+                  . '</tr></table>';
         }
         return $out;
     };
@@ -103,15 +103,13 @@
 
     /* ── Cabeçalho ── */
     .doc-header {
-        display: table;
-        width: 100%;
+        width: 100%; table-layout: fixed; border-collapse: collapse;
         border-bottom: 3px solid {{ $accent }};
-        padding-bottom: 12px;
         margin-bottom: 18px;
     }
-    .doc-header-left  { display: table-cell; vertical-align: middle; width: 60px; }
-    .doc-header-mid   { display: table-cell; vertical-align: middle; padding: 0 12px; }
-    .doc-header-right { display: table-cell; vertical-align: middle; text-align: right; width: 96px; }
+    .doc-header-left  { vertical-align: middle; width: 60px; padding-bottom: 12px; }
+    .doc-header-mid   { vertical-align: middle; padding: 0 12px 12px; }
+    .doc-header-right { vertical-align: middle; text-align: right; width: 96px; padding-bottom: 12px; }
     .doc-school { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: #1a1a1a; }
     .doc-subtitle { font-size: 8.5px; color: #666; margin-top: 2px; }
     .doc-title {
@@ -123,17 +121,17 @@
     .student-photo { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc; }
     .photo-placeholder {
         width: 90px; height: 90px; border-radius: 6px; border: 1px dashed #ccc;
-        display: table; text-align: center; vertical-align: middle;
+        text-align: center; vertical-align: middle;
     }
 
     /* ── Cabeçalho de continuação (páginas 2+) ── */
     .doc-header-sm {
-        display: table; width: 100%;
+        width: 100%; table-layout: fixed; border-collapse: collapse;
         border-bottom: 1.5px solid {{ $accent }};
-        padding-bottom: 6px; margin-bottom: 16px;
+        margin-bottom: 16px;
     }
-    .doc-header-sm-l { display: table-cell; font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; }
-    .doc-header-sm-r { display: table-cell; text-align: right; font-size: 8px; color: #888; }
+    .doc-header-sm-l { font-size: 9px; font-weight: bold; color: #333; text-transform: uppercase; padding-bottom: 6px; }
+    .doc-header-sm-r { text-align: right; font-size: 8px; color: #888; padding-bottom: 6px; }
 
     /* ── Identificação ── */
     .id-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
@@ -189,27 +187,27 @@
 <div class="page">
 
 {{-- Cabeçalho --}}
-<div class="doc-header">
-    <div class="doc-header-left">
+<table class="doc-header"><tr>
+    <td class="doc-header-left">
         @if($logoB64)
             <img src="{{ $logoB64 }}" class="school-logo" alt="Logo">
         @else
             <div class="photo-placeholder"><span style="font-size:7px; color:#ccc;">Logo</span></div>
         @endif
-    </div>
-    <div class="doc-header-mid">
+    </td>
+    <td class="doc-header-mid">
         <div class="doc-school">{{ $school?->name }}</div>
         <div class="doc-subtitle">Atendimento Educacional Especializado &nbsp;·&nbsp; Ano Letivo {{ $documento->year }}</div>
         <div class="doc-title">Estudo de Caso</div>
-    </div>
-    <div class="doc-header-right">
+    </td>
+    <td class="doc-header-right">
         @if($photoB64)
             <img src="{{ $photoB64 }}" class="student-photo" alt="Foto">
         @else
             <div class="photo-placeholder"><span style="font-size:7px; color:#ccc;">Foto</span></div>
         @endif
-    </div>
-</div>
+    </td>
+</tr></table>
 
 {{-- Identificação --}}
 <table class="id-table">
@@ -403,16 +401,16 @@
                 @if($sig['nome'])<div style="font-size:9px;color:#1a1a1a;margin-top:3px;">{{ $sig['nome'] }}</div>@endif
             </td>
             <td style="width:60%;border:1px solid #ddd;padding:8px 14px;vertical-align:bottom;">
-                <div style="display:table;width:100%;">
-                    <div style="display:table-cell;vertical-align:bottom;padding-right:16px;">
+                <table style="width:100%; border-collapse:collapse;"><tr>
+                    <td style="vertical-align:bottom; padding-right:16px;">
                         <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Assinatura</div>
                         <div style="border-bottom:1px solid #888;min-height:18px;"></div>
-                    </div>
-                    <div style="display:table-cell;width:110px;vertical-align:bottom;">
+                    </td>
+                    <td style="width:110px; vertical-align:bottom;">
                         <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Data</div>
                         <div style="border-bottom:1px solid #888;font-size:8px;color:#bbb;padding-bottom:2px;">____/____/________</div>
-                    </div>
-                </div>
+                    </td>
+                </tr></table>
             </td>
         </tr>
         @endforeach

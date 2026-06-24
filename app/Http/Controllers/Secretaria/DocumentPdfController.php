@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Secretaria;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\DocumentAccessLog;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\DocumentPdfRenderer;
 
 class DocumentPdfController extends Controller
 {
@@ -31,12 +31,6 @@ class DocumentPdfController extends Controller
             'accessed_at'   => now(),
         ]);
 
-        $pdf = Pdf::loadView('pdf.documento', compact('documento'))
-            ->setOptions(['isRemoteEnabled' => true]);
-        $pdf->render();
-
-        \App\Support\PdfFooter::apply($pdf->getDomPDF());
-
         $typeLabels = [
             'estudo_caso'     => 'ESTUDO-DE-CASO',
             'paee'            => 'PAEE',
@@ -51,6 +45,9 @@ class DocumentPdfController extends Controller
             . '_' . $documento->year
             . '.pdf';
 
-        return $pdf->download($filename);
+        return response(DocumentPdfRenderer::render($documento), 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
     }
 }

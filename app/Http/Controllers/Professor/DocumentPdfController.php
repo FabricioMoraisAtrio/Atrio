@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Professor;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use App\Models\DocumentAccessLog;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\DocumentPdfRenderer;
 
 class DocumentPdfController extends Controller
 {
@@ -19,6 +19,10 @@ class DocumentPdfController extends Controller
         if (! $temAcesso) abort(403);
 
         $documento->load('student', 'author');
+        $documento->student->load([
+            'school',
+            'schoolClasses' => fn($q) => $q->where('year', $documento->year),
+        ]);
 
         DocumentAccessLog::create([
             'school_id'     => $documento->school_id,
@@ -33,17 +37,14 @@ class DocumentPdfController extends Controller
             'accessed_at'   => now(),
         ]);
 
-        $pdf = Pdf::loadView('pdf.documento', compact('documento'))
-            ->setOptions(['isRemoteEnabled' => true]);
-        $pdf->render();
-
-        \App\Support\PdfFooter::apply($pdf->getDomPDF());
-
         $filename = strtoupper(str_replace('_', '-', $documento->type))
             . '_' . str($documento->student->name)->slug()
             . '_' . $documento->year
             . '.pdf';
 
-        return $pdf->download($filename);
+        return response(DocumentPdfRenderer::render($documento), 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
     }
 }
