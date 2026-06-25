@@ -19,21 +19,26 @@
             {{-- Foto --}}
             <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
                 <div style="width: 64px; height: 64px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid var(--border); background: var(--accent-bg); display: flex; align-items: center; justify-content: center;">
-                    @if($aluno->photo)
-                        <img id="foto-preview" src="{{ route('alunos.foto', $aluno) }}" style="width:100%; height:100%; object-fit:cover;" alt="">
-                    @else
-                        <img id="foto-preview" src="" style="display:none; width:100%; height:100%; object-fit:cover;" alt="">
-                        <span id="foto-inicial" style="font-size: 24px; font-weight: 700; color: var(--accent-text);">{{ strtoupper(substr($aluno->name, 0, 1)) }}</span>
-                    @endif
+                    <img id="foto-preview" src="{{ $aluno->photo ? route('alunos.foto', $aluno) : '' }}" style="width:100%; height:100%; object-fit:cover;@if(!$aluno->photo) display:none;@endif" alt="">
+                    <span id="foto-inicial" style="font-size: 24px; font-weight: 700; color: var(--accent-text);@if($aluno->photo) display:none;@endif">{{ strtoupper(substr($aluno->name, 0, 1)) }}</span>
                 </div>
+                <input type="hidden" name="remove_photo" id="remove_photo" value="0">
                 <div>
                     <p style="font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px;">Foto do aluno</p>
-                    <label for="foto-input-edit" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-2); cursor: pointer;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        Alterar foto
-                    </label>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <label for="foto-input-edit" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-2); cursor: pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            Alterar foto
+                        </label>
+                        <button type="button"
+                                onclick="atrioRemovePhoto({inputId:'foto-input-edit', removeFlagId:'remove_photo', previewId:'foto-preview', placeholderId:'foto-inicial', nameId:'foto-nome'})"
+                                style="display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:transparent; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:600; color:var(--danger); cursor:pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                            Remover
+                        </button>
+                    </div>
                     <input type="file" id="foto-input-edit" name="photo" accept="image/*"
-                           onchange="previewFoto(this)" style="display:none;">
+                           onchange="AtrioCropper.open(this, {aspect:1, previewId:'foto-preview', placeholderId:'foto-inicial', nameId:'foto-nome', output:'jpeg', name:'foto', removeFlagId:'remove_photo'})" style="display:none;">
                     <p id="foto-nome" style="font-size: 12px; color: var(--text-4); margin: 6px 0 0;">Nenhum arquivo selecionado</p>
                 </div>
             </div>
@@ -254,21 +259,6 @@ function toggleAtypical(checked) {
     if (!checked) {
         document.getElementById('condition_field').style.display = 'none';
         document.getElementById('cid_outros_check').checked = false;
-    }
-}
-function previewFoto(input) {
-    if (input.files && input.files[0]) {
-        var nome = document.getElementById('foto-nome');
-        if (nome) nome.textContent = input.files[0].name;
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var preview = document.getElementById('foto-preview');
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-            var inicial = document.getElementById('foto-inicial');
-            if (inicial) inicial.style.display = 'none';
-        };
-        reader.readAsDataURL(input.files[0]);
     }
 }
 </script>

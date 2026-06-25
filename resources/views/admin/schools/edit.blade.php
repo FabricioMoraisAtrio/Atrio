@@ -123,23 +123,29 @@
                 {{-- Logo --}}
                 <div>
                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Logo da escola</p>
-                    @if($school->logo)
-                    <div style="margin-bottom: 12px;">
+                    <div id="logo-preview-wrapper" style="margin-bottom: 12px;{{ $school->logo ? '' : ' display:none;' }}">
                         <p style="font-size:11px;color:#9CA3AF;margin-bottom:6px;">Logo atual</p>
-                        <img src="{{ route('school.logo', ['filename' => basename($school->logo)]) }}"
-                             style="height: 48px; object-fit: contain; border: 1px solid #E5E7EB; border-radius: 8px; padding: 6px;">
+                        <img id="logo-preview-img" src="{{ $school->logo ? route('school.logo', ['filename' => basename($school->logo)]) : '' }}"
+                             style="height: 48px; max-width: 180px; object-fit: contain; border: 1px solid #E5E7EB; border-radius: 8px; padding: 6px;">
                     </div>
-                    @endif
-                    <label for="logo-input" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid #D1D5DB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; background: #F9FAFB;"
-                           onmouseover="this.style.background='#F3F4F6'" onmouseout="this.style.background='#F9FAFB'">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-                        </svg>
-                        <span id="logo-label">Escolher imagem…</span>
-                    </label>
+                    <input type="hidden" name="remove_logo" id="remove_logo" value="0">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <label for="logo-input" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid #D1D5DB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; background: #F9FAFB;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                            </svg>
+                            <span id="logo-label">{{ $school->logo ? 'Trocar imagem…' : 'Escolher imagem…' }}</span>
+                        </label>
+                        <button type="button"
+                                onclick="atrioRemovePhoto({inputId:'logo-input', removeFlagId:'remove_logo', previewId:'logo-preview-img', wrapperId:'logo-preview-wrapper', nameId:'logo-label'})"
+                                style="display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border:1px solid #D1D5DB; border-radius:8px; font-size:13px; color:#B42318; background:#fff; cursor:pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                            Remover
+                        </button>
+                    </div>
                     <input id="logo-input" type="file" name="logo" accept=".svg,.png,.jpg,.jpeg,image/svg+xml,image/png,image/jpeg"
                            style="display: none;"
-                           onchange="document.getElementById('logo-label').textContent = this.files[0]?.name ?? 'Escolher imagem…'">
+                           onchange="AtrioCropper.open(this, {aspect:null, previewId:'logo-preview-img', wrapperId:'logo-preview-wrapper', output:'png', name:'logo', removeFlagId:'remove_logo'})">
                     <p style="font-size:11px;color:#9CA3AF;margin-top:6px;">SVG, PNG ou JPG</p>
                     @error('logo')<p style="font-size: 12px; color: #EF4444; margin-top: 4px;">{{ $message }}</p>@enderror
                 </div>

@@ -79,6 +79,7 @@ Route::middleware('school.module:alunos')->group(function () {
         Route::patch('alunos/{aluno}',     [StudentController::class, 'update']);
         Route::post('alunos/{aluno}/turma',[StudentController::class, 'attachClass'])->name('alunos.attachClass');
         Route::post('alunos/{aluno}/foto', [StudentController::class, 'uploadPhoto'])->name('alunos.uploadPhoto');
+        Route::delete('alunos/{aluno}/foto', [StudentController::class, 'removePhoto'])->name('alunos.removePhoto');
     });
     Route::middleware('can:alunos.deletar')->group(function () {
         Route::delete('alunos/{aluno}', [StudentController::class, 'destroy'])->name('alunos.destroy');

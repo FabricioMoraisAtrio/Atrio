@@ -67,10 +67,16 @@
                    onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
         </div>
 
-        <button type="submit"
-                style="background:var(--accent);color:white;border:none;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">
-            Criar matéria
-        </button>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <button type="submit"
+                    style="background:var(--accent);color:var(--accent-contrast);border:none;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">
+                Criar matéria
+            </button>
+            <a href="{{ route('secretaria.config.index', ['tab' => 'materias']) }}"
+               style="padding:11px 24px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-2);font-size:14px;font-weight:600;text-decoration:none;">
+                Cancelar
+            </a>
+        </div>
     </form>
 </div>
 @endsection

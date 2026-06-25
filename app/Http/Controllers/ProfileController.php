@@ -33,6 +33,9 @@ class ProfileController extends Controller
             }
             $path = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = $path;
+        } elseif ($request->boolean('remove_avatar') && $user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+            $user->avatar = null;
         }
 
         // Senha

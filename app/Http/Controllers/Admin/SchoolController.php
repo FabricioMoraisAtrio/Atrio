@@ -150,6 +150,9 @@ class SchoolController extends Controller
                 \Storage::disk('public')->delete($school->logo);
             }
             $data['logo'] = $request->file('logo')->store('logos', 'public');
+        } elseif ($request->boolean('remove_logo') && $school->logo) {
+            \Storage::disk('public')->delete($school->logo);
+            $data['logo'] = null;
         } else {
             unset($data['logo']);
         }

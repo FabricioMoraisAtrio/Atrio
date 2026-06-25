@@ -325,5 +325,6 @@ document.addEventListener('keydown', function (e) {
 });
 </script>
 @include('layouts.partials.theme-scripts')
+@include('layouts.partials.image-cropper')
 </body>
 </html>

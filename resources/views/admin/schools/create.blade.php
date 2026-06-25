@@ -67,9 +67,15 @@
                         </svg>
                         <span id="logo-label">Escolher imagem…</span>
                     </label>
+                    <button type="button"
+                            onclick="atrioRemovePhoto({inputId:'logo-input', previewId:'logo-preview-img', wrapperId:'logo-preview-wrapper', nameId:'logo-label'})"
+                            style="display:inline-flex; align-items:center; gap:6px; margin-left:8px; padding:8px 14px; border:1px solid #D1D5DB; border-radius:8px; font-size:13px; color:#B42318; background:#fff; cursor:pointer;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                        Remover
+                    </button>
                     <input id="logo-input" type="file" name="logo" accept=".svg,.png,.jpg,.jpeg,image/svg+xml,image/png,image/jpeg"
                         style="display: none;"
-                        onchange="previewLogo(this)">
+                        onchange="AtrioCropper.open(this, {aspect:null, previewId:'logo-preview-img', wrapperId:'logo-preview-wrapper', output:'png', name:'logo'})">
                     @error('logo')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -155,23 +161,6 @@
     </div>
 </div>
 <script>
-
-function previewLogo(input) {
-    const label   = document.getElementById('logo-label');
-    const wrapper = document.getElementById('logo-preview-wrapper');
-    const img     = document.getElementById('logo-preview-img');
-
-    if (input.files && input.files[0]) {
-        label.textContent = input.files[0].name;
-
-        const reader = new FileReader();
-        reader.onload = e => {
-            img.src = e.target.result;
-            wrapper.style.display = 'block';
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
 
 function selectColor(hex) {
     document.getElementById('color-hex').value = hex;

@@ -70,42 +70,41 @@
                 <div style="margin-bottom: 24px;">
                     <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Logo da Escola</label>
 
-                    <div id="cfg-logo-preview-wrapper" style="{{ $escola->logo ? '' : 'display:none;' }} margin-bottom: 10px;">
-                        <img id="cfg-logo-preview-img"
-                             src="{{ $escola->logo ? route('school.logo', ['filename' => basename($escola->logo)]) : '' }}"
-                             style="height: 52px; max-width: 180px; object-fit: contain; border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: var(--bg-subtle);">
-                    </div>
+                    <img id="cfg-logo-preview-img"
+                         src="{{ $escola->logo ? route('school.logo', ['filename' => basename($escola->logo)]) : '' }}"
+                         style="height: 52px; max-width: 180px; object-fit: contain; border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: var(--bg-subtle); margin-bottom: 10px;{{ $escola->logo ? '' : ' display:none;' }}">
 
-                    <label for="cfg-logo-input" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-2); background: var(--bg-subtle);"
-                           onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='var(--bg-subtle)'">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-                        </svg>
-                        <span id="cfg-logo-label">{{ $escola->logo ? 'Trocar imagem…' : 'Escolher imagem…' }}</span>
-                    </label>
+                    <input type="hidden" name="remove_logo" id="remove_logo" value="0">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <label for="cfg-logo-input" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-2); background: var(--bg-subtle);">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                            </svg>
+                            <span id="cfg-logo-label">{{ $escola->logo ? 'Trocar imagem…' : 'Escolher imagem…' }}</span>
+                        </label>
+                        <button type="button"
+                                onclick="atrioRemovePhoto({inputId:'cfg-logo-input', removeFlagId:'remove_logo', previewId:'cfg-logo-preview-img', nameId:'cfg-logo-label'})"
+                                style="display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:600; color:var(--danger); background:transparent; cursor:pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                            Remover
+                        </button>
+                    </div>
                     <input id="cfg-logo-input" type="file" name="logo" accept=".png,.jpg,.jpeg,image/png,image/jpeg"
                            style="display: none;"
-                           onchange="previewCfgLogo(this)">
+                           onchange="AtrioCropper.open(this, {aspect:null, previewId:'cfg-logo-preview-img', output:'png', name:'logo', removeFlagId:'remove_logo'})">
                     <p style="font-size: 11px; color: var(--text-4); margin-top: 6px;">PNG ou JPG, máx. 2MB. Aparece na barra lateral.</p>
                 </div>
-                <script>
-                function previewCfgLogo(input) {
-                    if (input.files && input.files[0]) {
-                        document.getElementById('cfg-logo-label').textContent = input.files[0].name;
-                        const reader = new FileReader();
-                        reader.onload = e => {
-                            document.getElementById('cfg-logo-preview-img').src = e.target.result;
-                            document.getElementById('cfg-logo-preview-wrapper').style.display = '';
-                        };
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-                </script>
 
-                <button type="submit"
-                        style="background: var(--accent); color: white; border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                    Salvar
-                </button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button type="submit"
+                            style="background: var(--accent); color: var(--accent-contrast); border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                        Salvar
+                    </button>
+                    <a href="{{ route('secretaria.dashboard') }}"
+                       style="padding: 11px 24px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-2); font-size: 13px; font-weight: 600; text-decoration: none;">
+                        Cancelar
+                    </a>
+                </div>
             </form>
         </div>
     @endif

@@ -21,25 +21,29 @@
         <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 24px; margin-bottom: 16px;">
             <p style="font-size: 13px; font-weight: 600; color: var(--text-1); margin: 0 0 16px;">Foto de perfil</p>
             <div style="display: flex; align-items: center; gap: 16px;">
-                @if($user->avatar)
-                    <img id="avatar-preview"
-                        src="{{ \Illuminate\Support\Facades\Storage::url($user->avatar) }}?v={{ $user->updated_at->timestamp }}"
-                        style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
-                @else
-                    <div id="avatar-preview"
-                        style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent); color: white; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                    </div>
-                @endif
+                @php $hasAvatar = (bool) $user->avatar; @endphp
+                <div id="avatar-preview"
+                    style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; background-size: cover; background-position: center;@if($hasAvatar) background-image: url('{{ \Illuminate\Support\Facades\Storage::url($user->avatar) }}?v={{ $user->updated_at->timestamp }}');@endif">
+                    <span id="avatar-initial" style="font-size: 24px; font-weight: 700;@if($hasAvatar) display:none;@endif">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                </div>
+                <input type="hidden" name="remove_avatar" id="remove_avatar" value="0">
                 <div>
-                    <label style="display: inline-flex; align-items: center; gap: 8px; background: var(--bg-subtle); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-2); font-weight: 500;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-                        </svg>
-                        Escolher foto
-                        <input type="file" name="avatar" accept="image/*" style="display: none;"
-                               onchange="previewAvatar(this)">
-                    </label>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <label style="display: inline-flex; align-items: center; gap: 8px; background: var(--bg-subtle); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-2); font-weight: 500;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                            </svg>
+                            Escolher foto
+                            <input type="file" name="avatar" id="avatar-input" accept="image/*" style="display: none;"
+                                   onchange="AtrioCropper.open(this, {aspect:1, previewId:'avatar-preview', placeholderId:'avatar-initial', output:'jpeg', name:'avatar', removeFlagId:'remove_avatar'})">
+                        </label>
+                        <button type="button"
+                                onclick="atrioRemovePhoto({inputId:'avatar-input', removeFlagId:'remove_avatar', previewId:'avatar-preview', placeholderId:'avatar-initial'})"
+                                style="display:inline-flex; align-items:center; gap:6px; background:transparent; padding:8px 14px; border-radius:8px; border:1px solid var(--border); cursor:pointer; font-size:13px; color:var(--danger); font-weight:500;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                            Remover foto
+                        </button>
+                    </div>
                     <p style="font-size: 12px; color: var(--text-4); margin: 6px 0 0;">JPG, PNG ou GIF. Máx 2MB.</p>
                     @error('avatar')<p style="font-size: 12px; color: var(--danger); margin-top: 4px;">{{ $message }}</p>@enderror
                 </div>
@@ -115,35 +119,17 @@
             </div>
         </div>
 
-        <button type="submit"
-                style="background: var(--accent); color: white; border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-            Salvar alterações
-        </button>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="submit"
+                    style="background: var(--accent); color: var(--accent-contrast); border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                Salvar alterações
+            </button>
+            <a href="{{ route(auth()->user()->hasRole('professor') ? 'professor.dashboard' : 'secretaria.dashboard') }}"
+               style="padding: 11px 24px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-2); font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;">
+                Cancelar
+            </a>
+        </div>
     </form>
 </div>
 
-<script>
-function previewAvatar(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const el = document.getElementById('avatar-preview');
-            if (!el) return;
-
-            if (el.tagName === 'IMG') {
-                // já era uma imagem, só atualiza o src
-                el.src = e.target.result;
-            } else {
-                // era o div com inicial — substitui por uma img
-                const img = document.createElement('img');
-                img.id = 'avatar-preview';
-                img.src = e.target.result;
-                img.style = 'width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0;';
-                el.replaceWith(img);
-            }
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
 @endsection

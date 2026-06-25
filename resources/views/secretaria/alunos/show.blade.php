@@ -28,7 +28,8 @@
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
                     <form method="POST" action="{{ route('secretaria.alunos.uploadPhoto', $aluno) }}" enctype="multipart/form-data" style="display:none;" id="foto-form-{{ $aluno->id }}">
                         @csrf
-                        <input type="file" name="photo" accept="image/*" onchange="document.getElementById('foto-form-{{ $aluno->id }}').submit()">
+                        <input type="file" name="photo" accept="image/*"
+                               onchange="AtrioCropper.open(this, {aspect:1, output:'jpeg', name:'foto', onDone:function(){document.getElementById('foto-form-{{ $aluno->id }}').submit();}})">
                     </form>
                 </label>
             </div>
@@ -42,6 +43,17 @@
                style="background: var(--accent); color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;">
                 Editar
             </a>
+            @if($aluno->photo)
+            <form method="POST" action="{{ route('secretaria.alunos.removePhoto', $aluno) }}"
+                  onsubmit="return confirm('Remover a foto do aluno?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit"
+                        style="background: transparent; border: 1px solid var(--border); color: var(--danger); padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    Remover foto
+                </button>
+            </form>
+            @endif
         </div>
     </div>
 </div>

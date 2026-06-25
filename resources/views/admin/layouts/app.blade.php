@@ -99,5 +99,6 @@
     </div>
 </div>
 
+@include('layouts.partials.image-cropper')
 </body>
 </html>

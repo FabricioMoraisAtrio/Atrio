@@ -186,6 +186,9 @@ public function show(Student $aluno)
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($aluno->photo);
             }
             $data['photo'] = $request->file('photo')->store('alunos/fotos', 'public');
+        } elseif ($request->boolean('remove_photo') && $aluno->photo) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($aluno->photo);
+            $data['photo'] = null;
         }
 
         $data['tea_nivel_suporte'] = $request->boolean('cid_autismo') ? $request->input('tea_nivel_suporte') : null;
@@ -249,6 +252,16 @@ public function show(Student $aluno)
         $aluno->update(['photo' => $path]);
 
         return back()->with('success', 'Foto atualizada com sucesso.');
+    }
+
+    public function removePhoto(Student $aluno)
+    {
+        if ($aluno->photo) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($aluno->photo);
+            $aluno->update(['photo' => null]);
+        }
+
+        return back()->with('success', 'Foto removida.');
     }
 
     public function attachClass(Request $request, Student $aluno)

@@ -40,6 +40,9 @@ class ConfigController extends Controller
                 Storage::disk('public')->delete($escola->logo);
             }
             $data['logo'] = $request->file('logo')->store('logos', 'public');
+        } elseif ($request->boolean('remove_logo') && $escola->logo) {
+            Storage::disk('public')->delete($escola->logo);
+            $escola->logo = null; // persistido pelo save() do update abaixo
         }
 
         $escola->update(array_filter($data, fn($v) => $v !== null));
