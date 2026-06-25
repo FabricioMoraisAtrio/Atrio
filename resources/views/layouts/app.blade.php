@@ -6,22 +6,43 @@
     <title>Átrio — @yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        /* ── VARIÁVEIS ── */
+        /* ════════ TOKENS DE TEMA ════════
+           Tudo no sistema usa estas variáveis. Cada tema redefine os tokens.
+           O acento (--accent*) é injetado a partir da cor da escola mais abaixo. */
         :root {
+            /* superfícies */
             --bg-page:   #EEF4FB;
             --bg-card:   #FFFFFF;
             --bg-subtle: #F0F6FD;
             --bg-hover:  #E2EDF8;
+            /* bordas */
             --border:    #C8DDF0;
             --border-sub:#D8E9F5;
-            --text-1:    #0D1F36;
-            --text-2:    #2C4A6E;
-            --text-3:    #5A7FA8;
-            --text-4:    #8EB3D4;
-            --accent:    #004B8D;
-            --accent-bg: #D6E8F8;
+            /* texto */
+            --text-1:    #111827;
+            --text-2:    #374151;
+            --text-3:    #6B7280;
+            --text-4:    #9CA3AF;
+            /* acento (sobrescrito pela cor da escola) */
+            --accent:        #004B8D;
+            --accent-text:   #004B8D;
+            --accent-bg:     #E8F0F9;
+            --accent-strong: #003366;
+            --accent-contrast:#FFFFFF;
+            /* status */
+            --success:#065F46; --success-bg:#ECFDF5; --success-border:#6EE7B7;
+            --danger: #991B1B; --danger-bg: #FEF2F2; --danger-border: #FECACA;
+            --warning:#92400E; --warning-bg:#FFFBEB; --warning-border:#FDE68A;
+            --info:   #1E40AF; --info-bg:   #EFF6FF; --info-border:   #BFDBFE;
+            /* fundos sólidos de botão (texto branco) */
+            --danger-solid:#DC2626; --success-solid:#059669;
+            /* acentos de categoria (tipos de documento) */
+            --teal:#009C8C;   --teal-bg:#E6F5F4;
+            --brown:#7C3700;  --brown-bg:#F5EDE6;
+            --purple:#6D28D9; --purple-bg:#F3E8FF;
         }
 
+        /* ── ESCURO ── */
         [data-theme="dark"] {
             --bg-page:   #1C2B40;
             --bg-card:   #243352;
@@ -33,8 +54,73 @@
             --text-2:    #C8D8EE;
             --text-3:    #8AAAC8;
             --text-4:    #6090B4;
-            --accent:    #4D9FFF;
-            --accent-bg: rgba(77,159,255,0.20);
+            --accent:        #2F6FB5;
+            --accent-text:   #7FB3F0;
+            --accent-bg:     rgba(77,159,255,0.18);
+            --accent-strong: #4D9FFF;
+            --accent-contrast:#FFFFFF;
+            --success:#6EDDB8; --success-bg:rgba(6,95,70,0.28);  --success-border:rgba(110,221,184,0.30);
+            --danger: #FCA5A5; --danger-bg: rgba(153,27,27,0.28); --danger-border: rgba(252,165,165,0.30);
+            --warning:#FCD34D; --warning-bg:rgba(146,64,14,0.25); --warning-border:rgba(253,230,138,0.22);
+            --info:   #93C5FD; --info-bg:   rgba(59,130,246,0.14);--info-border:   rgba(59,130,246,0.35);
+            --danger-solid:#E5484D; --success-solid:#10B981;
+            --teal:#5EEAD4;   --teal-bg:rgba(0,156,140,0.16);
+            --brown:#FCD34D;  --brown-bg:rgba(124,55,0,0.22);
+            --purple:#C4B5FD; --purple-bg:rgba(109,40,217,0.20);
+        }
+
+        /* ── ESCURO SUAVE (slate) ── */
+        [data-theme="slate"] {
+            --bg-page:   #1E222B;
+            --bg-card:   #272C37;
+            --bg-subtle: #2E3440;
+            --bg-hover:  rgba(255,255,255,0.06);
+            --border:    #3B4250;
+            --border-sub:#333A47;
+            --text-1:    #ECEFF4;
+            --text-2:    #C7CDD9;
+            --text-3:    #9AA3B2;
+            --text-4:    #6E7787;
+            --accent:        #4A7FBE;
+            --accent-text:   #93BBF5;
+            --accent-bg:     rgba(108,168,255,0.16);
+            --accent-strong: #6CA8FF;
+            --accent-contrast:#FFFFFF;
+            --success:#5FD1A8; --success-bg:rgba(15,122,82,0.24);  --success-border:rgba(95,209,168,0.28);
+            --danger: #F4A6A0; --danger-bg: rgba(180,35,24,0.24);  --danger-border: rgba(244,166,160,0.28);
+            --warning:#EAC15B; --warning-bg:rgba(154,103,0,0.24);  --warning-border:rgba(234,193,91,0.22);
+            --info:   #8FB8F5; --info-bg:   rgba(29,78,216,0.16);  --info-border:   rgba(143,184,245,0.30);
+            --danger-solid:#DB5A5A; --success-solid:#1DB47E;
+            --teal:#52D7C4;   --teal-bg:rgba(0,156,140,0.16);
+            --brown:#EAC15B;  --brown-bg:rgba(124,55,0,0.22);
+            --purple:#BBA6F2; --purple-bg:rgba(109,40,217,0.20);
+        }
+
+        /* ── ALTO CONTRASTE ── */
+        [data-theme="contrast"] {
+            --bg-page:   #000000;
+            --bg-card:   #0B0B0B;
+            --bg-subtle: #161616;
+            --bg-hover:  #222222;
+            --border:    #5C5C5C;
+            --border-sub:#444444;
+            --text-1:    #FFFFFF;
+            --text-2:    #ECECEC;
+            --text-3:    #CFCFCF;
+            --text-4:    #ABABAB;
+            --accent:        #2E7FD6;
+            --accent-text:   #A9D3FF;
+            --accent-bg:     rgba(108,182,255,0.22);
+            --accent-strong: #6CB6FF;
+            --accent-contrast:#FFFFFF;
+            --success:#5DF0A0; --success-bg:rgba(93,240,160,0.18); --success-border:rgba(93,240,160,0.45);
+            --danger: #FF8585; --danger-bg: rgba(255,133,133,0.18); --danger-border: rgba(255,133,133,0.45);
+            --warning:#FFE066; --warning-bg:rgba(255,224,102,0.16); --warning-border:rgba(255,224,102,0.45);
+            --info:   #8CC8FF; --info-bg:   rgba(140,200,255,0.16); --info-border:   rgba(140,200,255,0.45);
+            --danger-solid:#FF4D4D; --success-solid:#22C55E;
+            --teal:#5EEAD4;   --teal-bg:rgba(94,234,212,0.16);
+            --brown:#FFE066;  --brown-bg:rgba(255,224,102,0.16);
+            --purple:#D6C2FF; --purple-bg:rgba(214,194,255,0.18);
         }
 
         /* ── BASE ── */
@@ -238,40 +324,63 @@
         #theme-toggle:hover { background: var(--bg-hover) !important; }
     </style>
     @php
+        /* Cor da escola = acento PRIMÁRIO em todos os temas.
+           Para cada tema derivamos: fill (preenchimento de botão), text (acento
+           sobre fundo da página), bg (tinta sutil), strong (hover/ênfase) e
+           contrast (texto sobre o fill). Cores escuras clareiam no escuro;
+           cores claras escurecem para virar texto legível no claro. */
         $schoolTheme = null;
-        $accentBg    = null;
+        $A = [];
         if (auth()->check()) {
             $rawColor = auth()->user()->school?->theme_color;
             if ($rawColor && preg_match('/^#[0-9A-Fa-f]{6}$/', $rawColor)) {
                 $schoolTheme = $rawColor;
-                $r  = hexdec(substr($rawColor, 1, 2));
-                $g  = hexdec(substr($rawColor, 3, 2));
-                $b  = hexdec(substr($rawColor, 5, 2));
-                $lr = round($r * 0.14 + 255 * 0.86);
-                $lg = round($g * 0.14 + 255 * 0.86);
-                $lb = round($b * 0.14 + 255 * 0.86);
-                $accentBg = sprintf('#%02x%02x%02x', $lr, $lg, $lb);
+                $r = hexdec(substr($rawColor, 1, 2));
+                $g = hexdec(substr($rawColor, 3, 2));
+                $b = hexdec(substr($rawColor, 5, 2));
+                $lumOf = fn($a) => (0.299 * $a[0] + 0.587 * $a[1] + 0.114 * $a[2]) / 255;
+                // mistura com branco (t>0) ou preto (t<0) → array [r,g,b]
+                $mix = function ($t) use ($r, $g, $b) {
+                    $f = $t >= 0
+                        ? fn($c) => (int) round($c + (255 - $c) * $t)
+                        : fn($c) => (int) round($c * (1 + $t));
+                    return [$f($r), $f($g), $f($b)];
+                };
+                $hex      = fn($a) => sprintf('#%02x%02x%02x', $a[0], $a[1], $a[2]);
+                $rgba     = fn($al) => "rgba($r,$g,$b,$al)";
+                $contrast = fn($a) => $lumOf($a) > 0.55 ? '#10141B' : '#FFFFFF';
+                $lum      = $lumOf([$r, $g, $b]);
+
+                $lFill = [$r, $g, $b];
+                $lText = $lum > 0.55 ? $mix(-0.45) : [$r, $g, $b];
+                $A['light'] = ['fill' => $hex($lFill), 'text' => $hex($lText), 'bg' => $hex($mix(0.86)), 'strong' => $hex($mix(-0.30)), 'contrast' => $contrast($lFill)];
+
+                $dt    = $lum < 0.40 ? 0.22 : ($lum > 0.70 ? -0.18 : 0.0);
+                $dFill = $mix($dt);
+                $A['dark'] = ['fill' => $hex($dFill), 'text' => $hex($lum < 0.55 ? $mix(0.55) : $mix(0.25)), 'bg' => $rgba('0.18'), 'strong' => $hex($mix(min($dt + 0.22, 0.85))), 'contrast' => $contrast($dFill)];
+
+                $ct    = $lum < 0.40 ? 0.30 : ($lum > 0.70 ? -0.10 : 0.10);
+                $cFill = $mix($ct);
+                $A['contrast'] = ['fill' => $hex($cFill), 'text' => $hex($lum < 0.55 ? $mix(0.65) : $mix(0.40)), 'bg' => $rgba('0.24'), 'strong' => $hex($mix(min($ct + 0.25, 0.90))), 'contrast' => $contrast($cFill)];
             }
         }
     @endphp
     @if($schoolTheme)
     <style>
         :root {
-            --accent:    {{ $schoolTheme }};
-            --accent-bg: {{ $accentBg }};
+            --accent:{{ $A['light']['fill'] }}; --accent-text:{{ $A['light']['text'] }};
+            --accent-bg:{{ $A['light']['bg'] }}; --accent-strong:{{ $A['light']['strong'] }};
+            --accent-contrast:{{ $A['light']['contrast'] }};
         }
-        /* Restaura variáveis dark que foram sobrescritas pelo school theme */
-        [data-theme="dark"] {
-            --accent:    #4D9FFF;
-            --accent-bg: rgba(77,159,255,0.20);
+        [data-theme="dark"], [data-theme="slate"] {
+            --accent:{{ $A['dark']['fill'] }}; --accent-text:{{ $A['dark']['text'] }};
+            --accent-bg:{{ $A['dark']['bg'] }}; --accent-strong:{{ $A['dark']['strong'] }};
+            --accent-contrast:{{ $A['dark']['contrast'] }};
         }
-        /* Override inline styles — apenas no tema claro */
-        html:not([data-theme="dark"]) [style*="background: #004B8D"] { background: {{ $schoolTheme }} !important; }
-        html:not([data-theme="dark"]) [style*="background: #E8F0F9"] { background: {{ $accentBg }} !important; }
-        /* Cor do texto e borda aplicam em ambos os temas via variável */
-        [style*="color: #004B8D"]      { color: var(--accent) !important; }
-        [style*="border-color: #004B8D"], [style*="border-bottom-color: #004B8D"] {
-            border-color: var(--accent) !important;
+        [data-theme="contrast"] {
+            --accent:{{ $A['contrast']['fill'] }}; --accent-text:{{ $A['contrast']['text'] }};
+            --accent-bg:{{ $A['contrast']['bg'] }}; --accent-strong:{{ $A['contrast']['strong'] }};
+            --accent-contrast:{{ $A['contrast']['contrast'] }};
         }
     </style>
     @endif
