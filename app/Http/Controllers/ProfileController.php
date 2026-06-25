@@ -52,4 +52,18 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.edit')->with('success', 'Perfil atualizado com sucesso.');
     }
+
+    /** Salva o tema escolhido pelo usuário (chamado via fetch ao trocar o tema). */
+    public function updateTheme(Request $request)
+    {
+        $data = $request->validate([
+            'theme' => 'required|in:light,dark,slate,contrast',
+        ]);
+
+        $user = auth()->user();
+        $user->theme = $data['theme'];
+        $user->save();
+
+        return response()->json(['ok' => true]);
+    }
 }

@@ -131,6 +131,7 @@ Route::middleware(['auth', 'school.active'])->group(function () {
 
     Route::get('/perfil', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/perfil', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/perfil/tema', [\App\Http\Controllers\ProfileController::class, 'updateTheme'])->name('profile.theme');
 
     // Foto do aluno — servida diretamente do disco (independe do link public/storage)
     Route::get('/alunos/{aluno}/foto', \App\Http\Controllers\StudentPhotoController::class)->name('alunos.foto');
