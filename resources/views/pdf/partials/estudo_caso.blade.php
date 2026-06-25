@@ -400,15 +400,15 @@
                 <div style="font-size:8.5px;font-weight:bold;color:#444;text-transform:uppercase;letter-spacing:0.3px;">{{ $sig['cargo'] }}</div>
                 @if($sig['nome'])<div style="font-size:9px;color:#1a1a1a;margin-top:3px;">{{ $sig['nome'] }}</div>@endif
             </td>
-            <td style="width:60%;border:1px solid #ddd;padding:8px 14px;vertical-align:bottom;">
+            <td style="width:60%;border:1px solid #ddd;padding:10px 14px 12px;vertical-align:bottom;">
                 <table style="width:100%; border-collapse:collapse;"><tr>
                     <td style="vertical-align:bottom; padding-right:16px;">
-                        <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Assinatura</div>
-                        <div style="border-bottom:1px solid #888;min-height:18px;"></div>
+                        <div style="font-size:8.5px;color:#aaa;margin-bottom:2px;">Assinatura</div>
+                        <div style="border-bottom:1px solid #888;min-height:34px;"></div>
                     </td>
-                    <td style="width:110px; vertical-align:bottom;">
-                        <div style="font-size:7.5px;color:#aaa;margin-bottom:2px;">Data</div>
-                        <div style="border-bottom:1px solid #888;font-size:8px;color:#bbb;padding-bottom:2px;">____/____/________</div>
+                    <td style="width:130px; vertical-align:bottom;">
+                        <div style="font-size:8.5px;color:#aaa;margin-bottom:2px;">Data</div>
+                        <div style="border-bottom:1px solid #888;font-size:10px;color:#bbb;padding-bottom:4px;">____/____/________</div>
                     </td>
                 </tr></table>
             </td>

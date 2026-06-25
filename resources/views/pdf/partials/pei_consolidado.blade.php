@@ -127,10 +127,10 @@
     .inv-obs  { font-size: 8px; padding: 3px 5px; border: 1px solid #ddd; }
 
     .sig-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-    .sig-table td { border: 1px solid #ddd; padding: 6px 10px; vertical-align: top; word-break: break-word; }
-    .sig-role { font-size: 8.5px; font-weight: bold; color: {{ $accent }}; }
-    .sig-line { border-bottom: 1px solid #888; display: block; margin-top: 14px; width: 100%; }
-    .sig-date { font-size: 7.5px; color: #888; text-align: right; margin-top: 3px; }
+    .sig-table td { border: 1px solid #ddd; padding: 10px 12px 12px; vertical-align: top; word-break: break-word; }
+    .sig-role { font-size: 9px; font-weight: bold; color: {{ $accent }}; }
+    .sig-line { border-bottom: 1px solid #888; display: block; margin-top: 34px; width: 100%; }
+    .sig-date { font-size: 9px; color: #888; text-align: right; margin-top: 5px; }
 
     hr.div { border: none; border-top: 1px solid #efefef; margin: 10px 0; }
 </style>
