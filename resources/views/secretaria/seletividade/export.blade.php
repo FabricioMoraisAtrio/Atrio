@@ -299,7 +299,7 @@
     <div class="legend">
         <span class="legend-title">Legenda:</span>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #EF4444;"></div>
+            <div class="legend-dot" style="background: var(--danger-solid);"></div>
             Recusa — não servir
         </div>
         <div class="legend-item">
@@ -307,14 +307,14 @@
             Tolera — pode causar desconforto
         </div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #10B981;"></div>
+            <div class="legend-dot" style="background: var(--success-solid);"></div>
             Aceita — sem restrição
         </div>
     </div>
 
     {{-- Grid de alunos --}}
     @if($alunos->isEmpty())
-        <div style="text-align: center; padding: 60px; color: #8EB3D4; font-size: 14px;">
+        <div style="text-align: center; padding: 60px; color: var(--text-4); font-size: 14px;">
             Nenhum aluno com perfil alimentar cadastrado.
         </div>
     @else

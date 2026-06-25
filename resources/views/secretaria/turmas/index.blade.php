@@ -8,14 +8,14 @@
         <p style="font-size: 13px; color: var(--text-3); margin: 0;">{{ $turmas->count() }} {{ strtolower(term('turmas')) }} cadastradas</p>
     </div>
     <a href="{{ route('secretaria.turmas.create') }}"
-       style="background: #004B8D; color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+       style="background: var(--accent); color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
         Nova {{ strtolower(term('turma')) }}
     </a>
 </div>
 
 @if(session('success'))
-    <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+    <div style="background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
         {{ session('success') }}
     </div>
 @endif
@@ -36,7 +36,7 @@
              style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; cursor: pointer; user-select: none;"
              onmouseover="this.style.background='var(--bg-sidebar)'" onmouseout="this.style.background='transparent'">
             <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
-                <div style="width: 38px; height: 38px; border-radius: 10px; background: #E8F0F9; color: #004B8D; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: var(--accent-bg); color: var(--accent-text); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                     {{ strtoupper(substr($turma->name, 0, 1)) }}
                 </div>
                 <div>
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 16px;">
-                <span style="background: #E6F5F4; color: #009C8C; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">
+                <span style="background: var(--teal-bg); color: var(--teal); font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">
                     {{ $turma->students_count }} {{ strtolower(term('alunos')) }}
                 </span>
                 <div style="display: flex; align-items: center; gap: 12px;" onclick="event.stopPropagation()">
@@ -57,7 +57,7 @@
                     <form method="POST" action="{{ route('secretaria.turmas.destroy', $turma) }}" style="display: inline;">
                         @csrf @method('DELETE')
                         <button type="button" data-confirm="Remover {{ strtolower(term('turma')) }}?"
-                                style="font-size: 13px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 0;">
+                                style="font-size: 13px; color: var(--danger); background: none; border: none; cursor: pointer; padding: 0;">
                             Remover
                         </button>
                     </form>
@@ -102,7 +102,7 @@
                             onmouseover="this.style.background='var(--bg-sidebar)'" onmouseout="this.style.background='transparent'">
                             <td style="padding: 12px 20px;">
                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: var(--accent-bg); color: var(--accent-text); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                         {{ strtoupper(substr($aluno->name, 0, 1)) }}
                                     </div>
                                     <span style="font-size: 13px; font-weight: 500; color: var(--text-1);">{{ $aluno->name }}</span>
@@ -112,12 +112,12 @@
                             <td style="padding: 12px 20px;">
                                 @if($aluno->is_atypical)
                                     @if($aluno->is_publico_alvo)
-                                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+                                        <span style="background: var(--purple-bg); color: var(--purple); font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
                                     @else
-                                        <span style="background: #FEF3C7; color: #92400E; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px;">Atípico</span>
+                                        <span style="background: var(--warning-bg); color: var(--warning); font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px;">Atípico</span>
                                     @endif
                                 @else
-                                    <span style="background: #F3F4F6; color: #6B7280; font-size: 10px; padding: 2px 7px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
+                                    <span style="background: var(--bg-subtle); color: var(--text-3); font-size: 10px; padding: 2px 7px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
                                 @endif
                             </td>
                             @foreach([
@@ -128,15 +128,15 @@
                             ] as $col)
                             <td style="padding: 12px 10px; text-align: center;">
                                 @if($col['ok'])
-                                    <span style="background: #ECFDF5; color: #065F46; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px; white-space: nowrap;">✓</span>
+                                    <span style="background: var(--success-bg); color: var(--success); font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px; white-space: nowrap;">✓</span>
                                 @else
-                                    <span style="background: #F3F4F6; color: #9CA3AF; font-size: 10px; padding: 2px 7px; border-radius: 20px;">—</span>
+                                    <span style="background: var(--bg-subtle); color: var(--text-4); font-size: 10px; padding: 2px 7px; border-radius: 20px;">—</span>
                                 @endif
                             </td>
                             @endforeach
                             <td style="padding: 12px 20px; text-align: right;">
                                 <a href="{{ route('secretaria.alunos.show', $aluno) }}?back={{ urlencode(url()->current()) }}"
-                                   style="font-size: 12px; color: #004B8D; text-decoration: none; font-weight: 500;">Ver</a>
+                                   style="font-size: 12px; color: var(--accent-text); text-decoration: none; font-weight: 500;">Ver</a>
                             </td>
                         </tr>
                         @endforeach

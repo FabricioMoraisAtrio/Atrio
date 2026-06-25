@@ -138,176 +138,169 @@
         [data-theme="dark"] tbody tr { background: transparent !important; }
         [data-theme="dark"] tbody tr:hover td { background: rgba(96,165,250,0.06) !important; }
 
-        /* ── TEXTOS — com e sem espaço após os dois pontos ── */
-        [style*="color: #0D1F36"],[style*="color:#0D1F36"] { color: var(--text-1) !important; }
-        [style*="color: #0F172A"],[style*="color:#0F172A"] { color: var(--text-1) !important; }
-        [style*="color: #111827"],[style*="color:#111827"] { color: var(--text-1) !important; }
-        [style*="color: #1F2937"],[style*="color:#1F2937"] { color: var(--text-1) !important; }
-        [style*="color: #374151"],[style*="color:#374151"] { color: var(--text-2) !important; }
-        [style*="color: #4B5563"],[style*="color:#4B5563"] { color: var(--text-2) !important; }
-        [style*="color: #6B7280"],[style*="color:#6B7280"] { color: var(--text-3) !important; }
-        [style*="color: #9CA3AF"],[style*="color:#9CA3AF"] { color: var(--text-4) !important; }
-        [style*="color: #D1D5DB"],[style*="color:#D1D5DB"] { color: var(--text-3) !important; }
+                        /* ════ REDE DE SEGURANÇA (token-based, todos os temas) ════
+           Cobre cores fixas remanescentes em style="..." não migradas
+           (ex.: junto de gradientes) e atributos stroke de SVG. */
 
-        /* ── FUNDOS BRANCOS E CINZAS — com e sem espaço ── */
-        [style*="background: #fff"],[style*="background:#fff"],
-        [style*="background: white"],[style*="background:white"],
-        [style*="background: #FFFFFF"],[style*="background:#FFFFFF"] { background: var(--bg-card) !important; }
+        /* texto */
+        [style*="color: #0D1F36"],[style*="color:#0D1F36"],[style*="color: #0F172A"],[style*="color:#0F172A"],[style*="color: #111827"],[style*="color:#111827"],[style*="color: #1F2937"],[style*="color:#1F2937"],[style*="color: #1a1a1a"],[style*="color:#1a1a1a"],[style*="color: #1A1A1A"],[style*="color:#1A1A1A"],[style*="color: #222"],[style*="color:#222"],[style*="color: #333"],[style*="color:#333"] { color: var(--text-1) !important; }
+        [style*="color: #374151"],[style*="color:#374151"],[style*="color: #4B5563"],[style*="color:#4B5563"],[style*="color: #2C4A6E"],[style*="color:#2C4A6E"],[style*="color: #3e3e3a"],[style*="color:#3e3e3a"],[style*="color: #444"],[style*="color:#444"],[style*="color: #555"],[style*="color:#555"] { color: var(--text-2) !important; }
+        [style*="color: #6B7280"],[style*="color:#6B7280"],[style*="color: #5A7FA8"],[style*="color:#5A7FA8"],[style*="color: #666"],[style*="color:#666"] { color: var(--text-3) !important; }
+        [style*="color: #9CA3AF"],[style*="color:#9CA3AF"],[style*="color: #8EB3D4"],[style*="color:#8EB3D4"],[style*="color: #888"],[style*="color:#888"],[style*="color: #D1D5DB"],[style*="color:#D1D5DB"],[style*="color: #aaa"],[style*="color:#aaa"],[style*="color: #bbb"],[style*="color:#bbb"],[style*="color: #ccc"],[style*="color:#ccc"],[style*="color: #cbcbcb"],[style*="color:#cbcbcb"] { color: var(--text-4) !important; }
+        [style*="color: #004B8D"],[style*="color:#004B8D"] { color: var(--accent-text) !important; }
+        [style*="color: #003366"],[style*="color:#003366"] { color: var(--accent-strong) !important; }
+        [style*="color: #065F46"],[style*="color:#065F46"],[style*="color: #059669"],[style*="color:#059669"],[style*="color: #166534"],[style*="color:#166534"],[style*="color: #3D7A27"],[style*="color:#3D7A27"],[style*="color: #10B981"],[style*="color:#10B981"],[style*="color: #047857"],[style*="color:#047857"],[style*="color: #15803D"],[style*="color:#15803D"],[style*="color: #16a34a"],[style*="color:#16a34a"] { color: var(--success) !important; }
+        [style*="color: #991B1B"],[style*="color:#991B1B"],[style*="color: #DC2626"],[style*="color:#DC2626"],[style*="color: #EF4444"],[style*="color:#EF4444"],[style*="color: #B42318"],[style*="color:#B42318"],[style*="color: #B91C1C"],[style*="color:#B91C1C"],[style*="color: #e11d48"],[style*="color:#e11d48"] { color: var(--danger) !important; }
+        [style*="color: #92400E"],[style*="color:#92400E"],[style*="color: #B45309"],[style*="color:#B45309"],[style*="color: #C77A00"],[style*="color:#C77A00"],[style*="color: #9A6700"],[style*="color:#9A6700"],[style*="color: #f59e0b"],[style*="color:#f59e0b"],[style*="color: #9a3412"],[style*="color:#9a3412"],[style*="color: #D97706"],[style*="color:#D97706"],[style*="color: #A16207"],[style*="color:#A16207"] { color: var(--warning) !important; }
+        [style*="color: #1E40AF"],[style*="color:#1E40AF"],[style*="color: #1D4ED8"],[style*="color:#1D4ED8"],[style*="color: #3B5BDB"],[style*="color:#3B5BDB"],[style*="color: #2563EB"],[style*="color:#2563EB"],[style*="color: #1E3A8A"],[style*="color:#1E3A8A"] { color: var(--info) !important; }
+        [style*="color: #009C8C"],[style*="color:#009C8C"],[style*="color: #007a6e"],[style*="color:#007a6e"],[style*="color: #0d9488"],[style*="color:#0d9488"],[style*="color: #0F766E"],[style*="color:#0F766E"],[style*="color: #60CFCA"],[style*="color:#60CFCA"] { color: var(--teal) !important; }
+        [style*="color: #7C3700"],[style*="color:#7C3700"],[style*="color: #8B4513"],[style*="color:#8B4513"] { color: var(--brown) !important; }
+        [style*="color: #6D28D9"],[style*="color:#6D28D9"],[style*="color: #7C3AED"],[style*="color:#7C3AED"],[style*="color: #7E22CE"],[style*="color:#7E22CE"],[style*="color: #5B21B6"],[style*="color:#5B21B6"],[style*="color: #8B5CF6"],[style*="color:#8B5CF6"],[style*="color: #9333EA"],[style*="color:#9333EA"] { color: var(--purple) !important; }
 
-        [style*="background: #F8FAFC"],[style*="background:#F8FAFC"],
-        [style*="background: #F9FAFB"],[style*="background:#F9FAFB"],
-        [style*="background: #FAFAFA"],[style*="background:#FAFAFA"],
-        [style*="background: #F3F4F6"],[style*="background:#F3F4F6"],
-        [style*="background: #F0F5FB"],[style*="background:#F0F5FB"],
-        [style*="background: #F0F6FD"],[style*="background:#F0F6FD"] { background: var(--bg-subtle) !important; }
+        /* fundo */
+        [style*="background: #fff"],[style*="background:#fff"],[style*="background: white"],[style*="background:white"],[style*="background: #FFFFFF"],[style*="background:#FFFFFF"],[style*="background: #ffffff"],[style*="background:#ffffff"] { background: var(--bg-card) !important; }
+        [style*="background: #F8FAFC"],[style*="background:#F8FAFC"],[style*="background: #F9FAFB"],[style*="background:#F9FAFB"],[style*="background: #FAFAFA"],[style*="background:#FAFAFA"],[style*="background: #fafafa"],[style*="background:#fafafa"],[style*="background: #F3F4F6"],[style*="background:#F3F4F6"],[style*="background: #F0F5FB"],[style*="background:#F0F5FB"],[style*="background: #F0F6FD"],[style*="background:#F0F6FD"],[style*="background: #F8FAFF"],[style*="background:#F8FAFF"],[style*="background: #FAFBFC"],[style*="background:#FAFBFC"],[style*="background: #F4F8FD"],[style*="background:#F4F8FD"] { background: var(--bg-subtle) !important; }
+        [style*="background: #EEF4FB"],[style*="background:#EEF4FB"],[style*="background: #F0F4F8"],[style*="background:#F0F4F8"] { background: var(--bg-page) !important; }
+        [style*="background: #E2EDF8"],[style*="background:#E2EDF8"],[style*="background: #F1F5F9"],[style*="background:#F1F5F9"],[style*="background: #E2EAF4"],[style*="background:#E2EAF4"] { background: var(--bg-hover) !important; }
+        [style*="background: #E8F0F9"],[style*="background:#E8F0F9"],[style*="background: #D6E8F8"],[style*="background:#D6E8F8"],[style*="background: #EAF2FB"],[style*="background:#EAF2FB"] { background: var(--accent-bg) !important; }
+        [style*="background: #004B8D"],[style*="background:#004B8D"] { background: var(--accent) !important; }
+        [style*="background: #ECFDF5"],[style*="background:#ECFDF5"],[style*="background: #D1FAE5"],[style*="background:#D1FAE5"],[style*="background: #F0FDF4"],[style*="background:#F0FDF4"],[style*="background: #DCFCE7"],[style*="background:#DCFCE7"],[style*="background: #EFF6E8"],[style*="background:#EFF6E8"] { background: var(--success-bg) !important; }
+        [style*="background: #FEF2F2"],[style*="background:#FEF2F2"],[style*="background: #FEE2E2"],[style*="background:#FEE2E2"] { background: var(--danger-bg) !important; }
+        [style*="background: #FFFBEB"],[style*="background:#FFFBEB"],[style*="background: #FEF3C7"],[style*="background:#FEF3C7"],[style*="background: #FFF4E6"],[style*="background:#FFF4E6"],[style*="background: #FEFCE8"],[style*="background:#FEFCE8"],[style*="background: #FFF8E1"],[style*="background:#FFF8E1"] { background: var(--warning-bg) !important; }
+        [style*="background: #EFF6FF"],[style*="background:#EFF6FF"],[style*="background: #DBEAFE"],[style*="background:#DBEAFE"],[style*="background: #F0F5FF"],[style*="background:#F0F5FF"],[style*="background: #E8F0FE"],[style*="background:#E8F0FE"] { background: var(--info-bg) !important; }
+        [style*="background: #E6F5F4"],[style*="background:#E6F5F4"],[style*="background: #F0FDFB"],[style*="background:#F0FDFB"],[style*="background: #E8FAF7"],[style*="background:#E8FAF7"] { background: var(--teal-bg) !important; }
+        [style*="background: #F5EDE6"],[style*="background:#F5EDE6"],[style*="background: #FFF7ED"],[style*="background:#FFF7ED"] { background: var(--brown-bg) !important; }
+        [style*="background: #F3E8FF"],[style*="background:#F3E8FF"],[style*="background: #EDE9FE"],[style*="background:#EDE9FE"],[style*="background: #F5F3FF"],[style*="background:#F5F3FF"],[style*="background: #F0EBF8"],[style*="background:#F0EBF8"],[style*="background: #FAFAFF"],[style*="background:#FAFAFF"],[style*="background: #fdf4ff"],[style*="background:#fdf4ff"] { background: var(--purple-bg) !important; }
+        [style*="background: #EF4444"],[style*="background:#EF4444"],[style*="background: #DC2626"],[style*="background:#DC2626"],[style*="background: #DC3545"],[style*="background:#DC3545"] { background: var(--danger-solid) !important; }
+        [style*="background: #10B981"],[style*="background:#10B981"],[style*="background: #28A745"],[style*="background:#28A745"] { background: var(--success-solid) !important; }
 
-        /* ── FUNDOS COLORIDOS — com e sem espaço ── */
-        [style*="background: #E8F0F9"],[style*="background:#E8F0F9"] { background: var(--accent-bg) !important; }
-        [style*="background: #E6F5F4"],[style*="background:#E6F5F4"] { background: rgba(0,156,140,0.15) !important; }
-        [style*="background: #F0FDFB"],[style*="background:#F0FDFB"] { background: rgba(0,156,140,0.10) !important; }
-        [style*="border: 1px solid #CCECE9"],[style*="border:1px solid #CCECE9"] { border-color: rgba(0,156,140,0.30) !important; }
-        [style*="background: #F5EDE6"],[style*="background:#F5EDE6"] { background: rgba(124,55,0,0.18) !important; }
-        [style*="background: #F3E8FF"],[style*="background:#F3E8FF"] { background: rgba(139,92,246,0.18) !important; }
-        [style*="background: #EDE9FE"],[style*="background:#EDE9FE"] { background: rgba(109,40,217,0.18) !important; }
-        [style*="background: #F5F3FF"],[style*="background:#F5F3FF"] { background: rgba(139,92,246,0.18) !important; }
-        [style*="background: #FAFAFF"],[style*="background:#FAFAFF"] { background: rgba(139,92,246,0.08) !important; }
-        [style*="background: #F8FAFF"],[style*="background:#F8FAFF"] { background: var(--bg-hover) !important; }
-        [style*="background: #EFF6E8"],[style*="background:#EFF6E8"] { background: rgba(61,122,39,0.15) !important; }
-        [style*="background: #FFF4E6"],[style*="background:#FFF4E6"] { background: rgba(199,122,0,0.15) !important; }
-        [style*="background: #F0F5FF"],[style*="background:#F0F5FF"] { background: rgba(59,91,219,0.15) !important; }
-        [style*="background: #E8FAF7"],[style*="background:#E8FAF7"] { background: rgba(0,156,140,0.13) !important; }
+        /* bordas — formas realmente usadas no sistema */
+        [style*="border:1px solid #E5E7EB"],[style*="border: 1px solid #E5E7EB"],[style*="border:2px solid #E5E7EB"],[style*="border: 2px solid #E5E7EB"],[style*="border-bottom:1px solid #E5E7EB"],[style*="border-bottom: 1px solid #E5E7EB"],
+        [style*="border-bottom:2px solid #E5E7EB"],[style*="border-bottom: 2px solid #E5E7EB"],[style*="border-top:1px solid #E5E7EB"],[style*="border-top: 1px solid #E5E7EB"],[style*="border-left:2px solid #E5E7EB"],[style*="border-left: 2px solid #E5E7EB"],
+        [style*="border-right:1px solid #E5E7EB"],[style*="border-right: 1px solid #E5E7EB"],[style*="border-color:#E5E7EB"],[style*="border-color: #E5E7EB"],[style*="border:1px solid #D1D5DB"],[style*="border: 1px solid #D1D5DB"],
+        [style*="border:2px solid #D1D5DB"],[style*="border: 2px solid #D1D5DB"],[style*="border-bottom:1px solid #D1D5DB"],[style*="border-bottom: 1px solid #D1D5DB"],[style*="border-bottom:2px solid #D1D5DB"],[style*="border-bottom: 2px solid #D1D5DB"],
+        [style*="border-top:1px solid #D1D5DB"],[style*="border-top: 1px solid #D1D5DB"],[style*="border-left:2px solid #D1D5DB"],[style*="border-left: 2px solid #D1D5DB"],[style*="border-right:1px solid #D1D5DB"],[style*="border-right: 1px solid #D1D5DB"],
+        [style*="border-color:#D1D5DB"],[style*="border-color: #D1D5DB"],[style*="border:1px solid #C8DDF0"],[style*="border: 1px solid #C8DDF0"],[style*="border:2px solid #C8DDF0"],[style*="border: 2px solid #C8DDF0"],
+        [style*="border-bottom:1px solid #C8DDF0"],[style*="border-bottom: 1px solid #C8DDF0"],[style*="border-bottom:2px solid #C8DDF0"],[style*="border-bottom: 2px solid #C8DDF0"],[style*="border-top:1px solid #C8DDF0"],[style*="border-top: 1px solid #C8DDF0"],
+        [style*="border-left:2px solid #C8DDF0"],[style*="border-left: 2px solid #C8DDF0"],[style*="border-right:1px solid #C8DDF0"],[style*="border-right: 1px solid #C8DDF0"],[style*="border-color:#C8DDF0"],[style*="border-color: #C8DDF0"],
+        [style*="border:1px solid #E2EAF4"],[style*="border: 1px solid #E2EAF4"],[style*="border:2px solid #E2EAF4"],[style*="border: 2px solid #E2EAF4"],[style*="border-bottom:1px solid #E2EAF4"],[style*="border-bottom: 1px solid #E2EAF4"],
+        [style*="border-bottom:2px solid #E2EAF4"],[style*="border-bottom: 2px solid #E2EAF4"],[style*="border-top:1px solid #E2EAF4"],[style*="border-top: 1px solid #E2EAF4"],[style*="border-left:2px solid #E2EAF4"],[style*="border-left: 2px solid #E2EAF4"],
+        [style*="border-right:1px solid #E2EAF4"],[style*="border-right: 1px solid #E2EAF4"],[style*="border-color:#E2EAF4"],[style*="border-color: #E2EAF4"],[style*="border:1px solid #ddd"],[style*="border: 1px solid #ddd"],
+        [style*="border:2px solid #ddd"],[style*="border: 2px solid #ddd"],[style*="border-bottom:1px solid #ddd"],[style*="border-bottom: 1px solid #ddd"],[style*="border-bottom:2px solid #ddd"],[style*="border-bottom: 2px solid #ddd"],
+        [style*="border-top:1px solid #ddd"],[style*="border-top: 1px solid #ddd"],[style*="border-left:2px solid #ddd"],[style*="border-left: 2px solid #ddd"],[style*="border-right:1px solid #ddd"],[style*="border-right: 1px solid #ddd"],
+        [style*="border-color:#ddd"],[style*="border-color: #ddd"],[style*="border:1px solid #dddddd"],[style*="border: 1px solid #dddddd"],[style*="border:2px solid #dddddd"],[style*="border: 2px solid #dddddd"],
+        [style*="border-bottom:1px solid #dddddd"],[style*="border-bottom: 1px solid #dddddd"],[style*="border-bottom:2px solid #dddddd"],[style*="border-bottom: 2px solid #dddddd"],[style*="border-top:1px solid #dddddd"],[style*="border-top: 1px solid #dddddd"],
+        [style*="border-left:2px solid #dddddd"],[style*="border-left: 2px solid #dddddd"],[style*="border-right:1px solid #dddddd"],[style*="border-right: 1px solid #dddddd"],[style*="border-color:#dddddd"],[style*="border-color: #dddddd"],
+        [style*="border:1px solid #E0E0E0"],[style*="border: 1px solid #E0E0E0"],[style*="border:2px solid #E0E0E0"],[style*="border: 2px solid #E0E0E0"],[style*="border-bottom:1px solid #E0E0E0"],[style*="border-bottom: 1px solid #E0E0E0"],
+        [style*="border-bottom:2px solid #E0E0E0"],[style*="border-bottom: 2px solid #E0E0E0"],[style*="border-top:1px solid #E0E0E0"],[style*="border-top: 1px solid #E0E0E0"],[style*="border-left:2px solid #E0E0E0"],[style*="border-left: 2px solid #E0E0E0"],
+        [style*="border-right:1px solid #E0E0E0"],[style*="border-right: 1px solid #E0E0E0"],[style*="border-color:#E0E0E0"],[style*="border-color: #E0E0E0"],[style*="border:1px solid #C5D8F0"],[style*="border: 1px solid #C5D8F0"],
+        [style*="border:2px solid #C5D8F0"],[style*="border: 2px solid #C5D8F0"],[style*="border-bottom:1px solid #C5D8F0"],[style*="border-bottom: 1px solid #C5D8F0"],[style*="border-bottom:2px solid #C5D8F0"],[style*="border-bottom: 2px solid #C5D8F0"],
+        [style*="border-top:1px solid #C5D8F0"],[style*="border-top: 1px solid #C5D8F0"],[style*="border-left:2px solid #C5D8F0"],[style*="border-left: 2px solid #C5D8F0"],[style*="border-right:1px solid #C5D8F0"],[style*="border-right: 1px solid #C5D8F0"],
+        [style*="border-color:#C5D8F0"],[style*="border-color: #C5D8F0"] { border-color: var(--border) !important; }
+        [style*="border:1px solid #F3F4F6"],[style*="border: 1px solid #F3F4F6"],[style*="border:2px solid #F3F4F6"],[style*="border: 2px solid #F3F4F6"],[style*="border-bottom:1px solid #F3F4F6"],[style*="border-bottom: 1px solid #F3F4F6"],
+        [style*="border-bottom:2px solid #F3F4F6"],[style*="border-bottom: 2px solid #F3F4F6"],[style*="border-top:1px solid #F3F4F6"],[style*="border-top: 1px solid #F3F4F6"],[style*="border-left:2px solid #F3F4F6"],[style*="border-left: 2px solid #F3F4F6"],
+        [style*="border-right:1px solid #F3F4F6"],[style*="border-right: 1px solid #F3F4F6"],[style*="border-color:#F3F4F6"],[style*="border-color: #F3F4F6"],[style*="border:1px solid #F9FAFB"],[style*="border: 1px solid #F9FAFB"],
+        [style*="border:2px solid #F9FAFB"],[style*="border: 2px solid #F9FAFB"],[style*="border-bottom:1px solid #F9FAFB"],[style*="border-bottom: 1px solid #F9FAFB"],[style*="border-bottom:2px solid #F9FAFB"],[style*="border-bottom: 2px solid #F9FAFB"],
+        [style*="border-top:1px solid #F9FAFB"],[style*="border-top: 1px solid #F9FAFB"],[style*="border-left:2px solid #F9FAFB"],[style*="border-left: 2px solid #F9FAFB"],[style*="border-right:1px solid #F9FAFB"],[style*="border-right: 1px solid #F9FAFB"],
+        [style*="border-color:#F9FAFB"],[style*="border-color: #F9FAFB"],[style*="border:1px solid #eee"],[style*="border: 1px solid #eee"],[style*="border:2px solid #eee"],[style*="border: 2px solid #eee"],
+        [style*="border-bottom:1px solid #eee"],[style*="border-bottom: 1px solid #eee"],[style*="border-bottom:2px solid #eee"],[style*="border-bottom: 2px solid #eee"],[style*="border-top:1px solid #eee"],[style*="border-top: 1px solid #eee"],
+        [style*="border-left:2px solid #eee"],[style*="border-left: 2px solid #eee"],[style*="border-right:1px solid #eee"],[style*="border-right: 1px solid #eee"],[style*="border-color:#eee"],[style*="border-color: #eee"],
+        [style*="border:1px solid #eeeeee"],[style*="border: 1px solid #eeeeee"],[style*="border:2px solid #eeeeee"],[style*="border: 2px solid #eeeeee"],[style*="border-bottom:1px solid #eeeeee"],[style*="border-bottom: 1px solid #eeeeee"],
+        [style*="border-bottom:2px solid #eeeeee"],[style*="border-bottom: 2px solid #eeeeee"],[style*="border-top:1px solid #eeeeee"],[style*="border-top: 1px solid #eeeeee"],[style*="border-left:2px solid #eeeeee"],[style*="border-left: 2px solid #eeeeee"],
+        [style*="border-right:1px solid #eeeeee"],[style*="border-right: 1px solid #eeeeee"],[style*="border-color:#eeeeee"],[style*="border-color: #eeeeee"],[style*="border:1px solid #eaeaea"],[style*="border: 1px solid #eaeaea"],
+        [style*="border:2px solid #eaeaea"],[style*="border: 2px solid #eaeaea"],[style*="border-bottom:1px solid #eaeaea"],[style*="border-bottom: 1px solid #eaeaea"],[style*="border-bottom:2px solid #eaeaea"],[style*="border-bottom: 2px solid #eaeaea"],
+        [style*="border-top:1px solid #eaeaea"],[style*="border-top: 1px solid #eaeaea"],[style*="border-left:2px solid #eaeaea"],[style*="border-left: 2px solid #eaeaea"],[style*="border-right:1px solid #eaeaea"],[style*="border-right: 1px solid #eaeaea"],
+        [style*="border-color:#eaeaea"],[style*="border-color: #eaeaea"],[style*="border:1px solid #D8E9F5"],[style*="border: 1px solid #D8E9F5"],[style*="border:2px solid #D8E9F5"],[style*="border: 2px solid #D8E9F5"],
+        [style*="border-bottom:1px solid #D8E9F5"],[style*="border-bottom: 1px solid #D8E9F5"],[style*="border-bottom:2px solid #D8E9F5"],[style*="border-bottom: 2px solid #D8E9F5"],[style*="border-top:1px solid #D8E9F5"],[style*="border-top: 1px solid #D8E9F5"],
+        [style*="border-left:2px solid #D8E9F5"],[style*="border-left: 2px solid #D8E9F5"],[style*="border-right:1px solid #D8E9F5"],[style*="border-right: 1px solid #D8E9F5"],[style*="border-color:#D8E9F5"],[style*="border-color: #D8E9F5"],
+        [style*="border:1px solid #F0F0F0"],[style*="border: 1px solid #F0F0F0"],[style*="border:2px solid #F0F0F0"],[style*="border: 2px solid #F0F0F0"],[style*="border-bottom:1px solid #F0F0F0"],[style*="border-bottom: 1px solid #F0F0F0"],
+        [style*="border-bottom:2px solid #F0F0F0"],[style*="border-bottom: 2px solid #F0F0F0"],[style*="border-top:1px solid #F0F0F0"],[style*="border-top: 1px solid #F0F0F0"],[style*="border-left:2px solid #F0F0F0"],[style*="border-left: 2px solid #F0F0F0"],
+        [style*="border-right:1px solid #F0F0F0"],[style*="border-right: 1px solid #F0F0F0"],[style*="border-color:#F0F0F0"],[style*="border-color: #F0F0F0"] { border-color: var(--border-sub) !important; }
+        [style*="border:1px solid #004B8D"],[style*="border: 1px solid #004B8D"],[style*="border:2px solid #004B8D"],[style*="border: 2px solid #004B8D"],[style*="border-bottom:1px solid #004B8D"],[style*="border-bottom: 1px solid #004B8D"],
+        [style*="border-bottom:2px solid #004B8D"],[style*="border-bottom: 2px solid #004B8D"],[style*="border-top:1px solid #004B8D"],[style*="border-top: 1px solid #004B8D"],[style*="border-left:2px solid #004B8D"],[style*="border-left: 2px solid #004B8D"],
+        [style*="border-right:1px solid #004B8D"],[style*="border-right: 1px solid #004B8D"],[style*="border-color:#004B8D"],[style*="border-color: #004B8D"] { border-color: var(--accent) !important; }
+        [style*="border:1px solid #6EE7B7"],[style*="border: 1px solid #6EE7B7"],[style*="border:2px solid #6EE7B7"],[style*="border: 2px solid #6EE7B7"],[style*="border-bottom:1px solid #6EE7B7"],[style*="border-bottom: 1px solid #6EE7B7"],
+        [style*="border-bottom:2px solid #6EE7B7"],[style*="border-bottom: 2px solid #6EE7B7"],[style*="border-top:1px solid #6EE7B7"],[style*="border-top: 1px solid #6EE7B7"],[style*="border-left:2px solid #6EE7B7"],[style*="border-left: 2px solid #6EE7B7"],
+        [style*="border-right:1px solid #6EE7B7"],[style*="border-right: 1px solid #6EE7B7"],[style*="border-color:#6EE7B7"],[style*="border-color: #6EE7B7"],[style*="border:1px solid #A7F3D0"],[style*="border: 1px solid #A7F3D0"],
+        [style*="border:2px solid #A7F3D0"],[style*="border: 2px solid #A7F3D0"],[style*="border-bottom:1px solid #A7F3D0"],[style*="border-bottom: 1px solid #A7F3D0"],[style*="border-bottom:2px solid #A7F3D0"],[style*="border-bottom: 2px solid #A7F3D0"],
+        [style*="border-top:1px solid #A7F3D0"],[style*="border-top: 1px solid #A7F3D0"],[style*="border-left:2px solid #A7F3D0"],[style*="border-left: 2px solid #A7F3D0"],[style*="border-right:1px solid #A7F3D0"],[style*="border-right: 1px solid #A7F3D0"],
+        [style*="border-color:#A7F3D0"],[style*="border-color: #A7F3D0"],[style*="border:1px solid #86EFAC"],[style*="border: 1px solid #86EFAC"],[style*="border:2px solid #86EFAC"],[style*="border: 2px solid #86EFAC"],
+        [style*="border-bottom:1px solid #86EFAC"],[style*="border-bottom: 1px solid #86EFAC"],[style*="border-bottom:2px solid #86EFAC"],[style*="border-bottom: 2px solid #86EFAC"],[style*="border-top:1px solid #86EFAC"],[style*="border-top: 1px solid #86EFAC"],
+        [style*="border-left:2px solid #86EFAC"],[style*="border-left: 2px solid #86EFAC"],[style*="border-right:1px solid #86EFAC"],[style*="border-right: 1px solid #86EFAC"],[style*="border-color:#86EFAC"],[style*="border-color: #86EFAC"],
+        [style*="border:1px solid #BBF7D0"],[style*="border: 1px solid #BBF7D0"],[style*="border:2px solid #BBF7D0"],[style*="border: 2px solid #BBF7D0"],[style*="border-bottom:1px solid #BBF7D0"],[style*="border-bottom: 1px solid #BBF7D0"],
+        [style*="border-bottom:2px solid #BBF7D0"],[style*="border-bottom: 2px solid #BBF7D0"],[style*="border-top:1px solid #BBF7D0"],[style*="border-top: 1px solid #BBF7D0"],[style*="border-left:2px solid #BBF7D0"],[style*="border-left: 2px solid #BBF7D0"],
+        [style*="border-right:1px solid #BBF7D0"],[style*="border-right: 1px solid #BBF7D0"],[style*="border-color:#BBF7D0"],[style*="border-color: #BBF7D0"] { border-color: var(--success-border) !important; }
+        [style*="border:1px solid #FECACA"],[style*="border: 1px solid #FECACA"],[style*="border:2px solid #FECACA"],[style*="border: 2px solid #FECACA"],[style*="border-bottom:1px solid #FECACA"],[style*="border-bottom: 1px solid #FECACA"],
+        [style*="border-bottom:2px solid #FECACA"],[style*="border-bottom: 2px solid #FECACA"],[style*="border-top:1px solid #FECACA"],[style*="border-top: 1px solid #FECACA"],[style*="border-left:2px solid #FECACA"],[style*="border-left: 2px solid #FECACA"],
+        [style*="border-right:1px solid #FECACA"],[style*="border-right: 1px solid #FECACA"],[style*="border-color:#FECACA"],[style*="border-color: #FECACA"],[style*="border:1px solid #FCA5A5"],[style*="border: 1px solid #FCA5A5"],
+        [style*="border:2px solid #FCA5A5"],[style*="border: 2px solid #FCA5A5"],[style*="border-bottom:1px solid #FCA5A5"],[style*="border-bottom: 1px solid #FCA5A5"],[style*="border-bottom:2px solid #FCA5A5"],[style*="border-bottom: 2px solid #FCA5A5"],
+        [style*="border-top:1px solid #FCA5A5"],[style*="border-top: 1px solid #FCA5A5"],[style*="border-left:2px solid #FCA5A5"],[style*="border-left: 2px solid #FCA5A5"],[style*="border-right:1px solid #FCA5A5"],[style*="border-right: 1px solid #FCA5A5"],
+        [style*="border-color:#FCA5A5"],[style*="border-color: #FCA5A5"],[style*="border:1px solid #FEE2E2"],[style*="border: 1px solid #FEE2E2"],[style*="border:2px solid #FEE2E2"],[style*="border: 2px solid #FEE2E2"],
+        [style*="border-bottom:1px solid #FEE2E2"],[style*="border-bottom: 1px solid #FEE2E2"],[style*="border-bottom:2px solid #FEE2E2"],[style*="border-bottom: 2px solid #FEE2E2"],[style*="border-top:1px solid #FEE2E2"],[style*="border-top: 1px solid #FEE2E2"],
+        [style*="border-left:2px solid #FEE2E2"],[style*="border-left: 2px solid #FEE2E2"],[style*="border-right:1px solid #FEE2E2"],[style*="border-right: 1px solid #FEE2E2"],[style*="border-color:#FEE2E2"],[style*="border-color: #FEE2E2"] { border-color: var(--danger-border) !important; }
+        [style*="border:1px solid #FDE68A"],[style*="border: 1px solid #FDE68A"],[style*="border:2px solid #FDE68A"],[style*="border: 2px solid #FDE68A"],[style*="border-bottom:1px solid #FDE68A"],[style*="border-bottom: 1px solid #FDE68A"],
+        [style*="border-bottom:2px solid #FDE68A"],[style*="border-bottom: 2px solid #FDE68A"],[style*="border-top:1px solid #FDE68A"],[style*="border-top: 1px solid #FDE68A"],[style*="border-left:2px solid #FDE68A"],[style*="border-left: 2px solid #FDE68A"],
+        [style*="border-right:1px solid #FDE68A"],[style*="border-right: 1px solid #FDE68A"],[style*="border-color:#FDE68A"],[style*="border-color: #FDE68A"],[style*="border:1px solid #FCD34D"],[style*="border: 1px solid #FCD34D"],
+        [style*="border:2px solid #FCD34D"],[style*="border: 2px solid #FCD34D"],[style*="border-bottom:1px solid #FCD34D"],[style*="border-bottom: 1px solid #FCD34D"],[style*="border-bottom:2px solid #FCD34D"],[style*="border-bottom: 2px solid #FCD34D"],
+        [style*="border-top:1px solid #FCD34D"],[style*="border-top: 1px solid #FCD34D"],[style*="border-left:2px solid #FCD34D"],[style*="border-left: 2px solid #FCD34D"],[style*="border-right:1px solid #FCD34D"],[style*="border-right: 1px solid #FCD34D"],
+        [style*="border-color:#FCD34D"],[style*="border-color: #FCD34D"],[style*="border:1px solid #FEF08A"],[style*="border: 1px solid #FEF08A"],[style*="border:2px solid #FEF08A"],[style*="border: 2px solid #FEF08A"],
+        [style*="border-bottom:1px solid #FEF08A"],[style*="border-bottom: 1px solid #FEF08A"],[style*="border-bottom:2px solid #FEF08A"],[style*="border-bottom: 2px solid #FEF08A"],[style*="border-top:1px solid #FEF08A"],[style*="border-top: 1px solid #FEF08A"],
+        [style*="border-left:2px solid #FEF08A"],[style*="border-left: 2px solid #FEF08A"],[style*="border-right:1px solid #FEF08A"],[style*="border-right: 1px solid #FEF08A"],[style*="border-color:#FEF08A"],[style*="border-color: #FEF08A"],
+        [style*="border:1px solid #FED7AA"],[style*="border: 1px solid #FED7AA"],[style*="border:2px solid #FED7AA"],[style*="border: 2px solid #FED7AA"],[style*="border-bottom:1px solid #FED7AA"],[style*="border-bottom: 1px solid #FED7AA"],
+        [style*="border-bottom:2px solid #FED7AA"],[style*="border-bottom: 2px solid #FED7AA"],[style*="border-top:1px solid #FED7AA"],[style*="border-top: 1px solid #FED7AA"],[style*="border-left:2px solid #FED7AA"],[style*="border-left: 2px solid #FED7AA"],
+        [style*="border-right:1px solid #FED7AA"],[style*="border-right: 1px solid #FED7AA"],[style*="border-color:#FED7AA"],[style*="border-color: #FED7AA"] { border-color: var(--warning-border) !important; }
+        [style*="border:1px solid #BFDBFE"],[style*="border: 1px solid #BFDBFE"],[style*="border:2px solid #BFDBFE"],[style*="border: 2px solid #BFDBFE"],[style*="border-bottom:1px solid #BFDBFE"],[style*="border-bottom: 1px solid #BFDBFE"],
+        [style*="border-bottom:2px solid #BFDBFE"],[style*="border-bottom: 2px solid #BFDBFE"],[style*="border-top:1px solid #BFDBFE"],[style*="border-top: 1px solid #BFDBFE"],[style*="border-left:2px solid #BFDBFE"],[style*="border-left: 2px solid #BFDBFE"],
+        [style*="border-right:1px solid #BFDBFE"],[style*="border-right: 1px solid #BFDBFE"],[style*="border-color:#BFDBFE"],[style*="border-color: #BFDBFE"],[style*="border:1px solid #93C5FD"],[style*="border: 1px solid #93C5FD"],
+        [style*="border:2px solid #93C5FD"],[style*="border: 2px solid #93C5FD"],[style*="border-bottom:1px solid #93C5FD"],[style*="border-bottom: 1px solid #93C5FD"],[style*="border-bottom:2px solid #93C5FD"],[style*="border-bottom: 2px solid #93C5FD"],
+        [style*="border-top:1px solid #93C5FD"],[style*="border-top: 1px solid #93C5FD"],[style*="border-left:2px solid #93C5FD"],[style*="border-left: 2px solid #93C5FD"],[style*="border-right:1px solid #93C5FD"],[style*="border-right: 1px solid #93C5FD"],
+        [style*="border-color:#93C5FD"],[style*="border-color: #93C5FD"] { border-color: var(--info-border) !important; }
+        [style*="border:1px solid #CCECE9"],[style*="border: 1px solid #CCECE9"],[style*="border:2px solid #CCECE9"],[style*="border: 2px solid #CCECE9"],[style*="border-bottom:1px solid #CCECE9"],[style*="border-bottom: 1px solid #CCECE9"],
+        [style*="border-bottom:2px solid #CCECE9"],[style*="border-bottom: 2px solid #CCECE9"],[style*="border-top:1px solid #CCECE9"],[style*="border-top: 1px solid #CCECE9"],[style*="border-left:2px solid #CCECE9"],[style*="border-left: 2px solid #CCECE9"],
+        [style*="border-right:1px solid #CCECE9"],[style*="border-right: 1px solid #CCECE9"],[style*="border-color:#CCECE9"],[style*="border-color: #CCECE9"] { border-color: var(--teal) !important; }
+        [style*="border:1px solid #D8B4FE"],[style*="border: 1px solid #D8B4FE"],[style*="border:2px solid #D8B4FE"],[style*="border: 2px solid #D8B4FE"],[style*="border-bottom:1px solid #D8B4FE"],[style*="border-bottom: 1px solid #D8B4FE"],
+        [style*="border-bottom:2px solid #D8B4FE"],[style*="border-bottom: 2px solid #D8B4FE"],[style*="border-top:1px solid #D8B4FE"],[style*="border-top: 1px solid #D8B4FE"],[style*="border-left:2px solid #D8B4FE"],[style*="border-left: 2px solid #D8B4FE"],
+        [style*="border-right:1px solid #D8B4FE"],[style*="border-right: 1px solid #D8B4FE"],[style*="border-color:#D8B4FE"],[style*="border-color: #D8B4FE"],[style*="border:1px solid #DDD6FE"],[style*="border: 1px solid #DDD6FE"],
+        [style*="border:2px solid #DDD6FE"],[style*="border: 2px solid #DDD6FE"],[style*="border-bottom:1px solid #DDD6FE"],[style*="border-bottom: 1px solid #DDD6FE"],[style*="border-bottom:2px solid #DDD6FE"],[style*="border-bottom: 2px solid #DDD6FE"],
+        [style*="border-top:1px solid #DDD6FE"],[style*="border-top: 1px solid #DDD6FE"],[style*="border-left:2px solid #DDD6FE"],[style*="border-left: 2px solid #DDD6FE"],[style*="border-right:1px solid #DDD6FE"],[style*="border-right: 1px solid #DDD6FE"],
+        [style*="border-color:#DDD6FE"],[style*="border-color: #DDD6FE"],[style*="border:1px solid #E9D5FF"],[style*="border: 1px solid #E9D5FF"],[style*="border:2px solid #E9D5FF"],[style*="border: 2px solid #E9D5FF"],
+        [style*="border-bottom:1px solid #E9D5FF"],[style*="border-bottom: 1px solid #E9D5FF"],[style*="border-bottom:2px solid #E9D5FF"],[style*="border-bottom: 2px solid #E9D5FF"],[style*="border-top:1px solid #E9D5FF"],[style*="border-top: 1px solid #E9D5FF"],
+        [style*="border-left:2px solid #E9D5FF"],[style*="border-left: 2px solid #E9D5FF"],[style*="border-right:1px solid #E9D5FF"],[style*="border-right: 1px solid #E9D5FF"],[style*="border-color:#E9D5FF"],[style*="border-color: #E9D5FF"] { border-color: var(--purple) !important; }
 
-        /* ── STATUS BADGES ── */
-        [style*="background: #ECFDF5"],[style*="background:#ECFDF5"] { background: rgba(6,95,70,0.28) !important; }
-        [style*="background: #FEF2F2"],[style*="background:#FEF2F2"] { background: rgba(153,27,27,0.28) !important; }
-        [style*="background: #FEF3C7"],[style*="background:#FEF3C7"],
-        [style*="background: #FFFBEB"],[style*="background:#FFFBEB"] { background: rgba(146,64,14,0.25) !important; }
+        /* ícones SVG (atributo stroke) */
+        [stroke="#004B8D"] { stroke: var(--accent-text) !important; }
+        [stroke="#111827"],[stroke="#1B1B18"] { stroke: var(--text-1) !important; }
+        [stroke="#374151"] { stroke: var(--text-2) !important; }
+        [stroke="#6B7280"] { stroke: var(--text-3) !important; }
+        [stroke="#9CA3AF"],[stroke="#D1D5DB"] { stroke: var(--text-4) !important; }
+        [stroke="#3D7A27"],[stroke="#059669"] { stroke: var(--success) !important; }
+        [stroke="#EF4444"],[stroke="#DC2626"] { stroke: var(--danger) !important; }
+        [stroke="#92400E"],[stroke="#C77A00"],[stroke="#B45309"] { stroke: var(--warning) !important; }
+        [stroke="#3B5BDB"],[stroke="#1E40AF"],[stroke="#1D4ED8"],[stroke="#91A7FF"],[stroke="#A8D4FF"] { stroke: var(--info) !important; }
+        [stroke="#009C8C"],[stroke="#60CFCA"] { stroke: var(--teal) !important; }
+        [stroke="#7C3700"] { stroke: var(--brown) !important; }
+        [stroke="#6D28D9"],[stroke="#7C3AED"],[stroke="#7E22CE"] { stroke: var(--purple) !important; }
 
-        /* ── CAIXAS INFO AZUIS (EFF6FF/BFDBFE/DBEAFE) ── */
-        [style*="background: #EFF6FF"],[style*="background:#EFF6FF"] { background: rgba(59,130,246,0.12) !important; }
-        [style*="background: #DBEAFE"],[style*="background:#DBEAFE"] { background: rgba(59,130,246,0.18) !important; }
-        [style*="background: #D1FAE5"],[style*="background:#D1FAE5"] { background: rgba(16,185,129,0.18) !important; }
-        [style*="border: 1px solid #BFDBFE"],[style*="border:1px solid #BFDBFE"] { border-color: rgba(59,130,246,0.35) !important; }
-        [style*="border-left: 2px solid #BFDBFE"],[style*="border-left:2px solid #BFDBFE"] { border-left-color: rgba(59,130,246,0.4) !important; }
-
-        /* ── CAIXAS INVENTÁRIO PEI (categorias) ── */
-        [style*="background: #F0EBF8"],[style*="background:#F0EBF8"] { background: rgba(109,40,217,0.18) !important; }
-        [style*="border: 1px solid #E8F0F9"],[style*="border:1px solid #E8F0F9"] { border-color: rgba(0,75,141,0.3) !important; }
-        [style*="border: 1px solid #E6F5F4"],[style*="border:1px solid #E6F5F4"] { border-color: rgba(0,156,140,0.3) !important; }
-        [style*="border: 1px solid #F0EBF8"],[style*="border:1px solid #F0EBF8"] { border-color: rgba(109,40,217,0.3) !important; }
-        [style*="border: 1px solid #C5D8F0"],[style*="border:1px solid #C5D8F0"] { border-color: var(--border) !important; }
-        [style*="border: 1.5px solid #D8B4FE"],[style*="border:1.5px solid #D8B4FE"] { border-color: rgba(139,92,246,0.35) !important; }
-        [style*="border-bottom: 1px solid #D8B4FE"],[style*="border-bottom:1px solid #D8B4FE"] { border-color: rgba(139,92,246,0.35) !important; }
-        [style*="border: 1px solid #EDE9FE"],[style*="border:1px solid #EDE9FE"] { border-color: rgba(139,92,246,0.25) !important; }
-
-        /* ── DARK: textos de badge com cor forte ── */
-        [data-theme="dark"] [style*="color: #065F46"],[data-theme="dark"] [style*="color:#065F46"] { color: #6EDDB8 !important; }
-        [data-theme="dark"] [style*="color: #991B1B"],[data-theme="dark"] [style*="color:#991B1B"] { color: #FCA5A5 !important; }
-        [data-theme="dark"] [style*="color: #92400E"],[data-theme="dark"] [style*="color:#92400E"] { color: #FCD34D !important; }
-        [data-theme="dark"] [style*="color: #7C3700"],[data-theme="dark"] [style*="color:#7C3700"] { color: #FCD34D !important; }
-        [data-theme="dark"] [style*="color: #7E22CE"],[data-theme="dark"] [style*="color:#7E22CE"] { color: #C4B5FD !important; }
-        [data-theme="dark"] [style*="color: #7C3AED"],[data-theme="dark"] [style*="color:#7C3AED"] { color: #C4B5FD !important; }
-        [data-theme="dark"] [style*="color: #009C8C"],[data-theme="dark"] [style*="color:#009C8C"] { color: #5EEAD4 !important; }
-        [data-theme="dark"] [style*="color: #004B8D"],[data-theme="dark"] [style*="color:#004B8D"] { color: var(--accent) !important; }
-        [data-theme="dark"] [style*="color: #3D7A27"],[data-theme="dark"] [style*="color:#3D7A27"] { color: #86EFAC !important; }
-        [data-theme="dark"] [style*="color: #B45309"],[data-theme="dark"] [style*="color:#B45309"] { color: #FCD34D !important; }
-        [data-theme="dark"] [style*="color: #6D28D9"],[data-theme="dark"] [style*="color:#6D28D9"] { color: #C4B5FD !important; }
-        [data-theme="dark"] [style*="color: #5B21B6"],[data-theme="dark"] [style*="color:#5B21B6"] { color: #C4B5FD !important; }
-        [data-theme="dark"] [style*="color: #1E40AF"],[data-theme="dark"] [style*="color:#1E40AF"] { color: #93C5FD !important; }
-        [data-theme="dark"] [style*="color: #1D4ED8"],[data-theme="dark"] [style*="color:#1D4ED8"] { color: #60A5FA !important; }
-
-        /* ── DARK: textos escuros que faltavam (cinzas/quase-preto) ── */
-        [data-theme="dark"] [style*="color: #1a1a1a"],[data-theme="dark"] [style*="color:#1a1a1a"],
-        [data-theme="dark"] [style*="color: #1A1A1A"],[data-theme="dark"] [style*="color:#1A1A1A"] { color: var(--text-1) !important; }
-        [data-theme="dark"] [style*="color: #222"],[data-theme="dark"] [style*="color:#222"] { color: var(--text-1) !important; }
-        [data-theme="dark"] [style*="color: #333"],[data-theme="dark"] [style*="color:#333"] { color: var(--text-1) !important; }
-        [data-theme="dark"] [style*="color: #3e3e3a"],[data-theme="dark"] [style*="color:#3e3e3a"] { color: var(--text-2) !important; }
-        [data-theme="dark"] [style*="color: #444"],[data-theme="dark"] [style*="color:#444"] { color: var(--text-2) !important; }
-        [data-theme="dark"] [style*="color: #555"],[data-theme="dark"] [style*="color:#555"] { color: var(--text-2) !important; }
-        [data-theme="dark"] [style*="color: #666"],[data-theme="dark"] [style*="color:#666"] { color: var(--text-3) !important; }
-        [data-theme="dark"] [style*="color: #888"],[data-theme="dark"] [style*="color:#888"] { color: var(--text-3) !important; }
-        [data-theme="dark"] [style*="color: #000"],[data-theme="dark"] [style*="color:#000"],
-        [data-theme="dark"] [style*="color: black"],[data-theme="dark"] [style*="color:black"] { color: var(--text-1) !important; }
-
-        /* ── DARK: ícones SVG com cor fixa no atributo stroke (não pega via style*) ── */
-        [data-theme="dark"] [stroke="#004B8D"] { stroke: var(--accent) !important; }
-        [data-theme="dark"] [stroke="#009C8C"],[data-theme="dark"] [stroke="#60CFCA"] { stroke: #5EEAD4 !important; }
-        [data-theme="dark"] [stroke="#7C3700"],[data-theme="dark"] [stroke="#92400E"],
-        [data-theme="dark"] [stroke="#C77A00"],[data-theme="dark"] [stroke="#B45309"] { stroke: #FCD34D !important; }
-        [data-theme="dark"] [stroke="#9CA3AF"] { stroke: var(--text-4) !important; }
-        [data-theme="dark"] [stroke="#D1D5DB"] { stroke: var(--text-3) !important; }
-        [data-theme="dark"] [stroke="#6D28D9"],[data-theme="dark"] [stroke="#7C3AED"],
-        [data-theme="dark"] [stroke="#7E22CE"] { stroke: #C4B5FD !important; }
-        [data-theme="dark"] [stroke="#3D7A27"],[data-theme="dark"] [stroke="#059669"] { stroke: #86EFAC !important; }
-        [data-theme="dark"] [stroke="#3B5BDB"],[data-theme="dark"] [stroke="#1E40AF"],
-        [data-theme="dark"] [stroke="#1D4ED8"],[data-theme="dark"] [stroke="#91A7FF"] { stroke: #60A5FA !important; }
-        [data-theme="dark"] [stroke="#A8D4FF"] { stroke: #8EB3D4 !important; }
-        [data-theme="dark"] [stroke="#EF4444"],[data-theme="dark"] [stroke="#DC2626"] { stroke: #FCA5A5 !important; }
-        [data-theme="dark"] [stroke="#111827"],[data-theme="dark"] [stroke="#1B1B18"],
-        [data-theme="dark"] [stroke="#374151"],[data-theme="dark"] [stroke="#6B7280"] { stroke: var(--text-2) !important; }
-
-        /* ── BORDAS — com e sem espaço ── */
-        [style*="border:1px solid #F3F4F6"],
-        [style*="border: 1px solid #F3F4F6"]        { border-color: var(--border-sub) !important; }
-        [style*="border:1px solid #E5E7EB"],
-        [style*="border: 1px solid #E5E7EB"]        { border-color: var(--border) !important; }
-        [style*="border:1px solid #E2EAF4"],
-        [style*="border: 1px solid #E2EAF4"]        { border-color: var(--border) !important; }
-        [style*="border:1px solid #D1D5DB"],
-        [style*="border: 1px solid #D1D5DB"]        { border-color: var(--border) !important; }
-        [style*="border-top:1px solid #F9FAFB"],
-        [style*="border-top: 1px solid #F9FAFB"]    { border-color: var(--border-sub) !important; }
-        [style*="border-bottom:1px solid #F3F4F6"],
-        [style*="border-bottom: 1px solid #F3F4F6"] { border-color: var(--border-sub) !important; }
-        [style*="border-bottom:1px solid #F9FAFB"],
-        [style*="border-bottom: 1px solid #F9FAFB"] { border-color: var(--border-sub) !important; }
-        [style*="border-bottom:1px solid #E5E7EB"],
-        [style*="border-bottom: 1px solid #E5E7EB"] { border-color: var(--border) !important; }
-        [style*="border-right:1px solid #E5E7EB"],
-        [style*="border-right: 1px solid #E5E7EB"]  { border-color: var(--border) !important; }
-        [style*="border-bottom:2px solid #E5E7EB"],
-        [style*="border-bottom: 2px solid #E5E7EB"] { border-color: var(--border) !important; }
-
-        /* ── DARK: bordas coloridas de alerta ── */
-        [data-theme="dark"] [style*="border:1px solid #6EE7B7"],
-        [data-theme="dark"] [style*="border: 1px solid #6EE7B7"] { border-color: rgba(110,221,184,0.3) !important; }
-        [data-theme="dark"] [style*="border:1px solid #FECACA"],
-        [data-theme="dark"] [style*="border: 1px solid #FECACA"] { border-color: rgba(252,165,165,0.3) !important; }
-        [data-theme="dark"] [style*="border:1px solid #FDE68A"],
-        [data-theme="dark"] [style*="border: 1px solid #FDE68A"] { border-color: rgba(253,230,138,0.2) !important; }
+        /* accent-color de checkbox/radio segue o acento da escola */
+        [style*="accent-color: #004B8D"],[style*="accent-color:#004B8D"] { accent-color: var(--accent) !important; }
 
         /* ── INPUTS ── */
         input, textarea, select { color: var(--text-1) !important; }
-        [data-theme="dark"] input  { background: transparent !important; }
-        [data-theme="dark"] textarea { background: var(--bg-subtle) !important; border-color: var(--border) !important; }
-        /* No dark mode a textarea ganha fundo (vira caixa); garante respiro horizontal
-           para o texto não colar na borda. */
-        [data-theme="dark"] textarea { padding-left: 12px !important; padding-right: 12px !important; border-radius: 8px; }
-        [data-theme="dark"] select { background: var(--bg-subtle) !important; border-color: var(--border) !important; }
-        [data-theme="dark"] input[type="date"] { background: var(--bg-subtle) !important; color-scheme: dark; }
-        [data-theme="dark"] input::placeholder,
-        [data-theme="dark"] textarea::placeholder { color: var(--text-4) !important; }
-
-        /* ── SIDEBAR ATIVO ── */
-        [style*="background: #E8F0F9; color: #004B8D"] {
-            background: var(--accent-bg) !important;
-            color: var(--accent) !important;
-        }
-        [data-theme="dark"] [style*="background: #E8F0F9; color: #004B8D"] {
-            background: rgba(77,159,255,0.22) !important;
-            color: #7EC8FF !important;
-        }
+        :is([data-theme="dark"],[data-theme="slate"],[data-theme="contrast"]) input  { background: transparent !important; }
+        :is([data-theme="dark"],[data-theme="slate"],[data-theme="contrast"]) textarea { background: var(--bg-subtle) !important; border-color: var(--border) !important;
+            padding-left: 12px !important; padding-right: 12px !important; border-radius: 8px; }
+        :is([data-theme="dark"],[data-theme="slate"],[data-theme="contrast"]) select { background: var(--bg-subtle) !important; border-color: var(--border) !important; }
+        :is([data-theme="dark"],[data-theme="slate"],[data-theme="contrast"]) input[type="date"] { background: var(--bg-subtle) !important; color-scheme: dark; }
+        :is([data-theme="dark"],[data-theme="slate"],[data-theme="contrast"]) input::placeholder,
+        :is([data-theme="dark"],[data-theme="slate"],[data-theme="contrast"]) textarea::placeholder { color: var(--text-4) !important; }
 
         /* ── MURAL DE OBSERVAÇÕES ── */
-        [data-theme="dark"] .observation-feed-card {
-            background: var(--bg-card) !important;
-            border-color: var(--border) !important;
-        }
+        :is([data-theme="dark"],[data-theme="slate"],[data-theme="contrast"]) .observation-feed-card { background: var(--bg-card) !important; border-color: var(--border) !important; }
 
-        /* ── HOVER DARK ── */
-        [data-theme="dark"] button[style*="background: #004B8D"]:hover { background: #2272CC !important; }
-        [data-theme="dark"] a[style*="background: #004B8D"]:hover       { background: #2272CC !important; }
-        [data-theme="dark"] button[style*="color: #EF4444"]:hover        { background: rgba(239,68,68,0.15) !important; }
+        /* ── HOVER de botões com acento/ação (claro e escuro) ── */
+        button[style*="var(--accent)"]:hover, a[style*="var(--accent)"]:hover,
+        button[style*="var(--danger-solid)"]:hover, a[style*="var(--danger-solid)"]:hover,
+        button[style*="var(--success-solid)"]:hover, a[style*="var(--success-solid)"]:hover { filter: brightness(1.08); }
 
         /* ── BOTÃO TEMA ── */
         #theme-toggle {
@@ -401,10 +394,10 @@
 <div class="flex min-h-screen">
 
     {{-- SIDEBAR --}}
-    <aside style="width: 240px; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
+    <aside style="width: 240px; border-right: 1px solid var(--border); display: flex; flex-direction: column; min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
 
         {{-- Logo --}}
-        <div style="padding: 24px 20px 20px; border-bottom: 1px solid #F3F4F6;">
+        <div style="padding: 24px 20px 20px; border-bottom: 1px solid var(--border-sub);">
             @php
                 $roleDashboardMap = ['admin' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'professor.dashboard'];
                 $dashboardRoute = auth()->check() ? ($roleDashboardMap[auth()->user()->getRoleNames()->first()] ?? 'secretaria.dashboard') : 'secretaria.dashboard';
@@ -417,33 +410,33 @@
                         <img src="{{ route('school.logo', ['filename' => basename($school->logo)]) }}"
                              style="height: 40px; object-fit: contain; max-width: 120px; flex-shrink: 0;">
                         <div style="min-width: 0;">
-                            <div style="font-size: 13px; font-weight: 700; color: #004B8D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $school->name }}</div>
-                            <div style="font-size: 10px; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase;">Portal Institucional</div>
+                            <div style="font-size: 13px; font-weight: 700; color: var(--accent-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $school->name }}</div>
+                            <div style="font-size: 10px; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase;">Portal Institucional</div>
                         </div>
                     @else
-                        <div style="width: 36px; height: 36px; background: #004B8D; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <div style="width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                                 <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" fill="white" opacity="0.9"/>
                                 <path d="M12 2L3 7l9 5 9-5-9-5z" fill="white"/>
                             </svg>
                         </div>
                         <div style="min-width: 0;">
-                            <div style="font-size: 15px; font-weight: 700; color: #004B8D; letter-spacing: 0.5px;">ÁTRIO</div>
-                            <div style="font-size: 10px; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase;">
+                            <div style="font-size: 15px; font-weight: 700; color: var(--accent-text); letter-spacing: 0.5px;">ÁTRIO</div>
+                            <div style="font-size: 10px; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase;">
                                 {{ $school?->name ?? 'Portal Institucional' }}
                             </div>
                         </div>
                     @endif
                 @else
-                    <div style="width: 36px; height: 36px; background: #004B8D; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <div style="width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                             <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" fill="white" opacity="0.9"/>
                             <path d="M12 2L3 7l9 5 9-5-9-5z" fill="white"/>
                         </svg>
                     </div>
                     <div>
-                        <div style="font-size: 15px; font-weight: 700; color: #004B8D; letter-spacing: 0.5px;">ÁTRIO</div>
-                        <div style="font-size: 10px; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase;">Portal Institucional</div>
+                        <div style="font-size: 15px; font-weight: 700; color: var(--accent-text); letter-spacing: 0.5px;">ÁTRIO</div>
+                        <div style="font-size: 10px; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase;">Portal Institucional</div>
                     </div>
                 @endauth
             </a>
@@ -546,22 +539,22 @@
         </nav>
 
         @auth
-        <div style="padding: 16px 12px; border-top: 1px solid #F3F4F6;">
+        <div style="padding: 16px 12px; border-top: 1px solid var(--border-sub);">
             <a href="{{ route('profile.edit') }}"
-               style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; text-decoration: none; color: #374151;">
+               style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; text-decoration: none; color: var(--text-2);">
                 @if(auth()->user()->avatar)
                     <img src="{{ \Illuminate\Support\Facades\Storage::url(auth()->user()->avatar) }}"
                          style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
                 @else
-                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #004B8D; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0;">
                         {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                     </div>
                 @endif
                 <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 13px; font-weight: 500; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="font-size: 13px; font-weight: 500; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         {{ auth()->user()->name }}
                     </div>
-                    <div style="font-size: 11px; color: #9CA3AF;">
+                    <div style="font-size: 11px; color: var(--text-4);">
                         @php
                             $roleLabels = [
                                 'admin'       => 'Administrador',
@@ -582,7 +575,7 @@
             <form method="POST" action="{{ route('logout') }}" style="margin-top: 4px;">
                 @csrf
                 <button type="submit"
-                        style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; border: none; background: none; cursor: pointer; font-size: 13px; color: #EF4444; text-align: left;">
+                        style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; border: none; background: none; cursor: pointer; font-size: 13px; color: var(--danger); text-align: left;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
                     </svg>
@@ -595,12 +588,12 @@
 
     <div style="margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh;">
 
-        <header style="border-bottom: 1px solid #E5E7EB; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 30;">
+        <header style="border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 30;">
             <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
                 @hasSection('breadcrumb')
                     @yield('breadcrumb')
                 @else
-                    <span style="color: #111827; font-weight: 500;">@yield('title')</span>
+                    <span style="color: var(--text-1); font-weight: 500;">@yield('title')</span>
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -618,13 +611,13 @@
 
         <main style="flex: 1; padding: 32px;">
             @if(session('success'))
-                <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <div style="background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
                     {{ session('success') }}
                 </div>
             @endif
             @if(session('error'))
-                <div style="background: #FEF2F2; border: 1px solid #FCA5A5; color: #991B1B; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <div style="background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger); font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     {{ session('error') }}
                 </div>
@@ -648,7 +641,7 @@
                 box-shadow:0 20px 60px rgba(0,0,0,0.2);z-index:1;">
 
         {{-- Ícone --}}
-        <div style="width:48px;height:48px;border-radius:14px;background:#FEF2F2;
+        <div style="width:48px;height:48px;border-radius:14px;background:var(--danger-bg);
                     display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
                 <polyline points="3 6 5 6 21 6"/>
@@ -673,7 +666,7 @@
             </button>
             <button id="confirm-ok"
                     style="flex:1;padding:11px;border-radius:8px;border:none;
-                           background:#EF4444;color:white;font-size:13px;font-weight:600;cursor:pointer;">
+                           background:var(--danger-solid);color:white;font-size:13px;font-weight:600;cursor:pointer;">
                 Remover
             </button>
         </div>

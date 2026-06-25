@@ -103,7 +103,7 @@
                 <img src="{{ route('school.logo', ['filename' => basename($school->logo)]) }}"
                      style="height: 36px; object-fit: contain;">
             @else
-                <div style="width: 36px; height: 36px; background: #004B8D; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <div style="width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                         <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" fill="white" opacity="0.9"/>
                         <path d="M12 2L3 7l9 5 9-5-9-5z" fill="white"/>
@@ -111,8 +111,8 @@
                 </div>
             @endif
             <div>
-                <div style="font-size: 14px; font-weight: 700; color: #111827;">{{ $school?->name ?? 'Átrio' }}</div>
-                <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px;">Portal Institucional</div>
+                <div style="font-size: 14px; font-weight: 700; color: var(--text-1);">{{ $school?->name ?? 'Átrio' }}</div>
+                <div style="font-size: 11px; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Portal Institucional</div>
             </div>
         </a>
         @endauth
@@ -122,8 +122,8 @@
     <div style="display: flex; align-items: center; gap: 16px;">
         @auth
         <div style="font-size: 13px; text-align: right;">
-            <div style="font-weight: 600; color: #111827;">{{ auth()->user()->name }}</div>
-            <div style="color: #9CA3AF; font-size: 11px;">
+            <div style="font-weight: 600; color: var(--text-1);">{{ auth()->user()->name }}</div>
+            <div style="color: var(--text-4); font-size: 11px;">
                 @php
                     $rl = ['admin' => 'Administrador', 'coordenador' => 'Coordenação', 'orientador' => 'Orientação', 'professor' => 'Professor'];
                     $hubRoleLabel = $rl[$hubRole] ?? null;
@@ -150,7 +150,7 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
-                    style="display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: 1px solid #FECACA; background: transparent; color: #EF4444; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    style="display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--danger-border); background: transparent; color: var(--danger); font-size: 13px; font-weight: 600; cursor: pointer;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
                 </svg>
@@ -164,7 +164,7 @@
 {{-- CONTEÚDO --}}
 <main style="max-width: 960px; margin: 0 auto; padding: 48px 24px;">
     @if(session('success'))
-        <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+        <div style="background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
             {{ session('success') }}
         </div>
     @endif

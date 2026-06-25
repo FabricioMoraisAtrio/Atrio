@@ -11,29 +11,29 @@
 
 {{-- ═══ MATÉRIA (auto-preenchida, somente leitura) ═══ --}}
 <div style="margin-bottom: 24px;">
-    <label style="display: block; font-size: 11px; font-weight: 600; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Disciplina / Matéria</label>
+    <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Disciplina / Matéria</label>
     @if($subject)
-        <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #E8F0F9; border-radius: 8px;">
-            <span style="font-size: 15px; font-weight: 700; color: #004B8D;">{{ $subject->name }}</span>
-            <span style="font-size: 11px; color: #6B7280;">{{ $subject->label_responsavel }}</span>
+        <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--accent-bg); border-radius: 8px;">
+            <span style="font-size: 15px; font-weight: 700; color: var(--accent-text);">{{ $subject->name }}</span>
+            <span style="font-size: 11px; color: var(--text-3);">{{ $subject->label_responsavel }}</span>
         </div>
         <input type="hidden" name="materia" value="{{ $subject->name }}">
     @else
         <input type="text" name="materia" value="{{ old('materia', $content['materia'] ?? '') }}"
                placeholder="Ex: Matemática, Português, Ciências..."
-               style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
-               onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">
+               style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
     @endif
 </div>
 
 {{-- ═══ ESTRATÉGIAS PEDAGÓGICAS ═══ --}}
-<div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-    <p style="font-size: 11px; font-weight: 700; color: #004B8D; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Estratégias Pedagógicas</p>
-    <p style="font-size: 12px; color: #9CA3AF; margin: 0 0 16px;">Descreva como você vai adaptar o ensino desta disciplina para este aluno.</p>
+<div style="border: 1px solid var(--border-sub); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+    <p style="font-size: 11px; font-weight: 700; color: var(--accent-text); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Estratégias Pedagógicas</p>
+    <p style="font-size: 12px; color: var(--text-4); margin: 0 0 16px;">Descreva como você vai adaptar o ensino desta disciplina para este aluno.</p>
     <textarea name="estrategias_pedagogicas" rows="4"
               placeholder="Ex: Uso de material concreto, atividades em dupla, rotina estruturada, apoio visual..."
-              style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.6;"
-              onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">{{ old('estrategias_pedagogicas', $content['estrategias_pedagogicas'] ?? '') }}</textarea>
+              style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.6;"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">{{ old('estrategias_pedagogicas', $content['estrategias_pedagogicas'] ?? '') }}</textarea>
 </div>
 
 {{-- ═══ INVENTÁRIO DE HABILIDADES ═══ --}}
@@ -50,30 +50,30 @@
 @foreach($categorias as $catKey => $cat)
     @php $itens = $itensPorCategoria->get($catKey, collect()); @endphp
     @if($itens->count())
-    <div style="border: 1px solid #F3F4F6; border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
-        <div style="padding: 14px 20px; border-bottom: 1px solid #F3F4F6; background: rgba(0,0,0,0.02);">
+    <div style="border: 1px solid var(--border-sub); border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
+        <div style="padding: 14px 20px; border-bottom: 1px solid var(--border-sub); background: rgba(0,0,0,0.02);">
             <p style="font-size: 11px; font-weight: 700; color: {{ $cat['cor'] }}; letter-spacing: 1px; text-transform: uppercase; margin: 0;">
                 {{ $cat['label'] }} — {{ $subject->name }}
             </p>
-            <p style="font-size: 11px; color: #9CA3AF; margin: 4px 0 0;">Avalie cada meta conforme o desempenho do aluno nesta disciplina.</p>
+            <p style="font-size: 11px; color: var(--text-4); margin: 4px 0 0;">Avalie cada meta conforme o desempenho do aluno nesta disciplina.</p>
         </div>
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
                 <thead>
-                    <tr style="background: #F9FAFB;">
-                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280; width: 36%;">Metas / Objetivos</th>
+                    <tr style="background: var(--bg-subtle);">
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: var(--text-3); width: 36%;">Metas / Objetivos</th>
                         @foreach($colunas as $colLabel)
-                            <th style="text-align: center; padding: 10px 6px; font-size: 10px; font-weight: 600; color: #6B7280; width: 10%;">{{ $colLabel }}</th>
+                            <th style="text-align: center; padding: 10px 6px; font-size: 10px; font-weight: 600; color: var(--text-3); width: 10%;">{{ $colLabel }}</th>
                         @endforeach
-                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280; width: 14%;">Responsável</th>
-                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280;">Observações</th>
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: var(--text-3); width: 14%;">Responsável</th>
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: var(--text-3);">Observações</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($itens as $i => $item)
                         @php $saved = $content[$cat['key']][$i] ?? []; @endphp
-                        <tr style="border-top: 1px solid #F3F4F6; {{ $i % 2 !== 0 ? 'background: #FAFAFA;' : '' }}">
-                            <td style="padding: 10px 14px; color: #374151; font-size: 13px;">
+                        <tr style="border-top: 1px solid var(--border-sub); {{ $i % 2 !== 0 ? 'background: #FAFAFA;' : '' }}">
+                            <td style="padding: 10px 14px; color: var(--text-2); font-size: 13px;">
                                 {{ $item->meta }}
                                 <input type="hidden" name="{{ $cat['key'] }}[{{ $i }}][meta]" value="{{ $item->meta }}">
                             </td>
@@ -89,15 +89,15 @@
                             <td style="padding: 10px 14px;">
                                 <input type="text" name="{{ $cat['key'] }}[{{ $i }}][responsavel]"
                                        value="{{ $saved['responsavel'] ?? $subject->label_responsavel }}"
-                                       style="width: 100%; border: none; border-bottom: 1px solid #E5E7EB; padding: 4px 0; font-size: 12px; color: #374151; outline: none; background: transparent;"
-                                       onfocus="this.style.borderColor='{{ $cat['cor'] }}'" onblur="this.style.borderColor='#E5E7EB'">
+                                       style="width: 100%; border: none; border-bottom: 1px solid var(--border); padding: 4px 0; font-size: 12px; color: var(--text-2); outline: none; background: transparent;"
+                                       onfocus="this.style.borderColor='{{ $cat['cor'] }}'" onblur="this.style.borderColor='var(--border)'">
                             </td>
                             <td style="padding: 10px 14px;">
                                 <input type="text" name="{{ $cat['key'] }}[{{ $i }}][observacoes]"
                                        value="{{ $saved['observacoes'] ?? '' }}"
                                        placeholder="..."
-                                       style="width: 100%; border: none; border-bottom: 1px solid #E5E7EB; padding: 4px 0; font-size: 12px; color: #374151; outline: none; background: transparent;"
-                                       onfocus="this.style.borderColor='{{ $cat['cor'] }}'" onblur="this.style.borderColor='#E5E7EB'">
+                                       style="width: 100%; border: none; border-bottom: 1px solid var(--border); padding: 4px 0; font-size: 12px; color: var(--text-2); outline: none; background: transparent;"
+                                       onfocus="this.style.borderColor='{{ $cat['cor'] }}'" onblur="this.style.borderColor='var(--border)'">
                             </td>
                         </tr>
                     @endforeach

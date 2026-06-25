@@ -19,15 +19,15 @@
 @php
 $section = fn(string $title, string $subtitle = '') =>
     '<div style="border-left: 3px solid ' . $accent . '; padding: 4px 0 4px 14px; margin-bottom: 16px;">
-        <p style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 2px;">' . $title . '</p>'
-        . ($subtitle ? '<p style="font-size: 12px; color: #9CA3AF; font-style: italic; margin: 0;">' . $subtitle . '</p>' : '') .
+        <p style="font-size: 15px; font-weight: 700; color: var(--text-1); margin: 0 0 2px;">' . $title . '</p>'
+        . ($subtitle ? '<p style="font-size: 12px; color: var(--text-4); font-style: italic; margin: 0;">' . $subtitle . '</p>' : '') .
     '</div>';
 
 $textarea = fn(string $name, string $label, int $rows = 3) =>
     '<div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">' . $label . '</label>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">' . $label . '</label>
         <textarea name="' . $name . '" rows="' . $rows . '"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
                   onfocus="this.style.borderColor=\'' . $accent . '\'" onblur="this.style.borderColor=\'#E5E7EB\'">'
             . e(old($name, $content[$name] ?? '')) .
         '</textarea>
@@ -35,33 +35,33 @@ $textarea = fn(string $name, string $label, int $rows = 3) =>
 @endphp
 
 {{-- ═══ IDENTIFICAÇÃO (somente leitura) ═══ --}}
-<div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 20px; margin-bottom: 24px;">
-    <p style="font-size: 11px; font-weight: 700; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Identificação — preenchido automaticamente</p>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px; color: #374151;">
-        <div><span style="color:#9CA3AF; font-weight:600;">Escola:</span> {{ $aluno->school?->name }}</div>
-        <div><span style="color:#9CA3AF; font-weight:600;">Matrícula:</span> {{ $aluno->registration_number }}</div>
-        <div><span style="color:#9CA3AF; font-weight:600;">Aluno(a):</span> {{ $aluno->name }}</div>
+<div style="background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 24px;">
+    <p style="font-size: 11px; font-weight: 700; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Identificação — preenchido automaticamente</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px; color: var(--text-2);">
+        <div><span style="color:var(--text-4); font-weight:600;">Escola:</span> {{ $aluno->school?->name }}</div>
+        <div><span style="color:var(--text-4); font-weight:600;">Matrícula:</span> {{ $aluno->registration_number }}</div>
+        <div><span style="color:var(--text-4); font-weight:600;">Aluno(a):</span> {{ $aluno->name }}</div>
         <div>
-            <span style="color:#9CA3AF; font-weight:600;">Data de Nascimento:</span>
+            <span style="color:var(--text-4); font-weight:600;">Data de Nascimento:</span>
             {{ $aluno->birth_date ? $aluno->birth_date->format('d/m/Y') : '—' }}
             @if($aluno->birth_date)
-                <span style="color:#9CA3AF;"> · </span>{{ $aluno->birth_date->age }} anos
+                <span style="color:var(--text-4);"> · </span>{{ $aluno->birth_date->age }} anos
             @endif
         </div>
         <div>
-            <span style="color:#9CA3AF; font-weight:600;">Turma/Turno:</span>
+            <span style="color:var(--text-4); font-weight:600;">Turma/Turno:</span>
             {{ $turma ? $turma->name . ' · ' . $turma->shift : '—' }}
         </div>
-        <div><span style="color:#9CA3AF; font-weight:600;">Ano Letivo:</span> {{ $anoLetivo }}</div>
+        <div><span style="color:var(--text-4); font-weight:600;">Ano Letivo:</span> {{ $anoLetivo }}</div>
         @if($aluno->responsavel_nome)
-        <div><span style="color:#9CA3AF; font-weight:600;">Responsável:</span> {{ $aluno->responsavel_nome }}</div>
+        <div><span style="color:var(--text-4); font-weight:600;">Responsável:</span> {{ $aluno->responsavel_nome }}</div>
         @endif
         @if($aluno->responsavel_2_nome)
-        <div><span style="color:#9CA3AF; font-weight:600;">Responsável 2:</span> {{ $aluno->responsavel_2_nome }}</div>
+        <div><span style="color:var(--text-4); font-weight:600;">Responsável 2:</span> {{ $aluno->responsavel_2_nome }}</div>
         @endif
         @if($diagnostico)
         <div style="grid-column: 1 / -1;">
-            <span style="color:#9CA3AF; font-weight:600;">Diagnóstico / Laudo:</span> {{ $diagnostico }}
+            <span style="color:var(--text-4); font-weight:600;">Diagnóstico / Laudo:</span> {{ $diagnostico }}
         </div>
         @endif
     </div>
@@ -72,34 +72,34 @@ $textarea = fn(string $name, string $label, int $rows = 3) =>
 
 <div style="margin-bottom: 28px;">
     <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Breve descrição do contexto familiar</label>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Breve descrição do contexto familiar</label>
         <textarea name="contexto_familiar" rows="3"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('contexto_familiar') }}</textarea>
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('contexto_familiar') }}</textarea>
     </div>
 </div>
 
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+<hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 28px;">
 
 {{-- ═══ HISTÓRICO ESCOLAR ═══ --}}
 {!! $section('Histórico Escolar', 'Trajetória e experiências anteriores.') !!}
 
 <div style="margin-bottom: 28px;">
     <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Resumo da vida escolar (escolas anteriores, retenções ou avanços)</label>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Resumo da vida escolar (escolas anteriores, retenções ou avanços)</label>
         <textarea name="historico_escolar" rows="4"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('historico_escolar') }}</textarea>
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('historico_escolar') }}</textarea>
     </div>
     <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Frequência e assiduidade</label>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Frequência e assiduidade</label>
         <textarea name="frequencia_assiduidade" rows="2"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('frequencia_assiduidade') }}</textarea>
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('frequencia_assiduidade') }}</textarea>
     </div>
 </div>
 
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+<hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 28px;">
 
 {{-- ═══ OBSERVAÇÕES PEDAGÓGICAS ═══ --}}
 {!! $section('Observações Pedagógicas', 'Comportamento, aprendizagem e interação.') !!}
@@ -131,7 +131,7 @@ $obsSelected = old('obs_pedagogicas', $content['obs_pedagogicas'] ?? []);
 <div style="margin-bottom: 28px;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
         @foreach($obsOpcoes as $opt)
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); cursor: pointer;">
             <input type="checkbox" name="obs_pedagogicas[]" value="{{ $opt }}"
                    {{ in_array($opt, (array)$obsSelected) ? 'checked' : '' }}
                    style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
@@ -140,14 +140,14 @@ $obsSelected = old('obs_pedagogicas', $content['obs_pedagogicas'] ?? []);
         @endforeach
     </div>
     <div>
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Observações complementares</label>
         <textarea name="obs_pedagogicas_obs" rows="3"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('obs_pedagogicas_obs') }}</textarea>
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('obs_pedagogicas_obs') }}</textarea>
     </div>
 </div>
 
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+<hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 28px;">
 
 {{-- ═══ BARREIRAS IDENTIFICADAS ═══ --}}
 {!! $section('Barreiras Identificadas', 'Dificuldades e limitações encontradas.') !!}
@@ -170,7 +170,7 @@ $barreiraSelected = old('barreiras', $content['barreiras'] ?? []);
 <div style="margin-bottom: 28px;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
         @foreach($barreiraOpcoes as $opt)
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); cursor: pointer;">
             <input type="checkbox" name="barreiras[]" value="{{ $opt }}"
                    {{ in_array($opt, (array)$barreiraSelected) ? 'checked' : '' }}
                    style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
@@ -179,14 +179,14 @@ $barreiraSelected = old('barreiras', $content['barreiras'] ?? []);
         @endforeach
     </div>
     <div>
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Observações complementares</label>
         <textarea name="barreiras_obs" rows="3"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('barreiras_obs') }}</textarea>
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('barreiras_obs') }}</textarea>
     </div>
 </div>
 
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+<hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 28px;">
 
 {{-- ═══ POTENCIALIDADES ═══ --}}
 {!! $section('Potencialidades', 'Habilidades e pontos fortes.') !!}
@@ -209,7 +209,7 @@ $potSelected = old('potencialidades', $content['potencialidades'] ?? []);
 <div style="margin-bottom: 28px;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
         @foreach($potOpcoes as $opt)
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); cursor: pointer;">
             <input type="checkbox" name="potencialidades[]" value="{{ $opt }}"
                    {{ in_array($opt, (array)$potSelected) ? 'checked' : '' }}
                    style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
@@ -218,14 +218,14 @@ $potSelected = old('potencialidades', $content['potencialidades'] ?? []);
         @endforeach
     </div>
     <div>
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Observações complementares</label>
         <textarea name="potencialidades_obs" rows="3"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('potencialidades_obs') }}</textarea>
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('potencialidades_obs') }}</textarea>
     </div>
 </div>
 
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+<hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 28px;">
 
 {{-- ═══ ENCAMINHAMENTOS ═══ --}}
 {!! $section('Encaminhamentos', 'Sugestões e ações pedagógicas.') !!}
@@ -247,7 +247,7 @@ $encSelected = old('encaminhamentos', $content['encaminhamentos'] ?? []);
 <div style="margin-bottom: 28px;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
         @foreach($encOpcoes as $opt)
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; cursor: pointer;">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); cursor: pointer;">
             <input type="checkbox" name="encaminhamentos[]" value="{{ $opt }}"
                    {{ in_array($opt, (array)$encSelected) ? 'checked' : '' }}
                    style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
@@ -256,14 +256,14 @@ $encSelected = old('encaminhamentos', $content['encaminhamentos'] ?? []);
         @endforeach
     </div>
     <div>
-        <label style="display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px;">Observações complementares</label>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Observações complementares</label>
         <textarea name="encaminhamentos_obs" rows="3"
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">{{ $fn('encaminhamentos_obs') }}</textarea>
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('encaminhamentos_obs') }}</textarea>
     </div>
 </div>
 
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 28px;">
+<hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 28px;">
 
 {{-- ═══ EQUIPE RESPONSÁVEL ═══ --}}
 {!! $section('Equipe Responsável', 'Profissionais envolvidos na formulação deste documento.') !!}
@@ -277,24 +277,24 @@ if (empty($equipeParticipantes)) $equipeParticipantes = [['nome' => '', 'cargo' 
     @foreach($equipeParticipantes as $i => $p)
     <div class="equipe-row" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: end; margin-bottom: 12px;">
         <div>
-            @if($i === 0)<label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Nome completo</label>@endif
+            @if($i === 0)<label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Nome completo</label>@endif
             <input type="text" name="equipe_participantes[{{ $i }}][nome]"
                    value="{{ $p['nome'] ?? '' }}"
                    placeholder="Nome completo"
-                   style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
-                   onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">
+                   style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                   onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">
         </div>
         <div>
-            @if($i === 0)<label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Cargo / Função</label>@endif
+            @if($i === 0)<label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Cargo / Função</label>@endif
             <input type="text" name="equipe_participantes[{{ $i }}][cargo]"
                    value="{{ $p['cargo'] ?? '' }}"
                    placeholder="Ex: Coordenador Pedagógico"
-                   style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; background: transparent; box-sizing: border-box;"
-                   onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='#E5E7EB'">
+                   style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                   onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">
         </div>
         <div style="{{ $i === 0 ? 'padding-top: 22px;' : '' }}">
             <button type="button" onclick="removerParticipante(this)"
-                    style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 18px; line-height: 1; padding: 4px;" title="Remover">×</button>
+                    style="background: none; border: none; cursor: pointer; color: var(--danger); font-size: 18px; line-height: 1; padding: 4px;" title="Remover">×</button>
         </div>
     </div>
     @endforeach

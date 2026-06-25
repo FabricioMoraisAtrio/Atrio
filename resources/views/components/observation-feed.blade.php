@@ -29,7 +29,7 @@
             </select>
 
             <button type="submit"
-                    style="background: #004B8D; color: white; font-size: 13px; font-weight: 600; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer;">
+                    style="background: var(--accent); color: white; font-size: 13px; font-weight: 600; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer;">
                 Registrar
             </button>
         </div>
@@ -52,7 +52,7 @@
                         <span style="font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 20px; background: {{ $urgencyStyle['badge_bg'] }}; color: {{ $urgencyStyle['badge_color'] }};">
                             {{ ucfirst($obs->urgency) }}
                         </span>
-                        <span style="font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 20px; background: #E8F0F9; color: #004B8D;">
+                        <span style="font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 20px; background: var(--accent-bg); color: var(--accent-text);">
                             {{ ucfirst($obs->category) }}
                         </span>
                         <span style="font-size: 11px; color: var(--text-3);">{{ $obs->created_at->format('d/m/Y') }}</span>
@@ -64,7 +64,7 @@
                     <form method="POST" action="{{ route($role . '.observacoes.destroy', $obs) }}">
                         @csrf @method('DELETE')
                         <button type="button" data-confirm="Remover observação?"
-                                style="font-size: 12px; color: #EF4444; background: none; border: none; cursor: pointer; white-space: nowrap; padding: 0;">
+                                style="font-size: 12px; color: var(--danger); background: none; border: none; cursor: pointer; white-space: nowrap; padding: 0;">
                             Remover
                         </button>
                     </form>

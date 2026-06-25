@@ -8,7 +8,7 @@
         <p style="font-size: 13px; color: var(--text-3); margin: 0;">Perfil alimentar dos alunos cadastrados</p>
     </div>
     <a href="{{ route('secretaria.seletividade.export') }}"
-       style="display: inline-flex; align-items: center; gap: 8px; background: #004B8D; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,75,141,0.25);">
+       style="display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,75,141,0.25);">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/>
         </svg>
@@ -17,7 +17,7 @@
 </div>
 
 @if(session('success'))
-    <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+    <div style="background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
         {{ session('success') }}
     </div>
 @endif
@@ -52,7 +52,7 @@
                     onmouseover="this.style.background='var(--bg-sidebar)'" onmouseout="this.style.background='transparent'">
                     <td style="padding: 14px 20px;">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent-bg); color: var(--accent-text); font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 {{ strtoupper(substr($aluno->name, 0, 1)) }}
                             </div>
                             <div>
@@ -70,28 +70,28 @@
                     </td>
                     <td style="padding: 14px 16px; text-align: center;">
                         @if($aceita > 0)
-                            <span style="background: #ECFDF5; color: #065F46; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ $aceita }}</span>
+                            <span style="background: var(--success-bg); color: var(--success); font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ $aceita }}</span>
                         @else
                             <span style="color: var(--text-3); font-size: 13px;">—</span>
                         @endif
                     </td>
                     <td style="padding: 14px 16px; text-align: center;">
                         @if($tolera > 0)
-                            <span style="background: #FEF3C7; color: #92400E; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ $tolera }}</span>
+                            <span style="background: var(--warning-bg); color: var(--warning); font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ $tolera }}</span>
                         @else
                             <span style="color: var(--text-3); font-size: 13px;">—</span>
                         @endif
                     </td>
                     <td style="padding: 14px 16px; text-align: center;">
                         @if($recusa > 0)
-                            <span style="background: #FEF2F2; color: #991B1B; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ $recusa }}</span>
+                            <span style="background: var(--danger-bg); color: var(--danger); font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ $recusa }}</span>
                         @else
                             <span style="color: var(--text-3); font-size: 13px;">—</span>
                         @endif
                     </td>
                     <td style="padding: 14px 20px; text-align: right;">
                         <a href="{{ route('secretaria.seletividade.show', $aluno) }}"
-                           style="font-size: 12px; color: #004B8D; text-decoration: none; font-weight: 500;">
+                           style="font-size: 12px; color: var(--accent-text); text-decoration: none; font-weight: 500;">
                             {{ $total === 0 ? 'Cadastrar' : 'Gerenciar' }}
                         </a>
                     </td>

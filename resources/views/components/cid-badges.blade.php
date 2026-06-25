@@ -25,5 +25,5 @@ $temCid = collect($cids)->keys()->some(fn($field) => $aluno->$field);
         @endforeach
     </div>
 @elseif($aluno->condition)
-    <p style="font-size: 12px; color: #9CA3AF; margin: 4px 0 0;">{{ $aluno->condition }}</p>
+    <p style="font-size: 12px; color: var(--text-4); margin: 4px 0 0;">{{ $aluno->condition }}</p>
 @endif

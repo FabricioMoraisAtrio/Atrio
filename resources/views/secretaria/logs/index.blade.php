@@ -52,7 +52,7 @@
         </div>
         <div style="display: flex; gap: 8px;">
             <button type="submit"
-                    style="background: #004B8D; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                    style="background: var(--accent); color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;">
                 Filtrar
             </button>
             @if(request()->hasAny(['aluno','usuario','acao','de','ate']))
@@ -117,7 +117,7 @@
                         <span style="font-size: 13px; color: var(--text-1);">{{ $entidades[$log->document_type] }}</span>
                     @elseif($log->document)
                         <a href="{{ route('secretaria.documentos.show', $log->document) }}"
-                           style="font-size: 13px; color: #004B8D; text-decoration: none; font-weight: 500;">
+                           style="font-size: 13px; color: var(--accent-text); text-decoration: none; font-weight: 500;">
                             {{ $docType }} · {{ $log->document_year }}
                         </a>
                     @else
@@ -152,7 +152,7 @@
             @endif
             @foreach($logs->getUrlRange(max(1, $logs->currentPage()-2), min($logs->lastPage(), $logs->currentPage()+2)) as $page => $url)
                 @if($page == $logs->currentPage())
-                    <span style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; background: #004B8D; color: #fff; border: 1px solid #004B8D;">{{ $page }}</span>
+                    <span style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; background: var(--accent); color: #fff; border: 1px solid var(--accent);">{{ $page }}</span>
                 @else
                     <a href="{{ $url }}" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; color: var(--text-1); border: 1px solid var(--border); text-decoration: none;">{{ $page }}</a>
                 @endif

@@ -35,32 +35,32 @@
     $temInventario = collect($categorias)->keys()->some(fn($k) => !empty($inventario[$k]));
 
     $infoBlock = fn(string $title, string $sub, string $text, string $color = '#004B8D') =>
-        '<div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 18px 20px; margin-bottom: 20px;">
+        '<div style="background: var(--info-bg); border: 1px solid var(--info-border); border-radius: 10px; padding: 18px 20px; margin-bottom: 20px;">
             <p style="font-size: 11px; font-weight: 700; color: ' . $color . '; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">' . e($title) . '</p>
-            <p style="font-size: 11px; color: #6B7280; font-style: italic; margin: 0 0 10px;">' . e($sub) . '</p>
-            <p style="font-size: 13px; color: #374151; white-space: pre-wrap; margin: 0; line-height: 1.6;">' . e($text) . '</p>
+            <p style="font-size: 11px; color: var(--text-3); font-style: italic; margin: 0 0 10px;">' . e($sub) . '</p>
+            <p style="font-size: 13px; color: var(--text-2); white-space: pre-wrap; margin: 0; line-height: 1.6;">' . e($text) . '</p>
         </div>';
 
     $emptyBlock = fn(string $title, string $msg) =>
-        '<div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
-            <p style="font-size: 11px; font-weight: 700; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">' . e($title) . '</p>
-            <p style="font-size: 12px; color: #9CA3AF; font-style: italic; margin: 0;">' . e($msg) . '</p>
+        '<div style="background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
+            <p style="font-size: 11px; font-weight: 700; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">' . e($title) . '</p>
+            <p style="font-size: 12px; color: var(--text-4); font-style: italic; margin: 0;">' . e($msg) . '</p>
         </div>';
 @endphp
 
 <div style="margin-bottom: 24px;">
     <a href="{{ route('secretaria.rotinas.documentos.pei') }}"
-       style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+       style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Voltar para listagem de PEI
     </a>
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
         <div>
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-                <span style="background: #E8F0F9; color: #004B8D; font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 20px;">PEI</span>
-                <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0;">{{ $aluno->name }}</h1>
+                <span style="background: var(--accent-bg); color: var(--accent-text); font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 20px;">PEI</span>
+                <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0;">{{ $aluno->name }}</h1>
             </div>
-            <p style="font-size: 13px; color: #9CA3AF; margin: 0;">
+            <p style="font-size: 13px; color: var(--text-4); margin: 0;">
                 Plano Educacional Individualizado · {{ date('Y') }}
                 @if($turma) · {{ $turma->name }} {{ $turma->shift }} @endif
             </p>
@@ -68,14 +68,14 @@
         <div style="display: flex; gap: 8px;">
             @can('pei.metas_gerenciar')
             <a href="{{ route('secretaria.alunos.metas-academicas.edit', $aluno) }}"
-               style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; background: #004B8D; color: #fff;">
+               style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; background: var(--accent); color: #fff;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>
                 Personalizar Metas
             </a>
             @endcan
             @if($peiConsolidado)
             <a href="{{ route('secretaria.documentos.pdf', $peiConsolidado) }}"
-               style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid #E5E7EB; color: #374151;">
+               style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); color: var(--text-2);">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                 Exportar PDF
             </a>
@@ -91,14 +91,14 @@
     $temObjetivos = !empty($ec['objetivos_curto_prazo']) || !empty($ec['objetivos_medio_prazo']) || !empty($ec['objetivos_longo_prazo']);
 @endphp
 @if($temObjetivos)
-<div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-    <p style="font-size: 11px; font-weight: 700; color: #004B8D; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 16px;">Objetivos de Aprendizagem — extraído do Estudo de Caso</p>
+<div style="border: 1px solid var(--border-sub); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+    <p style="font-size: 11px; font-weight: 700; color: var(--accent-text); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 16px;">Objetivos de Aprendizagem — extraído do Estudo de Caso</p>
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
         @foreach(['objetivos_curto_prazo' => 'Curto Prazo', 'objetivos_medio_prazo' => 'Médio Prazo', 'objetivos_longo_prazo' => 'Longo Prazo'] as $key => $label)
         @if(!empty($ec[$key]))
         <div>
-            <p style="font-size: 11px; font-weight: 700; color: #004B8D; margin: 0 0 6px;">{{ $label }}</p>
-            <p style="font-size: 13px; color: #374151; white-space: pre-wrap; margin: 0; line-height: 1.6;">{{ $ec[$key] }}</p>
+            <p style="font-size: 11px; font-weight: 700; color: var(--accent-text); margin: 0 0 6px;">{{ $label }}</p>
+            <p style="font-size: 13px; color: var(--text-2); white-space: pre-wrap; margin: 0; line-height: 1.6;">{{ $ec[$key] }}</p>
         </div>
         @endif
         @endforeach
@@ -114,41 +114,41 @@
 {{-- ═══ INVENTÁRIO DE HABILIDADES ═══ --}}
 @if($temInventario)
 <div style="margin-bottom: 20px;">
-    <p style="font-size: 11px; font-weight: 700; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Metas de Habilidades — preenchido pelos professores</p>
+    <p style="font-size: 11px; font-weight: 700; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Metas de Habilidades — preenchido pelos professores</p>
 
     @foreach($categorias as $catKey => $cat)
     @php $itens = $inventario[$catKey] ?? []; @endphp
     @if(count($itens))
-    <div style="border: 1px solid #F3F4F6; border-radius: 10px; overflow: hidden; margin-bottom: 16px;">
-        <div style="padding: 12px 20px; border-bottom: 1px solid #F3F4F6; background: rgba(0,0,0,0.02);">
+    <div style="border: 1px solid var(--border-sub); border-radius: 10px; overflow: hidden; margin-bottom: 16px;">
+        <div style="padding: 12px 20px; border-bottom: 1px solid var(--border-sub); background: rgba(0,0,0,0.02);">
             <p style="font-size: 11px; font-weight: 700; color: {{ $cat['cor'] }}; letter-spacing: 1px; text-transform: uppercase; margin: 0;">{{ $cat['label'] }}</p>
         </div>
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
                 <thead>
-                    <tr style="background: #F9FAFB;">
-                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280; width: 36%;">Meta / Objetivo</th>
-                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280; width: 20%;">Disciplina</th>
-                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280; width: 18%;">Avaliação</th>
-                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: #6B7280;">Observações</th>
+                    <tr style="background: var(--bg-subtle);">
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: var(--text-3); width: 36%;">Meta / Objetivo</th>
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: var(--text-3); width: 20%;">Disciplina</th>
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: var(--text-3); width: 18%;">Avaliação</th>
+                        <th style="text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; color: var(--text-3);">Observações</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($itens as $i => $item)
-                    <tr style="border-top: 1px solid #F3F4F6; {{ $i % 2 !== 0 ? 'background: #FAFAFA;' : '' }}">
-                        <td style="padding: 10px 14px; color: #374151; font-size: 12px;">{{ $item['meta'] }}</td>
-                        <td style="padding: 10px 14px; font-size: 11px; color: #6B7280;">{{ $item['subject_name'] }}</td>
+                    <tr style="border-top: 1px solid var(--border-sub); {{ $i % 2 !== 0 ? 'background: #FAFAFA;' : '' }}">
+                        <td style="padding: 10px 14px; color: var(--text-2); font-size: 12px;">{{ $item['meta'] }}</td>
+                        <td style="padding: 10px 14px; font-size: 11px; color: var(--text-3);">{{ $item['subject_name'] }}</td>
                         <td style="padding: 10px 14px;">
                             @php $flag = $item['flag'] ?? null; @endphp
                             @if($flag)
-                            <span style="font-size: 11px; font-weight: 600; color: {{ $flagCores[$flag] ?? '#9CA3AF' }};">
+                            <span style="font-size: 11px; font-weight: 600; color: {{ $flagCores[$flag] ?? 'var(--text-4)' }};">
                                 {{ $flagLabels[$flag] ?? $flag }}
                             </span>
                             @else
-                            <span style="font-size: 11px; color: #D1D5DB;">—</span>
+                            <span style="font-size: 11px; color: var(--text-4);">—</span>
                             @endif
                         </td>
-                        <td style="padding: 10px 14px; font-size: 11px; color: #6B7280;">{{ $item['obs'] ?: '—' }}</td>
+                        <td style="padding: 10px 14px; font-size: 11px; color: var(--text-3);">{{ $item['obs'] ?: '—' }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -159,12 +159,12 @@
     @endforeach
 </div>
 @else
-    <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
-        <p style="font-size: 11px; font-weight: 700; color: #9CA3AF; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Metas de Habilidades</p>
-        <p style="font-size: 12px; color: #9CA3AF; font-style: italic; margin: 0;">Nenhum professor preencheu as metas de habilidades ainda.</p>
+    <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
+        <p style="font-size: 11px; font-weight: 700; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Metas de Habilidades</p>
+        <p style="font-size: 12px; color: var(--text-4); font-style: italic; margin: 0;">Nenhum professor preencheu as metas de habilidades ainda.</p>
         @can('pei.metas_gerenciar')
         <a href="{{ route('secretaria.alunos.metas-academicas.edit', $aluno) }}"
-           style="display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 600; color: #004B8D; text-decoration: none;">
+           style="display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--accent-text); text-decoration: none;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             Personalizar metas acadêmicas que os professores irão preencher
         </a>
@@ -205,14 +205,14 @@ $equipePreenchida = collect($equipeFields)->keys()->filter(fn($k) => !empty($ec[
 @endphp
 
 @if($equipePreenchida)
-<div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-    <p style="font-size: 11px; font-weight: 700; color: #004B8D; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Equipe Responsável — extraído do Estudo de Caso</p>
+<div style="background: var(--info-bg); border: 1px solid var(--info-border); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+    <p style="font-size: 11px; font-weight: 700; color: var(--accent-text); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Equipe Responsável — extraído do Estudo de Caso</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         @foreach($equipeFields as $field => $label)
         @if(!empty($ec[$field]))
         <div>
-            <p style="font-size: 11px; font-weight: 600; color: #6B7280; margin: 0 0 2px;">{{ $label }}</p>
-            <p style="font-size: 13px; color: #374151; margin: 0;">{{ $ec[$field] }}</p>
+            <p style="font-size: 11px; font-weight: 600; color: var(--text-3); margin: 0 0 2px;">{{ $label }}</p>
+            <p style="font-size: 13px; color: var(--text-2); margin: 0;">{{ $ec[$field] }}</p>
         </div>
         @endif
         @endforeach
@@ -223,26 +223,26 @@ $equipePreenchida = collect($equipeFields)->keys()->filter(fn($k) => !empty($ec[
 @endif
 
 {{-- ═══ OBSERVAÇÕES ADICIONAIS ═══ --}}
-<hr style="border: none; border-top: 1px solid #F3F4F6; margin-bottom: 24px;">
+<hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 24px;">
 
-    <div style="border: 1px solid #F3F4F6; border-radius: 10px; padding: 24px; margin-bottom: 28px;">
-        <div style="border-left: 3px solid #004B8D; padding: 4px 0 4px 14px; margin-bottom: 16px;">
-            <p style="font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 2px;">Observações Complementares</p>
-            <p style="font-size: 12px; color: #9CA3AF; font-style: italic; margin: 0;">Informações adicionais não contempladas nos campos acima.</p>
+    <div style="border: 1px solid var(--border-sub); border-radius: 10px; padding: 24px; margin-bottom: 28px;">
+        <div style="border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; margin-bottom: 16px;">
+            <p style="font-size: 15px; font-weight: 700; color: var(--text-1); margin: 0 0 2px;">Observações Complementares</p>
+            <p style="font-size: 12px; color: var(--text-4); font-style: italic; margin: 0;">Informações adicionais não contempladas nos campos acima.</p>
         </div>
         <textarea name="observacoes" rows="4"
                   placeholder="Observações gerais sobre o aluno..."
-                  style="width: 100%; border: none; border-bottom: 2px solid #E5E7EB; padding: 8px 0; font-size: 14px; color: #111827; outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='#004B8D'" onblur="this.style.borderColor='#E5E7EB'">{{ old('observacoes', $c['observacoes'] ?? '') }}</textarea>
+                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
+                  onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">{{ old('observacoes', $c['observacoes'] ?? '') }}</textarea>
     </div>
 
     <div style="display: flex; gap: 12px; align-items: center;">
         <button type="submit"
-                style="background: #004B8D; color: white; border: none; padding: 11px 28px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                style="background: var(--accent); color: white; border: none; padding: 11px 28px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
             Salvar
         </button>
         <a href="{{ route('secretaria.rotinas.documentos.pei') }}"
-           style="padding: 11px 20px; border-radius: 8px; font-size: 13px; color: #6B7280; text-decoration: none; border: 1px solid #E5E7EB;">
+           style="padding: 11px 20px; border-radius: 8px; font-size: 13px; color: var(--text-3); text-decoration: none; border: 1px solid var(--border);">
             Cancelar
         </a>
     </div>

@@ -8,7 +8,7 @@
         $backLabel = request('back') ? 'Voltar' : 'Voltar para ' . strtolower(term('alunos'));
     @endphp
     <a href="{{ $backUrl }}"
-       style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+       style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         {{ $backLabel }}
     </a>
@@ -18,13 +18,13 @@
             <div style="position: relative; width: 110px; height: 110px; flex-shrink: 0;">
                 @if($aluno->photo)
                     <img src="{{ route('alunos.foto', $aluno) }}" alt="{{ $aluno->name }}"
-                         style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #E5E7EB;">
+                         style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border);">
                 @else
-                    <div style="width: 110px; height: 110px; border-radius: 50%; background: #E8F0F9; color: #004B8D; font-size: 36px; font-weight: 700; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 110px; height: 110px; border-radius: 50%; background: var(--accent-bg); color: var(--accent-text); font-size: 36px; font-weight: 700; display: flex; align-items: center; justify-content: center;">
                         {{ strtoupper(substr($aluno->name, 0, 1)) }}
                     </div>
                 @endif
-                <label title="Alterar foto" style="position: absolute; bottom: 4px; right: 4px; width: 26px; height: 26px; background: #004B8D; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 2px solid #fff;">
+                <label title="Alterar foto" style="position: absolute; bottom: 4px; right: 4px; width: 26px; height: 26px; background: var(--accent); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 2px solid #fff;">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
                     <form method="POST" action="{{ route('secretaria.alunos.uploadPhoto', $aluno) }}" enctype="multipart/form-data" style="display:none;" id="foto-form-{{ $aluno->id }}">
                         @csrf
@@ -33,13 +33,13 @@
                 </label>
             </div>
             <div>
-                <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ $aluno->name }}</h1>
-                <p style="font-size: 13px; color: #9CA3AF; margin: 0;">Matrícula: {{ $aluno->registration_number }}</p>
+                <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">{{ $aluno->name }}</h1>
+                <p style="font-size: 13px; color: var(--text-4); margin: 0;">Matrícula: {{ $aluno->registration_number }}</p>
             </div>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <a href="{{ route('secretaria.alunos.edit', $aluno) }}"
-               style="background: #004B8D; color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;">
+               style="background: var(--accent); color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;">
                 Editar
             </a>
         </div>
@@ -47,27 +47,27 @@
 </div>
 
 @if(session('success'))
-    <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+    <div style="background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
         {{ session('success') }}
     </div>
 @endif
 
 {{-- Responsáveis --}}
 @if($aluno->responsavel_nome || $aluno->responsavel_2_nome)
-<div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px; margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+<div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px; margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
     @foreach([
         ['label' => 'Responsável',    'nome' => $aluno->responsavel_nome,    'email' => $aluno->responsavel_email,    'tel' => $aluno->responsavel_telefone],
         ['label' => '2º Responsável', 'nome' => $aluno->responsavel_2_nome,  'email' => $aluno->responsavel_2_email,  'tel' => $aluno->responsavel_2_telefone],
     ] as $resp)
     @if($resp['nome'])
     <div>
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">{{ $resp['label'] }}</p>
-        <p style="font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 4px;">{{ $resp['nome'] }}</p>
+        <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">{{ $resp['label'] }}</p>
+        <p style="font-size: 14px; font-weight: 600; color: var(--text-1); margin: 0 0 4px;">{{ $resp['nome'] }}</p>
         @if($resp['email'])
-        <a href="mailto:{{ $resp['email'] }}" style="font-size: 12px; color: #004B8D; text-decoration: none; display: block; margin-bottom: 2px;">{{ $resp['email'] }}</a>
+        <a href="mailto:{{ $resp['email'] }}" style="font-size: 12px; color: var(--accent-text); text-decoration: none; display: block; margin-bottom: 2px;">{{ $resp['email'] }}</a>
         @endif
         @if($resp['tel'])
-        <a href="tel:{{ preg_replace('/\D/', '', $resp['tel']) }}" style="font-size: 12px; color: #6B7280; text-decoration: none;">{{ $resp['tel'] }}</a>
+        <a href="tel:{{ preg_replace('/\D/', '', $resp['tel']) }}" style="font-size: 12px; color: var(--text-3); text-decoration: none;">{{ $resp['tel'] }}</a>
         @endif
     </div>
     @endif
@@ -77,42 +77,42 @@
 
 {{-- Cards de info --}}
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
-    <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Nascimento</p>
-        <p style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">{{ $aluno->birth_date->format('d/m/Y') }}</p>
+    <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px;">
+        <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Nascimento</p>
+        <p style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0;">{{ $aluno->birth_date->format('d/m/Y') }}</p>
     </div>
-    <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Perfil</p>
+    <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px;">
+        <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Perfil</p>
         @if($aluno->is_atypical)
             @if($aluno->is_publico_alvo)
-                <span style="background: #F3E8FF; color: #7E22CE; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+                <span style="background: var(--purple-bg); color: var(--purple); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
             @else
-                <span style="background: #FEF3C7; color: #92400E; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Atípico</span>
+                <span style="background: var(--warning-bg); color: var(--warning); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Atípico</span>
             @endif
             @if($aluno->condition)
-                <p style="font-size: 13px; color: #6B7280; margin: 6px 0 0;">{{ $aluno->condition }}</p>
+                <p style="font-size: 13px; color: var(--text-3); margin: 6px 0 0;">{{ $aluno->condition }}</p>
             @endif
             {{-- Flags CID --}}
             <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;">
                 @foreach(config('transtornos') as $field => [$sigla, $nome])
                     @if($aluno->$field)
-                        <span style="background: #F5EDE6; color: #7C3700; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px;" title="{{ $nome }}">{{ $sigla }}</span>
+                        <span style="background: var(--brown-bg); color: var(--brown); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px;" title="{{ $nome }}">{{ $sigla }}</span>
                         @if($field === 'cid_autismo' && $aluno->tea_nivel_suporte)
-                            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;">N{{ $aluno->tea_nivel_suporte }}</span>
+                            <span style="background: var(--warning-bg); color: var(--warning); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;">N{{ $aluno->tea_nivel_suporte }}</span>
                         @endif
                     @endif
                 @endforeach
             </div>
         @else
-            <span style="background: #F3F4F6; color: #6B7280; font-size: 12px; padding: 4px 10px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
+            <span style="background: var(--bg-subtle); color: var(--text-3); font-size: 12px; padding: 4px 10px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
         @endif
     </div>
-    <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 20px;">
-        <p style="font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Estudo de caso</p>
+    <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px;">
+        <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Estudo de caso</p>
         @if($aluno->has_case_study)
-            <span style="background: #ECFDF5; color: #065F46; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">✓ Preenchido</span>
+            <span style="background: var(--success-bg); color: var(--success); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">✓ Preenchido</span>
         @else
-            <span style="background: #FEF2F2; color: #991B1B; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Pendente</span>
+            <span style="background: var(--danger-bg); color: var(--danger); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px;">Pendente</span>
         @endif
     </div>
 </div>
@@ -123,14 +123,14 @@
     $docsVisiveis = $docsAno->whereIn('type', ['paee', 'pei_consolidado']);
     $peiConsolidadoDoc = $docsAno->firstWhere('type', 'pei_consolidado');
 @endphp
-<div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 24px; margin-bottom: 16px;">
+<div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 24px; margin-bottom: 16px;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-        <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Documentos {{ date('Y') }}</h3>
+        <h3 style="font-size: 14px; font-weight: 600; color: var(--text-1); margin: 0;">Documentos {{ date('Y') }}</h3>
         <div style="display: flex; gap: 8px;">
             @foreach(['paee' => 'PAEE'] as $tipo => $label)
                 @unless($docsVisiveis->where('type', $tipo)->count())
                     <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => $tipo]) }}"
-                       style="font-size: 12px; background: #F3F4F6; color: #374151; font-weight: 600; padding: 6px 12px; border-radius: 8px; text-decoration: none;">
+                       style="font-size: 12px; background: var(--bg-subtle); color: var(--text-2); font-weight: 600; padding: 6px 12px; border-radius: 8px; text-decoration: none;">
                         + {{ $label }}
                     </a>
                 @endunless
@@ -139,7 +139,7 @@
     </div>
 
     @if($errors->has('documento'))
-        <div style="background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
+        <div style="background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger); font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
             {{ $errors->first('documento') }}
         </div>
     @endif
@@ -148,14 +148,14 @@
     @foreach($docsVisiveis->whereIn('type', ['paee']) as $doc)
         <a href="{{ route('secretaria.documentos.show', $doc) }}?back={{ urlencode(url()->current()) }}"
            style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none; margin-bottom: 4px;"
-           onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+           onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="width: 32px; height: 32px; border-radius: 8px; background: #E8F0F9; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--accent-bg); display: flex; align-items: center; justify-content: center;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                 </div>
                 <div>
-                    <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">{{ strtoupper(str_replace('_', ' ', $doc->type)) }}</p>
-                    <p style="font-size: 12px; color: #9CA3AF; margin: 0;">{{ $doc->updated_at->format('d/m/Y') }}</p>
+                    <p style="font-size: 13px; font-weight: 600; color: var(--text-1); margin: 0;">{{ strtoupper(str_replace('_', ' ', $doc->type)) }}</p>
+                    <p style="font-size: 12px; color: var(--text-4); margin: 0;">{{ $doc->updated_at->format('d/m/Y') }}</p>
                 </div>
             </div>
         </a>
@@ -164,20 +164,20 @@
     {{-- PEI Consolidado --}}
     <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
        style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none; margin-bottom: 4px;"
-       onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+       onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
         <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 32px; height: 32px; border-radius: 8px; background: #E8F0F9; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--accent-bg); display: flex; align-items: center; justify-content: center;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
             </div>
             <div>
-                <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">PEI</p>
-                <p style="font-size: 12px; color: #9CA3AF; margin: 0;">
+                <p style="font-size: 13px; font-weight: 600; color: var(--text-1); margin: 0;">PEI</p>
+                <p style="font-size: 12px; color: var(--text-4); margin: 0;">
                     {{ $peiConsolidadoDoc ? $peiConsolidadoDoc->updated_at->format('d/m/Y') : 'Não preenchido' }}
                 </p>
             </div>
         </div>
         @unless($peiConsolidadoDoc)
-            <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; background: #F3F4F6; color: #6B7280;">Em branco</span>
+            <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; background: var(--bg-subtle); color: var(--text-3);">Em branco</span>
         @endunless
     </a>
 
@@ -185,21 +185,21 @@
     @can('pei.metas_gerenciar')
     <a href="{{ route('secretaria.alunos.metas-academicas.edit', $aluno) }}"
        style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none; margin-bottom: 4px;"
-       onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+       onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
         <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 32px; height: 32px; border-radius: 8px; background: #E8F0F9; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--accent-bg); display: flex; align-items: center; justify-content: center;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004B8D" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
             </div>
             <div>
-                <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">Metas Acadêmicas</p>
-                <p style="font-size: 12px; color: #9CA3AF; margin: 0;">Metas do PEI por matéria</p>
+                <p style="font-size: 13px; font-weight: 600; color: var(--text-1); margin: 0;">Metas Acadêmicas</p>
+                <p style="font-size: 12px; color: var(--text-4); margin: 0;">Metas do PEI por matéria</p>
             </div>
         </div>
     </a>
     @endcan
 
     @if($docsVisiveis->whereIn('type', ['paee'])->isEmpty() && !$peiConsolidadoDoc)
-        <p style="font-size: 13px; color: #9CA3AF;">Nenhum documento criado para {{ date('Y') }}.</p>
+        <p style="font-size: 13px; color: var(--text-4);">Nenhum documento criado para {{ date('Y') }}.</p>
     @endif
 </div>
 
@@ -214,7 +214,7 @@
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <h3 style="font-size: 14px; font-weight: 600; color: var(--text-1); margin: 0;">Jornada Alimentar</h3>
         <a href="{{ route('secretaria.seletividade.show', $aluno) }}"
-           style="font-size: 12px; color: #004B8D; text-decoration: none; font-weight: 500;">Gerenciar →</a>
+           style="font-size: 12px; color: var(--accent-text); text-decoration: none; font-weight: 500;">Gerenciar →</a>
     </div>
     @php
         $statuses = \App\Models\StudentFoodItem::STATUSES;

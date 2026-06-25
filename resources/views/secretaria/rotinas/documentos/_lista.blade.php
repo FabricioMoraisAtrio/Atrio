@@ -5,14 +5,14 @@
 
 <div style="margin-bottom: 24px;">
     <a href="{{ route('secretaria.rotinas.documentos.index') }}"
-       style="font-size: 13px; color: #9CA3AF; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+       style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Documentos
     </a>
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
         <div>
-            <h1 style="font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 4px;">{{ $cfg['titulo'] }}</h1>
-            <p style="font-size: 13px; color: #9CA3AF; margin: 0;">
+            <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">{{ $cfg['titulo'] }}</h1>
+            <p style="font-size: 13px; color: var(--text-4); margin: 0;">
                 {{ $alunos->count() }} aluno(s) listado(s)
                 @if($cfg['so_publico']) · apenas {{ term('publico_alvo') }} @endif
             </p>
@@ -22,13 +22,13 @@
             $semDoc = $alunos->count() - $comDoc;
         @endphp
         <div style="display: flex; gap: 10px;">
-            <div style="background: #ECFDF5; border-radius: 8px; padding: 8px 16px; text-align: center;">
-                <p style="font-size: 18px; font-weight: 700; color: #065F46; margin: 0;">{{ $comDoc }}</p>
-                <p style="font-size: 11px; color: #065F46; margin: 0;">Com documento</p>
+            <div style="background: var(--success-bg); border-radius: 8px; padding: 8px 16px; text-align: center;">
+                <p style="font-size: 18px; font-weight: 700; color: var(--success); margin: 0;">{{ $comDoc }}</p>
+                <p style="font-size: 11px; color: var(--success); margin: 0;">Com documento</p>
             </div>
-            <div style="background: #FEF2F2; border-radius: 8px; padding: 8px 16px; text-align: center;">
-                <p style="font-size: 18px; font-weight: 700; color: #991B1B; margin: 0;">{{ $semDoc }}</p>
-                <p style="font-size: 11px; color: #991B1B; margin: 0;">Sem documento</p>
+            <div style="background: var(--danger-bg); border-radius: 8px; padding: 8px 16px; text-align: center;">
+                <p style="font-size: 18px; font-weight: 700; color: var(--danger); margin: 0;">{{ $semDoc }}</p>
+                <p style="font-size: 11px; color: var(--danger); margin: 0;">Sem documento</p>
             </div>
         </div>
     </div>
@@ -36,11 +36,11 @@
 
 {{-- Filtros --}}
 <form method="GET" action="{{ route($rotaNome) }}"
-      style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 16px 20px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
+      style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 16px 20px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
 
     <div style="flex: 1; min-width: 180px;">
-        <label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Turma</label>
-        <select name="turma" style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
+        <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Turma</label>
+        <select name="turma" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--text-2); outline: none; background: var(--bg-card);">
             <option value="">Todas as turmas</option>
             @foreach($turmas as $turma)
                 <option value="{{ $turma->id }}" {{ request('turma') == $turma->id ? 'selected' : '' }}>
@@ -52,8 +52,8 @@
 
     @if(!$cfg['so_publico'])
     <div style="min-width: 160px;">
-        <label style="display: block; font-size: 11px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">{{ term('publico_alvo') }}</label>
-        <select name="publico" style="width: 100%; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #374151; outline: none; background: #fff;">
+        <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">{{ term('publico_alvo') }}</label>
+        <select name="publico" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--text-2); outline: none; background: var(--bg-card);">
             <option value="">Todos</option>
             <option value="sim" {{ request('publico') === 'sim' ? 'selected' : '' }}>Sim</option>
             <option value="nao" {{ request('publico') === 'nao' ? 'selected' : '' }}>Não</option>
@@ -63,12 +63,12 @@
 
     <div style="display: flex; gap: 8px;">
         <button type="submit"
-                style="background: #004B8D; color: white; border: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                style="background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
             Filtrar
         </button>
         @if(request()->hasAny(['turma', 'publico']))
             <a href="{{ route($rotaNome) }}"
-               style="padding: 9px 14px; border-radius: 8px; font-size: 13px; color: #6B7280; text-decoration: none; border: 1px solid #E5E7EB;">
+               style="padding: 9px 14px; border-radius: 8px; font-size: 13px; color: var(--text-3); text-decoration: none; border: 1px solid var(--border);">
                 Limpar
             </a>
         @endif
@@ -76,20 +76,20 @@
 </form>
 
 {{-- Tabela --}}
-<div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; overflow: hidden;">
+<div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); overflow: hidden;">
     @if($alunos->isEmpty())
         <div style="padding: 48px; text-align: center;">
-            <p style="font-size: 14px; color: #9CA3AF;">Nenhum aluno encontrado com os filtros selecionados.</p>
+            <p style="font-size: 14px; color: var(--text-4);">Nenhum aluno encontrado com os filtros selecionados.</p>
         </div>
     @else
         <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
-                <tr style="background: #F9FAFB; border-bottom: 1px solid #F3F4F6;">
-                    <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
-                    <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
-                    <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
-                    <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">{{ $cfg['titulo'] }}</th>
-                    <th style="text-align: right; padding: 12px 20px; font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Ação</th>
+                <tr style="background: var(--bg-subtle); border-bottom: 1px solid var(--border-sub);">
+                    <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                    <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
+                    <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
+                    <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">{{ $cfg['titulo'] }}</th>
+                    <th style="text-align: right; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -99,26 +99,26 @@
                     @if($cfg['multiplos'])
 
                         {{-- ── MODO MÚLTIPLOS DOCUMENTOS (PEI / Atendimentos) ── --}}
-                        <tr style="border-bottom: 1px solid #F3F4F6; background: #FAFAFA;">
+                        <tr style="border-bottom: 1px solid var(--border-sub); background: var(--bg-subtle);">
                             <td style="padding: 12px 20px;" colspan="4">
                                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                                     <div style="width: 30px; height: 30px; border-radius: 50%; background: {{ $bgPrincipal }}; color: {{ $corPrincipal }}; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                         {{ strtoupper(substr($aluno->name, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <p style="font-size: 13px; font-weight: 700; color: #111827; margin: 0;">{{ $aluno->name }}</p>
+                                        <p style="font-size: 13px; font-weight: 700; color: var(--text-1); margin: 0;">{{ $aluno->name }}</p>
                                         @if($aluno->registration_number)
-                                            <p style="font-size: 11px; color: #9CA3AF; margin: 0;">Mat. {{ $aluno->registration_number }}</p>
+                                            <p style="font-size: 11px; color: var(--text-4); margin: 0;">Mat. {{ $aluno->registration_number }}</p>
                                         @endif
                                     </div>
                                     @if($turma)
-                                        <span style="font-size: 11px; color: #6B7280; padding: 2px 8px; background: #F3F4F6; border-radius: 20px;">{{ $turma->name }} · {{ $turma->shift }}</span>
+                                        <span style="font-size: 11px; color: var(--text-3); padding: 2px 8px; background: var(--bg-subtle); border-radius: 20px;">{{ $turma->name }} · {{ $turma->shift }}</span>
                                     @endif
                                     @if($aluno->is_atypical)
                                         @if($aluno->is_publico_alvo)
-                                            <span style="background: #F3E8FF; color: #7E22CE; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+                                            <span style="background: var(--purple-bg); color: var(--purple); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
                                         @else
-                                            <span style="background: #FEF3C7; color: #92400E; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">Atípico</span>
+                                            <span style="background: var(--warning-bg); color: var(--warning); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;">Atípico</span>
                                         @endif
                                     @endif
                                 </div>
@@ -143,18 +143,18 @@
 
                         {{-- Documentos existentes --}}
                         @foreach($aluno->documents as $doc)
-                        <tr style="border-bottom: 1px solid #F9FAFB;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
-                            <td style="padding: 10px 20px 10px 56px; color: #374151; font-size: 12px;" colspan="4">
+                        <tr style="border-bottom: 1px solid var(--border-sub);" onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 10px 20px 10px 56px; color: var(--text-2); font-size: 12px;" colspan="4">
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{ $corPrincipal }}" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                                     @if($doc->author)
-                                        <span style="font-weight: 600; color: #374151;">{{ $doc->author->name }}</span>
+                                        <span style="font-weight: 600; color: var(--text-2);">{{ $doc->author->name }}</span>
                                     @endif
                                     <span style="font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
-                                        {{ $doc->status === 'published' ? 'background: #ECFDF5; color: #065F46;' : 'background: #FEF3C7; color: #92400E;' }}">
+                                        {{ $doc->status === 'published' ? 'background: #ECFDF5; color: var(--success);' : 'background: #FEF3C7; color: var(--warning);' }}">
                                         {{ $doc->status === 'published' ? 'Publicado' : 'Rascunho' }}
                                     </span>
-                                    <span style="font-size: 11px; color: #9CA3AF;">{{ $doc->updated_at->format('d/m/Y') }}</span>
+                                    <span style="font-size: 11px; color: var(--text-4);">{{ $doc->updated_at->format('d/m/Y') }}</span>
                                 </div>
                             </td>
                             <td style="padding: 10px 20px; text-align: right;">
@@ -168,9 +168,9 @@
                         @endforeach
 
                         @if($aluno->documents->isEmpty())
-                        <tr style="border-bottom: 1px solid #F9FAFB;">
+                        <tr style="border-bottom: 1px solid var(--border-sub);">
                             <td colspan="5" style="padding: 8px 20px 8px 56px;">
-                                <span style="font-size: 11px; color: #9CA3AF; font-style: italic;">Nenhum documento registrado</span>
+                                <span style="font-size: 11px; color: var(--text-4); font-style: italic;">Nenhum documento registrado</span>
                             </td>
                         </tr>
                         @endif
@@ -179,7 +179,7 @@
 
                         {{-- ── MODO ÚNICO DOCUMENTO POR ALUNO ── --}}
                         @php $doc = $aluno->documents->first(); @endphp
-                        <tr style="border-bottom: 1px solid #F9FAFB;" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background='transparent'">
+                        <tr style="border-bottom: 1px solid var(--border-sub);" onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
 
                             <td style="padding: 14px 20px;">
                                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -187,9 +187,9 @@
                                         {{ strtoupper(substr($aluno->name, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <p style="font-size: 13px; font-weight: 600; color: #111827; margin: 0;">{{ $aluno->name }}</p>
+                                        <p style="font-size: 13px; font-weight: 600; color: var(--text-1); margin: 0;">{{ $aluno->name }}</p>
                                         @if($aluno->registration_number)
-                                            <p style="font-size: 11px; color: #9CA3AF; margin: 0;">Mat. {{ $aluno->registration_number }}</p>
+                                            <p style="font-size: 11px; color: var(--text-4); margin: 0;">Mat. {{ $aluno->registration_number }}</p>
                                         @endif
                                         @php
                                             $siglas = collect(config('transtornos'))->filter(fn($v, $k) => $aluno->$k)->map(fn($v) => $v[0]);
@@ -197,7 +197,7 @@
                                         @if($siglas->isNotEmpty())
                                         <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
                                             @foreach($siglas as $sigla)
-                                                <span style="font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 20px; background: #F3F4F6; color: #374151;">{{ $sigla }}</span>
+                                                <span style="font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 20px; background: var(--bg-subtle); color: var(--text-2);">{{ $sigla }}</span>
                                             @endforeach
                                         </div>
                                         @endif
@@ -207,22 +207,22 @@
 
                             <td style="padding: 14px 16px;">
                                 @if($turma)
-                                    <p style="font-size: 13px; font-weight: 500; color: #374151; margin: 0;">{{ $turma->name }}</p>
-                                    <p style="font-size: 11px; color: #9CA3AF; margin: 0;">{{ $turma->shift }}</p>
+                                    <p style="font-size: 13px; font-weight: 500; color: var(--text-2); margin: 0;">{{ $turma->name }}</p>
+                                    <p style="font-size: 11px; color: var(--text-4); margin: 0;">{{ $turma->shift }}</p>
                                 @else
-                                    <span style="font-size: 12px; color: #D1D5DB;">Sem turma</span>
+                                    <span style="font-size: 12px; color: var(--text-4);">Sem turma</span>
                                 @endif
                             </td>
 
                             <td style="padding: 14px 16px; text-align: center;">
                                 @if($aluno->is_atypical)
                                     @if($aluno->is_publico_alvo)
-                                        <span style="background: #F3E8FF; color: #7E22CE; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
+                                        <span style="background: var(--purple-bg); color: var(--purple); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">{{ term('publico_alvo') }}</span>
                                     @else
-                                        <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">Atípico</span>
+                                        <span style="background: var(--warning-bg); color: var(--warning); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;">Atípico</span>
                                     @endif
                                 @else
-                                    <span style="background: #F3F4F6; color: #6B7280; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
+                                    <span style="background: var(--bg-subtle); color: var(--text-3); font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px;">{{ term('nao_publico_alvo') }}</span>
                                 @endif
                             </td>
 
@@ -230,21 +230,21 @@
                                 @if($cfg['tipo'] === 'pei')
                                     @php $qtdProfessores = $aluno->documents->where('type', 'pei')->count(); @endphp
                                     @if($qtdProfessores > 0)
-                                        <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: #ECFDF5; color: #065F46;">
+                                        <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--success-bg); color: var(--success);">
                                             {{ $qtdProfessores }} {{ $qtdProfessores === 1 ? 'professor' : 'professores' }}
                                         </span>
                                     @else
-                                        <span style="font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: #FEF2F2; color: #991B1B;">
+                                        <span style="font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: var(--danger-bg); color: var(--danger);">
                                             Pendente
                                         </span>
                                     @endif
                                 @elseif($doc)
-                                    <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: #ECFDF5; color: #065F46;">
+                                    <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--success-bg); color: var(--success);">
                                         Preenchido
                                     </span>
-                                    <p style="font-size: 10px; color: #9CA3AF; margin: 4px 0 0;">{{ $doc->updated_at->format('d/m/Y') }}</p>
+                                    <p style="font-size: 10px; color: var(--text-4); margin: 4px 0 0;">{{ $doc->updated_at->format('d/m/Y') }}</p>
                                 @else
-                                    <span style="font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: #FEF2F2; color: #991B1B;">
+                                    <span style="font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: var(--danger-bg); color: var(--danger);">
                                         Pendente
                                     </span>
                                 @endif
@@ -261,7 +261,7 @@
                                         </a>
                                         @if($peiConsolidado)
                                         <a href="{{ route('secretaria.documentos.pdf', $peiConsolidado) }}"
-                                           style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #6B7280; text-decoration: none; padding: 6px 12px; border-radius: 8px; border: 1px solid #E5E7EB;">
+                                           style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--text-3); text-decoration: none; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);">
                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
                                             PDF
                                         </a>

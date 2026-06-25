@@ -453,7 +453,7 @@
     @endif
 
     @if($total === 0)
-    <div style="text-align: center; padding: 60px; color: #8EB3D4; font-size: 14px;">
+    <div style="text-align: center; padding: 60px; color: var(--text-4); font-size: 14px;">
         Nenhum alimento registrado para este aluno.
     </div>
     @endif

@@ -33,7 +33,7 @@
 </div>
 
 @if(session('success'))
-    <div style="background: #ECFDF5; border: 1px solid #6EE7B7; color: #065F46; font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
+    <div style="background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); font-size: 13px; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;">
         {{ session('success') }}
     </div>
 @endif
@@ -85,7 +85,7 @@
         <form method="POST" action="{{ route('secretaria.seletividade.store', $aluno) }}">
             @csrf
             @if($errors->any())
-                <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: #991B1B;">
+                <div style="background: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: var(--danger);">
                     {{ $errors->first() }}
                 </div>
             @endif
@@ -128,7 +128,7 @@
             </div>
 
             <button type="submit"
-                    style="width: 100%; background: #004B8D; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    style="width: 100%; background: var(--accent); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
                 Registrar
             </button>
         </form>
@@ -139,9 +139,9 @@
 document.querySelectorAll('.status-radio').forEach(function(radio) {
     radio.addEventListener('change', function() {
         const statuses = {
-            aceita:  { bg: '#ECFDF5', color: '#065F46' },
-            tolera:  { bg: '#FEF3C7', color: '#92400E' },
-            recusa:  { bg: '#FEF2F2', color: '#991B1B' },
+            aceita:  { bg: 'var(--success-bg)', color: 'var(--success)' },
+            tolera:  { bg: 'var(--warning-bg)', color: 'var(--warning)' },
+            recusa:  { bg: 'var(--danger-bg)',  color: 'var(--danger)' },
         };
         document.querySelectorAll('.status-btn').forEach(function(btn) {
             const s = statuses[btn.dataset.status];
