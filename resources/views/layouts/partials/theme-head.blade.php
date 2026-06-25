@@ -290,10 +290,15 @@
         /* ── MURAL DE OBSERVAÇÕES ── */
         :is([data-theme="dark"],[data-theme="slate"],[data-theme="contrast"]) .observation-feed-card { background: var(--bg-card) !important; border-color: var(--border) !important; }
 
-        /* ── HOVER de botões com acento/ação (claro e escuro) ── */
-        button[style*="var(--accent)"]:hover, a[style*="var(--accent)"]:hover,
-        button[style*="var(--danger-solid)"]:hover, a[style*="var(--danger-solid)"]:hover,
-        button[style*="var(--success-solid)"]:hover, a[style*="var(--success-solid)"]:hover { filter: brightness(1.08); }
+        /* ── HOVER de botões com FUNDO de acento/ação (claro e escuro) ──
+           Restrito a 'background: var(--…)' para não pegar elementos que só
+           recebem border-color: var(--accent) no hover (ex.: cards de turma). */
+        button[style*="background: var(--accent)"]:hover, a[style*="background: var(--accent)"]:hover,
+        button[style*="background:var(--accent)"]:hover, a[style*="background:var(--accent)"]:hover,
+        button[style*="background: var(--danger-solid)"]:hover, a[style*="background: var(--danger-solid)"]:hover,
+        button[style*="background:var(--danger-solid)"]:hover, a[style*="background:var(--danger-solid)"]:hover,
+        button[style*="background: var(--success-solid)"]:hover, a[style*="background: var(--success-solid)"]:hover,
+        button[style*="background:var(--success-solid)"]:hover, a[style*="background:var(--success-solid)"]:hover { filter: brightness(1.08); }
 
         /* ── BOTÃO TEMA ── */
         #theme-toggle {

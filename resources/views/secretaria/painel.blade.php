@@ -137,7 +137,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
 
         {{-- Professor regente --}}
         @if($item['professor_regente'])
-        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--bg-2, rgba(0,75,141,0.06)); border-radius: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--accent-bg); border-radius: 8px;">
             <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                 {{ strtoupper(substr($item['professor_regente']->name, 0, 1)) }}
             </div>
