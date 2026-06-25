@@ -130,6 +130,36 @@
         [data-theme="dark"] [style*="color: #1E40AF"],[data-theme="dark"] [style*="color:#1E40AF"] { color: #93C5FD !important; }
         [data-theme="dark"] [style*="color: #1D4ED8"],[data-theme="dark"] [style*="color:#1D4ED8"] { color: #60A5FA !important; }
 
+        /* ── DARK: textos escuros que faltavam (cinzas/quase-preto) ── */
+        [data-theme="dark"] [style*="color: #1a1a1a"],[data-theme="dark"] [style*="color:#1a1a1a"],
+        [data-theme="dark"] [style*="color: #1A1A1A"],[data-theme="dark"] [style*="color:#1A1A1A"] { color: var(--text-1) !important; }
+        [data-theme="dark"] [style*="color: #222"],[data-theme="dark"] [style*="color:#222"] { color: var(--text-1) !important; }
+        [data-theme="dark"] [style*="color: #333"],[data-theme="dark"] [style*="color:#333"] { color: var(--text-1) !important; }
+        [data-theme="dark"] [style*="color: #3e3e3a"],[data-theme="dark"] [style*="color:#3e3e3a"] { color: var(--text-2) !important; }
+        [data-theme="dark"] [style*="color: #444"],[data-theme="dark"] [style*="color:#444"] { color: var(--text-2) !important; }
+        [data-theme="dark"] [style*="color: #555"],[data-theme="dark"] [style*="color:#555"] { color: var(--text-2) !important; }
+        [data-theme="dark"] [style*="color: #666"],[data-theme="dark"] [style*="color:#666"] { color: var(--text-3) !important; }
+        [data-theme="dark"] [style*="color: #888"],[data-theme="dark"] [style*="color:#888"] { color: var(--text-3) !important; }
+        [data-theme="dark"] [style*="color: #000"],[data-theme="dark"] [style*="color:#000"],
+        [data-theme="dark"] [style*="color: black"],[data-theme="dark"] [style*="color:black"] { color: var(--text-1) !important; }
+
+        /* ── DARK: ícones SVG com cor fixa no atributo stroke (não pega via style*) ── */
+        [data-theme="dark"] [stroke="#004B8D"] { stroke: var(--accent) !important; }
+        [data-theme="dark"] [stroke="#009C8C"],[data-theme="dark"] [stroke="#60CFCA"] { stroke: #5EEAD4 !important; }
+        [data-theme="dark"] [stroke="#7C3700"],[data-theme="dark"] [stroke="#92400E"],
+        [data-theme="dark"] [stroke="#C77A00"],[data-theme="dark"] [stroke="#B45309"] { stroke: #FCD34D !important; }
+        [data-theme="dark"] [stroke="#9CA3AF"] { stroke: var(--text-4) !important; }
+        [data-theme="dark"] [stroke="#D1D5DB"] { stroke: var(--text-3) !important; }
+        [data-theme="dark"] [stroke="#6D28D9"],[data-theme="dark"] [stroke="#7C3AED"],
+        [data-theme="dark"] [stroke="#7E22CE"] { stroke: #C4B5FD !important; }
+        [data-theme="dark"] [stroke="#3D7A27"],[data-theme="dark"] [stroke="#059669"] { stroke: #86EFAC !important; }
+        [data-theme="dark"] [stroke="#3B5BDB"],[data-theme="dark"] [stroke="#1E40AF"],
+        [data-theme="dark"] [stroke="#1D4ED8"],[data-theme="dark"] [stroke="#91A7FF"] { stroke: #60A5FA !important; }
+        [data-theme="dark"] [stroke="#A8D4FF"] { stroke: #8EB3D4 !important; }
+        [data-theme="dark"] [stroke="#EF4444"],[data-theme="dark"] [stroke="#DC2626"] { stroke: #FCA5A5 !important; }
+        [data-theme="dark"] [stroke="#111827"],[data-theme="dark"] [stroke="#1B1B18"],
+        [data-theme="dark"] [stroke="#374151"],[data-theme="dark"] [stroke="#6B7280"] { stroke: var(--text-2) !important; }
+
         /* ── BORDAS — com e sem espaço ── */
         [style*="border:1px solid #F3F4F6"],
         [style*="border: 1px solid #F3F4F6"]        { border-color: var(--border-sub) !important; }
