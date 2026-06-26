@@ -164,5 +164,13 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
         Route::post('schools/{school}/materias',                  [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'store'])->name('admin.schools.materias.store');
         Route::put('schools/{school}/materias/{subject}',         [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'update'])->name('admin.schools.materias.update');
         Route::delete('schools/{school}/materias/{subject}',      [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'destroy'])->name('admin.schools.materias.destroy');
+
+        // Financeiro (faturas)
+        Route::get('financeiro',                    [\App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('admin.invoices.index');
+        Route::post('financeiro',                   [\App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('admin.invoices.store');
+        Route::post('financeiro/gerar',             [\App\Http\Controllers\Admin\InvoiceController::class, 'generate'])->name('admin.invoices.generate');
+        Route::post('financeiro/{invoice}/pagar',   [\App\Http\Controllers\Admin\InvoiceController::class, 'markPaid'])->name('admin.invoices.pay');
+        Route::post('financeiro/{invoice}/cancelar',[\App\Http\Controllers\Admin\InvoiceController::class, 'cancel'])->name('admin.invoices.cancel');
+        Route::delete('financeiro/{invoice}',       [\App\Http\Controllers\Admin\InvoiceController::class, 'destroy'])->name('admin.invoices.destroy');
     });
 });
