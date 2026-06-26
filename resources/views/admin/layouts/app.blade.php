@@ -64,6 +64,45 @@
         {{ $admDark }} .bg-red-50 { background:var(--adm-red-bg) !important; }
         {{ $admDark }} .bg-green-50 { background:var(--adm-green-bg) !important; }
         {{ $admDark }} .bg-amber-50 { background:var(--adm-amber-bg) !important; }
+        /* cores hex inline (telas antigas) — remapeadas na familia escura */
+        {{ $admDark }} [style*="color: #111827"],{{ $admDark }} [style*="color:#111827"],
+        {{ $admDark }} [style*="color: #0F172A"],{{ $admDark }} [style*="color:#0F172A"],
+        {{ $admDark }} [style*="color: #1F2937"],{{ $admDark }} [style*="color:#1F2937"],
+        {{ $admDark }} [style*="color: #1a1a1a"],{{ $admDark }} [style*="color:#1a1a1a"] { color:var(--adm-text) !important; }
+        {{ $admDark }} [style*="color: #374151"],{{ $admDark }} [style*="color:#374151"],
+        {{ $admDark }} [style*="color: #4B5563"],{{ $admDark }} [style*="color:#4B5563"],
+        {{ $admDark }} [style*="color: #6B7280"],{{ $admDark }} [style*="color:#6B7280"] { color:var(--adm-text-2) !important; }
+        {{ $admDark }} [style*="color: #9CA3AF"],{{ $admDark }} [style*="color:#9CA3AF"],
+        {{ $admDark }} [style*="color: #D1D5DB"],{{ $admDark }} [style*="color:#D1D5DB"] { color:var(--adm-text-3) !important; }
+        {{ $admDark }} [style*="color: #065F46"],{{ $admDark }} [style*="color:#065F46"],
+        {{ $admDark }} [style*="color: #A7E0C7"],{{ $admDark }} [style*="color:#A7E0C7"] { color:var(--adm-green) !important; }
+        {{ $admDark }} [style*="color: #991B1B"],{{ $admDark }} [style*="color:#991B1B"],
+        {{ $admDark }} [style*="color: #B42318"],{{ $admDark }} [style*="color:#B42318"],
+        {{ $admDark }} [style*="color: #DC2626"],{{ $admDark }} [style*="color:#DC2626"],
+        {{ $admDark }} [style*="color: #EF4444"],{{ $admDark }} [style*="color:#EF4444"] { color:var(--adm-red) !important; }
+        {{ $admDark }} [style*="color: #92400E"],{{ $admDark }} [style*="color:#92400E"],
+        {{ $admDark }} [style*="color: #B45309"],{{ $admDark }} [style*="color:#B45309"] { color:var(--adm-amber) !important; }
+        {{ $admDark }} [style*="color: #004B8D"],{{ $admDark }} [style*="color:#004B8D"],
+        {{ $admDark }} [style*="color: #1E40AF"],{{ $admDark }} [style*="color:#1E40AF"] { color:var(--adm-accent) !important; }
+        /* fundos claros inline */
+        {{ $admDark }} [style*="background: #fff"],{{ $admDark }} [style*="background:#fff"],
+        {{ $admDark }} [style*="background: #FFFFFF"],{{ $admDark }} [style*="background:#FFFFFF"],
+        {{ $admDark }} [style*="background: white"],{{ $admDark }} [style*="background:white"] { background:var(--adm-card) !important; }
+        {{ $admDark }} [style*="background: #F3F4F6"],{{ $admDark }} [style*="background:#F3F4F6"],
+        {{ $admDark }} [style*="background: #F9FAFB"],{{ $admDark }} [style*="background:#F9FAFB"],
+        {{ $admDark }} [style*="background: #FAFAFA"],{{ $admDark }} [style*="background:#FAFAFA"],
+        {{ $admDark }} [style*="background: #F8FAFC"],{{ $admDark }} [style*="background:#F8FAFC"] { background:var(--adm-border-2) !important; }
+        {{ $admDark }} [style*="background: #ECFDF5"],{{ $admDark }} [style*="background:#ECFDF5"] { background:var(--adm-green-bg) !important; }
+        {{ $admDark }} [style*="background: #FEF2F2"],{{ $admDark }} [style*="background:#FEF2F2"],
+        {{ $admDark }} [style*="background: #FEE2E2"],{{ $admDark }} [style*="background:#FEE2E2"],
+        {{ $admDark }} [style*="background: #FDECEC"],{{ $admDark }} [style*="background:#FDECEC"] { background:var(--adm-red-bg) !important; }
+        {{ $admDark }} [style*="background: #FFFBEB"],{{ $admDark }} [style*="background:#FFFBEB"],
+        {{ $admDark }} [style*="background: #FBF1DD"],{{ $admDark }} [style*="background:#FBF1DD"] { background:var(--adm-amber-bg) !important; }
+        /* bordas claras inline */
+        {{ $admDark }} [style*="#E5E7EB"],{{ $admDark }} [style*="#D1D5DB"] { border-color:var(--adm-border) !important; }
+        {{ $admDark }} [style*="solid #F3F4F6"],{{ $admDark }} [style*="solid #f3f4f6"] { border-color:var(--adm-border-2) !important; }
+        /* icone SVG com cor fixa */
+        {{ $admDark }} [stroke="#DC2626"],{{ $admDark }} [stroke="#dc2626"] { stroke:var(--adm-red) !important; }
         {{ $admDark }} input, {{ $admDark }} select, {{ $admDark }} textarea { background:var(--adm-border-2); color:var(--adm-text); border-color:var(--adm-border); }
         {{ $admDark }} table thead tr { background:var(--adm-border-2) !important; }
         /* botão + menu de tema */
