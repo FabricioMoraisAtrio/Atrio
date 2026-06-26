@@ -107,8 +107,8 @@
                        type="text"
                        placeholder="Nome exato da escola"
                        style="width:100%; border:1px solid #D1D5DB; border-radius:8px; padding:9px 12px; font-size:13px; color:#111827; outline:none; box-sizing:border-box;"
-                       onfocus="this.style.borderColor='#DC2626'; this.style.boxShadow='0 0 0 3px rgba(220,38,38,0.1)'"
-                       onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none'">
+                       onfocus="this.style.borderColor='var(--adm-red)'; this.style.boxShadow='0 0 0 3px rgba(220,38,38,0.1)'"
+                       onblur="this.style.borderColor='var(--adm-border)'; this.style.boxShadow='none'">
                 <p id="modal-confirmation-error"
                    style="display:none; font-size:12px; color:#DC2626; margin-top:4px;">
                     O nome digitado não confere. Tente novamente.
@@ -124,8 +124,8 @@
                           rows="3"
                           placeholder="Ex: Escola encerrou o contrato, dados de teste, etc."
                           style="width:100%; border:1px solid #D1D5DB; border-radius:8px; padding:9px 12px; font-size:13px; color:#111827; outline:none; resize:none; box-sizing:border-box;"
-                          onfocus="this.style.borderColor='#6B7280'; this.style.boxShadow='0 0 0 3px rgba(107,114,128,0.1)'"
-                          onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none'"></textarea>
+                          onfocus="this.style.borderColor='var(--adm-accent)'; this.style.boxShadow='0 0 0 3px rgba(107,114,128,0.1)'"
+                          onblur="this.style.borderColor='var(--adm-border)'; this.style.boxShadow='none'"></textarea>
             </div>
 
             {{-- Botões --}}

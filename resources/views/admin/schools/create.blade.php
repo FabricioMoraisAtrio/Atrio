@@ -70,7 +70,7 @@
                     </div>
 
                     <label for="logo-input" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid #D1D5DB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; background: #F9FAFB;"
-                        onmouseover="this.style.background='#F3F4F6'" onmouseout="this.style.background='#F9FAFB'">
+                        onmouseover="this.style.background='var(--adm-border-2)'" onmouseout="this.style.background='var(--adm-card)'">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
                         </svg>

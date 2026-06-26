@@ -214,7 +214,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                     @foreach($availableModules as $key => $label)
                     <label style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid #E5E7EB; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151;"
-                           onmouseover="this.style.borderColor='#6B7280'" onmouseout="this.style.borderColor='#E5E7EB'">
+                           onmouseover="this.style.borderColor='var(--adm-accent)'" onmouseout="this.style.borderColor='var(--adm-border)'">
                         <input type="checkbox" name="modules[]" value="{{ $key }}"
                                {{ ($activeModules === null || in_array($key, (array) $activeModules)) ? 'checked' : '' }}>
                         {{ $label }}
@@ -259,7 +259,7 @@
                           onsubmit="return confirm('Remover \'{{ addslashes($subject->name) }}\'?')">
                         @csrf @method('DELETE')
                         <button type="submit" style="font-size: 12px; color: #EF4444; background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px;"
-                                onmouseover="this.style.background='#FEF2F2'" onmouseout="this.style.background='none'">
+                                onmouseover="this.style.background='var(--adm-red-bg)'" onmouseout="this.style.background='none'">
                             Remover
                         </button>
                     </form>
@@ -373,8 +373,8 @@ function switchTab(active) {
         const isActive = id === active;
 
         panel.style.display = isActive ? '' : 'none';
-        tab.style.color       = isActive ? '#111827' : '#6B7280';
-        tab.style.borderColor = isActive ? '#111827' : 'transparent';
+        tab.style.color       = isActive ? 'var(--adm-text)' : 'var(--adm-text-3)';
+        tab.style.borderColor = isActive ? 'var(--adm-accent)' : 'transparent';
     });
 
     // Oculta botão de salvar principal em abas com form próprio
