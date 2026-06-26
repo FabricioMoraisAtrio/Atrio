@@ -13,11 +13,20 @@
         @endif
     </p>
     </div>
-    <a href="{{ route('secretaria.alunos.create') }}"
-       style="background: var(--accent); color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-        Novo {{ strtolower(term('aluno')) }}
-    </a>
+    <div style="display:flex; gap:10px; align-items:center;">
+        @can('alunos.criar')
+        <a href="{{ route('secretaria.alunos.importar') }}"
+           style="background: transparent; color: var(--accent-text); text-decoration: none; padding: 10px 16px; border-radius: 8px; border:1px solid var(--border); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Importar
+        </a>
+        @endcan
+        <a href="{{ route('secretaria.alunos.create') }}"
+           style="background: var(--accent); color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Novo {{ strtolower(term('aluno')) }}
+        </a>
+    </div>
 </div>
 
 {{-- A mensagem de sucesso já é exibida globalmente pelo layout --}}
