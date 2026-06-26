@@ -57,6 +57,8 @@
         @php $admDark = ':is([data-theme=dark],[data-theme=slate],[data-theme=contrast])'; @endphp
         {{ $admDark }} .bg-white { background:var(--adm-card) !important; }
         {{ $admDark }} .bg-gray-50, {{ $admDark }} .bg-gray-100 { background:var(--adm-border-2) !important; }
+        {{ $admDark }} .hover\:bg-gray-50:hover { background:var(--adm-border-2) !important; }
+        {{ $admDark }} tbody tr:hover { background:var(--adm-border-2) !important; }
         {{ $admDark }} .text-gray-800, {{ $admDark }} .text-gray-900, {{ $admDark }} .text-gray-700 { color:var(--adm-text) !important; }
         {{ $admDark }} .text-gray-600, {{ $admDark }} .text-gray-500 { color:var(--adm-text-2) !important; }
         {{ $admDark }} .text-gray-400, {{ $admDark }} .text-gray-300 { color:var(--adm-text-3) !important; }

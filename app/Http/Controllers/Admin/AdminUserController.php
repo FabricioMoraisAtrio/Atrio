@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminLog;
 use App\Models\AdminUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,12 +29,13 @@ class AdminUserController extends Controller
             'permissions.*' => ['string', Rule::in(array_keys(AdminUser::ROUTINES))],
         ]);
 
-        AdminUser::create([
+        $novo = AdminUser::create([
             'name'        => $data['name'],
             'email'       => $data['email'],
             'password'    => Hash::make($data['password']),
             'permissions' => $this->permissionsFromRequest($request),
         ]);
+        AdminLog::record('admin_criado', "Administrador {$novo->name} ({$novo->email}) criado");
 
         return back()->with('success', 'Administrador criado.');
     }
@@ -64,6 +66,7 @@ class AdminUserController extends Controller
             $administrador->password = Hash::make($data['password']);
         }
         $administrador->save();
+        AdminLog::record('admin_editado', "Administrador {$administrador->name} editado" . ($permissions === null ? ' (acesso total)' : ' (acesso restrito)'));
 
         return back()->with('success', 'Administrador atualizado.');
     }
@@ -97,6 +100,7 @@ class AdminUserController extends Controller
             return back()->with('error', 'É necessário ao menos um administrador.');
         }
 
+        AdminLog::record('admin_removido', "Administrador {$administrador->name} removido");
         $administrador->delete();
 
         return back()->with('success', 'Administrador removido.');

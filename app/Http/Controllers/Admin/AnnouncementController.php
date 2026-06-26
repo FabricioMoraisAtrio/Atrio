@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminLog;
 use App\Models\Announcement;
 use App\Models\School;
 use Illuminate\Http\Request;
@@ -21,7 +22,8 @@ class AnnouncementController extends Controller
     {
         $data = $this->validated($request);
         $data['admin_user_id'] = auth('admin')->id();
-        Announcement::create($data);
+        $a = Announcement::create($data);
+        AdminLog::record('comunicado_criado', "Comunicado \"{$a->title}\" publicado", $a->school_id);
 
         return back()->with('success', 'Comunicado publicado.');
     }
@@ -29,6 +31,7 @@ class AnnouncementController extends Controller
     public function update(Request $request, Announcement $comunicado)
     {
         $comunicado->update($this->validated($request));
+        AdminLog::record('comunicado_editado', "Comunicado \"{$comunicado->title}\" editado", $comunicado->school_id);
 
         return back()->with('success', 'Comunicado atualizado.');
     }
@@ -42,6 +45,7 @@ class AnnouncementController extends Controller
 
     public function destroy(Announcement $comunicado)
     {
+        AdminLog::record('comunicado_removido', "Comunicado \"{$comunicado->title}\" removido", $comunicado->school_id);
         $comunicado->delete();
 
         return back()->with('success', 'Comunicado removido.');

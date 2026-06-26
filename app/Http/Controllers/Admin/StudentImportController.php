@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminLog;
 use App\Models\School;
 use App\Services\StudentImporter;
 use Illuminate\Http\Request;
@@ -92,6 +93,8 @@ class StudentImportController extends Controller
 
         Storage::disk('local')->delete($path);
         session()->forget(['admin_import_file', 'admin_import_name']);
+
+        AdminLog::record('alunos_importados', "Importou alunos em \"{$school->name}\": {$out['created']} criado(s), {$out['updated']} atualizado(s)", (int) $school->id);
 
         return redirect()->route('admin.schools.edit', $school)
             ->with('success', "Importação concluída para {$school->name}: {$out['created']} criado(s), {$out['updated']} atualizado(s), {$out['skipped']} ignorado(s).");

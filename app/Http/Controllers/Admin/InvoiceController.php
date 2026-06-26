@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminLog;
 use App\Models\Invoice;
 use App\Models\School;
 use Illuminate\Http\Request;
@@ -53,7 +54,8 @@ class InvoiceController extends Controller
             'notes'     => 'nullable|string',
         ]);
 
-        Invoice::create($data + ['status' => 'aberto']);
+        $inv = Invoice::create($data + ['status' => 'aberto']);
+        AdminLog::record('fatura_criada', "Fatura {$inv->reference} de R$ " . number_format((float) $inv->amount, 2, ',', '.') . " criada", (int) $inv->school_id);
 
         return back()->with('success', 'Fatura criada.');
     }
@@ -82,6 +84,8 @@ class InvoiceController extends Controller
                 }
             });
 
+        AdminLog::record('faturas_geradas', "{$created} fatura(s) geradas para {$ref}");
+
         return back()->with('success', "{$created} fatura(s) gerada(s) para {$ref}.");
     }
 
@@ -92,6 +96,7 @@ class InvoiceController extends Controller
             'paid_at' => now()->toDateString(),
             'method'  => $request->input('method'),
         ]);
+        AdminLog::record('fatura_paga', "Fatura {$invoice->reference} marcada como paga", (int) $invoice->school_id);
 
         return back()->with('success', 'Fatura marcada como paga.');
     }
@@ -99,13 +104,17 @@ class InvoiceController extends Controller
     public function cancel(Invoice $invoice)
     {
         $invoice->update(['status' => 'cancelado']);
+        AdminLog::record('fatura_cancelada', "Fatura {$invoice->reference} cancelada", (int) $invoice->school_id);
 
         return back()->with('success', 'Fatura cancelada.');
     }
 
     public function destroy(Invoice $invoice)
     {
+        $ref = $invoice->reference;
+        $sid = (int) $invoice->school_id;
         $invoice->delete();
+        AdminLog::record('fatura_excluida', "Fatura {$ref} excluída", $sid);
 
         return back()->with('success', 'Fatura excluída.');
     }

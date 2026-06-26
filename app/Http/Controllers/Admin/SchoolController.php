@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminLog;
 use App\Models\School;
 use App\Models\SchoolSetting;
 use App\Models\User;
@@ -80,6 +81,8 @@ class SchoolController extends Controller
 
         // Semeia a grade curricular padrão (BNCC + professor regente)
         \App\Models\Subject::seedDefaultsForSchool($school->id);
+
+        AdminLog::record('escola_criada', "Escola \"{$school->name}\" criada", (int) $school->id);
 
         return redirect()->route('admin.schools.index')
             ->with('success', 'Escola criada com sucesso.');
@@ -178,6 +181,8 @@ class SchoolController extends Controller
             }
         }
 
+        AdminLog::record('escola_editada', "Escola \"{$school->name}\" editada", (int) $school->id);
+
         return redirect()->route('admin.schools.show', $school)
             ->with('success', 'Escola atualizada.');
     }
@@ -231,6 +236,8 @@ class SchoolController extends Controller
 
         $school->delete();
     });
+
+    AdminLog::record('escola_removida', "Escola \"{$school->name}\" e todos os dados removidos");
 
     return redirect()->route('admin.schools.index')
         ->with('success', 'Escola e todos os dados removidos com sucesso.');

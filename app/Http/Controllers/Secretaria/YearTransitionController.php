@@ -39,6 +39,10 @@ class YearTransitionController extends Controller
 
         $resumo = $svc->prepare($target, $data['dest'] ?? [], $data['status'] ?? []);
 
+        \App\Models\DocumentAccessLog::record('virada_ano', [
+            'student_name' => "Preparou o ano {$target}: {$resumo['classes_created']} turma(s), {$resumo['students_enrolled']} matrícula(s)",
+        ]);
+
         return redirect()
             ->route('secretaria.turmas.index')
             ->with('success', "Ano {$target} preparado: {$resumo['classes_created']} turma(s) criada(s), {$resumo['students_enrolled']} matrícula(s), {$resumo['teachers_copied']} professor(es) copiado(s).");
