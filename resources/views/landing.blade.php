@@ -770,8 +770,8 @@
         <li><a href="#legislacao">Legislação</a></li>
         <li><a href="#funcionalidades">Funcionalidades</a></li>
         <li><a href="#documentos">Documentos</a></li>
-        <li><a href="#perfis">Perfis</a></li>
         <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#perfis">Perfis</a></li>
     </ul>
 
     <div class="nav-cta">

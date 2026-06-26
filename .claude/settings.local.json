@@ -6,7 +6,10 @@
       "Bash(cat app/Http/Middleware/AdminAuth.php)",
       "Bash(find app/ -name \"AdminAuth*\" -o -name \"admin.auth*\")",
       "Bash(php -v)",
-      "Bash(php -r \"echo PHP_VERSION;\")"
+      "Bash(php -r \"echo PHP_VERSION;\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
