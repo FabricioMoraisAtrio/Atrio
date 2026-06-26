@@ -28,7 +28,37 @@
         .adm-btn-primary:hover { background:var(--adm-accent-2); }
         .adm-btn-ghost { background:transparent; border-color:var(--adm-border); color:var(--adm-text-2); }
         .adm-btn-ghost:hover { background:var(--adm-border-2); }
+
+        /* ── TEMA ESCURO ── */
+        [data-theme="dark"] {
+            --adm-bg:#0E1626; --adm-card:#18233A; --adm-border:#2B3A55; --adm-border-2:#222F45;
+            --adm-text:#EAF0FA; --adm-text-2:#AEBCD2; --adm-text-3:#7388A5;
+            --adm-side:#0A1322; --adm-side-2:#13203A; --adm-accent:#4D9FFF; --adm-accent-2:#2F86F0;
+            --adm-green:#34D399; --adm-green-bg:rgba(15,157,88,0.20); --adm-amber:#FBBF24; --adm-amber-bg:rgba(180,83,9,0.22);
+            --adm-red:#F87171; --adm-red-bg:rgba(220,38,38,0.20);
+        }
+        /* telas de escola usam classes Tailwind — remapear no escuro */
+        [data-theme="dark"] .bg-white { background:var(--adm-card) !important; }
+        [data-theme="dark"] .bg-gray-50, [data-theme="dark"] .bg-gray-100 { background:var(--adm-border-2) !important; }
+        [data-theme="dark"] .text-gray-800, [data-theme="dark"] .text-gray-900, [data-theme="dark"] .text-gray-700 { color:var(--adm-text) !important; }
+        [data-theme="dark"] .text-gray-600, [data-theme="dark"] .text-gray-500 { color:var(--adm-text-2) !important; }
+        [data-theme="dark"] .text-gray-400, [data-theme="dark"] .text-gray-300 { color:var(--adm-text-3) !important; }
+        [data-theme="dark"] .border-gray-300, [data-theme="dark"] .border-gray-200, [data-theme="dark"] .border-gray-100 { border-color:var(--adm-border) !important; }
+        [data-theme="dark"] .bg-red-50 { background:var(--adm-red-bg) !important; }
+        [data-theme="dark"] .bg-green-50 { background:var(--adm-green-bg) !important; }
+        [data-theme="dark"] .bg-amber-50 { background:var(--adm-amber-bg) !important; }
+        [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea { background:var(--adm-border-2); color:var(--adm-text); border-color:var(--adm-border); }
+        [data-theme="dark"] table thead tr { background:var(--adm-border-2) !important; }
+        /* botão de tema */
+        #adm-theme-toggle { width:34px; height:34px; border-radius:9px; border:1px solid var(--adm-border); background:var(--adm-bg); cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--adm-text-2); }
+        #adm-theme-toggle:hover { background:var(--adm-border-2); }
     </style>
+    <script>
+        (function () {
+            var t = localStorage.getItem('admin-theme');
+            if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
 </head>
 <body>
 
@@ -91,7 +121,17 @@
     <div style="margin-left:248px; flex:1; display:flex; flex-direction:column;">
         <header style="background:var(--adm-card); border-bottom:1px solid var(--adm-border); padding:0 32px; height:62px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:30;">
             <span style="font-size:16px; font-weight:700; color:var(--adm-text);">@yield('title')</span>
-            <span style="font-size:11px; font-weight:600; color:var(--adm-text-3); background:var(--adm-border-2); padding:5px 12px; border-radius:20px; letter-spacing:.3px;">PAINEL ADMINISTRATIVO</span>
+            <div style="display:flex; align-items:center; gap:14px;">
+                <button id="adm-theme-toggle" type="button" onclick="toggleAdminTheme()" title="Alternar tema">
+                    <svg id="adm-icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none;">
+                        <circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>
+                    </svg>
+                    <svg id="adm-icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                    </svg>
+                </button>
+                <span style="font-size:11px; font-weight:600; color:var(--adm-text-3); background:var(--adm-border-2); padding:5px 12px; border-radius:20px; letter-spacing:.3px;">PAINEL ADMINISTRATIVO</span>
+            </div>
         </header>
 
         <main style="flex:1; padding:28px 32px;">
@@ -120,5 +160,19 @@
 </div>
 
 @include('layouts.partials.image-cropper')
+<script>
+function toggleAdminTheme() {
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (dark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('admin-theme', 'light'); }
+    else { document.documentElement.setAttribute('data-theme', 'dark'); localStorage.setItem('admin-theme', 'dark'); }
+    updateAdmThemeIcon();
+}
+function updateAdmThemeIcon() {
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var sun = document.getElementById('adm-icon-sun'), moon = document.getElementById('adm-icon-moon');
+    if (sun && moon) { sun.style.display = dark ? 'block' : 'none'; moon.style.display = dark ? 'none' : 'block'; }
+}
+document.addEventListener('DOMContentLoaded', updateAdmThemeIcon);
+</script>
 </body>
 </html>
