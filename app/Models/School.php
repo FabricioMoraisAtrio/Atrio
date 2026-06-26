@@ -9,7 +9,7 @@ class School extends Model
 {
     protected $fillable = [
         'name', 'slug', 'is_active', 'plan', 'plan_status',
-        'plan_expires_at', 'max_students', 'notes', 'logo', 'theme_color', 'modules',
+        'plan_expires_at', 'max_students', 'monthly_fee', 'notes', 'logo', 'theme_color', 'modules',
     ];
 
     protected function casts(): array
@@ -17,6 +17,7 @@ class School extends Model
         return [
             'is_active'       => 'boolean',
             'plan_expires_at' => 'date',
+            'monthly_fee'     => 'decimal:2',
             'modules'         => 'array',
         ];
     }
@@ -63,6 +64,16 @@ class School extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class);
     }
 
     public function isExpired(): bool

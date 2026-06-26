@@ -42,11 +42,20 @@
                 </div>
             </div>
 
-            <div>
-                <label class="block text-sm text-gray-600 mb-1">Expira em</label>
-                <input type="date" name="plan_expires_at" value="{{ old('plan_expires_at') }}"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
-                @error('plan_expires_at')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Expira em</label>
+                    <input type="date" name="plan_expires_at" value="{{ old('plan_expires_at') }}"
+                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                    @error('plan_expires_at')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Valor mensal (R$)</label>
+                    <input type="number" step="0.01" min="0" name="monthly_fee" value="{{ old('monthly_fee') }}" placeholder="0.00"
+                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                    <p class="text-xs text-gray-400 mt-1">Base para faturamento e MRR.</p>
+                    @error('monthly_fee')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                </div>
             </div>
 
             <div>

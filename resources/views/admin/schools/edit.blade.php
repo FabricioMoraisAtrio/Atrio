@@ -77,6 +77,15 @@
                 </div>
 
                 <div>
+                    <label class="block text-sm text-gray-600 mb-1">Valor mensal (R$)</label>
+                    <input type="number" step="0.01" min="0" name="monthly_fee"
+                           value="{{ old('monthly_fee', $school->monthly_fee) }}" placeholder="0.00"
+                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
+                    <p class="text-xs text-gray-400 mt-1">Base para geração de faturas e cálculo do MRR.</p>
+                    @error('monthly_fee')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                </div>
+
+                <div>
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="is_active" value="1"
                                {{ old('is_active', $school->is_active) ? 'checked' : '' }} class="rounded">
