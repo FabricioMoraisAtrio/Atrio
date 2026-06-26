@@ -51,6 +51,9 @@ Route::middleware(['school.module:configuracoes', 'can:escola.configurar'])
 // ─── Turmas ───────────────────────────────────────────────────────────────────
 Route::middleware('school.module:turmas')->group(function () {
     Route::middleware('can:turmas.gerenciar')->group(function () {
+        // Virada do ano (promoção assistida) — antes das rotas com {turma}
+        Route::get('turmas/virada',           [\App\Http\Controllers\Secretaria\YearTransitionController::class, 'index'])->name('turmas.virada');
+        Route::post('turmas/virada',          [\App\Http\Controllers\Secretaria\YearTransitionController::class, 'confirmar'])->name('turmas.virada.confirmar');
         Route::get('turmas/create',           [SchoolClassController::class, 'create'])->name('turmas.create');
         Route::post('turmas',                 [SchoolClassController::class, 'store'])->name('turmas.store');
         Route::get('turmas/{turma}/edit',     [SchoolClassController::class, 'edit'])->name('turmas.edit');

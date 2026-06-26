@@ -7,11 +7,18 @@
         <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">{{ term('turmas') }}</h1>
         <p style="font-size: 13px; color: var(--text-3); margin: 0;">{{ $turmas->count() }} {{ strtolower(term('turmas')) }} cadastradas</p>
     </div>
-    <a href="{{ route('secretaria.turmas.create') }}"
-       style="background: var(--accent); color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-        Nova {{ strtolower(term('turma')) }}
-    </a>
+    <div style="display:flex; gap:10px; align-items:center;">
+        <a href="{{ route('secretaria.turmas.virada') }}"
+           style="background: transparent; color: var(--accent-text); text-decoration: none; padding: 10px 16px; border-radius: 8px; border:1px solid var(--border); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+            Preparar próximo ano
+        </a>
+        <a href="{{ route('secretaria.turmas.create') }}"
+           style="background: var(--accent); color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Nova {{ strtolower(term('turma')) }}
+        </a>
+    </div>
 </div>
 
 @if(session('success'))
