@@ -29,7 +29,7 @@
         .adm-btn-ghost { background:transparent; border-color:var(--adm-border); color:var(--adm-text-2); }
         .adm-btn-ghost:hover { background:var(--adm-border-2); }
 
-        /* ── TEMA ESCURO ── */
+        /* ── ESCURO ── */
         [data-theme="dark"] {
             --adm-bg:#0E1626; --adm-card:#18233A; --adm-border:#2B3A55; --adm-border-2:#222F45;
             --adm-text:#EAF0FA; --adm-text-2:#AEBCD2; --adm-text-3:#7388A5;
@@ -37,26 +37,52 @@
             --adm-green:#34D399; --adm-green-bg:rgba(15,157,88,0.20); --adm-amber:#FBBF24; --adm-amber-bg:rgba(180,83,9,0.22);
             --adm-red:#F87171; --adm-red-bg:rgba(220,38,38,0.20);
         }
-        /* telas de escola usam classes Tailwind — remapear no escuro */
-        [data-theme="dark"] .bg-white { background:var(--adm-card) !important; }
-        [data-theme="dark"] .bg-gray-50, [data-theme="dark"] .bg-gray-100 { background:var(--adm-border-2) !important; }
-        [data-theme="dark"] .text-gray-800, [data-theme="dark"] .text-gray-900, [data-theme="dark"] .text-gray-700 { color:var(--adm-text) !important; }
-        [data-theme="dark"] .text-gray-600, [data-theme="dark"] .text-gray-500 { color:var(--adm-text-2) !important; }
-        [data-theme="dark"] .text-gray-400, [data-theme="dark"] .text-gray-300 { color:var(--adm-text-3) !important; }
-        [data-theme="dark"] .border-gray-300, [data-theme="dark"] .border-gray-200, [data-theme="dark"] .border-gray-100 { border-color:var(--adm-border) !important; }
-        [data-theme="dark"] .bg-red-50 { background:var(--adm-red-bg) !important; }
-        [data-theme="dark"] .bg-green-50 { background:var(--adm-green-bg) !important; }
-        [data-theme="dark"] .bg-amber-50 { background:var(--adm-amber-bg) !important; }
-        [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea { background:var(--adm-border-2); color:var(--adm-text); border-color:var(--adm-border); }
-        [data-theme="dark"] table thead tr { background:var(--adm-border-2) !important; }
-        /* botão de tema */
+        /* ── ESCURO SUAVE (slate) ── */
+        [data-theme="slate"] {
+            --adm-bg:#1E222B; --adm-card:#272C37; --adm-border:#3B4250; --adm-border-2:#333A47;
+            --adm-text:#ECEFF4; --adm-text-2:#C7CDD9; --adm-text-3:#9AA3B2;
+            --adm-side:#191D25; --adm-side-2:#272C37; --adm-accent:#6CA8FF; --adm-accent-2:#4A7FBE;
+            --adm-green:#5FD1A8; --adm-green-bg:rgba(15,157,88,0.18); --adm-amber:#EAC15B; --adm-amber-bg:rgba(180,103,0,0.20);
+            --adm-red:#F4A6A0; --adm-red-bg:rgba(180,35,24,0.18);
+        }
+        /* ── ALTO CONTRASTE ── */
+        [data-theme="contrast"] {
+            --adm-bg:#000000; --adm-card:#0B0B0B; --adm-border:#5C5C5C; --adm-border-2:#1A1A1A;
+            --adm-text:#FFFFFF; --adm-text-2:#ECECEC; --adm-text-3:#CFCFCF;
+            --adm-side:#000000; --adm-side-2:#141414; --adm-accent:#6CB6FF; --adm-accent-2:#2E7FD6;
+            --adm-green:#5DF0A0; --adm-green-bg:rgba(93,240,160,0.16); --adm-amber:#FFE066; --adm-amber-bg:rgba(255,224,102,0.14);
+            --adm-red:#FF8585; --adm-red-bg:rgba(255,133,133,0.16);
+        }
+        /* telas de escola usam classes Tailwind — remapear na família escura */
+        @php $admDark = ':is([data-theme=dark],[data-theme=slate],[data-theme=contrast])'; @endphp
+        {{ $admDark }} .bg-white { background:var(--adm-card) !important; }
+        {{ $admDark }} .bg-gray-50, {{ $admDark }} .bg-gray-100 { background:var(--adm-border-2) !important; }
+        {{ $admDark }} .text-gray-800, {{ $admDark }} .text-gray-900, {{ $admDark }} .text-gray-700 { color:var(--adm-text) !important; }
+        {{ $admDark }} .text-gray-600, {{ $admDark }} .text-gray-500 { color:var(--adm-text-2) !important; }
+        {{ $admDark }} .text-gray-400, {{ $admDark }} .text-gray-300 { color:var(--adm-text-3) !important; }
+        {{ $admDark }} .border-gray-300, {{ $admDark }} .border-gray-200, {{ $admDark }} .border-gray-100 { border-color:var(--adm-border) !important; }
+        {{ $admDark }} .bg-red-50 { background:var(--adm-red-bg) !important; }
+        {{ $admDark }} .bg-green-50 { background:var(--adm-green-bg) !important; }
+        {{ $admDark }} .bg-amber-50 { background:var(--adm-amber-bg) !important; }
+        {{ $admDark }} input, {{ $admDark }} select, {{ $admDark }} textarea { background:var(--adm-border-2); color:var(--adm-text); border-color:var(--adm-border); }
+        {{ $admDark }} table thead tr { background:var(--adm-border-2) !important; }
+        /* botão + menu de tema */
         #adm-theme-toggle { width:34px; height:34px; border-radius:9px; border:1px solid var(--adm-border); background:var(--adm-bg); cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--adm-text-2); }
         #adm-theme-toggle:hover { background:var(--adm-border-2); }
+        .adm-theme-opt { width:100%; display:flex; align-items:center; gap:10px; padding:9px 10px; border:none; background:transparent; border-radius:8px; cursor:pointer; font-size:13px; color:var(--adm-text-2); text-align:left; }
+        .adm-theme-opt:hover { background:var(--adm-border-2); }
+        .adm-theme-opt.active { background:var(--adm-accent); color:#fff; font-weight:600; }
+        .adm-theme-opt.active .adm-theme-check { display:block !important; }
+        .adm-theme-sw { width:16px; height:16px; border-radius:5px; flex-shrink:0; border:1px solid rgba(128,128,128,.4); }
+        .adm-theme-sw[data-sw=light]    { background:linear-gradient(135deg,#F4F6FB 50%,#3B82F6 50%); }
+        .adm-theme-sw[data-sw=dark]     { background:linear-gradient(135deg,#0E1626 50%,#4D9FFF 50%); }
+        .adm-theme-sw[data-sw=slate]    { background:linear-gradient(135deg,#272C37 50%,#6CA8FF 50%); }
+        .adm-theme-sw[data-sw=contrast] { background:linear-gradient(135deg,#000 50%,#6CB6FF 50%); }
     </style>
     <script>
         (function () {
             var t = localStorage.getItem('admin-theme');
-            if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+            if (t && t !== 'light') document.documentElement.setAttribute('data-theme', t);
         })();
     </script>
 </head>
@@ -122,14 +148,23 @@
         <header style="background:var(--adm-card); border-bottom:1px solid var(--adm-border); padding:0 32px; height:62px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:30;">
             <span style="font-size:16px; font-weight:700; color:var(--adm-text);">@yield('title')</span>
             <div style="display:flex; align-items:center; gap:14px;">
-                <button id="adm-theme-toggle" type="button" onclick="toggleAdminTheme()" title="Alternar tema">
-                    <svg id="adm-icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none;">
-                        <circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>
-                    </svg>
-                    <svg id="adm-icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-                    </svg>
-                </button>
+                <div style="position:relative;">
+                    <button id="adm-theme-toggle" type="button" onclick="toggleAdmThemeMenu(event)" title="Tema" aria-haspopup="true" aria-expanded="false">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>
+                        </svg>
+                    </button>
+                    <div id="adm-theme-menu" role="menu" style="display:none; position:absolute; right:0; top:42px; background:var(--adm-card); border:1px solid var(--adm-border); border-radius:12px; box-shadow:0 12px 32px rgba(0,0,0,.28); padding:6px; min-width:188px; z-index:60;">
+                        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--adm-text-3); padding:6px 10px 8px;">Tema</div>
+                        @foreach(['light'=>'Claro','dark'=>'Escuro','slate'=>'Escuro suave','contrast'=>'Alto contraste'] as $val => $label)
+                        <button type="button" class="adm-theme-opt" data-theme-val="{{ $val }}" onclick="setAdminTheme('{{ $val }}')">
+                            <span class="adm-theme-sw" data-sw="{{ $val }}"></span>
+                            <span style="flex:1;">{{ $label }}</span>
+                            <svg class="adm-theme-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:none;"><path d="M20 6L9 17l-5-5"/></svg>
+                        </button>
+                        @endforeach
+                    </div>
+                </div>
                 <span style="font-size:11px; font-weight:600; color:var(--adm-text-3); background:var(--adm-border-2); padding:5px 12px; border-radius:20px; letter-spacing:.3px;">PAINEL ADMINISTRATIVO</span>
             </div>
         </header>
@@ -161,18 +196,36 @@
 
 @include('layouts.partials.image-cropper')
 <script>
-function toggleAdminTheme() {
-    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-    if (dark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('admin-theme', 'light'); }
-    else { document.documentElement.setAttribute('data-theme', 'dark'); localStorage.setItem('admin-theme', 'dark'); }
-    updateAdmThemeIcon();
+var ADM_THEMES = ['light', 'dark', 'slate', 'contrast'];
+function admCurrentTheme() { return document.documentElement.getAttribute('data-theme') || 'light'; }
+function markActiveAdmTheme() {
+    var t = admCurrentTheme();
+    document.querySelectorAll('.adm-theme-opt').forEach(function (o) {
+        o.classList.toggle('active', o.getAttribute('data-theme-val') === t);
+    });
 }
-function updateAdmThemeIcon() {
-    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-    var sun = document.getElementById('adm-icon-sun'), moon = document.getElementById('adm-icon-moon');
-    if (sun && moon) { sun.style.display = dark ? 'block' : 'none'; moon.style.display = dark ? 'none' : 'block'; }
+function toggleAdmThemeMenu(e) {
+    e.stopPropagation();
+    var m = document.getElementById('adm-theme-menu');
+    var open = m.style.display === 'block';
+    m.style.display = open ? 'none' : 'block';
+    document.getElementById('adm-theme-toggle').setAttribute('aria-expanded', String(!open));
+    if (!open) markActiveAdmTheme();
 }
-document.addEventListener('DOMContentLoaded', updateAdmThemeIcon);
+function setAdminTheme(theme) {
+    if (ADM_THEMES.indexOf(theme) === -1) theme = 'light';
+    if (theme === 'light') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('admin-theme', theme);
+    markActiveAdmTheme();
+    document.getElementById('adm-theme-menu').style.display = 'none';
+}
+document.addEventListener('click', function (e) {
+    var m = document.getElementById('adm-theme-menu'), b = document.getElementById('adm-theme-toggle');
+    if (!m || m.style.display !== 'block') return;
+    if (!m.contains(e.target) && !b.contains(e.target)) m.style.display = 'none';
+});
+document.addEventListener('DOMContentLoaded', markActiveAdmTheme);
 </script>
 </body>
 </html>
