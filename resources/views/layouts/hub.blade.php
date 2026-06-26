@@ -91,6 +91,28 @@
             {{ session('success') }}
         </div>
     @endif
+
+    {{-- Comunicados do Átrio (superadmin) --}}
+    @auth
+        @php
+            $avisos = \App\Models\Announcement::activeNow()
+                ->forSchool((int) (auth()->user()->school_id ?? 0))
+                ->latest()->take(5)->get();
+        @endphp
+        @foreach($avisos as $aviso)
+            @php $warn = $aviso->level === 'warning'; @endphp
+            <div style="display:flex; gap:12px; align-items:flex-start; background: {{ $warn ? 'var(--warning-bg)' : 'var(--accent-bg)' }}; border: 1px solid {{ $warn ? 'var(--warning-border)' : 'var(--border)' }}; border-left: 4px solid {{ $warn ? 'var(--warning)' : 'var(--accent)' }}; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ $warn ? 'var(--warning)' : 'var(--accent-text)' }}" stroke-width="2" style="flex-shrink:0; margin-top:1px;">
+                    @if($warn)<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>@else<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>@endif
+                </svg>
+                <div>
+                    <div style="font-size:13.5px; font-weight:700; color:var(--text-1); margin-bottom:2px;">{{ $aviso->title }}</div>
+                    <div style="font-size:13px; color:var(--text-2); white-space:pre-wrap;">{{ $aviso->body }}</div>
+                </div>
+            </div>
+        @endforeach
+    @endauth
+
     @yield('content')
 </main>
 
