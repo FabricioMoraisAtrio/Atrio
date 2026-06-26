@@ -26,8 +26,8 @@ public function store(Request $request)
     }
 
     $request->session()->regenerate();
-    
-    return redirect()->route('admin.dashboard');
+
+    return redirect()->route(Auth::guard('admin')->user()->homeRoute());
 }
 
     public function destroy(Request $request)

@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         'permission'    => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'school.active'  => \App\Http\Middleware\EnsureSchoolIsActive::class,
         'admin.auth'     => \App\Http\Middleware\EnsureAdminIsAuthenticated::class,
+        'admin.can'      => \App\Http\Middleware\EnsureAdminCan::class,
         'school.member'  => \App\Http\Middleware\EnsureSchoolMember::class,
         'school.module'  => \App\Http\Middleware\EnsureSchoolHasModule::class,
     ]);

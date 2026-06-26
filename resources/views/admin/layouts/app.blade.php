@@ -90,14 +90,15 @@
 
 @php
     $admNav = [
-        ['route'=>'admin.dashboard',          'label'=>'Dashboard',          'icon'=>'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'],
-        ['route'=>'admin.schools.index',      'label'=>'Cadastro de Escolas', 'icon'=>'<path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-5h6v5"/><path d="M9 10h.01M15 10h.01"/>'],
-        ['route'=>'admin.invoices.index',     'label'=>'Financeiro',          'icon'=>'<path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>'],
-        ['route'=>'admin.announcements.index','label'=>'Comunicados',         'icon'=>'<path d="M3 11l15-5v13L3 15v-4z"/><path d="M11.5 17.5a3 3 0 01-5.7-1.3"/>'],
-        ['route'=>'admin.reports.index',      'label'=>'Relatórios',          'icon'=>'<path d="M3 3v18h18"/><path d="M7 15l3-4 3 3 5-7"/>'],
-        ['route'=>'admin.admins.index',       'label'=>'Administradores',     'icon'=>'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 11l2 2 4-4"/>'],
-        ['route'=>'admin.logs.index',         'label'=>'Logs / Auditoria',    'icon'=>'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>'],
+        ['key'=>'dashboard',       'route'=>'admin.dashboard',          'label'=>'Dashboard',          'icon'=>'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'],
+        ['key'=>'escolas',         'route'=>'admin.schools.index',      'label'=>'Cadastro de Escolas', 'icon'=>'<path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-5h6v5"/><path d="M9 10h.01M15 10h.01"/>'],
+        ['key'=>'financeiro',      'route'=>'admin.invoices.index',     'label'=>'Financeiro',          'icon'=>'<path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>'],
+        ['key'=>'comunicados',     'route'=>'admin.announcements.index','label'=>'Comunicados',         'icon'=>'<path d="M3 11l15-5v13L3 15v-4z"/><path d="M11.5 17.5a3 3 0 01-5.7-1.3"/>'],
+        ['key'=>'relatorios',      'route'=>'admin.reports.index',      'label'=>'Relatórios',          'icon'=>'<path d="M3 3v18h18"/><path d="M7 15l3-4 3 3 5-7"/>'],
+        ['key'=>'administradores', 'route'=>'admin.admins.index',       'label'=>'Administradores',     'icon'=>'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 11l2 2 4-4"/>'],
+        ['key'=>'logs',            'route'=>'admin.logs.index',         'label'=>'Logs / Auditoria',    'icon'=>'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>'],
     ];
+    $admUser = auth('admin')->user();
 @endphp
 
 <div style="display:flex; min-height:100vh;">
@@ -119,6 +120,7 @@
         <nav style="flex:1; padding:14px 12px; overflow-y:auto;">
             @foreach($admNav as $item)
                 @continue(! \Illuminate\Support\Facades\Route::has($item['route']))
+                @continue($admUser && ! $admUser->canAccess($item['key']))
                 @php $active = request()->routeIs($item['route']) || request()->routeIs(str_replace('.index','',$item['route']).'.*'); @endphp
                 <a href="{{ route($item['route']) }}" class="adm-nav-item {{ $active ? 'active' : '' }}">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $item['icon'] !!}</svg>

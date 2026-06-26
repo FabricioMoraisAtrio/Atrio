@@ -156,40 +156,48 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
 
     Route::middleware('admin.auth')->group(function () {
         Route::post('/logout', [\App\Http\Controllers\Admin\LoginController::class, 'destroy'])->name('admin.logout');
-        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, '__invoke'])->name('admin.dashboard');
-        Route::resource('schools', \App\Http\Controllers\Admin\SchoolController::class)->names('admin.schools');
-        Route::post('schools/{school}/reset-password/{user}', [\App\Http\Controllers\Admin\SchoolController::class, 'resetPassword'])->name('admin.schools.resetPassword');
-        Route::put('schools/{school}/terminologias', [\App\Http\Controllers\Admin\SchoolController::class, 'updateTerminologias'])->name('admin.schools.terminologias.update');
-        // Matérias (gerenciadas pelo Super Admin por escola)
-        Route::post('schools/{school}/materias',                  [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'store'])->name('admin.schools.materias.store');
-        Route::put('schools/{school}/materias/{subject}',         [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'update'])->name('admin.schools.materias.update');
-        Route::delete('schools/{school}/materias/{subject}',      [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'destroy'])->name('admin.schools.materias.destroy');
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, '__invoke'])->middleware('admin.can:dashboard')->name('admin.dashboard');
 
-        // Financeiro (faturas)
-        Route::get('financeiro',                    [\App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('admin.invoices.index');
-        Route::post('financeiro',                   [\App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('admin.invoices.store');
-        Route::post('financeiro/gerar',             [\App\Http\Controllers\Admin\InvoiceController::class, 'generate'])->name('admin.invoices.generate');
-        Route::post('financeiro/{invoice}/pagar',   [\App\Http\Controllers\Admin\InvoiceController::class, 'markPaid'])->name('admin.invoices.pay');
-        Route::post('financeiro/{invoice}/cancelar',[\App\Http\Controllers\Admin\InvoiceController::class, 'cancel'])->name('admin.invoices.cancel');
-        Route::delete('financeiro/{invoice}',       [\App\Http\Controllers\Admin\InvoiceController::class, 'destroy'])->name('admin.invoices.destroy');
+        Route::middleware('admin.can:escolas')->group(function () {
+            Route::resource('schools', \App\Http\Controllers\Admin\SchoolController::class)->names('admin.schools');
+            Route::post('schools/{school}/reset-password/{user}', [\App\Http\Controllers\Admin\SchoolController::class, 'resetPassword'])->name('admin.schools.resetPassword');
+            Route::put('schools/{school}/terminologias', [\App\Http\Controllers\Admin\SchoolController::class, 'updateTerminologias'])->name('admin.schools.terminologias.update');
+            // Matérias (gerenciadas pelo Super Admin por escola)
+            Route::post('schools/{school}/materias',                  [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'store'])->name('admin.schools.materias.store');
+            Route::put('schools/{school}/materias/{subject}',         [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'update'])->name('admin.schools.materias.update');
+            Route::delete('schools/{school}/materias/{subject}',      [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'destroy'])->name('admin.schools.materias.destroy');
+        });
 
-        // Comunicados
-        Route::get('comunicados',                 [\App\Http\Controllers\Admin\AnnouncementController::class, 'index'])->name('admin.announcements.index');
-        Route::post('comunicados',                [\App\Http\Controllers\Admin\AnnouncementController::class, 'store'])->name('admin.announcements.store');
-        Route::put('comunicados/{comunicado}',    [\App\Http\Controllers\Admin\AnnouncementController::class, 'update'])->name('admin.announcements.update');
-        Route::post('comunicados/{comunicado}/toggle', [\App\Http\Controllers\Admin\AnnouncementController::class, 'toggle'])->name('admin.announcements.toggle');
-        Route::delete('comunicados/{comunicado}', [\App\Http\Controllers\Admin\AnnouncementController::class, 'destroy'])->name('admin.announcements.destroy');
+        Route::middleware('admin.can:financeiro')->group(function () {
+            Route::get('financeiro',                    [\App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('admin.invoices.index');
+            Route::post('financeiro',                   [\App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('admin.invoices.store');
+            Route::post('financeiro/gerar',             [\App\Http\Controllers\Admin\InvoiceController::class, 'generate'])->name('admin.invoices.generate');
+            Route::post('financeiro/{invoice}/pagar',   [\App\Http\Controllers\Admin\InvoiceController::class, 'markPaid'])->name('admin.invoices.pay');
+            Route::post('financeiro/{invoice}/cancelar',[\App\Http\Controllers\Admin\InvoiceController::class, 'cancel'])->name('admin.invoices.cancel');
+            Route::delete('financeiro/{invoice}',       [\App\Http\Controllers\Admin\InvoiceController::class, 'destroy'])->name('admin.invoices.destroy');
+        });
 
-        // Relatórios
-        Route::get('relatorios', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.reports.index');
+        Route::middleware('admin.can:comunicados')->group(function () {
+            Route::get('comunicados',                 [\App\Http\Controllers\Admin\AnnouncementController::class, 'index'])->name('admin.announcements.index');
+            Route::post('comunicados',                [\App\Http\Controllers\Admin\AnnouncementController::class, 'store'])->name('admin.announcements.store');
+            Route::put('comunicados/{comunicado}',    [\App\Http\Controllers\Admin\AnnouncementController::class, 'update'])->name('admin.announcements.update');
+            Route::post('comunicados/{comunicado}/toggle', [\App\Http\Controllers\Admin\AnnouncementController::class, 'toggle'])->name('admin.announcements.toggle');
+            Route::delete('comunicados/{comunicado}', [\App\Http\Controllers\Admin\AnnouncementController::class, 'destroy'])->name('admin.announcements.destroy');
+        });
 
-        // Administradores
-        Route::get('administradores',                  [\App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('admin.admins.index');
-        Route::post('administradores',                 [\App\Http\Controllers\Admin\AdminUserController::class, 'store'])->name('admin.admins.store');
-        Route::put('administradores/{administrador}',  [\App\Http\Controllers\Admin\AdminUserController::class, 'update'])->name('admin.admins.update');
-        Route::delete('administradores/{administrador}',[\App\Http\Controllers\Admin\AdminUserController::class, 'destroy'])->name('admin.admins.destroy');
+        Route::middleware('admin.can:relatorios')->group(function () {
+            Route::get('relatorios', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.reports.index');
+        });
 
-        // Logs / Auditoria global
-        Route::get('logs', [\App\Http\Controllers\Admin\LogController::class, 'index'])->name('admin.logs.index');
+        Route::middleware('admin.can:administradores')->group(function () {
+            Route::get('administradores',                  [\App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('admin.admins.index');
+            Route::post('administradores',                 [\App\Http\Controllers\Admin\AdminUserController::class, 'store'])->name('admin.admins.store');
+            Route::put('administradores/{administrador}',  [\App\Http\Controllers\Admin\AdminUserController::class, 'update'])->name('admin.admins.update');
+            Route::delete('administradores/{administrador}',[\App\Http\Controllers\Admin\AdminUserController::class, 'destroy'])->name('admin.admins.destroy');
+        });
+
+        Route::middleware('admin.can:logs')->group(function () {
+            Route::get('logs', [\App\Http\Controllers\Admin\LogController::class, 'index'])->name('admin.logs.index');
+        });
     });
 });

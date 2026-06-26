@@ -20,15 +20,19 @@ class AdminUserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:admin_users,email',
-            'password' => 'required|min:6',
+            'name'        => 'required|string|max:255',
+            'email'       => 'required|email|unique:admin_users,email',
+            'password'    => 'required|min:6',
+            'access_mode' => 'required|in:full,custom',
+            'permissions' => 'nullable|array',
+            'permissions.*' => ['string', Rule::in(array_keys(AdminUser::ROUTINES))],
         ]);
 
         AdminUser::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name'        => $data['name'],
+            'email'       => $data['email'],
+            'password'    => Hash::make($data['password']),
+            'permissions' => $this->permissionsFromRequest($request),
         ]);
 
         return back()->with('success', 'Administrador criado.');
@@ -37,19 +41,51 @@ class AdminUserController extends Controller
     public function update(Request $request, AdminUser $administrador)
     {
         $data = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => ['required', 'email', Rule::unique('admin_users', 'email')->ignore($administrador->id)],
-            'password' => 'nullable|min:6',
+            'name'        => 'required|string|max:255',
+            'email'       => ['required', 'email', Rule::unique('admin_users', 'email')->ignore($administrador->id)],
+            'password'    => 'nullable|min:6',
+            'access_mode' => 'required|in:full,custom',
+            'permissions' => 'nullable|array',
+            'permissions.*' => ['string', Rule::in(array_keys(AdminUser::ROUTINES))],
         ]);
 
-        $administrador->name  = $data['name'];
-        $administrador->email = $data['email'];
+        $permissions = $this->permissionsFromRequest($request);
+
+        // Trava anti-lockout: não pode remover o próprio acesso a "Administradores".
+        if ($administrador->id === auth('admin')->id()
+            && $permissions !== null && ! in_array('administradores', $permissions, true)) {
+            return back()->with('error', 'Você não pode remover o seu próprio acesso a Administradores.');
+        }
+
+        $administrador->name        = $data['name'];
+        $administrador->email       = $data['email'];
+        $administrador->permissions = $permissions;
         if (! empty($data['password'])) {
             $administrador->password = Hash::make($data['password']);
         }
         $administrador->save();
 
         return back()->with('success', 'Administrador atualizado.');
+    }
+
+    /** null = acesso total; array = rotinas marcadas (sempre inclui dashboard). */
+    private function permissionsFromRequest(Request $request): ?array
+    {
+        if ($request->input('access_mode') === 'full') {
+            return null;
+        }
+
+        $perms = array_values(array_intersect(
+            array_keys(AdminUser::ROUTINES),
+            (array) $request->input('permissions', [])
+        ));
+
+        // Garante ao menos o Dashboard como ponto de entrada.
+        if (! in_array('dashboard', $perms, true)) {
+            array_unshift($perms, 'dashboard');
+        }
+
+        return $perms;
     }
 
     public function destroy(AdminUser $administrador)
