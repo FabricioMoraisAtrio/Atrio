@@ -218,6 +218,7 @@
                 @endif
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
+                @include('layouts.partials.notifications-bell')
                 @include('layouts.partials.theme-switcher')
             </div>
         </header>

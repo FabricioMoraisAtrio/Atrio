@@ -16,15 +16,15 @@
             <input type="hidden" name="_method" id="adm-form-method" value="POST">
             <div style="margin-bottom:12px;">
                 <label style="{{ $lbl }}">Nome</label>
-                <input type="text" name="name" id="a-name" required style="{{ $inp }}">
+                <input type="text" name="name" id="a-name" value="{{ old('name') }}" required style="{{ $inp }}">
             </div>
             <div style="margin-bottom:12px;">
                 <label style="{{ $lbl }}">E-mail</label>
-                <input type="email" name="email" id="a-email" required style="{{ $inp }}">
+                <input type="email" name="email" id="a-email" value="{{ old('email') }}" required style="{{ $inp }}">
             </div>
             <div style="margin-bottom:16px;">
-                <label style="{{ $lbl }}">Senha <span id="a-pass-hint" style="color:var(--adm-text-3); font-weight:400;"></span></label>
-                <input type="password" name="password" id="a-password" style="{{ $inp }}">
+                <label style="{{ $lbl }}">Senha <span id="a-pass-hint" style="color:var(--adm-text-3); font-weight:400;">(mín. 6 caracteres)</span></label>
+                <input type="password" name="password" id="a-password" minlength="6" required style="{{ $inp }}">
             </div>
             <div style="display:flex; gap:8px;">
                 <button type="submit" class="adm-btn adm-btn-primary" style="flex:1; justify-content:center;">Salvar</button>
@@ -73,7 +73,8 @@ function editAdmin(a) {
     document.getElementById('adm-form-method').value = 'PUT';
     document.getElementById('a-name').value = a.name;
     document.getElementById('a-email').value = a.email;
-    document.getElementById('a-password').value = '';
+    var pass = document.getElementById('a-password');
+    pass.value = ''; pass.required = false;
     document.getElementById('a-pass-hint').textContent = '(deixe em branco para manter)';
     document.getElementById('adm-btn-cancelar').style.display = 'inline-flex';
     window.scrollTo({top:0, behavior:'smooth'});
@@ -84,7 +85,8 @@ function resetAdminForm() {
     f.action = '{{ route('admin.admins.store') }}';
     document.getElementById('adm-form-method').value = 'POST';
     document.getElementById('adm-form-titulo').textContent = 'Novo administrador';
-    document.getElementById('a-pass-hint').textContent = '';
+    document.getElementById('a-password').required = true;
+    document.getElementById('a-pass-hint').textContent = '(mín. 6 caracteres)';
     document.getElementById('adm-btn-cancelar').style.display = 'none';
 }
 </script>

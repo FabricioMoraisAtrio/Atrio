@@ -106,6 +106,14 @@
                     {{ session('error') }}
                 </div>
             @endif
+            @if($errors->any())
+                <div style="background:var(--adm-red-bg); border:1px solid #F4B5AE; color:var(--adm-red); font-size:13px; border-radius:10px; padding:12px 16px; margin-bottom:20px;">
+                    <strong style="display:block; margin-bottom:4px;">Não foi possível salvar:</strong>
+                    <ul style="margin:0; padding-left:18px;">
+                        @foreach($errors->all() as $erro)<li>{{ $erro }}</li>@endforeach
+                    </ul>
+                </div>
+            @endif
             @yield('content')
         </main>
     </div>
