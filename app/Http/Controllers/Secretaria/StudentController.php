@@ -140,7 +140,7 @@ public function show(Student $aluno)
 {
     $aluno->load([
         'schoolClasses:id,name,shift,year',
-        'documents' => fn($q) => $q->where('year', date('Y'))->with('author:id,name'),
+        'documents' => fn($q) => $q->with('author:id,name'), // todos os anos (histórico)
         'observations' => fn($q) => $q->with('user:id,name')->latest()->take(20),
         'foodItems',
     ]);

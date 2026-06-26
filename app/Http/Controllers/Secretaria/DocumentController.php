@@ -128,6 +128,10 @@ class DocumentController extends Controller
 
     public function edit(Document $documento)
     {
+        if ((int) $documento->year !== (int) date('Y')) {
+            return redirect()->route('secretaria.alunos.show', $documento->student_id)
+                ->with('error', 'Documentos de anos anteriores são somente leitura.');
+        }
         // PEIs individuais dos professores são registros privados
         if ($documento->type === 'pei' && $documento->author_id !== auth()->id()) {
             abort(403, 'Os PEIs individuais dos professores são registros privados.');
@@ -147,6 +151,10 @@ class DocumentController extends Controller
 
     public function update(Request $request, Document $documento)
     {
+        if ((int) $documento->year !== (int) date('Y')) {
+            return redirect()->route('secretaria.alunos.show', $documento->student_id)
+                ->with('error', 'Documentos de anos anteriores são somente leitura.');
+        }
         if ($documento->type === 'pei') {
             $global = DocumentContentService::buildContent('pei', $request);
             $content = array_merge($documento->content ?? [], ['global' => $global]);

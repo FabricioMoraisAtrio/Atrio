@@ -215,6 +215,38 @@
     @endif
 </div>
 
+{{-- Histórico de anos anteriores (somente leitura) --}}
+@php
+    $docsHistorico = $aluno->documents->where('year', '<', (int) date('Y'))->sortByDesc('year')->groupBy('year');
+    $tipoLabels = ['estudo_caso' => 'Estudo de Caso', 'paee' => 'PAEE', 'pei' => 'PEI', 'pei_consolidado' => 'PEI Consolidado'];
+@endphp
+@if($docsHistorico->isNotEmpty())
+<div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); padding: 24px; margin-bottom: 16px;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 3"/></svg>
+        <h3 style="font-size: 14px; font-weight: 600; color: var(--text-1); margin: 0;">Histórico de documentos</h3>
+    </div>
+    <p style="font-size: 12px; color: var(--text-4); margin: 0 0 14px;">Anos anteriores — somente leitura.</p>
+    @foreach($docsHistorico as $ano => $docs)
+        <div style="margin-bottom: 14px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;">{{ $ano }}</div>
+            @foreach($docs as $doc)
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 12px; border: 1px solid var(--border-sub); border-radius: 8px; margin-bottom: 6px;">
+                <div style="min-width:0;">
+                    <span style="font-size: 13px; font-weight: 600; color: var(--text-1);">{{ $tipoLabels[$doc->type] ?? strtoupper(str_replace('_', ' ', $doc->type)) }}</span>
+                    <span style="font-size: 11px; color: var(--text-4);">· {{ $doc->author?->name ?? '—' }}</span>
+                </div>
+                <div style="display:flex; gap:8px; flex-shrink:0;">
+                    <a href="{{ route('secretaria.documentos.preview', $doc) }}" target="_blank" style="font-size: 12px; font-weight: 600; color: var(--accent-text); text-decoration: none;">Ver</a>
+                    <a href="{{ route('secretaria.documentos.pdf', $doc) }}" target="_blank" style="font-size: 12px; font-weight: 600; color: var(--text-3); text-decoration: none;">PDF</a>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    @endforeach
+</div>
+@endif
+
 {{-- Jornada Alimentar --}}
 @php
     $school = auth()->user()->school;
