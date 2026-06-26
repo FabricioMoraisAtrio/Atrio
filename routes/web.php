@@ -166,6 +166,12 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
             Route::post('schools/{school}/materias',                  [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'store'])->name('admin.schools.materias.store');
             Route::put('schools/{school}/materias/{subject}',         [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'update'])->name('admin.schools.materias.update');
             Route::delete('schools/{school}/materias/{subject}',      [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'destroy'])->name('admin.schools.materias.destroy');
+
+            // Importação de alunos (exclusiva do superadmin, por escola)
+            Route::get('schools/{school}/importar',            [\App\Http\Controllers\Admin\StudentImportController::class, 'index'])->name('admin.schools.import');
+            Route::get('schools/{school}/importar/modelo',     [\App\Http\Controllers\Admin\StudentImportController::class, 'template'])->name('admin.schools.import.template');
+            Route::post('schools/{school}/importar/preview',   [\App\Http\Controllers\Admin\StudentImportController::class, 'preview'])->name('admin.schools.import.preview');
+            Route::post('schools/{school}/importar/confirmar', [\App\Http\Controllers\Admin\StudentImportController::class, 'confirm'])->name('admin.schools.import.confirm');
         });
 
         Route::middleware('admin.can:financeiro')->group(function () {

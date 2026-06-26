@@ -69,10 +69,6 @@ Route::middleware('school.module:turmas')->group(function () {
 // ─── Alunos ───────────────────────────────────────────────────────────────────
 Route::middleware('school.module:alunos')->group(function () {
     Route::middleware('can:alunos.criar')->group(function () {
-        // Importação de alunos por planilha — antes das rotas com {aluno}
-        Route::get('alunos/importar',            [\App\Http\Controllers\Secretaria\ImportController::class, 'index'])->name('alunos.importar');
-        Route::post('alunos/importar/preview',   [\App\Http\Controllers\Secretaria\ImportController::class, 'preview'])->name('alunos.importar.preview');
-        Route::post('alunos/importar/confirmar', [\App\Http\Controllers\Secretaria\ImportController::class, 'confirm'])->name('alunos.importar.confirmar');
         Route::get('alunos/create',   [StudentController::class, 'create'])->name('alunos.create');
         Route::post('alunos',         [StudentController::class, 'store'])->name('alunos.store');
     });

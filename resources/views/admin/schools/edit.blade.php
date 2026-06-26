@@ -4,7 +4,14 @@
 @section('content')
 <div class="max-w-2xl">
 
-    <h2 class="text-lg font-semibold text-gray-800 mb-6">Editar — {{ $school->name }}</h2>
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-semibold text-gray-800">Editar — {{ $school->name }}</h2>
+        <a href="{{ route('admin.schools.import', $school) }}"
+           style="display:inline-flex; align-items:center; gap:7px; padding:8px 14px; border:1px solid var(--adm-border, #E6EAF2); border-radius:8px; font-size:13px; font-weight:600; color:var(--adm-accent, #3B82F6); text-decoration:none; background:var(--adm-card, #fff);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Importar alunos
+        </a>
+    </div>
 
     {{-- Abas --}}
     <div style="display: flex; gap: 2px; border-bottom: 2px solid #E5E7EB; margin-bottom: 0;">

@@ -18,14 +18,17 @@ class StudentImporter
 {
     /** Sinônimos de cabeçalho → campo do Átrio. */
     private const ALIASES = [
-        'name'                 => ['nome', 'name', 'aluno', 'estudante', 'nome completo', 'nome do aluno', 'nome aluno'],
-        'registration_number'  => ['matricula', 'ra', 'registro', 'registration', 'registration number', 'codigo', 'cod', 'matricula do aluno', 'numero matricula'],
-        'birth_date'           => ['nascimento', 'data de nascimento', 'data nascimento', 'dt nascimento', 'birth', 'birth date', 'nasc'],
-        'responsavel_nome'     => ['responsavel', 'responsavel nome', 'nome do responsavel', 'filiacao', 'responsavel 1', 'mae', 'pai'],
-        'responsavel_email'    => ['email do responsavel', 'responsavel email', 'email responsavel', 'email'],
-        'responsavel_telefone' => ['telefone', 'telefone do responsavel', 'responsavel telefone', 'celular', 'contato', 'fone', 'whatsapp'],
-        'turma'                => ['turma', 'classe', 'sala', 'serie', 'ano turma', 'turma do aluno'],
-        'condicao'             => ['condicao', 'diagnostico', 'cid', 'laudo', 'necessidade', 'deficiencia'],
+        'name'                   => ['nome', 'name', 'aluno', 'estudante', 'nome completo', 'nome do aluno', 'nome aluno'],
+        'registration_number'    => ['matricula', 'ra', 'registro', 'registration', 'registration number', 'codigo', 'cod', 'matricula do aluno', 'numero matricula'],
+        'birth_date'             => ['data nascimento', 'nascimento', 'data de nascimento', 'dt nascimento', 'birth', 'birth date', 'nasc'],
+        'responsavel_nome'       => ['responsavel nome', 'responsavel', 'nome do responsavel', 'filiacao', 'responsavel 1', 'mae', 'pai'],
+        'responsavel_email'      => ['responsavel email', 'email do responsavel', 'email responsavel', 'email', 'email responsavel 1'],
+        'responsavel_telefone'   => ['responsavel telefone', 'telefone', 'telefone do responsavel', 'celular', 'contato', 'fone', 'whatsapp', 'telefone responsavel 1'],
+        'responsavel_2_nome'     => ['responsavel 2 nome', 'responsavel 2', 'segundo responsavel', 'nome do responsavel 2', 'responsavel secundario'],
+        'responsavel_2_email'    => ['responsavel 2 email', 'email do responsavel 2', 'email responsavel 2'],
+        'responsavel_2_telefone' => ['responsavel 2 telefone', 'telefone do responsavel 2', 'telefone responsavel 2', 'celular 2'],
+        'turma'                  => ['turma', 'classe', 'sala', 'serie', 'ano turma', 'turma do aluno'],
+        'condicao'               => ['condicao', 'diagnostico', 'cid', 'laudo', 'necessidade', 'deficiencia', 'condicao diagnostico'],
     ];
 
     /** Lê o CSV e devolve linhas normalizadas. */
@@ -76,9 +79,8 @@ class StudentImporter
     }
 
     /** Analisa as linhas: ação (criar/atualizar/erro) + erros + resumo. */
-    public function analyze(array $rows): array
+    public function analyze(array $rows, int $schoolId): array
     {
-        $schoolId = (int) session('school_id');
         $analisadas = [];
         $resumo = ['criar' => 0, 'atualizar' => 0, 'erro' => 0, 'total' => count($rows)];
 
@@ -96,7 +98,8 @@ class StudentImporter
 
             $existing = null;
             if ($reg) {
-                $existing = Student::where('school_id', $schoolId)
+                $existing = Student::withoutGlobalScopes()
+                    ->where('school_id', $schoolId)
                     ->where('registration_number', $reg)->first();
             }
 
@@ -113,9 +116,8 @@ class StudentImporter
     }
 
     /** Aplica a importação. Retorna { created, updated, skipped }. */
-    public function commit(array $rows): array
+    public function commit(array $rows, int $schoolId): array
     {
-        $schoolId = (int) session('school_id');
         $year = (int) date('Y');
         $out = ['created' => 0, 'updated' => 0, 'skipped' => 0];
 
@@ -130,7 +132,8 @@ class StudentImporter
                     continue;
                 }
 
-                $student = Student::where('school_id', $schoolId)
+                $student = Student::withoutGlobalScopes()
+                    ->where('school_id', $schoolId)
                     ->where('registration_number', $reg)->first();
 
                 if (! $student) {
@@ -149,7 +152,8 @@ class StudentImporter
                 if ($turma) {
                     $key = mb_strtolower($turma);
                     if (! isset($turmaCache[$key])) {
-                        $turmaCache[$key] = SchoolClass::where('year', $year)->where('name', $turma)->first()
+                        $turmaCache[$key] = SchoolClass::withoutGlobalScopes()
+                                ->where('school_id', $schoolId)->where('year', $year)->where('name', $turma)->first()
                             ?? SchoolClass::create(['school_id' => $schoolId, 'name' => $turma, 'shift' => 'Matutino', 'year' => $year]);
                     }
                     $classId = $turmaCache[$key]->id;
@@ -171,7 +175,11 @@ class StudentImporter
     /** Aplica campos no aluno. $isNew = criar (seta tudo); senão só preenche vazios. */
     private function applyFields(Student $student, array $row, bool $isNew): void
     {
-        $campos = ['name', 'birth_date', 'responsavel_nome', 'responsavel_email', 'responsavel_telefone'];
+        $campos = [
+            'name', 'birth_date',
+            'responsavel_nome', 'responsavel_email', 'responsavel_telefone',
+            'responsavel_2_nome', 'responsavel_2_email', 'responsavel_2_telefone',
+        ];
         foreach ($campos as $f) {
             $val = $row[$f] ?? null;
             if ($val === null || $val === '') {
