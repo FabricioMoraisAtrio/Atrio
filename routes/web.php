@@ -179,5 +179,17 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
         Route::put('comunicados/{comunicado}',    [\App\Http\Controllers\Admin\AnnouncementController::class, 'update'])->name('admin.announcements.update');
         Route::post('comunicados/{comunicado}/toggle', [\App\Http\Controllers\Admin\AnnouncementController::class, 'toggle'])->name('admin.announcements.toggle');
         Route::delete('comunicados/{comunicado}', [\App\Http\Controllers\Admin\AnnouncementController::class, 'destroy'])->name('admin.announcements.destroy');
+
+        // Relatórios
+        Route::get('relatorios', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.reports.index');
+
+        // Administradores
+        Route::get('administradores',                  [\App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('admin.admins.index');
+        Route::post('administradores',                 [\App\Http\Controllers\Admin\AdminUserController::class, 'store'])->name('admin.admins.store');
+        Route::put('administradores/{administrador}',  [\App\Http\Controllers\Admin\AdminUserController::class, 'update'])->name('admin.admins.update');
+        Route::delete('administradores/{administrador}',[\App\Http\Controllers\Admin\AdminUserController::class, 'destroy'])->name('admin.admins.destroy');
+
+        // Logs / Auditoria global
+        Route::get('logs', [\App\Http\Controllers\Admin\LogController::class, 'index'])->name('admin.logs.index');
     });
 });
