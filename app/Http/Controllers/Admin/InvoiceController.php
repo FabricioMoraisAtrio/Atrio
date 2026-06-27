@@ -109,6 +109,19 @@ class InvoiceController extends Controller
         return back()->with('success', 'Fatura cancelada.');
     }
 
+    public function pdf(Invoice $invoice)
+    {
+        $invoice->load('school');
+        $bytes = \App\Services\InvoicePdfRenderer::render($invoice);
+        $tipo  = $invoice->status === 'pago' ? 'recibo' : 'fatura';
+        $nome  = "{$tipo}_{$invoice->reference}_" . \Illuminate\Support\Str::slug($invoice->school?->name ?? 'escola') . '.pdf';
+
+        return response($bytes, 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $nome . '"',
+        ]);
+    }
+
     public function destroy(Invoice $invoice)
     {
         $ref = $invoice->reference;

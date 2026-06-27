@@ -63,6 +63,7 @@ Route::get('/cron/notificacoes', function () {
         abort(403);
     }
     \Artisan::call('atrio:notificacoes-diarias');
+    \Artisan::call('atrio:faturas-vencendo');
     // processa a fila no mesmo passo (hospedagem sem worker dedicado)
     \Artisan::call('queue:work', ['--stop-when-empty' => true, '--max-time' => 50, '--tries' => 3]);
     return response()->json(['ok' => true]);
@@ -206,6 +207,7 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
             Route::get('financeiro',                    [\App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('admin.invoices.index');
             Route::post('financeiro',                   [\App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('admin.invoices.store');
             Route::post('financeiro/gerar',             [\App\Http\Controllers\Admin\InvoiceController::class, 'generate'])->name('admin.invoices.generate');
+            Route::get('financeiro/{invoice}/pdf',      [\App\Http\Controllers\Admin\InvoiceController::class, 'pdf'])->name('admin.invoices.pdf');
             Route::post('financeiro/{invoice}/pagar',   [\App\Http\Controllers\Admin\InvoiceController::class, 'markPaid'])->name('admin.invoices.pay');
             Route::post('financeiro/{invoice}/cancelar',[\App\Http\Controllers\Admin\InvoiceController::class, 'cancel'])->name('admin.invoices.cancel');
             Route::delete('financeiro/{invoice}',       [\App\Http\Controllers\Admin\InvoiceController::class, 'destroy'])->name('admin.invoices.destroy');

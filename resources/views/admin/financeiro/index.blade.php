@@ -116,6 +116,7 @@
                     <span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; color:{{ $b[1] }}; background:{{ $b[2] }};">{{ $b[0] }}</span>
                 </td>
                 <td style="padding:10px 18px; text-align:right; white-space:nowrap;">
+                    <a href="{{ route('admin.invoices.pdf', $f) }}" target="_blank" class="adm-btn adm-btn-ghost" style="padding:6px 12px;">{{ $f->status === 'pago' ? 'Recibo' : 'PDF' }}</a>
                     @if(in_array($f->status, ['aberto']))
                     <form method="POST" action="{{ route('admin.invoices.pay', $f) }}" style="display:inline;">
                         @csrf
