@@ -23,10 +23,17 @@ class PlanoVencendoNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Átrio — Plano vencendo em ' . $this->diasRestantes . ' dias')
-            ->greeting('Olá, ' . $notifiable->name . '!')
-            ->line('O plano da escola **' . $this->school->name . '** vence em **' . $this->diasRestantes . ' dias** (' . $this->school->plan_expires_at->format('d/m/Y') . ').')
-            ->line('Renove agora para não perder o acesso ao sistema.')
-            ->action('Falar com suporte', url('/'))
-            ->line('Sistema Átrio — Portal de Gestão Inclusiva.');
+            ->view('emails.notificacao', [
+                'titulo'     => 'Plano vencendo',
+                'topo'       => '#B45309',
+                'saudacao'   => 'Olá, ' . $notifiable->name . '!',
+                'paragrafos' => [
+                    'O plano da escola **' . $this->school->name . '** vence em **' . $this->diasRestantes . ' dias** (' . $this->school->plan_expires_at->format('d/m/Y') . ').',
+                    'Renove agora para não perder o acesso ao sistema.',
+                ],
+                'acaoTexto'  => 'Falar com suporte',
+                'acaoUrl'    => url('/'),
+                'rodape'     => 'Sistema Átrio — Portal de Gestão Inclusiva.',
+            ]);
     }
 }

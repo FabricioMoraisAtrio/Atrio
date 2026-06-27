@@ -25,21 +25,31 @@ class FaturaVencendoNotification extends Notification implements ShouldQueue
         $valor   = 'R$ ' . number_format((float) $this->invoice->amount, 2, ',', '.');
         $venc    = $this->invoice->due_date->format('d/m/Y');
         $vencida = $this->dias < 0;
-
-        $msg = (new MailMessage)->greeting('Olá, ' . $notifiable->name . '!');
+        $escola  = $this->invoice->school?->name;
 
         if ($vencida) {
-            $msg->subject('Átrio — Fatura vencida')
-                ->line("A fatura da escola **{$this->invoice->school?->name}** está **vencida** desde {$venc} (" . abs($this->dias) . ' dia(s)).')
-                ->line("Valor: **{$valor}**.")
-                ->line('Regularize para manter o acesso ao sistema.');
+            $subject    = 'Átrio — Fatura vencida';
+            $titulo     = 'Fatura vencida';
+            $paragrafos = [
+                "A fatura da escola **{$escola}** está **vencida** desde {$venc} (" . abs($this->dias) . ' dia(s)).',
+                'Regularize para manter o acesso ao sistema.',
+            ];
         } else {
-            $quando = $this->dias === 0 ? 'vence **hoje**' : "vence em **{$this->dias} dia(s)**";
-            $msg->subject('Átrio — Fatura ' . ($this->dias === 0 ? 'vence hoje' : "vence em {$this->dias} dia(s)"))
-                ->line("A fatura da escola **{$this->invoice->school?->name}** {$quando} ({$venc}).")
-                ->line("Valor: **{$valor}**.");
+            $quando     = $this->dias === 0 ? 'vence **hoje**' : "vence em **{$this->dias} dia(s)**";
+            $subject    = 'Átrio — Fatura ' . ($this->dias === 0 ? 'vence hoje' : "vence em {$this->dias} dia(s)");
+            $titulo     = 'Fatura a vencer';
+            $paragrafos = ["A fatura da escola **{$escola}** {$quando} ({$venc})."];
         }
 
-        return $msg->line('Em caso de dúvidas, fale com a administração do Átrio.');
+        return (new MailMessage)
+            ->subject($subject)
+            ->view('emails.notificacao', [
+                'titulo'     => $titulo,
+                'topo'       => $vencida ? '#B42318' : '#B45309',
+                'saudacao'   => 'Olá, ' . $notifiable->name . '!',
+                'paragrafos' => $paragrafos,
+                'dados'      => ['Valor' => $valor, 'Vencimento' => $venc],
+                'rodape'     => 'Em caso de dúvidas, fale com a administração do Átrio.',
+            ]);
     }
 }

@@ -20,19 +20,22 @@ class DocumentosPendentesNotification extends Notification implements ShouldQueu
 
     public function toMail($notifiable): MailMessage
     {
-        $mail = (new MailMessage)
-            ->subject('Átrio — Documentos pendentes para hoje')
-            ->greeting('Olá, ' . $notifiable->name . '!')
-            ->line('Os seguintes alunos possuem documentos pendentes de preenchimento:');
-
+        $itens = [];
         foreach ($this->pendentes as $item) {
             $tipos = implode(', ', array_map('strtoupper', $item['faltando']));
-            $mail->line('• **' . $item['aluno']->name . '** — ' . $tipos);
+            $itens[] = '**' . $item['aluno']->name . '** — ' . $tipos;
         }
 
-        $mail->action('Acessar o sistema', url('/secretaria/alunos'))
-             ->line('Este é um resumo diário automático do Sistema Átrio.');
-
-        return $mail;
+        return (new MailMessage)
+            ->subject('Átrio — Documentos pendentes para hoje')
+            ->view('emails.notificacao', [
+                'titulo'     => 'Documentos pendentes',
+                'saudacao'   => 'Olá, ' . $notifiable->name . '!',
+                'paragrafos' => ['Os seguintes alunos possuem documentos pendentes de preenchimento:'],
+                'itens'      => $itens,
+                'acaoTexto'  => 'Acessar o sistema',
+                'acaoUrl'    => route('secretaria.alunos.index'),
+                'rodape'     => 'Resumo diário automático do Sistema Átrio.',
+            ]);
     }
 }

@@ -23,12 +23,19 @@ class ObservacaoCriticaNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Átrio — Observação crítica registrada')
-            ->greeting('Olá, ' . $notifiable->name . '!')
-            ->line('Uma observação **crítica** foi registrada para o aluno **' . $this->observation->student->name . '**.')
-            ->line('**Registrado por:** ' . $this->observation->user->name)
-            ->line('**Categoria:** ' . ucfirst($this->observation->category))
-            ->line('**Observação:** ' . $this->observation->content)
-            ->action('Ver perfil do aluno', url('/secretaria/alunos/' . $this->observation->student_id))
-            ->line('Sistema Átrio — Portal de Gestão Inclusiva.');
+            ->view('emails.notificacao', [
+                'titulo'     => 'Observação crítica',
+                'topo'       => '#B42318',
+                'saudacao'   => 'Olá, ' . $notifiable->name . '!',
+                'paragrafos' => ['Uma observação **crítica** foi registrada para o aluno **' . $this->observation->student->name . '**.'],
+                'dados'      => [
+                    'Registrado por' => $this->observation->user->name,
+                    'Categoria'      => ucfirst($this->observation->category),
+                    'Observação'     => $this->observation->content,
+                ],
+                'acaoTexto'  => 'Ver perfil do aluno',
+                'acaoUrl'    => route('secretaria.alunos.show', $this->observation->student_id),
+                'rodape'     => 'Sistema Átrio — Portal de Gestão Inclusiva.',
+            ]);
     }
 }
