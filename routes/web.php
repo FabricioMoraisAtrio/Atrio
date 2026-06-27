@@ -106,6 +106,37 @@ Route::get('/cron/backup', function () use ($noStore) {
     return $noStore(response('<pre>' . e(trim(\Artisan::output())) . '</pre>'));
 });
 
+// Limpa todos os caches (config/route/view/compiled) — recuperação pós-deploy. Mesmo token.
+Route::get('/cron/clear', function () use ($noStore) {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    \Artisan::call('optimize:clear');
+
+    return $noStore(response('<pre>' . e(trim(\Artisan::output())) . '</pre>'));
+});
+
+// Mostra o fim do log de erros (diagnóstico). Mesmo token.
+Route::get('/cron/last-error', function () use ($noStore) {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    $path = storage_path('logs/laravel.log');
+    if (! is_file($path)) {
+        return $noStore(response('<pre>(sem arquivo de log)</pre>'));
+    }
+    $size = filesize($path);
+    $read = (int) min($size, 25000);
+    $fh = fopen($path, 'rb');
+    if ($read > 0) {
+        fseek($fh, -$read, SEEK_END);
+    }
+    $data = fread($fh, max($read, 1));
+    fclose($fh);
+
+    return $noStore(response('<pre>' . e($data) . '</pre>'));
+});
+
 // Executa migrations pendentes via URL (hospedagem compartilhada sem SSH).
 // Exige token NÃO-VAZIO definido em CRON_TOKEN, para não ficar exposta.
 Route::get('/cron/migrate', function () use ($noStore) {
