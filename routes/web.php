@@ -26,7 +26,14 @@ Route::get('/esqueceu-senha', function () {
 Route::post('/esqueceu-senha', function (Request $request) {
     $request->validate(['email' => 'required|email']);
 
-    $status = Password::sendResetLink($request->only('email'));
+    try {
+        $status = Password::sendResetLink($request->only('email'));
+    } catch (\Throwable $e) {
+        report($e); // não derruba a página (ex.: SMTP indisponível)
+        return back()->withErrors([
+            'email' => 'Não foi possível enviar o e-mail agora. Tente novamente em instantes ou contate o suporte.',
+        ]);
+    }
 
     return $status === Password::RESET_LINK_SENT
         ? back()->with('success', 'Link de redefinição enviado para seu e-mail.')
