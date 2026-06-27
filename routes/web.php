@@ -63,12 +63,40 @@ Route::get('/cron/notificacoes', function () {
         abort(403);
     }
     \Artisan::call('atrio:notificacoes-diarias');
+    // processa a fila no mesmo passo (hospedagem sem worker dedicado)
+    \Artisan::call('queue:work', ['--stop-when-empty' => true, '--max-time' => 50, '--tries' => 3]);
     return response()->json(['ok' => true]);
 });
 
 // Cabeçalhos para impedir cache das respostas /cron/* (HostGator/LiteSpeed
 // costuma cachear GET, o que confunde o diagnóstico).
 $noStore = fn ($response) => $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
+// Processa a fila (notificações/jobs) — agende a cada poucos minutos.
+// Necessário porque a hospedagem compartilhada não mantém um queue:work ativo.
+Route::get('/cron/fila', function () use ($noStore) {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    \Artisan::call('queue:work', [
+        '--stop-when-empty' => true,
+        '--max-time'        => 50,
+        '--tries'           => 3,
+        '--no-interaction'  => true,
+    ]);
+
+    return $noStore(response()->json(['ok' => true, 'saida' => trim(\Artisan::output())]));
+});
+
+// Backup do banco (.sql.gz em storage/app/backups). Agende 1x/dia. Mesmo token.
+Route::get('/cron/backup', function () use ($noStore) {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    \Artisan::call('atrio:backup', ['--no-interaction' => true]);
+
+    return $noStore(response('<pre>' . e(trim(\Artisan::output())) . '</pre>'));
+});
 
 // Executa migrations pendentes via URL (hospedagem compartilhada sem SSH).
 // Exige token NÃO-VAZIO definido em CRON_TOKEN, para não ficar exposta.
