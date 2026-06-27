@@ -149,6 +149,45 @@ Route::get('/cron/last-error', function () use ($noStore) {
     return $noStore(response('<pre>' . e($data) . '</pre>'));
 });
 
+// Teste de SMTP: mostra a config lida (sem vazar senha) e tenta enviar. Mesmo token.
+// Uso: /cron/mail-test?token=SEU_TOKEN&to=seu@email.com
+Route::get('/cron/mail-test', function () use ($noStore) {
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
+
+    $cfg = config('mail.mailers.' . config('mail.default'), []);
+    $pw  = (string) ($cfg['password'] ?? '');
+
+    $info = [
+        'mailer'          => config('mail.default'),
+        'host'            => $cfg['host'] ?? null,
+        'port'            => $cfg['port'] ?? null,
+        'scheme'          => $cfg['scheme'] ?? '(vazio)',
+        'username'        => $cfg['username'] ?? null,
+        'password_len'    => strlen($pw),
+        'from_address'    => config('mail.from.address'),
+        'from_name'       => config('mail.from.name'),
+        'config_em_cache' => is_file(base_path('bootstrap/cache/config.php')) ? 'SIM (rode /cron/clear apos editar .env)' : 'nao',
+    ];
+
+    $to = (string) request('to');
+    if ($to === '') {
+        $info['dica'] = 'adicione &to=seu@email.com na URL para enviar um teste';
+        return $noStore(response('<pre>' . e(json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) . '</pre>'));
+    }
+
+    try {
+        \Illuminate\Support\Facades\Mail::raw('Teste de e-mail do Átrio — se você recebeu isto, o SMTP está OK.', function ($m) use ($to) {
+            $m->to($to)->subject('Átrio — teste de SMTP');
+        });
+        $info['envio'] = 'OK ✔ — verifique a caixa de entrada e o spam de ' . $to;
+    } catch (\Throwable $e) {
+        $info['envio'] = 'FALHOU: ' . $e->getMessage();
+    }
+
+    return $noStore(response('<pre>' . e(json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) . '</pre>'));
+});
+
 // Executa migrations pendentes via URL (hospedagem compartilhada sem SSH).
 // Exige token NÃO-VAZIO definido em CRON_TOKEN, para não ficar exposta.
 Route::get('/cron/migrate', function () use ($noStore) {
