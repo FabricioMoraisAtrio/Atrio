@@ -51,9 +51,19 @@ class LoginController extends Controller
         }
 
         // Tenta guard admin (superadmin)
-        if (Auth::guard('admin')->attempt($credentials, $remember)) {
+        if (Auth::guard('admin')->validate($credentials)) {
+            $admin = \App\Models\AdminUser::where('email', $credentials['email'])->first();
+
+            // 2FA: segura o login e exige o código do app autenticador
+            if ($admin->hasTwoFactor()) {
+                $request->session()->put('2fa:admin_id', $admin->id);
+                $request->session()->put('2fa:remember', $remember);
+                return redirect()->route('admin.2fa');
+            }
+
+            Auth::guard('admin')->login($admin, $remember);
             $request->session()->regenerate();
-            return redirect()->route('admin.dashboard');
+            return redirect()->route($admin->homeRoute());
         }
 
         return back()

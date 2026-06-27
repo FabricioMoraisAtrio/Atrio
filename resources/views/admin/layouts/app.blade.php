@@ -175,6 +175,15 @@
                 <p style="font-size:13px; font-weight:600; color:rgba(255,255,255,0.82); margin:0;">{{ auth('admin')->user()->name }}</p>
                 <p style="font-size:11px; color:rgba(255,255,255,0.32); margin:0;">Super Admin</p>
             </div>
+            <a href="{{ route('admin.security') }}"
+               style="width:100%; display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:9px; text-decoration:none; font-size:13px; color:rgba(255,255,255,0.7);"
+               onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='transparent'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Segurança
+                @if(auth('admin')->user()->hasTwoFactor())
+                    <span style="margin-left:auto; font-size:10px; color:#34D399;">2FA</span>
+                @endif
+            </a>
             <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
                 <button type="submit"

@@ -31,16 +31,24 @@ class AdminUser extends Authenticatable
         'logs'            => 'admin.logs.index',
     ];
 
-    protected $fillable = ['name', 'email', 'password', 'permissions'];
+    protected $fillable = ['name', 'email', 'password', 'permissions', 'two_factor_secret', 'two_factor_confirmed_at'];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'two_factor_secret'];
 
     protected function casts(): array
     {
         return [
-            'password'    => 'hashed',
-            'permissions' => 'array',
+            'password'                => 'hashed',
+            'permissions'             => 'array',
+            'two_factor_secret'       => 'encrypted',
+            'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    /** 2FA ativo e confirmado? */
+    public function hasTwoFactor(): bool
+    {
+        return ! empty($this->two_factor_secret) && $this->two_factor_confirmed_at !== null;
     }
 
     /** Acesso total (owner) = sem restrição definida. */

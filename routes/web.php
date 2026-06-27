@@ -190,9 +190,18 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
     Route::get('/', fn() => redirect()->route('login', ['perfil' => 'escola']))->name('admin.login');
     Route::get('/login', fn() => redirect()->route('login', ['perfil' => 'escola']));
 
+    // Desafio 2FA (login com senha correta, aguardando o código) — sem admin.auth
+    Route::get('/2fa',  [\App\Http\Controllers\Admin\TwoFactorChallengeController::class, 'show'])->name('admin.2fa');
+    Route::post('/2fa', [\App\Http\Controllers\Admin\TwoFactorChallengeController::class, 'verify'])->name('admin.2fa.verify');
+
     Route::middleware('admin.auth')->group(function () {
         Route::post('/logout', [\App\Http\Controllers\Admin\LoginController::class, 'destroy'])->name('admin.logout');
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, '__invoke'])->middleware('admin.can:dashboard')->name('admin.dashboard');
+
+        // Segurança da própria conta (2FA) — qualquer admin autenticado
+        Route::get('/seguranca',            [\App\Http\Controllers\Admin\SecurityController::class, 'index'])->name('admin.security');
+        Route::post('/seguranca/ativar',    [\App\Http\Controllers\Admin\SecurityController::class, 'enable'])->name('admin.security.enable');
+        Route::post('/seguranca/desativar', [\App\Http\Controllers\Admin\SecurityController::class, 'disable'])->name('admin.security.disable');
 
         Route::middleware('admin.can:escolas')->group(function () {
             Route::resource('schools', \App\Http\Controllers\Admin\SchoolController::class)->names('admin.schools');

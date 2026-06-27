@@ -56,6 +56,8 @@ class AdminLog extends Model
             'admin_editado'      => 'Administrador editado',
             'admin_removido'     => 'Administrador removido',
             'alunos_importados'  => 'Alunos importados',
+            '2fa_ativado'        => '2FA ativado',
+            '2fa_desativado'     => '2FA desativado',
         ];
     }
 }
