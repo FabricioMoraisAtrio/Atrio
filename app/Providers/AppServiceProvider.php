@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Sistema é PT-BR: força o locale para as mensagens (validação, etc.)
+        // ficarem em português, independentemente do APP_LOCALE do ambiente.
+        $this->app->setLocale('pt_BR');
     }
 }

@@ -49,4 +49,10 @@ protected $fillable = [
     return $this->belongsToMany(Student::class, 'student_user')
                 ->withTimestamps();
 }
+
+    /** E-mail de redefinição de senha com a identidade visual do Átrio (em PT). */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+    }
 }
