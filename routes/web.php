@@ -106,14 +106,26 @@ Route::get('/cron/backup', function () use ($noStore) {
     return $noStore(response('<pre>' . e(trim(\Artisan::output())) . '</pre>'));
 });
 
-// Limpa todos os caches (config/route/view/compiled) — recuperação pós-deploy. Mesmo token.
+// Limpa caches (config/route/view) — recuperação pós-deploy. NÃO depende do banco,
+// para funcionar mesmo com a conexão fora (ex.: credencial de DB errada). Mesmo token.
 Route::get('/cron/clear', function () use ($noStore) {
     $token = config('app.cron_token');
     abort_if(! $token || request('token') !== $token, 403);
 
-    \Artisan::call('optimize:clear');
+    $out = [];
+    foreach (['config:clear', 'route:clear', 'view:clear'] as $cmd) {
+        \Artisan::call($cmd);
+        $out[] = trim(\Artisan::output());
+    }
+    // cache:clear usa o banco (store database) — tenta, mas não derruba se falhar
+    try {
+        \Artisan::call('cache:clear');
+        $out[] = trim(\Artisan::output());
+    } catch (\Throwable $e) {
+        $out[] = 'cache:clear ignorado: ' . $e->getMessage();
+    }
 
-    return $noStore(response('<pre>' . e(trim(\Artisan::output())) . '</pre>'));
+    return $noStore(response('<pre>' . e(implode("\n", array_filter($out))) . '</pre>'));
 });
 
 // Mostra o fim do log de erros (diagnóstico). Mesmo token.
