@@ -35,10 +35,13 @@ Route::post('/esqueceu-senha', function (Request $request) {
         ]);
     }
 
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with('success', 'Link de redefinição enviado para seu e-mail.')
-        : back()->withErrors(['email' => 'Não encontramos um usuário com este e-mail.']);
-})->name('password.email');
+    if ($status === Password::RESET_THROTTLED) {
+        return back()->withErrors(['email' => 'Aguarde um momento antes de tentar novamente.']);
+    }
+
+    // Mensagem genérica (não revela se o e-mail existe) — evita enumeração de usuários.
+    return back()->with('success', 'Se este e-mail estiver cadastrado, enviamos o link de redefinição.');
+})->middleware('throttle:5,1')->name('password.email');
 
 // Redefinir senha
 Route::get('/redefinir-senha/{token}', function (string $token) {
@@ -62,13 +65,12 @@ Route::post('/redefinir-senha', function (Request $request) {
     return $status === Password::PASSWORD_RESET
         ? redirect()->route('login')->with('success', 'Senha redefinida com sucesso.')
         : back()->withErrors(['email' => 'Token inválido ou expirado.']);
-})->name('password.update');
+})->middleware('throttle:6,1')->name('password.update');
 
 
 Route::get('/cron/notificacoes', function () {
-    if (request('token') !== config('app.cron_token')) {
-        abort(403);
-    }
+    $token = config('app.cron_token');
+    abort_if(! $token || request('token') !== $token, 403);
     \Artisan::call('atrio:notificacoes-diarias');
     \Artisan::call('atrio:faturas-vencendo');
     // processa a fila no mesmo passo (hospedagem sem worker dedicado)
@@ -146,15 +148,15 @@ Route::get('/cron/last-error', function () use ($noStore) {
     $data = fread($fh, max($read, 1));
     fclose($fh);
 
+    // Defesa extra: mascara valores sensíveis caso o token vaze.
+    $data = preg_replace('/\b(password|passwd|secret|token|api[_-]?key|bearer|authorization)\b(["\']?\s*[:=]\s*)([^\s,"\']+)/i', '$1$2[oculto]', (string) $data);
+
     return $noStore(response('<pre>' . e($data) . '</pre>'));
 });
 
-// Teste de SMTP: mostra a config lida (sem vazar senha) e tenta enviar. Mesmo token.
-// Uso: /cron/mail-test?token=SEU_TOKEN&to=seu@email.com
+// Teste de SMTP — restrito ao superadmin logado (sem token na URL).
+// Uso: faça login no /superadmin e acesse /cron/mail-test?to=seu@email.com
 Route::get('/cron/mail-test', function () use ($noStore) {
-    $token = config('app.cron_token');
-    abort_if(! $token || request('token') !== $token, 403);
-
     $cfg = config('mail.mailers.' . config('mail.default'), []);
     $pw  = (string) ($cfg['password'] ?? '');
 
@@ -186,7 +188,7 @@ Route::get('/cron/mail-test', function () use ($noStore) {
     }
 
     return $noStore(response('<pre>' . e(json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) . '</pre>'));
-});
+})->middleware('admin.auth');
 
 // Executa migrations pendentes via URL (hospedagem compartilhada sem SSH).
 // Exige token NÃO-VAZIO definido em CRON_TOKEN, para não ficar exposta.
@@ -242,7 +244,7 @@ Route::get('/cron/db-info', function () use ($noStore) {
 
 Route::get('/', fn() => view('landing'))->name('home');
 Route::get('/entrar', [LoginController::class, 'create'])->name('login');
-Route::post('/entrar', [LoginController::class, 'store'])->name('login.store');
+Route::post('/entrar', [LoginController::class, 'store'])->middleware('throttle:10,1')->name('login.store');
 
 Route::middleware(['auth', 'school.active'])->group(function () {
     Route::post('/logout', [LogoutController::class, '__invoke'])->name('logout');
@@ -274,7 +276,7 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
 
     // Desafio 2FA (login com senha correta, aguardando o código) — sem admin.auth
     Route::get('/2fa',  [\App\Http\Controllers\Admin\TwoFactorChallengeController::class, 'show'])->name('admin.2fa');
-    Route::post('/2fa', [\App\Http\Controllers\Admin\TwoFactorChallengeController::class, 'verify'])->name('admin.2fa.verify');
+    Route::post('/2fa', [\App\Http\Controllers\Admin\TwoFactorChallengeController::class, 'verify'])->middleware('throttle:6,1')->name('admin.2fa.verify');
 
     Route::middleware('admin.auth')->group(function () {
         Route::post('/logout', [\App\Http\Controllers\Admin\LoginController::class, 'destroy'])->name('admin.logout');
