@@ -98,6 +98,19 @@ class DocumentController extends Controller
     {
         $this->verificarAcesso($aluno->id);
 
+        // Deriva a matéria no servidor a partir da turma do professor — não confia
+        // no subject_slug/name/tipo vindos do request (senão um professor poderia
+        // sobrescrever a seção de PEI de outra matéria).
+        $subjectSlug = $this->turmaComAluno($aluno->id)?->pivot->subject;
+        abort_unless($subjectSlug, 403);
+        $subject = Subject::where('slug', $subjectSlug)->first();
+
+        $request->merge([
+            'subject_slug' => $subjectSlug,
+            'subject_name' => $subject?->name,
+            'subject_tipo' => $subject?->tipo,
+        ]);
+
         $pei = Document::where('student_id', $aluno->id)
             ->where('type', 'pei')
             ->where('year', date('Y'))
