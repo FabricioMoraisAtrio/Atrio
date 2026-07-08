@@ -45,21 +45,21 @@ class DocumentoTest extends TestCase
         ]);
     }
 
-    public function test_bloqueia_pei_sem_estudo_de_caso(): void
+    public function test_bloqueia_paee_sem_estudo_de_caso(): void
     {
+        // Estudo de Caso é pré-requisito do PAEE.
         $response = $this->post(route('secretaria.alunos.documentos.store', $this->aluno), [
-            'type'      => 'pei',
-            'objetivos' => 'Objetivos do PEI',
+            'type' => 'paee',
         ]);
 
         $response->assertSessionHasErrors('documento');
         $this->assertDatabaseMissing('documents', [
             'student_id' => $this->aluno->id,
-            'type'       => 'pei',
+            'type'       => 'paee',
         ]);
     }
 
-    public function test_permite_pei_com_estudo_de_caso(): void
+    public function test_permite_paee_com_estudo_de_caso(): void
     {
         Document::create([
             'school_id'  => $this->escola->id,
@@ -72,11 +72,27 @@ class DocumentoTest extends TestCase
         ]);
 
         $response = $this->post(route('secretaria.alunos.documentos.store', $this->aluno), [
-            'type'      => 'pei',
-            'objetivos' => 'Objetivos do PEI',
+            'type'      => 'paee',
+            'objetivos' => 'Objetivos do PAEE',
         ]);
 
         $response->assertRedirect();
+        $this->assertDatabaseHas('documents', [
+            'student_id' => $this->aluno->id,
+            'type'       => 'paee',
+        ]);
+    }
+
+    public function test_estudo_de_caso_cria_pei_automaticamente(): void
+    {
+        // Ao criar o Estudo de Caso, o PEI (Document tipo pei) é criado vazio.
+        $this->post(route('secretaria.alunos.documentos.store', $this->aluno), [
+            'type'            => 'estudo_caso',
+            'historico'       => 'Histórico',
+            'barreiras'       => 'Barreiras',
+            'potencialidades' => 'Potencialidades',
+        ])->assertRedirect();
+
         $this->assertDatabaseHas('documents', [
             'student_id' => $this->aluno->id,
             'type'       => 'pei',

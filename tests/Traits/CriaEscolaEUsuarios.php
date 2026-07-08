@@ -4,21 +4,23 @@ namespace Tests\Traits;
 
 use App\Models\School;
 use App\Models\User;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Spatie\Permission\Models\Role;
 
 trait CriaEscolaEUsuarios
 {
     protected School $escola;
-    protected User $secretaria;
+    protected User $secretaria; // usuário do portal — role built-in `admin` (acesso completo)
     protected User $professor;
     protected User $pai;
 
     protected function criarEscolaEUsuarios(): void
     {
-        // Cria roles se não existirem
-        foreach (['secretaria', 'professor', 'pai'] as $role) {
-            Role::firstOrCreate(['name' => $role, 'guard_name' => 'web']);
-        }
+        // Seeda as roles/permissões vigentes (admin, coordenador, orientador, professor).
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        // `pai` (responsável) não é membro do portal — usado só para checar bloqueio de acesso.
+        Role::firstOrCreate(['name' => 'pai', 'guard_name' => 'web']);
 
         $this->escola = School::create([
             'name'         => 'Escola Teste',
@@ -36,7 +38,7 @@ trait CriaEscolaEUsuarios
             'school_id' => $this->escola->id,
             'is_active' => true,
         ]);
-        $this->secretaria->assignRole('secretaria');
+        $this->secretaria->assignRole('admin');
 
         $this->professor = User::create([
             'name'      => 'Professor Teste',
