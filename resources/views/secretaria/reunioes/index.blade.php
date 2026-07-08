@@ -8,10 +8,10 @@
 
     {{-- Cabeçalho --}}
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('secretaria.alunos.show', $aluno) }}"
+        <a href="{{ route('secretaria.rotinas.reunioes') }}"
            style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Voltar para {{ $aluno->name }}
+            Voltar para Reuniões
         </a>
         <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
             <div>

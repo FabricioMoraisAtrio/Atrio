@@ -46,10 +46,10 @@
 
     {{-- Cabeçalho --}}
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+        <a href="{{ route('secretaria.rotinas.metas-evolucao') }}"
            style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Voltar para o PEI de {{ $aluno->name }}
+            Voltar para Evolução de Metas
         </a>
         <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">Evolução das Metas — {{ $ano }}</h1>
         <p style="font-size: 13px; color: var(--text-3); margin: 0;">
@@ -161,7 +161,7 @@
         @endif
 
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
-            <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+            <a href="{{ route('secretaria.rotinas.metas-evolucao') }}"
                style="padding: 11px 20px; border-radius: 8px; font-size: 13px; color: var(--text-3); text-decoration: none; border: 1px solid var(--border);">
                 Cancelar
             </a>
