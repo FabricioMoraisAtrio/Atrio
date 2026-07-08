@@ -34,6 +34,22 @@ class AlunoTest extends TestCase
         $response->assertSee('Aluno Teste');
     }
 
+    public function test_listar_alunos_com_data_de_nascimento_nula(): void
+    {
+        // Alunos importados por CSV podem ter birth_date nula — a listagem não pode quebrar.
+        Student::create([
+            'school_id'           => $this->escola->id,
+            'name'                => 'Aluno Sem Data',
+            'registration_number' => '010',
+            'birth_date'          => null,
+        ]);
+
+        $response = $this->get(route('secretaria.alunos.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Aluno Sem Data');
+    }
+
     public function test_criar_aluno(): void
     {
         $response = $this->post(route('secretaria.alunos.store'), [

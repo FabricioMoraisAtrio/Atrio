@@ -91,7 +91,7 @@
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
     <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px;">
         <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Nascimento</p>
-        <p style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0;">{{ $aluno->birth_date->format('d/m/Y') }}</p>
+        <p style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0;">{{ $aluno->birth_date?->format('d/m/Y') ?? '—' }}</p>
     </div>
     <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px;">
         <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Perfil</p>

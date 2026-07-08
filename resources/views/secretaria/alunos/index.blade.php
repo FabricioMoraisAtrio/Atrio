@@ -131,7 +131,7 @@
                                     @endif
                                 </div>
                             @else
-                                <div style="font-size: 12px; color: var(--text-4);">{{ $aluno->birth_date->format('d/m/Y') }}</div>
+                                <div style="font-size: 12px; color: var(--text-4);">{{ $aluno->birth_date?->format('d/m/Y') ?? '—' }}</div>
                             @endif
                         </div>
                     </div>

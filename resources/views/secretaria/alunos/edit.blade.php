@@ -61,7 +61,7 @@
 
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Data de nascimento</label>
-                <input type="date" name="birth_date" value="{{ old('birth_date', $aluno->birth_date->format('Y-m-d')) }}"
+                <input type="date" name="birth_date" value="{{ old('birth_date', $aluno->birth_date?->format('Y-m-d')) }}"
                        style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
                        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
                 @error('birth_date')<p style="font-size: 12px; color: var(--danger); margin-top: 4px;">{{ $message }}</p>@enderror

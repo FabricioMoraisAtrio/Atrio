@@ -40,7 +40,7 @@
             </div>
             <div>
                 <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">Nascimento</p>
-                <p style="font-size: 14px; color: var(--text-2); margin: 0;">{{ $aluno->birth_date->format('d/m/Y') }}</p>
+                <p style="font-size: 14px; color: var(--text-2); margin: 0;">{{ $aluno->birth_date?->format('d/m/Y') ?? '—' }}</p>
             </div>
             <div>
                 <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px;">Turma(s)</p>
