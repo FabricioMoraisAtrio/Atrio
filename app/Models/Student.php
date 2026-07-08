@@ -126,4 +126,9 @@ protected function casts(): array
         return $this->hasMany(StudentAcademicGoal::class);
     }
 
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
+    }
+
 }

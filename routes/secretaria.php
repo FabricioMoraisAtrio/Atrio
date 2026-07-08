@@ -22,6 +22,7 @@ use App\Http\Controllers\Secretaria\PeiConsolidadoController;
 use App\Http\Controllers\Secretaria\LogController;
 use App\Http\Controllers\Secretaria\SeletividadeController;
 use App\Http\Controllers\Secretaria\SubjectController;
+use App\Http\Controllers\Secretaria\MeetingController;
 
 
 
@@ -83,6 +84,17 @@ Route::middleware('school.module:alunos')->group(function () {
         Route::post('alunos/{aluno}/turma',[StudentController::class, 'attachClass'])->name('alunos.attachClass');
         Route::post('alunos/{aluno}/foto', [StudentController::class, 'uploadPhoto'])->name('alunos.uploadPhoto');
         Route::delete('alunos/{aluno}/foto', [StudentController::class, 'removePhoto'])->name('alunos.removePhoto');
+
+        // Rotina "Reuniões / Atas" — hub que lista os alunos
+        Route::get('rotinas/reunioes', \App\Http\Controllers\Secretaria\Rotinas\ReunioesHubController::class)->name('rotinas.reunioes');
+
+        // Registro de reuniões do aluno
+        Route::get('alunos/{aluno}/reunioes',                 [MeetingController::class, 'index'])->name('alunos.reunioes.index');
+        Route::get('alunos/{aluno}/reunioes/create',          [MeetingController::class, 'create'])->name('alunos.reunioes.create');
+        Route::post('alunos/{aluno}/reunioes',                [MeetingController::class, 'store'])->name('alunos.reunioes.store');
+        Route::get('alunos/{aluno}/reunioes/{reuniao}/edit',  [MeetingController::class, 'edit'])->name('alunos.reunioes.edit');
+        Route::put('alunos/{aluno}/reunioes/{reuniao}',       [MeetingController::class, 'update'])->name('alunos.reunioes.update');
+        Route::delete('alunos/{aluno}/reunioes/{reuniao}',    [MeetingController::class, 'destroy'])->name('alunos.reunioes.destroy');
     });
     Route::middleware('can:alunos.deletar')->group(function () {
         Route::delete('alunos/{aluno}', [StudentController::class, 'destroy'])->name('alunos.destroy');
@@ -109,6 +121,17 @@ Route::middleware('school.module:documentos')->group(function () {
     Route::middleware('can:pei.metas_gerenciar')->group(function () {
         Route::get('alunos/{aluno}/metas-academicas', [\App\Http\Controllers\Secretaria\StudentAcademicGoalController::class, 'edit'])->name('alunos.metas-academicas.edit');
         Route::put('alunos/{aluno}/metas-academicas', [\App\Http\Controllers\Secretaria\StudentAcademicGoalController::class, 'update'])->name('alunos.metas-academicas.update');
+
+        // Rotina "Evolução de Metas" — hub que lista os alunos
+        Route::get('rotinas/metas-evolucao', \App\Http\Controllers\Secretaria\Rotinas\MetasEvolucaoHubController::class)->name('rotinas.metas-evolucao');
+
+        // Evolução (acompanhamento bimestral) das metas do PEI
+        Route::get('alunos/{aluno}/metas-evolucao', [\App\Http\Controllers\Secretaria\GoalProgressController::class, 'edit'])->name('alunos.metas-evolucao.edit');
+        Route::put('alunos/{aluno}/metas-evolucao', [\App\Http\Controllers\Secretaria\GoalProgressController::class, 'update'])->name('alunos.metas-evolucao.update');
+
+        // Banco de metas reutilizáveis da escola
+        Route::get('metas/banco', [\App\Http\Controllers\Secretaria\GoalTemplateController::class, 'edit'])->name('metas.banco.edit');
+        Route::put('metas/banco', [\App\Http\Controllers\Secretaria\GoalTemplateController::class, 'update'])->name('metas.banco.update');
     });
 
     // Documentos por aluno — requer visualização de documentos

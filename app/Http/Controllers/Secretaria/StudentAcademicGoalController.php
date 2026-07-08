@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Secretaria;
 
 use App\Http\Controllers\Controller;
+use App\Models\GoalTemplate;
 use App\Models\Student;
 use App\Models\StudentAcademicGoal;
 use App\Models\Subject;
@@ -28,8 +29,11 @@ class StudentAcademicGoalController extends Controller
         $metasSocio      = $metas->where('categoria', 'socioemocional')->values();
         $metasFuncionais = $metas->where('categoria', 'funcional')->values();
 
+        // Sugestões do banco de metas da escola (alimentam os <datalist>).
+        $banco = GoalTemplate::orderBy('ordem')->orderBy('id')->get()->groupBy('categoria');
+
         return view('secretaria.alunos.metas-academicas', compact(
-            'aluno', 'subjects', 'metasPorMateria', 'metasSocio', 'metasFuncionais', 'ano'
+            'aluno', 'subjects', 'metasPorMateria', 'metasSocio', 'metasFuncionais', 'banco', 'ano'
         ));
     }
 

@@ -90,6 +90,8 @@
                             ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Cadastro de ' . term('alunos'), 'module' => 'alunos'],
                             ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos', 'badge' => $pendentesCount ?: null],
                             ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],
+                            ['route' => 'secretaria.rotinas.metas-evolucao',     'icon' => 'rotina',  'label' => 'Evolução de Metas', 'module' => 'documentos'],
+                            ['route' => 'secretaria.rotinas.reunioes',           'icon' => 'rotina',  'label' => 'Reuniões / Atas', 'module' => 'alunos'],
                             ['route' => 'secretaria.seletividade.index',         'icon' => 'food',    'label' => 'Jornada Alimentar', 'module' => 'seletividade'],
                         ];
                         $footerItems = [
@@ -134,6 +136,8 @@
                                 ['route' => 'secretaria.alunos.index',               'icon' => 'users',   'label' => 'Cadastro de ' . term('alunos'), 'module' => 'alunos'],
                                 ['route' => 'secretaria.rotinas.documentos.index',   'icon' => 'rotina',  'label' => 'Documentos de Inclusão', 'module' => 'documentos'],
                                 ['route' => 'secretaria.rotinas.adaptacoes',         'icon' => 'rotina',  'label' => 'Adaptações para Prova', 'module' => 'adaptacoes'],
+                                ['route' => 'secretaria.rotinas.metas-evolucao',     'icon' => 'rotina',  'label' => 'Evolução de Metas', 'module' => 'documentos'],
+                                ['route' => 'secretaria.rotinas.reunioes',           'icon' => 'rotina',  'label' => 'Reuniões / Atas', 'module' => 'alunos'],
                                 ['route' => 'secretaria.seletividade.index',         'icon' => 'food',    'label' => 'Jornada Alimentar', 'module' => 'seletividade'],
                             ];
                             $footerItems = [
