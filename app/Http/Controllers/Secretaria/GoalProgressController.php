@@ -12,14 +12,16 @@ use Illuminate\Support\Facades\Auth;
 class GoalProgressController extends Controller
 {
     /** Bimestres avaliados no acompanhamento. */
-    private const BIMESTRES = [1, 2, 3, 4];
+    public const BIMESTRES = [1, 2, 3, 4];
 
     /**
-     * Tela de evolução (acompanhamento bimestral) das metas do PEI do aluno.
-     * Matriz metas × 4 bimestres + gráfico de % atingido por bimestre.
-     * Restrita por pei.metas_gerenciar (mesma das metas).
+     * Monta os dados da matriz de evolução (metas × 4 bimestres) + gráfico de %
+     * atingido por bimestre. Reutilizado pela Linha do Tempo (que incorpora a
+     * matriz) e por quem precisar dos mesmos dados.
+     *
+     * @return array{ano:int, subjects:mixed, metas:mixed, metasPorMateria:mixed, metasSocio:mixed, metasFuncionais:mixed, progresso:array, grafico:array, bimestres:array}
      */
-    public function edit(Student $aluno)
+    public static function dadosEvolucao(Student $aluno): array
     {
         $ano = (int) date('Y');
 
@@ -43,12 +45,12 @@ class GoalProgressController extends Controller
         $metasSocio      = $metas->where('categoria', 'socioemocional')->values();
         $metasFuncionais = $metas->where('categoria', 'funcional')->values();
 
-        $grafico = $this->calcularGrafico($metas, $progresso);
+        $grafico = self::calcularGrafico($metas, $progresso);
 
-        return view('secretaria.alunos.metas-evolucao', compact(
-            'aluno', 'subjects', 'metas', 'metasPorMateria', 'metasSocio',
-            'metasFuncionais', 'progresso', 'grafico', 'ano'
-        ) + ['bimestres' => self::BIMESTRES]);
+        return compact(
+            'ano', 'subjects', 'metas', 'metasPorMateria', 'metasSocio',
+            'metasFuncionais', 'progresso', 'grafico'
+        ) + ['bimestres' => self::BIMESTRES];
     }
 
     public function update(Request $request, Student $aluno)
@@ -91,7 +93,7 @@ class GoalProgressController extends Controller
             }
         }
 
-        return redirect()->route('secretaria.alunos.metas-evolucao.edit', $aluno)
+        return redirect()->route('secretaria.alunos.linha-do-tempo', $aluno)
             ->with('success', 'Evolução das metas atualizada.');
     }
 
@@ -99,7 +101,7 @@ class GoalProgressController extends Controller
      * Percentual atingido por bimestre: média dos pesos (SCORES) das metas
      * avaliadas naquele bimestre. Bimestre sem avaliação fica sem barra.
      */
-    private function calcularGrafico($metas, array $progresso): array
+    private static function calcularGrafico($metas, array $progresso): array
     {
         $grafico = [];
 

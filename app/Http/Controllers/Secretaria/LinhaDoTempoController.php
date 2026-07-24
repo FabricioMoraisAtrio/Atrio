@@ -27,6 +27,10 @@ class LinhaDoTempoController extends Controller
             $resumo[$e['tipo']] = ($resumo[$e['tipo']] ?? 0) + 1;
         }
 
-        return view('secretaria.alunos.linha-do-tempo', compact('aluno', 'eventos', 'resumo'));
+        // Dados da matriz de evolução de metas (gráfico + tabela editável),
+        // incorporados na própria Linha do Tempo.
+        $evolucao = GoalProgressController::dadosEvolucao($aluno);
+
+        return view('secretaria.alunos.linha-do-tempo', compact('aluno', 'eventos', 'resumo') + $evolucao);
     }
 }

@@ -68,17 +68,6 @@ $cards = [
         'role'     => null,
         'module'   => 'adaptacoes',
     ],
-    // Evolução de Metas
-    [
-        'label'    => 'Evolução de Metas',
-        'descricao'=> 'Acompanhamento bimestral das metas do PEI de cada aluno.',
-        'route'    => 'secretaria.rotinas.metas-evolucao',
-        'cor'      => '#0369A1',
-        'bg'       => '#E0F2FE',
-        'icon'     => '<path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>',
-        'role'     => null,
-        'module'   => 'documentos',
-    ],
     // Reuniões / Atas
     [
         'label'    => 'Reuniões / Atas',

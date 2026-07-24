@@ -125,11 +125,8 @@ Route::middleware('school.module:documentos')->group(function () {
         Route::get('alunos/{aluno}/metas-academicas', [\App\Http\Controllers\Secretaria\StudentAcademicGoalController::class, 'edit'])->name('alunos.metas-academicas.edit');
         Route::put('alunos/{aluno}/metas-academicas', [\App\Http\Controllers\Secretaria\StudentAcademicGoalController::class, 'update'])->name('alunos.metas-academicas.update');
 
-        // Rotina "Evolução de Metas" — hub que lista os alunos
-        Route::get('rotinas/metas-evolucao', \App\Http\Controllers\Secretaria\Rotinas\MetasEvolucaoHubController::class)->name('rotinas.metas-evolucao');
-
-        // Evolução (acompanhamento bimestral) das metas do PEI
-        Route::get('alunos/{aluno}/metas-evolucao', [\App\Http\Controllers\Secretaria\GoalProgressController::class, 'edit'])->name('alunos.metas-evolucao.edit');
+        // Evolução (acompanhamento bimestral) das metas do PEI — salva a matriz
+        // incorporada na Linha do Tempo. A tela de edição vive na Linha do Tempo.
         Route::put('alunos/{aluno}/metas-evolucao', [\App\Http\Controllers\Secretaria\GoalProgressController::class, 'update'])->name('alunos.metas-evolucao.update');
 
         // Banco de metas reutilizáveis da escola

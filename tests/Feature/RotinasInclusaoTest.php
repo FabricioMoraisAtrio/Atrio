@@ -54,7 +54,7 @@ class RotinasInclusaoTest extends TestCase
 
         $this->put(route('secretaria.alunos.metas-evolucao.update', $this->aluno), [
             'status' => [$meta->id => [1 => 'atingiu', 2 => 'em_progresso']],
-        ])->assertRedirect(route('secretaria.alunos.metas-evolucao.edit', $this->aluno));
+        ])->assertRedirect(route('secretaria.alunos.linha-do-tempo', $this->aluno));
 
         $this->assertDatabaseHas('goal_progresses', [
             'student_academic_goal_id' => $meta->id,
