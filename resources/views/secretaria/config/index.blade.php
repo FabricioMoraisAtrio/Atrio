@@ -14,7 +14,7 @@
 
     {{-- Tabs --}}
     <div style="display: flex; gap: 4px; border-bottom: 2px solid var(--border-sub); margin-bottom: 28px;">
-        @foreach(['escola' => 'Escola', 'materias' => 'Matérias', 'perfis' => 'Perfis de Acesso'] as $t => $label)
+        @foreach(['escola' => 'Escola', 'bimestres' => 'Bimestres', 'materias' => 'Matérias', 'perfis' => 'Perfis de Acesso'] as $t => $label)
             @if($t === 'perfis')
                 <a href="{{ route('secretaria.config.perfis.index') }}"
                    style="padding: 10px 18px; font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px;
@@ -107,6 +107,36 @@
                 </div>
             </form>
         </div>
+    @endif
+
+    {{-- Tab: Bimestres --}}
+    @if($tab === 'bimestres')
+        <form method="POST" action="{{ route('secretaria.config.bimestres.update') }}">
+            @csrf @method('PUT')
+            <div style="background: var(--bg-card); border: 1px solid var(--border-sub); border-radius: 12px; padding: 24px;">
+                <p style="font-size: 13px; color: var(--text-3); margin: 0 0 18px;">
+                    Defina o período de cada bimestre. Essas datas liberam o <strong>fechamento de bimestre</strong> na Linha do Tempo no momento certo.
+                </p>
+                @foreach([1, 2, 3, 4] as $b)
+                    <div style="display: grid; grid-template-columns: 60px 1fr 1fr; gap: 12px; align-items: end; margin-bottom: 12px;">
+                        <span style="font-size: 13px; font-weight: 700; color: var(--text-1); padding-bottom: 9px;">{{ $b }}º bim.</span>
+                        <div>
+                            <label style="font-size: 11px; color: var(--text-4); display: block; margin-bottom: 4px;">Início</label>
+                            <input type="date" name="bim[{{ $b }}][inicio]" value="{{ $settings['bim'.$b.'_inicio'] ?? '' }}"
+                                   style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: var(--text-2); box-sizing: border-box;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; color: var(--text-4); display: block; margin-bottom: 4px;">Fim</label>
+                            <input type="date" name="bim[{{ $b }}][fim]" value="{{ $settings['bim'.$b.'_fim'] ?? '' }}"
+                                   style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: var(--text-2); box-sizing: border-box;">
+                        </div>
+                    </div>
+                @endforeach
+                <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+                    <button type="submit" style="background: var(--accent); color: #fff; border: none; padding: 11px 28px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Salvar datas</button>
+                </div>
+            </div>
+        </form>
     @endif
 
     {{-- Tab: Matérias --}}

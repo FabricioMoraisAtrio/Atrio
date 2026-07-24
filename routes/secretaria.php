@@ -36,6 +36,7 @@ Route::middleware(['school.module:configuracoes', 'can:escola.configurar'])->pre
     Route::get('/',              [ConfigController::class, 'index'])->name('index');
     Route::put('/escola',        [ConfigController::class, 'updateEscola'])->name('escola.update');
     Route::put('/terminologias', [ConfigController::class, 'updateTerminologias'])->name('terminologias.update');
+    Route::put('/bimestres',     [ConfigController::class, 'updateBimestres'])->name('bimestres.update');
     Route::resource('perfis', SchoolRoleController::class)->except(['show'])->parameters(['perfis' => 'perfil']);
 });
 
@@ -128,6 +129,10 @@ Route::middleware('school.module:documentos')->group(function () {
         // Evolução (acompanhamento bimestral) das metas do PEI — salva a matriz
         // incorporada na Linha do Tempo. A tela de edição vive na Linha do Tempo.
         Route::put('alunos/{aluno}/metas-evolucao', [\App\Http\Controllers\Secretaria\GoalProgressController::class, 'update'])->name('alunos.metas-evolucao.update');
+
+        // Fechamento/reabertura de bimestre (congela resultado + trava avaliações + marco no roadmap)
+        Route::post('alunos/{aluno}/bimestres/{bimestre}/fechar', [\App\Http\Controllers\Secretaria\BimestreClosingController::class, 'store'])->whereNumber('bimestre')->name('alunos.bimestres.fechar');
+        Route::delete('alunos/{aluno}/bimestres/{bimestre}', [\App\Http\Controllers\Secretaria\BimestreClosingController::class, 'destroy'])->whereNumber('bimestre')->name('alunos.bimestres.reabrir');
 
         // Banco de metas reutilizáveis da escola
         Route::get('metas/banco', [\App\Http\Controllers\Secretaria\GoalTemplateController::class, 'edit'])->name('metas.banco.edit');

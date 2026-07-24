@@ -131,4 +131,9 @@ protected function casts(): array
         return $this->hasMany(Meeting::class);
     }
 
+    public function bimestreClosings(): HasMany
+    {
+        return $this->hasMany(BimestreClosing::class);
+    }
+
 }

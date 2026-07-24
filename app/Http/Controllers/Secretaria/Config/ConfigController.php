@@ -51,6 +51,25 @@ class ConfigController extends Controller
             ->with('success', 'Dados da escola atualizados.');
     }
 
+    public function updateBimestres(Request $request)
+    {
+        $schoolId = session('school_id');
+
+        $request->validate([
+            'bim'          => 'nullable|array',
+            'bim.*.inicio' => 'nullable|date',
+            'bim.*.fim'    => 'nullable|date',
+        ]);
+
+        foreach (\App\Services\BimestreService::BIMESTRES as $b) {
+            SchoolSetting::setValue($schoolId, "bim{$b}_inicio", (string) $request->input("bim.$b.inicio", ''));
+            SchoolSetting::setValue($schoolId, "bim{$b}_fim", (string) $request->input("bim.$b.fim", ''));
+        }
+
+        return redirect()->route('secretaria.config.index', ['tab' => 'bimestres'])
+            ->with('success', 'Datas dos bimestres atualizadas.');
+    }
+
     public function updateTerminologias(Request $request)
     {
         $schoolId = session('school_id');

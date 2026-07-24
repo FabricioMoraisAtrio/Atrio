@@ -1,6 +1,8 @@
 @php
     use App\Models\GoalProgress;
 
+    $bimestresFechados = $bimestresFechados ?? [];
+
     // Cor do preenchimento da barra do gráfico conforme o % atingido.
     $corBarra = function (?int $pct) {
         if ($pct === null)  return 'var(--border)';
@@ -10,7 +12,13 @@
     };
 
     // <select> de status de uma meta em um bimestre (colorido via JS).
-    $statusSelect = function (int $goalId, int $bimestre, string $selected) {
+    $statusSelect = function (int $goalId, int $bimestre, string $selected) use ($bimestresFechados) {
+        if (in_array($bimestre, $bimestresFechados)) {
+            $lbl = GoalProgress::STATUSES[$selected] ?? '—';
+            return '<div style="width:100%;border:1px solid var(--border-sub);border-radius:7px;padding:6px 8px;
+                        font-size:12px;font-weight:600;color:var(--text-3);background:var(--bg-subtle);text-align:center;"
+                        title="Bimestre fechado (travado)">' . $lbl . '</div>';
+        }
         $opts = '';
         foreach (GoalProgress::STATUSES as $val => $label) {
             $sel = $val === $selected ? ' selected' : '';
@@ -82,7 +90,8 @@
         $thead = '<thead><tr>
                     <th style="text-align:left;padding:10px 14px;font-size:11px;font-weight:700;color:var(--text-4);text-transform:uppercase;letter-spacing:0.5px;">Meta</th>';
         foreach ($bimestres as $b) {
-            $thead .= '<th style="padding:10px 6px;font-size:11px;font-weight:700;color:var(--text-4);text-transform:uppercase;letter-spacing:0.5px;border-left:1px solid var(--border-sub);width:120px;">' . $b . 'º bim.</th>';
+            $lock = in_array($b, $bimestresFechados) ? ' 🔒' : '';
+            $thead .= '<th style="padding:10px 6px;font-size:11px;font-weight:700;color:var(--text-4);text-transform:uppercase;letter-spacing:0.5px;border-left:1px solid var(--border-sub);width:120px;">' . $b . 'º bim.' . $lock . '</th>';
         }
         $thead .= '</tr></thead>';
     @endphp

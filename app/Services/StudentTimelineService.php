@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BimestreClosing;
 use App\Models\Meeting;
 use App\Models\Student;
 
@@ -70,6 +71,19 @@ class StudentTimelineService
                 'descricao' => $o->content,
                 'status'    => null,
                 'critico'   => $critico,
+            ];
+        }
+
+        // Fechamentos de bimestre
+        foreach ($aluno->bimestreClosings()->get() as $c) {
+            $pct = $c->snapshot['percentual'] ?? null;
+            $eventos[] = [
+                'data'      => $c->created_at,
+                'tipo'      => 'fechamento',
+                'titulo'    => 'Fechamento do ' . $c->bimestre . 'º bimestre',
+                'descricao' => $pct !== null ? $pct . '% das metas atingidas' : 'Bimestre fechado',
+                'status'    => null,
+                'critico'   => false,
             ];
         }
 

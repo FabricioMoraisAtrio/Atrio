@@ -12,8 +12,9 @@
         'reuniao'    => '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/>',
         'laudo'      => '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>',
         'observacao' => '<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>',
+        'fechamento' => '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
     ];
-    $rotulo = ['meta' => 'Meta', 'reuniao' => 'Reunião', 'laudo' => 'Laudo', 'observacao' => 'Observação'];
+    $rotulo = ['meta' => 'Meta', 'reuniao' => 'Reunião', 'laudo' => 'Laudo', 'observacao' => 'Observação', 'fechamento' => 'Fechamento'];
     $corBgMeta = [
         'atingiu'      => 'var(--success-bg)',
         'em_progresso' => 'var(--warning-bg)',
@@ -23,12 +24,14 @@
         if ($e['tipo'] === 'meta')       return $corMeta[$e['status']] ?? 'var(--accent)';
         if ($e['tipo'] === 'reuniao')    return 'var(--accent)';
         if ($e['tipo'] === 'laudo')      return 'var(--teal)';
+        if ($e['tipo'] === 'fechamento') return 'var(--accent-text)';
         return $e['critico'] ? 'var(--danger)' : 'var(--purple)';
     };
     $corBgEvento = function ($e) use ($corBgMeta) {
         if ($e['tipo'] === 'meta')       return $corBgMeta[$e['status']] ?? 'var(--accent-bg)';
         if ($e['tipo'] === 'reuniao')    return 'var(--accent-bg)';
         if ($e['tipo'] === 'laudo')      return 'var(--teal-bg)';
+        if ($e['tipo'] === 'fechamento') return 'var(--accent-bg)';
         return $e['critico'] ? 'var(--danger-bg)' : 'var(--purple-bg)';
     };
 @endphp

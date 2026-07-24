@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\BimestreClosing;
 use App\Models\GoalProgress;
 use App\Models\Laudo;
 use App\Models\Meeting;
@@ -192,5 +193,48 @@ class RotinasInclusaoTest extends TestCase
         $this->get(route('secretaria.alunos.linha-do-tempo', $this->aluno))
             ->assertStatus(200)
             ->assertSee('Linha do Tempo');
+    }
+
+    // ─── Fechamento de bimestre ───
+
+    public function test_fecha_bimestre_trava_avaliacoes_e_marca_no_roadmap(): void
+    {
+        $meta = $this->criarMeta();
+        GoalProgress::create([
+            'school_id'                => $this->escola->id,
+            'student_academic_goal_id' => $meta->id,
+            'year'                     => (int) date('Y'),
+            'bimestre'                 => 1,
+            'status'                   => 'atingiu',
+        ]);
+
+        // Fecha o 1º bimestre (sem datas configuradas → permitido).
+        $this->post(route('secretaria.alunos.bimestres.fechar', [$this->aluno, 1]))->assertRedirect();
+        $this->assertDatabaseHas('bimestre_closings', [
+            'student_id' => $this->aluno->id,
+            'year'       => (int) date('Y'),
+            'bimestre'   => 1,
+        ]);
+
+        // Vira marco no roadmap.
+        $eventos = app(\App\Services\StudentTimelineService::class)->build($this->aluno);
+        $this->assertContains('fechamento', array_column($eventos, 'tipo'));
+
+        // Avaliação do bimestre fechado não pode mais mudar (travada).
+        $this->put(route('secretaria.alunos.metas-evolucao.update', $this->aluno), [
+            'status' => [$meta->id => [1 => 'em_progresso']],
+        ])->assertRedirect();
+        $this->assertDatabaseHas('goal_progresses', [
+            'student_academic_goal_id' => $meta->id,
+            'bimestre'                 => 1,
+            'status'                   => 'atingiu', // permaneceu
+        ]);
+
+        // Admin reabre.
+        $this->delete(route('secretaria.alunos.bimestres.reabrir', [$this->aluno, 1]))->assertRedirect();
+        $this->assertDatabaseMissing('bimestre_closings', [
+            'student_id' => $this->aluno->id,
+            'bimestre'   => 1,
+        ]);
     }
 }

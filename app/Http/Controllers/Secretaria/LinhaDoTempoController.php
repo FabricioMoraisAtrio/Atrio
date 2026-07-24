@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Secretaria;
 
 use App\Http\Controllers\Controller;
+use App\Models\BimestreClosing;
 use App\Models\Student;
+use App\Services\BimestreService;
 use App\Services\StudentTimelineService;
 
 class LinhaDoTempoController extends Controller
@@ -31,6 +33,24 @@ class LinhaDoTempoController extends Controller
         // incorporados na própria Linha do Tempo.
         $evolucao = GoalProgressController::dadosEvolucao($aluno);
 
-        return view('secretaria.alunos.linha-do-tempo', compact('aluno', 'eventos', 'resumo') + $evolucao);
+        // Situação dos bimestres (datas configuradas + fechamentos).
+        $ano       = (int) date('Y');
+        $bimService = app(BimestreService::class);
+        $datas     = $bimService->datas(session('school_id'));
+        $closings  = BimestreClosing::where('student_id', $aluno->id)->where('year', $ano)->get()->keyBy('bimestre');
+
+        $bimestresFechados = $closings->keys()->all();
+        $bimestresInfo = [];
+        foreach (BimestreService::BIMESTRES as $b) {
+            $bimestresInfo[$b] = [
+                'fechado'      => $closings->has($b),
+                'podeEncerrar' => $bimService->podeEncerrar($datas, $b),
+                'situacao'     => $bimService->situacao($datas, $b),
+                'inicio'       => $datas[$b]['inicio'],
+                'fim'          => $datas[$b]['fim'],
+            ];
+        }
+
+        return view('secretaria.alunos.linha-do-tempo', compact('aluno', 'eventos', 'resumo', 'bimestresFechados', 'bimestresInfo') + $evolucao);
     }
 }

@@ -70,10 +70,17 @@ class GoalProgressController extends Controller
         // Só processa metas que pertencem de fato ao aluno/ano (ignora ids forjados).
         $metas = $aluno->academicGoals()->where('year', $ano)->get();
 
+        // Bimestres fechados são travados — não aceitam alteração.
+        $fechados = \App\Models\BimestreClosing::where('student_id', $aluno->id)
+            ->where('year', $ano)->pluck('bimestre')->all();
+
         foreach ($metas as $meta) {
             $porBimestre = (array) ($entrada[$meta->id] ?? []);
 
             foreach (self::BIMESTRES as $bimestre) {
+                if (in_array($bimestre, $fechados)) {
+                    continue; // bimestre fechado — ignora
+                }
                 $status = $porBimestre[$bimestre] ?? 'nao_avaliado';
 
                 if ($status === 'nao_avaliado') {
