@@ -3,9 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\GoalProgress;
+use App\Models\Laudo;
 use App\Models\Meeting;
+use App\Models\Observation;
 use App\Models\Student;
 use App\Models\StudentAcademicGoal;
+use App\Services\StudentTimelineService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tests\Traits\CriaEscolaEUsuarios;
@@ -149,5 +152,45 @@ class RotinasInclusaoTest extends TestCase
         // Reunião do "outro" acessada pela URL do aluno errado → 404.
         $this->get(route('secretaria.alunos.reunioes.edit', [$this->aluno, $reuniao]))
             ->assertStatus(404);
+    }
+
+    // ─── Roadmap: linha do tempo ───
+
+    public function test_linha_do_tempo_agrega_eventos_de_varias_origens(): void
+    {
+        $meta = $this->criarMeta();
+        GoalProgress::create([
+            'school_id'                => $this->escola->id,
+            'student_academic_goal_id' => $meta->id,
+            'year'                     => (int) date('Y'),
+            'bimestre'                 => 1,
+            'status'                   => 'atingiu',
+        ]);
+        Meeting::create([
+            'school_id' => $this->escola->id, 'student_id' => $this->aluno->id,
+            'data' => date('Y-m-d'), 'tipo' => 'familia', 'participantes' => 'Família',
+            'created_by' => $this->secretaria->id,
+        ]);
+        Laudo::create([
+            'school_id' => $this->escola->id, 'student_id' => $this->aluno->id,
+            'uploaded_by' => $this->secretaria->id, 'tipo' => 'medico',
+            'descricao' => 'Laudo', 'arquivo' => 'laudos/x.pdf', 'data_laudo' => date('Y-m-d'),
+        ]);
+        Observation::create([
+            'school_id' => $this->escola->id, 'student_id' => $this->aluno->id,
+            'user_id' => $this->secretaria->id, 'content' => 'Observação de teste',
+            'urgency' => 'critico', 'category' => 'comportamento',
+        ]);
+
+        $eventos = app(StudentTimelineService::class)->build($this->aluno);
+        $tipos = array_column($eventos, 'tipo');
+
+        $this->assertCount(4, $eventos);
+        $this->assertEqualsCanonicalizing(['meta', 'reuniao', 'laudo', 'observacao'], $tipos);
+
+        // A tela por aluno renderiza os eventos (200).
+        $this->get(route('secretaria.alunos.linha-do-tempo', $this->aluno))
+            ->assertStatus(200)
+            ->assertSee('Linha do Tempo');
     }
 }

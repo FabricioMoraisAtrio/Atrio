@@ -248,4 +248,17 @@ $equipePreenchida = collect($equipeFields)->keys()->filter(fn($k) => !empty($ec[
     </div>
 </form>
 
+{{-- ═══ LINHA DO TEMPO (roadmap de evolução) ═══ --}}
+<div style="background: var(--bg-card); border: 1px solid var(--border-sub); border-radius: 12px; padding: 24px; margin-top: 16px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-text)" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+            <h2 style="font-size: 15px; font-weight: 700; color: var(--text-1); margin: 0;">Linha do Tempo</h2>
+        </div>
+        <a href="{{ route('secretaria.alunos.linha-do-tempo', $aluno) }}"
+           style="font-size: 12px; color: var(--accent-text); text-decoration: none; font-weight: 600;">Ver completa →</a>
+    </div>
+    @include('secretaria.partials.timeline', ['eventos' => $timeline])
+</div>
+
 @endsection

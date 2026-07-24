@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\Student;
 use App\Models\SubjectInventoryItem;
 use App\Services\DocumentContentService;
+use App\Services\StudentTimelineService;
 use Illuminate\Http\Request;
 
 class PeiConsolidadoController extends Controller
@@ -42,8 +43,11 @@ class PeiConsolidadoController extends Controller
             ->where('type', 'estudo_caso')
             ->value('content') ?? [];
 
+        // Linha do tempo resumida (roadmap de evolução) — 6 eventos mais recentes
+        $timeline = app(StudentTimelineService::class)->build($aluno, 6);
+
         return view('secretaria.pei.consolidado', compact(
-            'aluno', 'peiConsolidado', 'peiGlobal', 'peiSubjects', 'inventoryItems', 'ec'
+            'aluno', 'peiConsolidado', 'peiGlobal', 'peiSubjects', 'inventoryItems', 'ec', 'timeline'
         ));
     }
 

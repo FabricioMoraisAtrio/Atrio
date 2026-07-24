@@ -90,6 +90,17 @@ $cards = [
         'role'     => null,
         'module'   => 'alunos',
     ],
+    // Linha do Tempo
+    [
+        'label'    => 'Linha do Tempo',
+        'descricao'=> 'Roadmap da evolução do aluno: metas, reuniões, laudos e observações.',
+        'route'    => 'secretaria.rotinas.linha-do-tempo',
+        'cor'      => '#0F766E',
+        'bg'       => '#CCFBF1',
+        'icon'     => '<path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/>',
+        'role'     => null,
+        'module'   => 'alunos',
+    ],
     // 6. Usuários
     [
         'label'    => 'Usuários',

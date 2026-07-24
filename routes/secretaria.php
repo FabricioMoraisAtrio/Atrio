@@ -75,6 +75,9 @@ Route::middleware('school.module:alunos')->group(function () {
     });
     Route::middleware('can:alunos.ver')->group(function () {
         Route::get('alunos',              [StudentController::class, 'index'])->name('alunos.index');
+        // Rotina "Linha do Tempo" (roadmap de evolução) — antes de alunos/{aluno}
+        Route::get('rotinas/linha-do-tempo', \App\Http\Controllers\Secretaria\Rotinas\LinhaDoTempoHubController::class)->name('rotinas.linha-do-tempo');
+        Route::get('alunos/{aluno}/linha-do-tempo', [\App\Http\Controllers\Secretaria\LinhaDoTempoController::class, 'show'])->name('alunos.linha-do-tempo');
         Route::get('alunos/{aluno}',      [StudentController::class, 'show'])->name('alunos.show');
     });
     Route::middleware('can:alunos.editar')->group(function () {
