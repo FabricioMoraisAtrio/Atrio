@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Document;
 use App\Models\Student;
+use App\Models\Subject;
 use Tests\TestCase;
 use Tests\Traits\CriaEscolaEUsuarios;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -158,5 +159,33 @@ class DocumentoTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    }
+
+    public function test_exporta_pdf_do_pei_com_todas_as_materias(): void
+    {
+        // Matéria da escola sem metas preenchidas → deve renderizar sem erro
+        // (o PDF do PEI lista todas as disciplinas, marcando as vazias).
+        Subject::create([
+            'school_id' => $this->escola->id,
+            'name'      => 'Matemática',
+            'slug'      => 'matematica',
+            'tipo'      => 'disciplina',
+            'ordem'     => 1,
+        ]);
+
+        $pei = Document::create([
+            'school_id'  => $this->escola->id,
+            'student_id' => $this->aluno->id,
+            'author_id'  => $this->secretaria->id,
+            'type'       => 'pei_consolidado',
+            'year'       => date('Y'),
+            'status'     => 'published',
+            'content'    => [],
+        ]);
+
+        $response = $this->get(route('secretaria.documentos.pdf', $pei));
+
+        $response->assertStatus(200);
+        $response->assertHeader('content-type', 'application/pdf');
     }
 }

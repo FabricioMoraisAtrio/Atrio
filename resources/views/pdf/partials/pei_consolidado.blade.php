@@ -279,19 +279,65 @@ $objLongo = $peiGlobal['objetivos_longo_prazo'] ?? '';
 <hr class="div">
 @endif
 
-{{-- Inventário de Habilidades --}}
-@if($temInventario)
+{{-- Metas de Habilidades — todas as matérias (inclui as não preenchidas) --}}
+@php
+    $disciplinas          = \App\Models\Subject::where('tipo', 'disciplina')->orderBy('ordem')->orderBy('name')->get();
+    $academicasPorMateria = collect($inventario['academica'] ?? [])->groupBy('subject_name');
+    $nomesDisc            = $disciplinas->pluck('name')->all();
+
+    // Bloco de tabela de metas acadêmicas (sem coluna de disciplina).
+    $tabelaAcad = function ($itens) use ($flagLabels) {
+        $html = '<table style="width:100%;border-collapse:collapse;">
+            <tr>
+                <th class="inv-th" style="text-align:left;width:52%;">Metas / Objetivos</th>
+                <th class="inv-th" style="width:22%;">Avaliação</th>
+                <th class="inv-th">Observações</th>
+            </tr>';
+        foreach ($itens as $item) {
+            $html .= '<tr>
+                <td class="inv-meta">' . e($item['meta']) . '</td>
+                <td class="inv-obs">' . e($flagLabels[$item['flag'] ?? ''] ?? '—') . '</td>
+                <td class="inv-obs">' . e($item['obs']) . '</td>
+            </tr>';
+        }
+        return $html . '</table>';
+    };
+@endphp
 <div class="section">
     <div class="section-header">
         <div class="section-title">Metas de Habilidades</div>
-        <div class="section-sub">Consolidado das metas preenchidas pelos professores.</div>
+        <div class="section-sub">Metas por matéria e área. Matérias sem preenchimento são sinalizadas.</div>
     </div>
-    @foreach($grupos as $catKey => $catLabel)
+
+    {{-- Metas Acadêmicas: uma entrada por matéria da escola --}}
+    <div class="inv-cat-hdr"><div class="inv-cat-title">Metas Acadêmicas</div></div>
+    @foreach($disciplinas as $disc)
+        @php $itens = $academicasPorMateria->get($disc->name, collect()); @endphp
+        <div style="margin-bottom: 7px; page-break-inside: avoid;">
+            <div style="font-size: 8.5px; font-weight: bold; color: #333; padding: 2px 0 3px;">{{ $disc->name }}</div>
+            @if(count($itens))
+                {!! $tabelaAcad($itens) !!}
+            @else
+                <div style="font-size: 8.5px; font-style: italic; color: #aaa; border: 1px dashed #ddd; padding: 4px 6px;">Ainda não preenchido.</div>
+            @endif
+        </div>
+    @endforeach
+
+    {{-- Metas acadêmicas de matérias fora da grade atual (não perder nada) --}}
+    @foreach($academicasPorMateria as $subjName => $itens)
+        @if($subjName && !in_array($subjName, $nomesDisc))
+        <div style="margin-bottom: 7px; page-break-inside: avoid;">
+            <div style="font-size: 8.5px; font-weight: bold; color: #333; padding: 2px 0 3px;">{{ $subjName }}</div>
+            {!! $tabelaAcad($itens) !!}
+        </div>
+        @endif
+    @endforeach
+
+    {{-- Demais áreas (socioemocional, funcional, global) — só quando há metas --}}
+    @foreach(['socioemocional' => 'Metas Socioemocionais', 'funcional' => 'Metas Funcionais', 'global' => 'Desenvolvimento Global'] as $catKey => $catLabel)
         @php $itens = $inventario[$catKey] ?? []; @endphp
         @if(count($itens))
-        <div class="inv-cat-hdr">
-            <div class="inv-cat-title">{{ $catLabel }}</div>
-        </div>
+        <div class="inv-cat-hdr"><div class="inv-cat-title">{{ $catLabel }}</div></div>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; page-break-inside: avoid;">
             <tr>
                 <th class="inv-th" style="text-align: left; width: 36%;">Metas / Objetivos</th>
@@ -312,7 +358,7 @@ $objLongo = $peiGlobal['objetivos_longo_prazo'] ?? '';
     @endforeach
 </div>
 <hr class="div">
-@endif
+
 
 {{-- Estratégias Pedagógicas (do PEI global) --}}
 @php $estrategias = $peiGlobal['estrategias_pedagogicas'] ?? ''; @endphp
