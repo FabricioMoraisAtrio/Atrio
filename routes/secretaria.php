@@ -37,6 +37,7 @@ Route::middleware(['school.module:configuracoes', 'can:escola.configurar'])->pre
     Route::put('/escola',        [ConfigController::class, 'updateEscola'])->name('escola.update');
     Route::put('/terminologias', [ConfigController::class, 'updateTerminologias'])->name('terminologias.update');
     Route::put('/bimestres',     [ConfigController::class, 'updateBimestres'])->name('bimestres.update');
+    Route::put('/modulos',       [ConfigController::class, 'updateModulos'])->name('modulos.update');
     Route::resource('perfis', SchoolRoleController::class)->except(['show'])->parameters(['perfis' => 'perfil']);
 });
 

@@ -14,7 +14,7 @@
 
     {{-- Tabs --}}
     <div style="display: flex; gap: 4px; border-bottom: 2px solid var(--border-sub); margin-bottom: 28px;">
-        @foreach(['escola' => 'Escola', 'bimestres' => 'Bimestres', 'materias' => 'Matérias', 'perfis' => 'Perfis de Acesso'] as $t => $label)
+        @foreach(['escola' => 'Escola', 'modulos' => 'Módulos', 'bimestres' => 'Bimestres', 'materias' => 'Matérias', 'perfis' => 'Perfis de Acesso'] as $t => $label)
             @if($t === 'perfis')
                 <a href="{{ route('secretaria.config.perfis.index') }}"
                    style="padding: 10px 18px; font-size: 13px; font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px;
@@ -107,6 +107,35 @@
                 </div>
             </form>
         </div>
+    @endif
+
+    {{-- Tab: Módulos --}}
+    @if($tab === 'modulos')
+        <form method="POST" action="{{ route('secretaria.config.modulos.update') }}">
+            @csrf @method('PUT')
+            <div style="background: var(--bg-card); border: 1px solid var(--border-sub); border-radius: 12px; padding: 24px;">
+                <p style="font-size: 13px; color: var(--text-3); margin: 0 0 18px;">
+                    Ative apenas os módulos que a escola usa. Os desativados somem do menu e ficam bloqueados.
+                </p>
+                @php $ativos = $escola->modules; @endphp
+                @foreach(\App\Models\School::availableModules() as $key => $label)
+                    @php
+                        $checked = is_null($ativos) || in_array($key, $ativos, true);
+                        $lock    = in_array($key, ['configuracoes', 'painel']);
+                    @endphp
+                    <label style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--border-sub); border-radius: 10px; margin-bottom: 8px; cursor: {{ $lock ? 'default' : 'pointer' }};">
+                        <input type="checkbox" name="modules[]" value="{{ $key }}" @checked($checked) @disabled($lock)
+                               style="width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0;">
+                        @if($lock)<input type="hidden" name="modules[]" value="{{ $key }}">@endif
+                        <span style="font-size: 14px; color: var(--text-1); font-weight: 500; flex: 1;">{{ $label }}</span>
+                        @if($lock)<span style="font-size: 11px; color: var(--text-4); background: var(--bg-subtle); padding: 2px 8px; border-radius: 20px;">essencial</span>@endif
+                    </label>
+                @endforeach
+                <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+                    <button type="submit" style="background: var(--accent); color: #fff; border: none; padding: 11px 28px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Salvar módulos</button>
+                </div>
+            </div>
+        </form>
     @endif
 
     {{-- Tab: Bimestres --}}
