@@ -162,53 +162,6 @@
                 @endif
             @endauth
         </nav>
-
-        @auth
-        <div style="padding: 16px 12px; border-top: 1px solid var(--border-sub);">
-            <a href="{{ route('profile.edit') }}"
-               style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; text-decoration: none; color: var(--text-2);">
-                @if(auth()->user()->avatar)
-                    <img src="{{ \Illuminate\Support\Facades\Storage::url(auth()->user()->avatar) }}"
-                         style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
-                @else
-                    <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0;">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
-                @endif
-                <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 13px; font-weight: 500; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        {{ auth()->user()->name }}
-                    </div>
-                    <div style="font-size: 11px; color: var(--text-4);">
-                        @php
-                            $roleLabels = [
-                                'admin'       => 'Administrador',
-                                'coordenador' => 'Coordenação',
-                                'orientador'  => 'Orientação Pedagógica',
-                                'professor'   => 'Professor',
-                            ];
-                            $sidebarRole = auth()->user()->getRoleNames()->first();
-                            $sidebarRoleLabel = $roleLabels[$sidebarRole] ?? null;
-                            if (!$sidebarRoleLabel && $sidebarRole && str_starts_with($sidebarRole, 's')) {
-                                $sidebarRoleLabel = \App\Models\SchoolRole::where('spatie_role', $sidebarRole)->value('name');
-                            }
-                            echo $sidebarRoleLabel ?? $sidebarRole;
-                        @endphp
-                    </div>
-                </div>
-            </a>
-            <form method="POST" action="{{ route('logout') }}" style="margin-top: 4px;">
-                @csrf
-                <button type="submit"
-                        style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; border: none; background: none; cursor: pointer; font-size: 13px; color: var(--danger); text-align: left;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
-                    </svg>
-                    Sair
-                </button>
-            </form>
-        </div>
-        @endauth
     </aside>
 
     <div style="margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh;">
@@ -224,6 +177,7 @@
             <div style="display: flex; align-items: center; gap: 12px;">
                 @include('layouts.partials.notifications-bell')
                 @include('layouts.partials.theme-switcher')
+                @include('layouts.partials.user-menu')
             </div>
         </header>
 
