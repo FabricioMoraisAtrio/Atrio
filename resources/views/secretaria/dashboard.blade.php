@@ -77,7 +77,7 @@ $cards = [
         'bg'       => '#FEF3C7',
         'icon'     => '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>',
         'role'     => null,
-        'module'   => 'alunos',
+        'module'   => 'reunioes',
     ],
     // Linha do Tempo
     [
@@ -88,7 +88,7 @@ $cards = [
         'bg'       => '#CCFBF1',
         'icon'     => '<path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/>',
         'role'     => null,
-        'module'   => 'alunos',
+        'module'   => 'linha_do_tempo',
     ],
     // 6. Usuários
     [

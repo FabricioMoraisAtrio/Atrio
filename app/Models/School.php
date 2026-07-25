@@ -34,13 +34,15 @@ class School extends Model
     public static function availableModules(): array
     {
         return [
-            'painel'      => 'Painel de Controle',
-            'alunos'      => 'Alunos',
-            'documentos'  => 'Documentos de Inclusão',
-            'turmas'      => 'Turmas',
-            'adaptacoes'  => 'Adaptações para Prova',
-            'materias'    => 'Matérias',
-            'usuarios'    => 'Usuários',
+            'painel'         => 'Painel de Controle',
+            'alunos'         => 'Alunos',
+            'documentos'     => 'Documentos de Inclusão',
+            'reunioes'       => 'Reuniões / Atas',
+            'linha_do_tempo' => 'Linha do Tempo',
+            'turmas'         => 'Turmas',
+            'adaptacoes'     => 'Adaptações para Prova',
+            'materias'       => 'Matérias',
+            'usuarios'       => 'Usuários',
             'configuracoes'  => 'Configurações',
             'seletividade'   => 'Jornada Alimentar',
         ];

@@ -77,9 +77,11 @@ Route::middleware('school.module:alunos')->group(function () {
     });
     Route::middleware('can:alunos.ver')->group(function () {
         Route::get('alunos',              [StudentController::class, 'index'])->name('alunos.index');
-        // Rotina "Linha do Tempo" (roadmap de evolução) — antes de alunos/{aluno}
-        Route::get('rotinas/linha-do-tempo', \App\Http\Controllers\Secretaria\Rotinas\LinhaDoTempoHubController::class)->name('rotinas.linha-do-tempo');
-        Route::get('alunos/{aluno}/linha-do-tempo', [\App\Http\Controllers\Secretaria\LinhaDoTempoController::class, 'show'])->name('alunos.linha-do-tempo');
+        // Rotina "Linha do Tempo" (roadmap de evolução) — módulo próprio; antes de alunos/{aluno}
+        Route::middleware('school.module:linha_do_tempo')->group(function () {
+            Route::get('rotinas/linha-do-tempo', \App\Http\Controllers\Secretaria\Rotinas\LinhaDoTempoHubController::class)->name('rotinas.linha-do-tempo');
+            Route::get('alunos/{aluno}/linha-do-tempo', [\App\Http\Controllers\Secretaria\LinhaDoTempoController::class, 'show'])->name('alunos.linha-do-tempo');
+        });
         Route::get('alunos/{aluno}',      [StudentController::class, 'show'])->name('alunos.show');
     });
     Route::middleware('can:alunos.editar')->group(function () {
@@ -90,16 +92,18 @@ Route::middleware('school.module:alunos')->group(function () {
         Route::post('alunos/{aluno}/foto', [StudentController::class, 'uploadPhoto'])->name('alunos.uploadPhoto');
         Route::delete('alunos/{aluno}/foto', [StudentController::class, 'removePhoto'])->name('alunos.removePhoto');
 
-        // Rotina "Reuniões / Atas" — hub que lista os alunos
-        Route::get('rotinas/reunioes', \App\Http\Controllers\Secretaria\Rotinas\ReunioesHubController::class)->name('rotinas.reunioes');
+        // Rotina "Reuniões / Atas" — módulo próprio
+        Route::middleware('school.module:reunioes')->group(function () {
+            Route::get('rotinas/reunioes', \App\Http\Controllers\Secretaria\Rotinas\ReunioesHubController::class)->name('rotinas.reunioes');
 
-        // Registro de reuniões do aluno
-        Route::get('alunos/{aluno}/reunioes',                 [MeetingController::class, 'index'])->name('alunos.reunioes.index');
-        Route::get('alunos/{aluno}/reunioes/create',          [MeetingController::class, 'create'])->name('alunos.reunioes.create');
-        Route::post('alunos/{aluno}/reunioes',                [MeetingController::class, 'store'])->name('alunos.reunioes.store');
-        Route::get('alunos/{aluno}/reunioes/{reuniao}/edit',  [MeetingController::class, 'edit'])->name('alunos.reunioes.edit');
-        Route::put('alunos/{aluno}/reunioes/{reuniao}',       [MeetingController::class, 'update'])->name('alunos.reunioes.update');
-        Route::delete('alunos/{aluno}/reunioes/{reuniao}',    [MeetingController::class, 'destroy'])->name('alunos.reunioes.destroy');
+            // Registro de reuniões do aluno
+            Route::get('alunos/{aluno}/reunioes',                 [MeetingController::class, 'index'])->name('alunos.reunioes.index');
+            Route::get('alunos/{aluno}/reunioes/create',          [MeetingController::class, 'create'])->name('alunos.reunioes.create');
+            Route::post('alunos/{aluno}/reunioes',                [MeetingController::class, 'store'])->name('alunos.reunioes.store');
+            Route::get('alunos/{aluno}/reunioes/{reuniao}/edit',  [MeetingController::class, 'edit'])->name('alunos.reunioes.edit');
+            Route::put('alunos/{aluno}/reunioes/{reuniao}',       [MeetingController::class, 'update'])->name('alunos.reunioes.update');
+            Route::delete('alunos/{aluno}/reunioes/{reuniao}',    [MeetingController::class, 'destroy'])->name('alunos.reunioes.destroy');
+        });
     });
     Route::middleware('can:alunos.deletar')->group(function () {
         Route::delete('alunos/{aluno}', [StudentController::class, 'destroy'])->name('alunos.destroy');
