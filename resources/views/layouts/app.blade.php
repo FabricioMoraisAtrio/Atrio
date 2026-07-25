@@ -15,7 +15,7 @@
 <div class="flex min-h-screen">
 
     {{-- SIDEBAR --}}
-    <aside style="width: 240px; border-right: 1px solid var(--border); display: flex; flex-direction: column; min-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
+    <aside style="width: 240px; border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; max-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
 
         {{-- Logo --}}
         <div style="padding: 24px 20px 20px; border-bottom: 1px solid var(--border-sub);">
