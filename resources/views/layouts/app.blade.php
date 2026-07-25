@@ -15,7 +15,7 @@
 <div class="flex min-h-screen">
 
     {{-- SIDEBAR --}}
-    <aside style="width: 240px; border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; max-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
+    <aside style="width: clamp(256px, 16vw, 300px); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; max-height: 100vh; position: fixed; top: 0; left: 0; z-index: 40;">
 
         {{-- Logo --}}
         <div style="padding: 24px 20px 20px; border-bottom: 1px solid var(--border-sub);">
@@ -164,7 +164,7 @@
         </nav>
     </aside>
 
-    <div style="margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh;">
+    <div style="margin-left: clamp(256px, 16vw, 300px); flex: 1; display: flex; flex-direction: column; min-height: 100vh;">
 
         <header style="border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 30;">
             <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
