@@ -9,12 +9,12 @@
 <a href="{{ route($item['route']) }}"
    style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 8px; margin-bottom: 2px; font-size: 14px; font-weight: 500; text-decoration: none;
           {{ $isActive ? 'background: var(--accent-bg,#E8F0F9); color: var(--accent,#004B8D);' : 'color: #6B7280;' }}">
-    <div style="display: flex; align-items: center; gap: 10px;">
+    <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
         @include('layouts.partials.icon', ['icon' => $item['icon'], 'active' => $isActive])
-        {{ $item['label'] }}
+        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $item['label'] }}</span>
     </div>
     @if($badge)
-        <span style="background: #EF4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px;">{{ $badge }}</span>
+        <span style="flex-shrink: 0; margin-left: 8px; background: #EF4444; color: white; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 20px;">{{ $badge }}</span>
     @elseif($hasChildren)
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
              style="{{ $isActive ? 'transform:rotate(90deg);' : '' }} transition: transform 0.15s;">
