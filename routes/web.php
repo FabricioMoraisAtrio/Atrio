@@ -242,7 +242,19 @@ Route::get('/cron/db-info', function () use ($noStore) {
     return $noStore(response('<pre>' . e(json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</pre>'));
 });
 
-Route::get('/', fn() => view('landing'))->name('home');
+// Site institucional (marketing) — layout + partials compartilhados em resources/views/marketing
+Route::get('/',            fn() => view('marketing.home'))->name('home');
+Route::get('/plataforma',  fn() => view('marketing.plataforma'))->name('plataforma');
+Route::get('/plataforma/{modulo}', function (string $modulo) {
+    $m = \App\Support\Modulos::find($modulo);
+    abort_if(! $m, 404);
+    return view('marketing.modulo', ['m' => $m]);
+})->name('modulo');
+Route::get('/planos',      fn() => view('marketing.planos'))->name('planos');
+Route::get('/legislacao',  fn() => view('marketing.legislacao'))->name('legislacao');
+Route::get('/duvidas',     fn() => view('marketing.duvidas'))->name('duvidas');
+Route::get('/contato',     fn() => view('marketing.contato'))->name('contato');
+
 Route::get('/entrar', [LoginController::class, 'create'])->name('login');
 Route::post('/entrar', [LoginController::class, 'store'])->middleware('throttle:10,1')->name('login.store');
 
