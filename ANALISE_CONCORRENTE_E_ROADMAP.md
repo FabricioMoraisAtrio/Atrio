@@ -68,4 +68,35 @@ Ordem sugerida — do maior retorno com menor esforço para o mais estratégico 
 
 ## Estado técnico relacionado (jul/2026)
 - Já construído nesta fase: Linha do Tempo, evolução de metas por bimestre, fechamento de bimestre, Reuniões/Atas, gestão de módulos por escola, PDF do PEI com todas as matérias, perfil na topbar, sidebar responsiva. Tudo no GitHub (`main`).
-- Pendente na landing: Fase 1 (edição do `<head>` já salva no disco, não commitada).
+- Landing: **Fase 1 concluída e commitada localmente** (funil + CTA WhatsApp/e-mail + comparativo + planos + FAQ + SEO). Fase 2 depende de conteúdo do cliente (depoimentos, autoridade/equipe).
+
+---
+
+## 5. Teardown completo do Portal do PEI (fornecido pelo cliente, jul/2026)
+
+**Stack/sinais:** site de marketing tipo SPA (Next.js) com rotas amigáveis (`/plataforma/[modulo]`, `/professores`…); **produto logado separado em `/login.php` (PHP)**; assinaturas via **Hotmart** (`pay.hotmart.com`); **WhatsApp** (`wa.me/message/...`) recorrente + botão flutuante; rodapé cita LGPD + Decreto 12.686/2025.
+
+**Navegação:** 3 dropdowns — *A Plataforma* (7 módulos, página própria cada), *Soluções* (Para professores, Escolas particulares, Contratação pública), *Institucional* (Nossa história, Fundadores, Nossa equipe) — + itens diretos: Planos, Depoimentos, Blog, Contato, Entrar, "Ver planos".
+
+**Home:** hero "Todas as ferramentas… em um único lugar" → jornada em 5 etapas → autoridade (fundadores/especialistas com citações) → depoimentos por cargo/estado → bloco "problema" → comparativo avulso × ecossistema → 8 recursos → segmentação por perfil → resumo de planos → FAQ (6) → CTA duplo.
+
+**Páginas de módulo (7):** padrão repetido — hero + "o problema" + "como funciona" em **3 passos** + "benefícios" (**4 itens**) + "parte do ecossistema" (linka 3 módulos relacionados) + CTA duplo. **Todas com placeholder "Captura da plataforma — em breve" (sem prints reais do produto).**
+
+**Soluções por público:** `/professores` = self-serve (autonomia, "PEI em ~20 min", checkout Hotmart). `/escolas-particulares` e `/contratacao-publica` = venda consultiva (formulário de lead: nome, e-mail, telefone, escola/órgão, nº alunos/professores, mensagem). **Contratação pública** argumenta metodologia autoral → **inexigibilidade de licitação (Lei 14.133/2021)** + fornece documentos de suporte.
+
+**Planos (individuais):** toggle mensal/anual (−25% anual). **Essencial:** 10 alunos — R$150/mês (mensal) ou R$120/mês (anual). **Profissional:** 25 alunos (35 no anual) — R$320/mês (mensal) ou R$240/mês (anual) + bônus (alunos extras, curso "ABA na Escola"). Escolas/órgãos → formulário consultivo (sem checkout).
+
+**Institucional/prova social:** fundadores **nomeados e credenciados** (Prof. Leandro Rodrigues / Instituto Itard; Dr. Thiago Castro, pediatra ref. em TEA). `/depoimentos` com **métricas** (687 profissionais ativos, 3.386 PEIs/PAEEs gerados, 716 alunos) + depoimentos por cargo/estado (**sem nome/foto por ora**). **Blog** ativo (Institucional/Gestão/Metodologia). `/contato` com WhatsApp + e-mail + formulário. `/login.php` com banner de cookies.
+
+## 6. Insights estratégicos afiados por este teardown
+
+1. **Maior vantagem nossa: temos produto REAL e mostrável.** Eles descrevem 7 módulos mas **não mostram nenhuma tela** ("em breve"). **Prints/GIFs/demo ao vivo do Átrio funcionando** viram credibilidade instantânea que eles não conseguem igualar hoje. → Colocar screenshots reais na landing (Fase 2 prioritária, e não depende de terceiros).
+2. **Referência de preço (benchmark) obtida.** Individual R$120–150 (10 alunos) / R$240–320 (25 alunos), Hotmart, mensal/anual. Escola = consultivo. → Base concreta para definir os **nossos** planos (hoje "sob consulta"). Decisão de precificação do cliente.
+3. **Funil de duas trilhas confirmado:** self-serve (Hotmart) p/ professor + consultivo (formulário) p/ escola/rede. Nossa landing já segmenta professor × escola/rede; possível evoluir p/ **auto-contratação do professor** e **formulário de lead** p/ escola.
+4. **Autoridade nomeada é o padrão deles (e nosso maior gap).** Precisamos de **rostos + credenciais** (pedagogo/especialista/jurídico) na landing. Sem isso, perdemos em confiança.
+5. **Métricas como prova social.** Eles exibem números. Precisamos dos **nossos números reais** (escolas, PEIs gerados, alunos) assim que houver base.
+6. **Canal B2G via inexigibilidade (Lei 14.133/2021).** Argumento de metodologia autoral p/ contratação pública sem licitação. **Casa com a nossa força jurídica** — potencial página `/contratacao-publica` com esse enquadramento + docs de suporte.
+7. **Conteúdo/SEO (blog + institucional).** Jogo de médio prazo p/ autoridade e busca orgânica.
+8. **Padrão de "página de módulo" reutilizável.** Se formos criar páginas de recurso/produto, usar **um componente/partial parametrizado** (hero, problema, 3 passos, 4 benefícios, ecossistema-3-links, CTA duplo) — não N páginas soltas.
+
+**Reordenação sugerida do roadmap à luz disto:** subir **"mostrar o produto real na landing" (prints/demo)** para o topo dos ganhos rápidos (é grátis, imediato e é onde 100% ganhamos deles). Manter o roadmap de produto (Avaliação Funcional → práticas → planos de aula → BNCC → IA no Estudo de Caso).
