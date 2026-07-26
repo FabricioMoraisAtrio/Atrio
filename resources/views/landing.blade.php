@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Átrio — Sistema de Gestão Inclusiva</title>
+    <title>Átrio — Sistema de Gestão da Inclusão Escolar (PEI, PAEE, Estudo de Caso)</title>
+    <meta name="description" content="O Átrio centraliza Estudo de Caso, PAEE e PEI em um só lugar, em conformidade com a nova legislação de educação especial (Decretos 12.686 e 12.773/2025). Agende uma demonstração.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Átrio">
+    <meta property="og:title" content="Átrio — a inclusão da sua escola organizada e em conformidade com a lei">
+    <meta property="og:description" content="Estudo de Caso, PAEE e PEI integrados, com acompanhamento por bimestre e rastreabilidade LGPD. Agende uma demonstração.">
+    <meta property="og:url" content="https://atriosystem.com.br">
+    <meta property="og:image" content="{{ asset('favicon-32x32.png') }}">
+    <meta name="twitter:card" content="summary">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
@@ -703,6 +712,48 @@
             text-transform: uppercase;
         }
 
+        /* ── CTA COMERCIAL / WHATSAPP ── */
+        .btn-whatsapp { background: #16A34A; color: #fff; }
+        .btn-whatsapp:hover { background: #128C3E; }
+        .btn-ghost { background: rgba(255,255,255,0.08); color: #fff; border: 1.5px solid rgba(255,255,255,0.35); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.16); }
+        .wa-float {
+            position: fixed; right: 22px; bottom: 22px; z-index: 200;
+            width: 58px; height: 58px; border-radius: 50%;
+            background: #16A34A; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 24px rgba(22,163,74,0.42); text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .wa-float:hover { transform: scale(1.08); }
+
+        /* ── COMPARATIVO ── */
+        .compare-section { background: var(--blue-pale); }
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .compare-col { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 32px 28px; }
+        .compare-col.win { border: 2px solid var(--blue); box-shadow: 0 12px 40px rgba(0,75,141,0.10); }
+        .compare-col-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .compare-tag { font-size: 10.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; }
+        .compare-tag.bad { background: #FEF2F2; color: #B42318; }
+        .compare-tag.good { background: var(--blue-soft); color: var(--blue); }
+        .compare-col h3 { font-size: 17px; font-weight: 800; color: var(--ink); }
+        .compare-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .compare-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--slate); line-height: 1.5; }
+        .compare-list li::before { content: ''; width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; background-size: contain; background-repeat: no-repeat; }
+        .compare-col.bad-col .compare-list li::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B42318' stroke-width='2.5'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E"); }
+        .compare-col.win .compare-list li::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004B8D' stroke-width='2.5'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); }
+
+        /* ── FAQ ── */
+        .faq-list { display: flex; flex-direction: column; gap: 12px; max-width: 780px; }
+        .faq-item { border: 1px solid var(--border); border-radius: 12px; background: var(--white); overflow: hidden; }
+        .faq-q { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 18px 22px; font-size: 14px; font-weight: 700; color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .faq-q::after { content: '+'; font-size: 22px; color: var(--blue); flex-shrink: 0; transition: transform 0.2s; line-height: 1; }
+        .faq-item.open .faq-q::after { transform: rotate(45deg); }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+        .faq-item.open .faq-a { max-height: 340px; }
+        .faq-a p { padding: 0 22px 18px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+        @media (max-width: 780px) { .compare-grid { grid-template-columns: 1fr; } }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 900px) {
             .nav-links { display: none; }
@@ -767,15 +818,16 @@
     </a>
 
     <ul class="nav-links">
-        <li><a href="#legislacao">Legislação</a></li>
+        <li><a href="#comparativo">Por que o Átrio</a></li>
         <li><a href="#funcionalidades">Funcionalidades</a></li>
-        <li><a href="#documentos">Documentos</a></li>
         <li><a href="#como-funciona">Como funciona</a></li>
-        <li><a href="#perfis">Perfis</a></li>
+        <li><a href="#legislacao">Legislação</a></li>
+        <li><a href="#faq">Dúvidas</a></li>
     </ul>
 
     <div class="nav-cta">
-        <a href="{{ route('login') }}?perfil=escola" class="btn btn-primary">Acessar Sistema</a>
+        <a href="https://wa.me/5542988423965?text=Ol%C3%A1!%20Quero%20conhecer%20o%20%C3%81trio." target="_blank" rel="noopener" class="btn btn-whatsapp">Falar com especialista</a>
+        <a href="{{ route('login') }}?perfil=escola" class="btn btn-outline">Entrar</a>
     </div>
 </nav>
 
@@ -783,26 +835,29 @@
 <section class="hero">
     <div class="hero-badge">
         <span class="hero-badge-dot"></span>
-        Gestão Escolar Inclusiva
+        Conforme os Decretos 12.686 e 12.773/2025
     </div>
 
     <h1 class="hero-title">
-        Cada aluno tem uma<br>
-        <span>história que merece atenção</span>
+        O apoio à inclusão começa pela<br>
+        <span>avaliação pedagógica</span> — não pelo laudo
     </h1>
 
     <p class="hero-subtitle">
-        O Átrio centraliza toda a jornada dos estudantes com necessidades educacionais especiais,
-        conectando equipe escolar e famílias em um único sistema.
+        O Átrio centraliza Estudo de Caso, PAEE e PEI, acompanha a evolução de cada aluno
+        por bimestre e mantém tudo em conformidade com a nova legislação.
+        Sua rede tem até <strong style="color:#fff;">maio de 2029</strong> para adequar os documentos.
     </p>
 
     <div class="hero-actions">
-        <a href="{{ route('login') }}?perfil=escola" class="btn btn-white btn-lg">
+        <a href="https://wa.me/5542988423965?text=Ol%C3%A1!%20Quero%20agendar%20uma%20demonstra%C3%A7%C3%A3o%20do%20%C3%81trio." target="_blank" rel="noopener" class="btn btn-white btn-lg">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/>
-                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
             </svg>
-            Acessar o Sistema
+            Agendar demonstração
+        </a>
+        <a href="{{ route('login') }}?perfil=escola" class="btn btn-ghost btn-lg">
+            Acessar o sistema
         </a>
     </div>
 
@@ -822,8 +877,8 @@
             <div class="stat-label">Tipos de documentos especializados</div>
         </div>
         <div class="stat-item">
-            <div class="stat-number">2</div>
-            <div class="stat-label">Perfis de acesso distintos</div>
+            <div class="stat-number">4+</div>
+            <div class="stat-label">Perfis de acesso, e customizáveis por escola</div>
         </div>
         <div class="stat-item">
             <div class="stat-number">100%</div>
@@ -1048,9 +1103,9 @@
                         <line x1="3" y1="10" x2="21" y2="10"/>
                     </svg>
                 </div>
-                <div class="feature-title">Rotinas de Trabalho</div>
+                <div class="feature-title">Acompanhamento e Evolução</div>
                 <div class="feature-desc">
-                    Hub centralizado de rotinas: acompanhamento de documentação de todos os alunos, adaptações de prova e gestão de atendimentos.
+                    Linha do Tempo do aluno e evolução das metas do PEI por bimestre, com abertura e fechamento de bimestre que congela e registra o resultado.
                 </div>
             </div>
 
@@ -1113,6 +1168,47 @@
                     <div class="doc-name">PEI</div>
                     <div class="doc-desc">Plano Educacional Individualizado consolidado</div>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ── COMPARATIVO ── --}}
+<section id="comparativo" class="compare-section">
+    <div class="section-inner">
+        <div class="section-tag">Por que o Átrio</div>
+        <h2 class="section-title">Um gerador de PEI avulso<br>não é um sistema de inclusão</h2>
+        <p class="section-lead">
+            Ferramentas soltas geram um documento. O Átrio conecta avaliação, planejamento,
+            acompanhamento e conformidade — o processo inteiro, por aluno.
+        </p>
+
+        <div class="compare-grid">
+            <div class="compare-col bad-col">
+                <div class="compare-col-head">
+                    <span class="compare-tag bad">Gerador avulso</span>
+                    <h3>Um documento isolado</h3>
+                </div>
+                <ul class="compare-list">
+                    <li>Gera um PEI solto, sem Estudo de Caso nem PAEE integrados</li>
+                    <li>Depende de laudo e retrabalho manual a cada revisão</li>
+                    <li>Não acompanha a evolução do aluno ao longo do ano</li>
+                    <li>Sem controle de acesso por perfil nem rastreabilidade LGPD</li>
+                    <li>Modelo de Word solto — sem respaldo do mínimo legal</li>
+                </ul>
+            </div>
+            <div class="compare-col win">
+                <div class="compare-col-head">
+                    <span class="compare-tag good">Átrio</span>
+                    <h3>O ecossistema da inclusão</h3>
+                </div>
+                <ul class="compare-list">
+                    <li>Estudo de Caso, PAEE e PEI integrados e consolidados por aluno</li>
+                    <li>Começa pela avaliação pedagógica — laudo é opcional</li>
+                    <li>Linha do Tempo e evolução de metas por bimestre</li>
+                    <li>Perfis por função, com registro de acesso e conformidade LGPD</li>
+                    <li>Fundado em 5 bases legais (LBI, Decretos 2025, LDB, LGPD)</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -1211,15 +1307,63 @@
     </div>
 </section>
 
+{{-- ── FAQ ── --}}
+<section id="faq">
+    <div class="section-inner">
+        <div class="section-tag">Perguntas frequentes</div>
+        <h2 class="section-title">Tirando as dúvidas mais comuns</h2>
+        <p class="section-lead">
+            O que as escolas mais perguntam antes de começar com o Átrio.
+        </p>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <button type="button" class="faq-q">O Átrio está de acordo com a nova legislação de 2025?</button>
+                <div class="faq-a"><p>Sim. Os documentos (Estudo de Caso, PAEE e PEI) seguem o que preveem a LBI (Lei 13.146/2015), os Decretos 12.686 e 12.773/2025, a LDB e a LGPD. A avaliação pedagógica é a porta de entrada — o laudo médico é opcional, não obrigatório.</p></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q">Precisamos do laudo médico para começar?</button>
+                <div class="faq-a"><p>Não. O apoio parte da avaliação pedagógica do estudante (Estudo de Caso), feita pela própria equipe escolar. O laudo, quando existe, é anexado como complemento — mas o aluno não precisa esperar por ele para ter o PEI.</p></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q">Os dados dos alunos ficam seguros? E a LGPD?</button>
+                <div class="faq-a"><p>Sim. Diagnósticos e laudos são dados sensíveis: o acesso é restrito por perfil e permissão, cada acesso a documento é registrado (data e usuário) e os PDFs saem com identificação de autoria e nota de conformidade LGPD.</p></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q">A equipe vai conseguir usar sem dificuldade?</button>
+                <div class="faq-a"><p>Sim. Cada perfil (coordenação, AEE, professor) vê apenas o que precisa, e o PEI é preenchido de forma colaborativa — cada professor cuida da sua matéria e o sistema consolida tudo automaticamente. Fazemos a demonstração guiada.</p></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q">Já temos documentos análogos. Precisamos refazer tudo?</button>
+                <div class="faq-a"><p>Não. Redes com documentos análogos ao PAEE e ao PEI têm prazo para adequá-los à nova norma. O Átrio ajuda nessa transição, estruturando os documentos no padrão exigido e mantendo o histórico por aluno.</p></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q">Como funciona a contratação?</button>
+                <div class="faq-a"><p>Fale com um especialista pelo WhatsApp ou e-mail e agende uma demonstração. Apresentamos o sistema com o cenário da sua escola ou rede e montamos a melhor forma de começar.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {{-- ── CTA FINAL ── --}}
 <section class="cta-section">
     <div class="section-inner">
-        <h2 class="section-title">Pronto para acessar o sistema?</h2>
+        <h2 class="section-title">Pronto para organizar a inclusão<br>da sua escola?</h2>
         <p class="section-lead">
-            Escolha seu perfil de acesso e entre no Átrio.
+            Agende uma demonstração gratuita e veja o Átrio com o cenário da sua escola ou rede.
         </p>
 
         <div class="cta-cards">
+            <a href="https://wa.me/5542988423965?text=Ol%C3%A1!%20Quero%20agendar%20uma%20demonstra%C3%A7%C3%A3o%20do%20%C3%81trio." target="_blank" rel="noopener" class="cta-card">
+                <div class="cta-card-icon" style="background: rgba(22,163,74,0.55);">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8">
+                        <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+                    </svg>
+                </div>
+                <div class="cta-card-title">Agendar demonstração</div>
+                <div class="cta-card-desc">Fale com um especialista no WhatsApp</div>
+                <span class="cta-card-btn" style="background: #16A34A; color: #fff;">Conversar →</span>
+            </a>
             <a href="{{ route('login') }}?perfil=escola" class="cta-card">
                 <div class="cta-card-icon" style="background: rgba(0,75,141,0.5);">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#A8D4FF" stroke-width="1.8">
@@ -1227,11 +1371,15 @@
                         <path d="M6 12v5c3 3 9 3 12 0v-5"/>
                     </svg>
                 </div>
-                <div class="cta-card-title">Acessar o Sistema</div>
-                <div class="cta-card-desc">Administradores e professores</div>
+                <div class="cta-card-title">Acessar o sistema</div>
+                <div class="cta-card-desc">Para quem já é cliente</div>
                 <span class="cta-card-btn" style="background: white; color: #004B8D;">Entrar →</span>
             </a>
         </div>
+
+        <p class="section-lead" style="margin: 40px auto 0; font-size: 14px;">
+            Prefere e-mail? <a href="mailto:suporte@atriosystem.com.br" style="color:#fff; font-weight:700; text-decoration:underline;">suporte@atriosystem.com.br</a>
+        </p>
     </div>
 </section>
 
@@ -1296,7 +1444,21 @@
             }
         });
     });
+
+    // FAQ (accordion)
+    document.querySelectorAll('.faq-q').forEach(function (q) {
+        q.addEventListener('click', function () {
+            this.closest('.faq-item').classList.toggle('open');
+        });
+    });
 </script>
+
+{{-- ── WHATSAPP FLUTUANTE ── --}}
+<a href="https://wa.me/5542988423965?text=Ol%C3%A1!%20Quero%20conhecer%20o%20%C3%81trio." target="_blank" rel="noopener" class="wa-float" aria-label="Falar no WhatsApp">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm5.8 14.13c-.24.68-1.42 1.31-1.95 1.36-.53.05-1.03.24-3.48-.72-2.94-1.16-4.79-4.15-4.94-4.35-.14-.2-1.16-1.55-1.16-2.96 0-1.4.74-2.09 1-2.38.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.81 2 .88 2.15.07.14.12.31.02.51-.1.2-.15.31-.29.48-.14.17-.3.38-.43.51-.14.14-.29.29-.12.58.17.29.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.3 1.42.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.65-.14.27.1 1.7.8 1.99.95.29.14.48.22.55.34.07.12.07.7-.17 1.38z"/>
+    </svg>
+</a>
 
 </body>
 </html>
