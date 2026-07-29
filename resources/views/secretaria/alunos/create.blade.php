@@ -74,20 +74,62 @@
                 @error('birth_date')<p style="font-size: 12px; color: var(--danger); margin-top: 4px;">{{ $message }}</p>@enderror
             </div>
 
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Nome completo do responsável</label>
-                <input type="text" name="responsavel_nome" value="{{ old('responsavel_nome') }}"
-                       placeholder="Ex: Maria Silva Santos"
-                       style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
-                       onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            {{-- Responsável 1 --}}
+            <div style="border: 1px solid var(--border-sub); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px;">
+                <p style="font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">Responsável</p>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">Nome completo</label>
+                    <input type="text" name="responsavel_nome" value="{{ old('responsavel_nome') }}"
+                           placeholder="Ex: Maria Silva Santos"
+                           style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">E-mail</label>
+                        <input type="email" name="responsavel_email" value="{{ old('responsavel_email') }}"
+                               placeholder="email@exemplo.com"
+                               style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                        @error('responsavel_email')<p style="font-size:11px;color:var(--danger);margin-top:3px;">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">Telefone / WhatsApp</label>
+                        <input type="text" name="responsavel_telefone" value="{{ old('responsavel_telefone') }}"
+                               placeholder="(00) 00000-0000"
+                               style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                    </div>
+                </div>
             </div>
 
-            <div style="margin-bottom: 24px;">
-                <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Nome completo do 2º responsável</label>
-                <input type="text" name="responsavel_2_nome" value="{{ old('responsavel_2_nome') }}"
-                       placeholder="Opcional"
-                       style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
-                       onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            {{-- Responsável 2 --}}
+            <div style="border: 1px solid var(--border-sub); border-radius: 10px; padding: 16px 20px; margin-bottom: 24px;">
+                <p style="font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 14px;">2º Responsável <span style="font-weight:400;color:var(--text-4);">(opcional)</span></p>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">Nome completo</label>
+                    <input type="text" name="responsavel_2_nome" value="{{ old('responsavel_2_nome') }}"
+                           placeholder="Opcional"
+                           style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">E-mail</label>
+                        <input type="email" name="responsavel_2_email" value="{{ old('responsavel_2_email') }}"
+                               placeholder="email@exemplo.com"
+                               style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                        @error('responsavel_2_email')<p style="font-size:11px;color:var(--danger);margin-top:3px;">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 6px;">Telefone / WhatsApp</label>
+                        <input type="text" name="responsavel_2_telefone" value="{{ old('responsavel_2_telefone') }}"
+                               placeholder="(00) 00000-0000"
+                               style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+                    </div>
+                </div>
             </div>
 
             <div style="margin-bottom: 24px;">
