@@ -31,10 +31,11 @@
 
     {{-- Cabeçalho --}}
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('secretaria.painel') }}"
+        @php $voltarAluno = request('aluno'); @endphp
+        <a href="{{ $voltarAluno ? route('secretaria.alunos.metas-academicas.edit', $voltarAluno) : route('secretaria.painel') }}"
            style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Voltar
+            {{ $voltarAluno ? 'Voltar para o PEI do aluno' : 'Voltar' }}
         </a>
         <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">Banco de Metas</h1>
         <p style="font-size: 13px; color: var(--text-3); margin: 0;">
@@ -50,6 +51,7 @@
 
     <form method="POST" action="{{ route('secretaria.metas.banco.update') }}">
         @csrf @method('PUT')
+        @if(request('aluno'))<input type="hidden" name="aluno" value="{{ request('aluno') }}">@endif
 
         @foreach(GoalTemplate::CATEGORIES as $cat => $label)
             @php $lista = ($templates[$cat] ?? collect()); @endphp

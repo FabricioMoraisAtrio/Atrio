@@ -4,10 +4,11 @@
 @section('content')
 <div style="max-width: 1000px;">
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('secretaria.alunos.show', $aluno) }}"
+        @php $listRoute = $type === 'paee' ? 'secretaria.rotinas.documentos.paee' : 'secretaria.rotinas.documentos.estudo-caso'; @endphp
+        <a href="{{ route($listRoute) }}"
            style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Voltar para {{ $aluno->name }}
+            Voltar para {{ $type === 'paee' ? 'PAEE' : 'Estudo de Caso' }}
         </a>
         <div style="display: flex; align-items: center; gap: 12px;">
             <div style="padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
@@ -44,7 +45,7 @@
                         style="background: var(--accent); color: white; border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
                     Salvar documento
                 </button>
-                <a href="{{ route('secretaria.alunos.show', $aluno) }}"
+                <a href="{{ route($listRoute) }}"
                    style="padding: 11px 20px; border-radius: 8px; font-size: 13px; color: var(--text-3); text-decoration: none; border: 1px solid var(--border);">
                     Cancelar
                 </a>

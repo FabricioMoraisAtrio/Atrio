@@ -11,8 +11,17 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Voltar para Linha do Tempo
         </a>
-        <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">Linha do Tempo — {{ $aluno->name }}</h1>
-        <p style="font-size: 13px; color: var(--text-3); margin: 0;">Evolução das metas do PEI e histórico do aluno em um só lugar.</p>
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div>
+                <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">Linha do Tempo — {{ $aluno->name }}</h1>
+                <p style="font-size: 13px; color: var(--text-3); margin: 0;">Evolução das metas do PEI e histórico do aluno em um só lugar.</p>
+            </div>
+            <a href="{{ route('secretaria.alunos.linha-do-tempo.pdf', $aluno) }}"
+               style="display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; text-decoration: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/></svg>
+                Exportar PDF
+            </a>
+        </div>
     </div>
 
     @if($errors->any())

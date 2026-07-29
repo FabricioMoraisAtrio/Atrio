@@ -269,6 +269,12 @@
                                     </div>
                                 @elseif($doc)
                                     @include('secretaria.rotinas.documentos._visualizar_btn', ['doc' => $doc, 'corPrincipal' => $corPrincipal, 'bgPrincipal' => $bgPrincipal])
+                                @elseif($cfg['tipo'] === 'paee' && ! $aluno->has_case_study)
+                                    <span title="Preencha o Estudo de Caso antes de criar o PAEE"
+                                          style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-4); padding: 6px 14px; border-radius: 8px; background: var(--bg-subtle); border: 1px solid var(--border); cursor: not-allowed;">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                        Estudo de Caso pendente
+                                    </span>
                                 @else
                                     <a href="{{ route('secretaria.alunos.documentos.create', [$aluno, 'type' => $cfg['tipo']]) }}"
                                        style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 8px; background: {{ $corPrincipal }};">

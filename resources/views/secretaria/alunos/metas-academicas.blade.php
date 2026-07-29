@@ -41,7 +41,7 @@
                     socioemocionais e funcionais — aparecem no PEI para o professor avaliar.
                 </p>
             </div>
-            <a href="{{ route('secretaria.metas.banco.edit') }}"
+            <a href="{{ route('secretaria.metas.banco.edit', ['aluno' => $aluno->id]) }}"
                style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); color: var(--text-2);">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                 Banco de metas

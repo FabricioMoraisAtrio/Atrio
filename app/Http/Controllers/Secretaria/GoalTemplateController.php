@@ -51,6 +51,11 @@ class GoalTemplateController extends Controller
             }
         }
 
+        if ($request->filled('aluno')) {
+            return redirect()->route('secretaria.alunos.metas-academicas.edit', $request->input('aluno'))
+                ->with('success', 'Banco de metas atualizado.');
+        }
+
         return redirect()->route('secretaria.metas.banco.edit')
             ->with('success', 'Banco de metas atualizado.');
     }

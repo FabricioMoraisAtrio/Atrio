@@ -51,26 +51,7 @@ class ConfigController extends Controller
             ->with('success', 'Dados da escola atualizados.');
     }
 
-    public function updateModulos(Request $request)
-    {
-        $escola      = $this->escola();
-        $disponiveis = array_keys(School::availableModules());
-
-        // Mantém só as chaves válidas marcadas.
-        $selecionados = array_values(array_intersect($disponiveis, (array) $request->input('modules', [])));
-
-        // Módulos essenciais sempre ativos — evita o admin se trancar para fora.
-        foreach (['configuracoes', 'painel'] as $essencial) {
-            if (! in_array($essencial, $selecionados, true)) {
-                $selecionados[] = $essencial;
-            }
-        }
-
-        $escola->update(['modules' => $selecionados]);
-
-        return redirect()->route('secretaria.config.index', ['tab' => 'modulos'])
-            ->with('success', 'Módulos atualizados.');
-    }
+    // Gestão de módulos é exclusiva do superadmin (SaaS) — método removido do portal da escola.
 
     public function updateBimestres(Request $request)
     {

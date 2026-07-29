@@ -15,8 +15,17 @@ class DocumentPdfRenderer
      */
     public static function render(Document $documento): string
     {
-        $html = view('pdf.documento', ['documento' => $documento])->render();
+        return self::htmlToPdf(view('pdf.documento', ['documento' => $documento])->render());
+    }
 
+    /** Renderiza qualquer view Blade como PDF, com as mesmas margens e rodapé institucional. */
+    public static function renderView(string $view, array $data): string
+    {
+        return self::htmlToPdf(view($view, $data)->render());
+    }
+
+    private static function htmlToPdf(string $html): string
+    {
         $tmp = storage_path('app/mpdf');
         if (! is_dir($tmp)) {
             @mkdir($tmp, 0775, true);

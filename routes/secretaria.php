@@ -37,7 +37,7 @@ Route::middleware(['school.module:configuracoes', 'can:escola.configurar'])->pre
     Route::put('/escola',        [ConfigController::class, 'updateEscola'])->name('escola.update');
     Route::put('/terminologias', [ConfigController::class, 'updateTerminologias'])->name('terminologias.update');
     Route::put('/bimestres',     [ConfigController::class, 'updateBimestres'])->name('bimestres.update');
-    Route::put('/modulos',       [ConfigController::class, 'updateModulos'])->name('modulos.update');
+    // Módulos: gerenciados exclusivamente pelo superadmin (SaaS) — sem gestão pela escola.
     Route::resource('perfis', SchoolRoleController::class)->except(['show'])->parameters(['perfis' => 'perfil']);
 });
 
@@ -81,6 +81,7 @@ Route::middleware('school.module:alunos')->group(function () {
         Route::middleware('school.module:linha_do_tempo')->group(function () {
             Route::get('rotinas/linha-do-tempo', \App\Http\Controllers\Secretaria\Rotinas\LinhaDoTempoHubController::class)->name('rotinas.linha-do-tempo');
             Route::get('alunos/{aluno}/linha-do-tempo', [\App\Http\Controllers\Secretaria\LinhaDoTempoController::class, 'show'])->name('alunos.linha-do-tempo');
+            Route::get('alunos/{aluno}/linha-do-tempo/pdf', [\App\Http\Controllers\Secretaria\LinhaDoTempoController::class, 'pdf'])->name('alunos.linha-do-tempo.pdf');
         });
         Route::get('alunos/{aluno}',      [StudentController::class, 'show'])->name('alunos.show');
     });
