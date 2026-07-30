@@ -32,6 +32,17 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                // Mapa spatie_role => SchoolRole para exibir o nome amigável (não o slug interno "sN_...").
+                $schoolRoles = \App\Models\SchoolRole::where('school_id', session('school_id'))->get()->keyBy('spatie_role');
+                $roleLabels  = ['professor' => 'Professor', 'coordenador' => 'Coordenação', 'orientador' => 'Orientação Pedagógica', 'admin' => 'Administrador'];
+                $roleStyles  = [
+                    'professor'  => 'background: #E8F0F9; color: #004B8D;',
+                    'coordenador'=> 'background: #E6F5F4; color: #009C8C;',
+                    'orientador' => 'background: #F3E8FF; color: #7C3AED;',
+                    'admin'      => 'background: #F5EDE6; color: #7C3700;',
+                ];
+            @endphp
             @forelse($usuarios as $usuario)
             <tr style="border-top: 1px solid var(--border-sub);"
                 onmouseover="this.style.background='var(--bg-hover)'"
@@ -54,17 +65,14 @@
                 </td>
                 <td style="padding: 14px 20px;">
                     @php
-                        $role = $usuario->getRoleNames()->first();
-                        $roleLabels = ['professor' => 'Professor', 'coordenador' => 'Coordenação', 'orientador' => 'Orientação Pedagógica', 'admin' => 'Administrador'];
-                        $roleStyles = [
-                            'professor'  => 'background: #E8F0F9; color: #004B8D;',
-                            'coordenador'=> 'background: #E6F5F4; color: #009C8C;',
-                            'orientador' => 'background: #F3E8FF; color: #7C3AED;',
-                            'admin'      => 'background: #F5EDE6; color: #7C3700;',
-                        ];
+                        $role      = $usuario->getRoleNames()->first();
+                        $sr        = $role ? ($schoolRoles[$role] ?? null) : null;
+                        $roleName  = $sr?->name ?? ($roleLabels[$role] ?? ($role ? ucfirst($role) : '—'));
+                        $roleStyle = $roleStyles[$role]
+                            ?? ($sr && $sr->color ? 'background: ' . $sr->color . '1A; color: ' . $sr->color . ';' : 'background: #F3F4F6; color: var(--text-3);');
                     @endphp
-                    <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; {{ $roleStyles[$role] ?? 'background: #F3F4F6; color: var(--text-3);' }}">
-                        {{ $roleLabels[$role] ?? ucfirst($role) }}
+                    <span style="font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; {{ $roleStyle }}">
+                        {{ $roleName }}
                     </span>
                 </td>
                 <td style="padding: 14px 20px; font-size: 13px; color: var(--text-3);">

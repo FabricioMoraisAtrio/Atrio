@@ -86,8 +86,8 @@ $textarea = fn(string $name, string $label, int $rows = 3) =>
 
 <div style="margin-bottom: 28px;">
     <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Resumo da vida escolar (escolas anteriores, retenções ou avanços)</label>
-        <textarea name="historico_escolar" rows="4"
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Resumo da vida escolar (escolas anteriores, retenções ou avanços) <span style="color: var(--danger);">*</span></label>
+        <textarea name="historico_escolar" rows="4" required
                   style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
                   onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('historico_escolar') }}</textarea>
     </div>

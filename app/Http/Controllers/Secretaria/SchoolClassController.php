@@ -33,9 +33,16 @@ class SchoolClassController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'  => 'required|string|max:50',
+            'name'  => ['required', 'string', 'max:50',
+                \Illuminate\Validation\Rule::unique('school_classes')->where(fn ($q) => $q
+                    ->where('school_id', session('school_id'))
+                    ->where('shift', $request->input('shift'))
+                    ->where('year', $request->input('year'))),
+            ],
             'shift' => 'required|in:Matutino,Vespertino,Noturno',
             'year'  => 'required|digits:4',
+        ], [
+            'name.unique' => 'Já existe uma turma com esse nome para o mesmo turno e ano.',
         ]);
 
         $data['school_id'] = session('school_id');
@@ -54,9 +61,16 @@ class SchoolClassController extends Controller
     public function update(Request $request, SchoolClass $turma)
     {
         $data = $request->validate([
-            'name'  => 'required|string|max:50',
+            'name'  => ['required', 'string', 'max:50',
+                \Illuminate\Validation\Rule::unique('school_classes')->ignore($turma->id)->where(fn ($q) => $q
+                    ->where('school_id', session('school_id'))
+                    ->where('shift', $request->input('shift'))
+                    ->where('year', $request->input('year'))),
+            ],
             'shift' => 'required|in:Matutino,Vespertino,Noturno',
             'year'  => 'required|digits:4',
+        ], [
+            'name.unique' => 'Já existe uma turma com esse nome para o mesmo turno e ano.',
         ]);
 
         $turma->update($data);

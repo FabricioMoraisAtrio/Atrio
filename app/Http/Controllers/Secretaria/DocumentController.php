@@ -21,6 +21,29 @@ class DocumentController extends Controller
         ][$type] ?? ucfirst(str_replace('_', ' ', $type));
     }
 
+    /**
+     * Campos mínimos obrigatórios por tipo de documento (regra pedagógica):
+     * Estudo de Caso exige o histórico escolar; PAEE exige ao menos 1 item de Diagnóstico/Perfil.
+     * @return array{rules: array, messages: array}
+     */
+    private static function obrigatorios(string $type): array
+    {
+        return match ($type) {
+            'estudo_caso' => [
+                'rules'    => ['historico_escolar' => 'required|string'],
+                'messages' => ['historico_escolar.required' => 'Informe o histórico escolar do estudante.'],
+            ],
+            'paee' => [
+                'rules'    => ['diagnostico_perfil' => 'required|array|min:1'],
+                'messages' => [
+                    'diagnostico_perfil.required' => 'Selecione ao menos um item em Diagnóstico / Perfil.',
+                    'diagnostico_perfil.min'      => 'Selecione ao menos um item em Diagnóstico / Perfil.',
+                ],
+            ],
+            default => ['rules' => [], 'messages' => []],
+        };
+    }
+
     public function create(Student $aluno, Request $request)
     {
         $type = $request->query('type', 'estudo_caso');
@@ -59,11 +82,13 @@ class DocumentController extends Controller
 
     public function store(Student $aluno, Request $request)
     {
-        $request->validate([
-            'type' => 'required|in:estudo_caso,paee',
-        ]);
+        $type  = $request->input('type');
+        $obrig = self::obrigatorios($type);
 
-        $type = $request->input('type');
+        $request->validate(
+            ['type' => 'required|in:estudo_caso,paee'] + $obrig['rules'],
+            $obrig['messages'],
+        );
 
         if ($type === 'paee') {
             $hasCase = Document::where('student_id', $aluno->id)
@@ -155,6 +180,11 @@ class DocumentController extends Controller
             return redirect()->route('secretaria.alunos.show', $documento->student_id)
                 ->with('error', 'Documentos de anos anteriores são somente leitura.');
         }
+        $obrig = self::obrigatorios($documento->type);
+        if ($obrig['rules']) {
+            $request->validate($obrig['rules'], $obrig['messages']);
+        }
+
         if ($documento->type === 'pei') {
             $global = DocumentContentService::buildContent('pei', $request);
             $content = array_merge($documento->content ?? [], ['global' => $global]);

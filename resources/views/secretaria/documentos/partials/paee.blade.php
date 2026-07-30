@@ -77,6 +77,7 @@ $textarea = fn(string $name, string $label, int $rows = 3, string $placeholder =
 
 {{-- ═══ DIAGNÓSTICO / PERFIL ═══ --}}
 {!! $section('Diagnóstico / Perfil', 'Necessidades educacionais e barreiras identificadas.') !!}
+<p style="font-size: 12px; color: var(--danger); margin: -6px 0 14px;">* Selecione ao menos um item abaixo.</p>
 
 @php
 $diagOpcoes = [
