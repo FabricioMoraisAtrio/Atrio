@@ -31,7 +31,7 @@ class DocumentosPendentesNotification extends Notification implements ShouldQueu
             ->view('emails.notificacao', [
                 'titulo'     => 'Documentos pendentes',
                 'saudacao'   => 'Olá, ' . $notifiable->name . '!',
-                'paragrafos' => ['Os seguintes alunos possuem documentos pendentes de preenchimento:'],
+                'paragrafos' => ['Os seguintes estudantes possuem documentos pendentes de preenchimento:'],
                 'itens'      => $itens,
                 'acaoTexto'  => 'Acessar o sistema',
                 'acaoUrl'    => route('secretaria.alunos.index'),

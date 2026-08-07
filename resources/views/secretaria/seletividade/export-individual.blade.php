@@ -454,7 +454,7 @@
 
     @if($total === 0)
     <div style="text-align: center; padding: 60px; color: var(--text-4); font-size: 14px;">
-        Nenhum alimento registrado para este aluno.
+        Nenhum alimento registrado para este estudante.
     </div>
     @endif
 

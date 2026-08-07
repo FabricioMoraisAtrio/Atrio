@@ -82,7 +82,7 @@ class SchoolClassController extends Controller
     public function destroy(SchoolClass $turma)
     {
         if ($turma->students()->exists()) {
-            return back()->with('error', 'Não é possível remover a turma pois ela possui alunos vinculados.');
+            return back()->with('error', 'Não é possível remover a turma pois ela possui estudantes vinculados.');
         }
 
         $turma->delete();

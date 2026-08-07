@@ -231,7 +231,7 @@ $equipePreenchida = collect($equipeFields)->keys()->filter(fn($k) => !empty($ec[
             <p style="font-size: 12px; color: var(--text-4); font-style: italic; margin: 0;">Informações adicionais não contempladas nos campos acima.</p>
         </div>
         <textarea name="observacoes" rows="4"
-                  placeholder="Observações gerais sobre o aluno..."
+                  placeholder="Observações gerais sobre o estudante..."
                   style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
                   onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">{{ old('observacoes', $c['observacoes'] ?? '') }}</textarea>
     </div>

@@ -223,7 +223,7 @@ public function show(Student $aluno)
     public function destroy(Student $aluno)
     {
         if ($aluno->documents()->exists() || $aluno->laudos()->exists()) {
-            return back()->with('error', 'Não é possível remover o aluno pois ele possui documentos ou laudos cadastrados.');
+            return back()->with('error', 'Não é possível remover o estudante pois ele possui documentos ou laudos cadastrados.');
         }
 
         // Registra antes de excluir (student_id ainda válido para a FK)

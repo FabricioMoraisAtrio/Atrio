@@ -163,7 +163,7 @@
         <h2 class="section-title">Um gerador de PEI avulso<br>não é um sistema de inclusão</h2>
         <p class="section-lead">
             Ferramentas soltas geram um documento. O Átrio conecta avaliação, planejamento,
-            acompanhamento e conformidade — o processo inteiro, por aluno.
+            acompanhamento e conformidade — o processo inteiro, por estudante.
         </p>
 
         <div class="compare-grid">

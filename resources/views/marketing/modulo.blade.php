@@ -55,7 +55,7 @@
     <div class="section-inner">
         <div class="section-tag">A Plataforma</div>
         <h2 class="section-title">Outros módulos</h2>
-        <p class="section-lead">O Átrio conecta avaliação, planejamento, acompanhamento e conformidade — o processo inteiro, por aluno.</p>
+        <p class="section-lead">O Átrio conecta avaliação, planejamento, acompanhamento e conformidade — o processo inteiro, por estudante.</p>
         <div class="docs-grid">
             @foreach (\App\Support\Modulos::all() as $slug => $outro)
                 @continue($slug === $m['slug'])

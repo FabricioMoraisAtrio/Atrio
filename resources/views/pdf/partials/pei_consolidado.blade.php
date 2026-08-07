@@ -391,7 +391,7 @@ $objLongo = $peiGlobal['objetivos_longo_prazo'] ?? '';
 <div class="section">
     <div class="section-header">
         <div class="section-title">Avaliação</div>
-        <div class="section-sub">Como será acompanhado o progresso do aluno.</div>
+        <div class="section-sub">Como será acompanhado o progresso do estudante.</div>
     </div>
     <div class="field-value" style="white-space: pre-wrap;">{{ $avaliacao }}</div>
 </div>

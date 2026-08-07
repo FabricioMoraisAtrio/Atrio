@@ -36,7 +36,7 @@ class DocumentController extends Controller
     }
 
     /**
-     * Exibe o formulário de preenchimento da seção do professor no PEI do aluno.
+     * Exibe o formulário de preenchimento da seção do professor no PEI do estudante.
      */
     public function editPei(Student $aluno)
     {
@@ -48,7 +48,7 @@ class DocumentController extends Controller
             ->first();
 
         if (! $pei) {
-            return back()->withErrors(['documento' => 'O Estudo de Caso ainda não foi preenchido para este aluno.']);
+            return back()->withErrors(['documento' => 'O Estudo de Caso ainda não foi preenchido para este estudante.']);
         }
 
         $turma       = $this->turmaComAluno($aluno->id);

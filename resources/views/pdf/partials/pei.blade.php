@@ -336,7 +336,7 @@
 <div class="section">
     <div class="section-header">
         <div class="section-title">Avaliação</div>
-        <div class="section-sub">Como será acompanhado o progresso do aluno.</div>
+        <div class="section-sub">Como será acompanhado o progresso do estudante.</div>
     </div>
     <div class="field-value tall {{ !$criterios_peda ? 'empty' : '' }}" style="white-space: pre-wrap;">{{ $criterios_peda ?: '(não preenchido)' }}</div>
 </div>

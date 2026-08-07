@@ -10,7 +10,7 @@
         @csrf
 
         <textarea name="content" rows="2" maxlength="1000"
-                  placeholder="Registre uma observação sobre este aluno..."
+                  placeholder="Registre uma observação sobre este estudante..."
                   style="width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--text-1); background: var(--bg-card); outline: none; resize: none; box-sizing: border-box; margin-bottom: 10px; font-family: inherit;">{{ old('content') }}</textarea>
 
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">

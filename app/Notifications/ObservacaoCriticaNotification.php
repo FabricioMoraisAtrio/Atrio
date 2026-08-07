@@ -27,13 +27,13 @@ class ObservacaoCriticaNotification extends Notification implements ShouldQueue
                 'titulo'     => 'Observação crítica',
                 'topo'       => '#B42318',
                 'saudacao'   => 'Olá, ' . $notifiable->name . '!',
-                'paragrafos' => ['Uma observação **crítica** foi registrada para o aluno **' . $this->observation->student->name . '**.'],
+                'paragrafos' => ['Uma observação **crítica** foi registrada para o estudante **' . $this->observation->student->name . '**.'],
                 'dados'      => [
                     'Registrado por' => $this->observation->user->name,
                     'Categoria'      => ucfirst($this->observation->category),
                     'Observação'     => $this->observation->content,
                 ],
-                'acaoTexto'  => 'Ver perfil do aluno',
+                'acaoTexto'  => 'Ver perfil do estudante',
                 'acaoUrl'    => route('secretaria.alunos.show', $this->observation->student_id),
                 'rodape'     => 'Sistema Átrio — Portal de Gestão Inclusiva.',
             ]);

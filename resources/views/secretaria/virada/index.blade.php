@@ -18,7 +18,7 @@
 
     @if($jaExiste)
         <div style="background:var(--warning-bg); border:1px solid var(--warning-border); color:var(--warning); font-size:13px; border-radius:10px; padding:12px 16px; margin-bottom:18px;">
-            Já existem turmas em {{ $target }}. Você pode rodar mesmo assim — nada é duplicado (alunos/turmas já existentes são mantidos).
+            Já existem turmas em {{ $target }}. Você pode rodar mesmo assim — nada é duplicado (estudantes/turmas já existentes são mantidos).
         </div>
     @endif
 

@@ -17,7 +17,7 @@
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 12px; align-items: end;">
         <div>
             <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Estudante</label>
-            <input type="text" name="aluno" value="{{ request('aluno') }}" placeholder="Nome do aluno..."
+            <input type="text" name="aluno" value="{{ request('aluno') }}" placeholder="Nome do estudante..."
                    style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--text-1); background: var(--bg-card); outline: none; box-sizing: border-box;">
         </div>
         <div>
@@ -94,7 +94,7 @@
                     'viewed'   => ['label' => 'Visualizado',  'bg' => '#F3F4F6', 'color' => '#374151'],
                     default    => ['label' => ucfirst($log->action), 'bg' => '#F3F4F6', 'color' => '#374151'],
                 };
-                $entidades   = ['aluno' => 'Cadastro de aluno', 'laudo' => 'Laudo', 'usuario' => 'Usuário'];
+                $entidades   = ['aluno' => 'Cadastro de estudante', 'laudo' => 'Laudo', 'usuario' => 'Usuário'];
                 $isEntidade  = array_key_exists($log->document_type, $entidades);
                 $docType     = $log->document_type ? strtoupper(str_replace('_', ' ', $log->document_type)) : '—';
                 $studentName = $log->student_name ?? '—';

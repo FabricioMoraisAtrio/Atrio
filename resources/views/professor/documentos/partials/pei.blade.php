@@ -29,7 +29,7 @@
 {{-- ═══ ESTRATÉGIAS PEDAGÓGICAS ═══ --}}
 <div style="border: 1px solid var(--border-sub); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
     <p style="font-size: 11px; font-weight: 700; color: var(--accent-text); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 4px;">Estratégias Pedagógicas</p>
-    <p style="font-size: 12px; color: var(--text-4); margin: 0 0 16px;">Descreva como você vai adaptar o ensino desta disciplina para este aluno.</p>
+    <p style="font-size: 12px; color: var(--text-4); margin: 0 0 16px;">Descreva como você vai adaptar o ensino desta disciplina para este estudante.</p>
     <textarea name="estrategias_pedagogicas" rows="4"
               placeholder="Ex: Uso de material concreto, atividades em dupla, rotina estruturada, apoio visual..."
               style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.6;"

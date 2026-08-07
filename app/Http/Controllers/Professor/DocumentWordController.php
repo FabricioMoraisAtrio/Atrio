@@ -86,7 +86,7 @@ public function __invoke(Document $documento)
     $section->addTextBreak(2);
 
     $camposLabel = [
-        'historico'          => 'Histórico do aluno',
+        'historico'          => 'Histórico do estudante',
         'barreiras'          => 'Barreiras de aprendizagem',
         'potencialidades'    => 'Potencialidades',
         'objetivos'          => 'Objetivos pedagógicos',
@@ -114,7 +114,7 @@ public function __invoke(Document $documento)
 
     $sigTable = $section->addTable(['borderSize' => 0]);
     $sigTable->addRow(800);
-    foreach (['Professor / Elaborador', 'Coordenação / Secretaria', 'Responsável pelo aluno'] as $sig) {
+    foreach (['Professor / Elaborador', 'Coordenação / Secretaria', 'Responsável pelo estudante'] as $sig) {
         $sigTable->addCell(3333, ['borderBottomSize' => 6, 'borderBottomColor' => '374151'])
             ->addText($sig, ['size' => 9, 'color' => '6B7280', 'name' => 'Arial'], ['alignment' => 'center', 'spaceAfter' => 200]);
     }

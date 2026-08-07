@@ -49,7 +49,7 @@ $cards = [
     // 4. Documentos de Inclusão
     [
         'label'    => 'Documentos de Inclusão',
-        'descricao'=> 'PAEE, PEI e registros de atendimentos dos alunos.',
+        'descricao'=> 'PAEE, PEI e registros de atendimentos dos estudantes.',
         'route'    => 'secretaria.rotinas.documentos.index',
         'cor'      => '#7C3700',
         'bg'       => '#F5EDE6',

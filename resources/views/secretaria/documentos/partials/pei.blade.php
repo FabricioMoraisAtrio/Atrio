@@ -77,7 +77,7 @@
 <div style="margin-bottom: 28px;">
     <div style="border-left: 3px solid {{ $accent }}; padding: 4px 0 4px 14px; margin-bottom: 16px;">
         <p style="font-size: 15px; font-weight: 700; color: var(--text-1); margin: 0 0 2px;">Avaliação</p>
-        <p style="font-size: 12px; color: var(--text-4); font-style: italic; margin: 0;">Como será acompanhado o progresso do aluno.</p>
+        <p style="font-size: 12px; color: var(--text-4); font-style: italic; margin: 0;">Como será acompanhado o progresso do estudante.</p>
     </div>
     <textarea name="criterios_avaliacao" rows="4"
               style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"

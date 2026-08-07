@@ -66,7 +66,7 @@ class DocumentController extends Controller
             ->exists();
 
         if ($exists) {
-            return back()->withErrors(['documento' => 'Já existe um ' . self::tipoLabel($type) . ' para este aluno em ' . date('Y') . '.']);
+            return back()->withErrors(['documento' => 'Já existe um ' . self::tipoLabel($type) . ' para este estudante em ' . date('Y') . '.']);
         }
 
         $estudo_caso_content = [];
@@ -210,7 +210,7 @@ class DocumentController extends Controller
         if ($type === 'estudo_caso') {
             $student->update(['has_case_study' => false]);
 
-            // Remove o PEI do aluno junto com o Estudo de Caso
+            // Remove o PEI do estudante junto com o Estudo de Caso
             Document::where('student_id', $student->id)
                 ->where('type', 'pei')
                 ->where('year', date('Y'))

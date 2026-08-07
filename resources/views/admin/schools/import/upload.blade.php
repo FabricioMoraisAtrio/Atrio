@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Importar alunos')
+@section('title', 'Importar estudantes')
 
 @section('content')
 @php
@@ -70,7 +70,7 @@
     {{-- Campos --}}
     <div class="adm-card" style="padding:24px;">
         <p style="font-size:14px; font-weight:700; color:var(--adm-text); margin:0 0 4px;">Campos lidos pelo sistema</p>
-        <p style="font-size:12px; color:var(--adm-text-3); margin:0 0 14px;">Tudo que alimenta o cadastro do aluno. Dados clínicos (CIDs, laudos) seguem confirmados pela equipe — nunca preenchidos automaticamente.</p>
+        <p style="font-size:12px; color:var(--adm-text-3); margin:0 0 14px;">Tudo que alimenta o cadastro do estudante. Dados clínicos (CIDs, laudos) seguem confirmados pela equipe — nunca preenchidos automaticamente.</p>
         <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
             <thead>
                 <tr style="text-align:left; background:var(--adm-border-2);">

@@ -10,7 +10,7 @@ class GoalTemplateController extends Controller
 {
     /**
      * Banco de metas reutilizáveis da escola — sugestões por categoria que
-     * abastecem o cadastro de metas de cada aluno (via datalist).
+     * abastecem o cadastro de metas de cada estudante (via datalist).
      * Restrito por pei.metas_gerenciar.
      */
     public function edit()

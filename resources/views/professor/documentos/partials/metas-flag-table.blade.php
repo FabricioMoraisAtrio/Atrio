@@ -16,7 +16,7 @@
     @if($metas->isEmpty())
         <div style="padding: 16px 18px;">
             <p style="font-size: 12px; color: var(--text-4); font-style: italic; margin: 0;">
-                Nenhuma meta cadastrada nesta categoria. O administrador/coordenação cadastra as metas na ficha do aluno.
+                Nenhuma meta cadastrada nesta categoria. O administrador/coordenação cadastra as metas na ficha do estudante.
             </p>
         </div>
     @else

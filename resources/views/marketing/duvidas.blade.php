@@ -32,7 +32,7 @@
             </div>
             <div class="faq-item">
                 <button type="button" class="faq-q">Já temos documentos análogos. Precisamos refazer tudo?</button>
-                <div class="faq-a"><p>Não. Redes com documentos análogos ao PAEE e ao PEI têm prazo para adequá-los à nova norma. O Átrio ajuda nessa transição, estruturando os documentos no padrão exigido e mantendo o histórico por aluno.</p></div>
+                <div class="faq-a"><p>Não. Redes com documentos análogos ao PAEE e ao PEI têm prazo para adequá-los à nova norma. O Átrio ajuda nessa transição, estruturando os documentos no padrão exigido e mantendo o histórico por estudante.</p></div>
             </div>
             <div class="faq-item">
                 <button type="button" class="faq-q">Como funciona a contratação?</button>

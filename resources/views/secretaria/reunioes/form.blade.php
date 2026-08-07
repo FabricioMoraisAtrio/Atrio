@@ -57,7 +57,7 @@
 
             <div>
                 <label style="{{ $labelStyle }}">Participantes</label>
-                <textarea name="participantes" rows="2" required placeholder="Ex.: Coordenação, professora regente, mãe do aluno..."
+                <textarea name="participantes" rows="2" required placeholder="Ex.: Coordenação, professora regente, mãe do estudante..."
                           style="{{ $inputStyle }} resize:vertical;">{{ old('participantes', $reuniao->participantes) }}</textarea>
             </div>
 

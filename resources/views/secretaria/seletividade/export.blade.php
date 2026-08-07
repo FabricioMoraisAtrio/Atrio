@@ -292,7 +292,7 @@
 
     {{-- Aviso --}}
     <div class="alert-box">
-        Atenção: verifique sempre os itens marcados como <strong>RECUSA</strong> antes de preparar o lanche. Respeitar as restrições alimentares é fundamental para o bem-estar e segurança dos alunos.
+        Atenção: verifique sempre os itens marcados como <strong>RECUSA</strong> antes de preparar o lanche. Respeitar as restrições alimentares é fundamental para o bem-estar e segurança dos estudantes.
     </div>
 
     {{-- Legenda --}}
