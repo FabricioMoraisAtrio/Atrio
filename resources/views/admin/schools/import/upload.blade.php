@@ -22,7 +22,7 @@
     <div style="margin-bottom:8px;">
         <a href="{{ route('admin.schools.edit', $school) }}" style="font-size:13px; color:var(--adm-accent); text-decoration:none;">← {{ $school->name }}</a>
     </div>
-    <h1 style="font-size:22px; font-weight:800; color:var(--adm-text); margin:0 0 4px;">Importar alunos — {{ $school->name }}</h1>
+    <h1 style="font-size:22px; font-weight:800; color:var(--adm-text); margin:0 0 4px;">Importar estudantes — {{ $school->name }}</h1>
     <p style="font-size:13px; color:var(--adm-text-3); margin:0 0 18px;">
         Disponível apenas aqui no painel. Envie um <strong>CSV</strong>; o sistema detecta as colunas, mostra uma
         <strong>pré-visualização</strong> e só grava após confirmação. Deduplica por matrícula (reimportar é seguro) e nunca apaga.

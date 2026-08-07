@@ -5,7 +5,7 @@
 @php
     $cards = [
         ['Escolas', $totais['escolas'], '<path d="M3 21h18M5 21V8l7-4 7 4v13"/>'],
-        ['Alunos', $totais['alunos'], '<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/>'],
+        ['Estudantes', $totais['alunos'], '<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/>'],
         ['Documentos', $totais['documentos'], '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>'],
         ['Usuários', $totais['usuarios'], '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>'],
     ];
@@ -59,7 +59,7 @@
         <thead>
             <tr style="background:var(--adm-border-2); text-align:left;">
                 <th style="padding:11px 20px; font-size:11px; font-weight:700; color:var(--adm-text-3); text-transform:uppercase;">Escola</th>
-                <th style="padding:11px 14px; font-size:11px; font-weight:700; color:var(--adm-text-3); text-transform:uppercase;">Alunos</th>
+                <th style="padding:11px 14px; font-size:11px; font-weight:700; color:var(--adm-text-3); text-transform:uppercase;">Estudantes</th>
                 <th style="padding:11px 14px; font-size:11px; font-weight:700; color:var(--adm-text-3); text-transform:uppercase;">Documentos</th>
                 <th style="padding:11px 14px; font-size:11px; font-weight:700; color:var(--adm-text-3); text-transform:uppercase;">Usuários</th>
                 <th style="padding:11px 14px; font-size:11px; font-weight:700; color:var(--adm-text-3); text-transform:uppercase;">Plano</th>

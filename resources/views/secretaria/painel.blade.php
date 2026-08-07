@@ -32,7 +32,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
         </div>
         <div>
             <div style="font-size: 26px; font-weight: 700; color: var(--text-1); line-height: 1;">{{ \App\Models\Student::count() }}</div>
-            <div style="font-size: 12px; color: var(--text-4); margin-top: 3px;">Alunos cadastrados</div>
+            <div style="font-size: 12px; color: var(--text-4); margin-top: 3px;">Estudantes cadastrados</div>
         </div>
     </div>
 
@@ -71,7 +71,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
             <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
         </svg>
         <span style="font-size: 13px; font-weight: 600; color: var(--warning);">
-            {{ $totalPendentes->count() }} aluno(s) com documentação incompleta (PEI, PAEE ou Estudo de Caso)
+            {{ $totalPendentes->count() }} estudante(s) com documentação incompleta (PEI, PAEE ou Estudo de Caso)
         </span>
     </div>
     <a href="{{ route('secretaria.alunos.index') }}"
@@ -125,7 +125,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
         <div style="display: flex; gap: 20px; margin-bottom: 16px;">
             <div>
                 <div style="font-size: 22px; font-weight: 700; color: var(--text-1); line-height: 1;">{{ $item['total'] }}</div>
-                <div style="font-size: 11px; color: var(--text-4); margin-top: 2px;">alunos</div>
+                <div style="font-size: 11px; color: var(--text-4); margin-top: 2px;">estudantes</div>
             </div>
             @if($item['pendentes'] > 0)
             <div>
@@ -227,7 +227,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
             Limpar filtros
         </button>
         <div style="margin-left: auto; font-size: 12px; color: var(--text-4); align-self: center;">
-            <span id="total-linhas">0</span> aluno(s)
+            <span id="total-linhas">0</span> estudante(s)
         </div>
     </div>
 
@@ -235,7 +235,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
         <table style="width: 100%; border-collapse: collapse;" id="tabela-adaptacoes">
             <thead>
                 <tr style="background: var(--bg-subtle);">
-                    <th style="text-align: left; padding: 11px 20px; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                    <th style="text-align: left; padding: 11px 20px; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Estudante</th>
                     <th style="text-align: left; padding: 11px 20px; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
                     <th style="text-align: left; padding: 11px 20px; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Adaptações</th>
                 </tr>
@@ -267,7 +267,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
             </tbody>
         </table>
         <div id="sem-resultados" style="display: none; padding: 32px; text-align: center; font-size: 14px; color: var(--text-4);">
-            Nenhum aluno encontrado com este filtro.
+            Nenhum estudante encontrado com este filtro.
         </div>
     </div>
 </div>

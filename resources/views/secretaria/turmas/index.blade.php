@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        {{-- Lista de alunos (recolhida por padrão) --}}
+        {{-- Lista de estudantes (recolhida por padrão) --}}
         <div id="turma-{{ $turma->id }}" style="display: none; border-top: 1px solid var(--border);">
             @if($turma->students->isEmpty())
                 <div style="padding: 24px 20px; text-align: center; font-size: 13px; color: var(--text-3);">

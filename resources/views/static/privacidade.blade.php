@@ -23,7 +23,7 @@
     <div style="background: #fff; border-radius: 12px; border: 1px solid #F3F4F6; padding: 32px; line-height: 1.8;">
 
         <h2 style="font-size: 16px; font-weight: 600; color: #111827; margin: 0 0 12px;">1. Dados coletados</h2>
-        <p style="font-size: 14px; color: #374151; margin: 0 0 24px;">O Sistema Átrio coleta dados necessários para o funcionamento da plataforma, incluindo: nome, e-mail, informações de alunos cadastrados pelas instituições e registros de acesso a documentos (logs LGPD).</p>
+        <p style="font-size: 14px; color: #374151; margin: 0 0 24px;">O Sistema Átrio coleta dados necessários para o funcionamento da plataforma, incluindo: nome, e-mail, informações de estudantes cadastrados pelas instituições e registros de acesso a documentos (logs LGPD).</p>
 
         <h2 style="font-size: 16px; font-weight: 600; color: #111827; margin: 0 0 12px;">2. Finalidade do uso</h2>
         <p style="font-size: 14px; color: #374151; margin: 0 0 24px;">Os dados coletados são utilizados exclusivamente para: prestação do serviço de gestão educacional, comunicação entre usuários da plataforma, envio de notificações relacionadas ao sistema e cumprimento de obrigações legais.</p>

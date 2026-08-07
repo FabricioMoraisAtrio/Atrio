@@ -25,7 +25,7 @@
     $estrategias_peda  = $peiGlobal['estrategias_pedagogicas'] ?? '';
     $criterios_peda    = $peiGlobal['criterios_avaliacao']     ?? '';
 
-    // Diagnóstico clínico do aluno
+    // Diagnóstico clínico do estudante
     $transtornos = config('transtornos');
     $diagnostico = collect($transtornos)
         ->filter(fn($v, $k) => $aluno->$k)
@@ -166,7 +166,7 @@
         <td colspan="3">{{ $school?->name }}</td>
     </tr>
     <tr>
-        <td class="id-label">Aluno(a)</td>
+        <td class="id-label">Estudante(a)</td>
         <td colspan="3" style="font-weight: bold;">{{ $aluno->name }}</td>
     </tr>
     <tr>

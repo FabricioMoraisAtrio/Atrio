@@ -15,11 +15,11 @@ class SchoolRoleController extends Controller
     public static function permissionGroups(): array
     {
         return [
-            'Alunos' => [
-                'alunos.ver'    => 'Visualizar alunos',
-                'alunos.criar'  => 'Cadastrar alunos',
-                'alunos.editar' => 'Editar alunos',
-                'alunos.deletar'=> 'Remover alunos',
+            'Estudantes' => [
+                'alunos.ver'    => 'Visualizar estudantes',
+                'alunos.criar'  => 'Cadastrar estudantes',
+                'alunos.editar' => 'Editar estudantes',
+                'alunos.deletar'=> 'Remover estudantes',
             ],
             'Turmas' => [
                 'turmas.ver'      => 'Visualizar turmas',

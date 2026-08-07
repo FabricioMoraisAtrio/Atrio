@@ -5,7 +5,7 @@
 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
     <div>
         <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">Jornada Alimentar</h1>
-        <p style="font-size: 13px; color: var(--text-3); margin: 0;">Perfil alimentar dos alunos cadastrados</p>
+        <p style="font-size: 13px; color: var(--text-3); margin: 0;">Perfil alimentar dos estudantes cadastrados</p>
     </div>
     <a href="{{ route('secretaria.seletividade.export') }}"
        style="display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,75,141,0.25);">
@@ -25,13 +25,13 @@
 <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden;">
     @if($alunos->isEmpty())
         <div style="padding: 60px; text-align: center; color: var(--text-3); font-size: 14px;">
-            Nenhum aluno atípico cadastrado.
+            Nenhum estudante atípico cadastrado.
         </div>
     @else
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr style="background: var(--bg-sidebar);">
-                    <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                    <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Estudante</th>
                     <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
                     <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Aceita</th>
                     <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Tolera</th>

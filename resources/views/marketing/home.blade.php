@@ -17,7 +17,7 @@
     </h1>
 
     <p class="hero-subtitle">
-        O Átrio centraliza Estudo de Caso, PAEE e PEI, acompanha a evolução de cada aluno
+        O Átrio centraliza Estudo de Caso, PAEE e PEI, acompanha a evolução de cada estudante
         por bimestre e mantém tudo em conformidade com a nova legislação.
         Sua rede tem até <strong style="color:#fff;">maio de 2029</strong> para adequar os documentos.
     </p>
@@ -71,7 +71,7 @@
         <h2 class="section-title">Veja o Átrio funcionando —<br>não uma promessa de tela</h2>
         <p class="section-lead">
             Geradores de PEI mostram um modelo de documento e prometem a plataforma "em breve".
-            Aqui você navega pelo perfil do aluno, pelo PEI por matéria e pela evolução por bimestre.
+            Aqui você navega pelo perfil do estudante, pelo PEI por matéria e pela evolução por bimestre.
             É o sistema real, em uso.
         </p>
     </div>
@@ -88,14 +88,14 @@
                 <aside class="app-side">
                     <div class="app-brand">ÁTRIO</div>
                     <div class="app-nav-item"><span class="dot"></span> Painel</div>
-                    <div class="app-nav-item active"><span class="dot"></span> Alunos</div>
+                    <div class="app-nav-item active"><span class="dot"></span> Estudantes</div>
                     <div class="app-nav-item"><span class="dot"></span> Documentos</div>
                     <div class="app-nav-item"><span class="dot"></span> Linha do Tempo</div>
                     <div class="app-nav-item"><span class="dot"></span> Adaptações</div>
                     <div class="app-nav-item"><span class="dot"></span> Configurações</div>
                 </aside>
                 <main class="app-main">
-                    <div class="app-crumb">Alunos &nbsp;›&nbsp; Perfil do estudante</div>
+                    <div class="app-crumb">Estudantes &nbsp;›&nbsp; Perfil do estudante</div>
                     <div class="app-student">
                         <div class="app-avatar">JP</div>
                         <div>
@@ -175,7 +175,7 @@
                 <ul class="compare-list">
                     <li>Gera um PEI solto, sem Estudo de Caso nem PAEE integrados</li>
                     <li>Depende de laudo e retrabalho manual a cada revisão</li>
-                    <li>Não acompanha a evolução do aluno ao longo do ano</li>
+                    <li>Não acompanha a evolução do estudante ao longo do ano</li>
                     <li>Sem controle de acesso por perfil nem rastreabilidade LGPD</li>
                     <li>Modelo de Word solto — sem respaldo do mínimo legal</li>
                 </ul>
@@ -186,7 +186,7 @@
                     <h3>O ecossistema da inclusão</h3>
                 </div>
                 <ul class="compare-list">
-                    <li>Estudo de Caso, PAEE e PEI integrados e consolidados por aluno</li>
+                    <li>Estudo de Caso, PAEE e PEI integrados e consolidados por estudante</li>
                     <li>Começa pela avaliação pedagógica — laudo é opcional</li>
                     <li>Linha do Tempo e evolução de metas por bimestre</li>
                     <li>Perfis por função, com registro de acesso e conformidade LGPD</li>

@@ -1,7 +1,7 @@
 @extends('marketing.layout')
 
 @section('metaTitle', "Planos — Átrio para professores, escolas e redes")
-@section('metaDescription', "Planos sob medida: do profissional que atua com os alunos à rede que precisa padronizar a inclusão. Fale com um especialista.")
+@section('metaDescription', "Planos sob medida: do profissional que atua com os estudantes à rede que precisa padronizar a inclusão. Fale com um especialista.")
 
 @section('content')
 {{-- ── PLANOS / CONTRATAÇÃO ── --}}
@@ -10,7 +10,7 @@
         <div class="section-tag">Planos</div>
         <h2 class="section-title">Planos sob medida<br>para a sua realidade</h2>
         <p class="section-lead">
-            Do profissional que atua direto com os alunos à rede que precisa padronizar
+            Do profissional que atua direto com os estudantes à rede que precisa padronizar
             toda a inclusão. Fale com a gente e montamos o plano ideal.
         </p>
 
@@ -19,7 +19,7 @@
                 <div class="compare-col-head">
                     <span class="compare-tag good">Professor(a) / AEE</span>
                 </div>
-                <h3 style="margin-bottom: 8px;">Para quem atua com os alunos</h3>
+                <h3 style="margin-bottom: 8px;">Para quem atua com os estudantes</h3>
                 <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px;">
                     Organize os documentos e o acompanhamento da sua sala ou do seu atendimento.
                 </p>

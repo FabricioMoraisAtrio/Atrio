@@ -88,7 +88,7 @@
 <div style="margin-bottom:14px;">
     <h1 style="font-size:20px;font-weight:700;color:var(--text-1);margin:0 0 2px;">Adaptações de Prova</h1>
     <p style="font-size:12px;color:var(--text-4);margin:0;">
-        {{ $alunos->count() }} aluno(s)
+        {{ $alunos->count() }} estudante(s)
         @if(count($activeFilters))
             — <span style="color:var(--accent-text);font-weight:600;">{{ count($activeFilters) }} filtro(s) ativo(s)</span>
             · <a href="{{ route('secretaria.rotinas.adaptacoes') }}" style="color:var(--danger);font-size:12px;font-weight:500;text-decoration:none;">Limpar</a>
@@ -385,7 +385,7 @@
         @empty
             <tr>
                 <td colspan="11" style="padding:48px;text-align:center;color:var(--text-4);font-size:14px;">
-                    Nenhum aluno encontrado com os filtros selecionados.
+                    Nenhum estudante encontrado com os filtros selecionados.
                 </td>
             </tr>
         @endforelse

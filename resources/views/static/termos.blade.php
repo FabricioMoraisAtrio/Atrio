@@ -26,7 +26,7 @@
         <p style="font-size: 14px; color: #374151; margin: 0 0 24px;">Ao acessar e utilizar o Sistema Átrio, você concorda com estes Termos de Uso. Caso não concorde, não utilize o sistema.</p>
 
         <h2 style="font-size: 16px; font-weight: 600; color: #111827; margin: 0 0 12px;">2. Descrição do serviço</h2>
-        <p style="font-size: 14px; color: #374151; margin: 0 0 24px;">O Sistema Átrio é uma plataforma de gestão educacional inclusiva destinada a escolas e instituições de ensino. O sistema permite o cadastro de alunos, criação de documentos pedagógicos e comunicação entre equipes escolares.</p>
+        <p style="font-size: 14px; color: #374151; margin: 0 0 24px;">O Sistema Átrio é uma plataforma de gestão educacional inclusiva destinada a escolas e instituições de ensino. O sistema permite o cadastro de estudantes, criação de documentos pedagógicos e comunicação entre equipes escolares.</p>
 
         <h2 style="font-size: 16px; font-weight: 600; color: #111827; margin: 0 0 12px;">3. Uso responsável</h2>
         <p style="font-size: 14px; color: #374151; margin: 0 0 24px;">O usuário é responsável por manter a confidencialidade de suas credenciais de acesso e por todas as atividades realizadas em sua conta. É proibido compartilhar senhas ou acessar contas de terceiros.</p>

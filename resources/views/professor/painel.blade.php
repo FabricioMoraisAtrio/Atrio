@@ -12,7 +12,7 @@
         Painel
     </h1>
     <div style="display: flex; align-items: center; gap: 10px;">
-        <p style="font-size: 14px; color: var(--text-4); margin: 0;">Resumo das suas turmas e alunos inclusivos</p>
+        <p style="font-size: 14px; color: var(--text-4); margin: 0;">Resumo das suas turmas e estudantes inclusivos</p>
         @if($subject)
             <span style="background: var(--accent-bg); color: var(--accent-text); font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 20px;">
                 {{ $subject->name }}
@@ -175,7 +175,7 @@ document.addEventListener('click', function(e) {
                 <p style="font-size: 12px; color: var(--text-4); margin: 0;">{{ $turma->shift }} · {{ $turma->year }}</p>
             </div>
             <span style="background: var(--teal-bg); color: var(--teal); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px;">
-                {{ $turma->students->count() }} aluno(s) {{ strtolower(term('publico_alvo')) }}
+                {{ $turma->students->count() }} estudante(s) {{ strtolower(term('publico_alvo')) }}
             </span>
         </div>
 

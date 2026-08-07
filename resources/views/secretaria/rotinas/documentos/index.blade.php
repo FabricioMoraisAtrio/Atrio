@@ -27,7 +27,7 @@ $cards = [
     ],
     [
         'label'       => 'PEI',
-        'descricao'   => 'Plano Educacional Individualizado consolidado por aluno e disciplina.',
+        'descricao'   => 'Plano Educacional Individualizado consolidado por estudante e disciplina.',
         'route'       => 'secretaria.rotinas.documentos.pei',
         'cor'         => '#004B8D',
         'bg'          => '#E8F0F9',

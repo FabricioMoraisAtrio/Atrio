@@ -11,7 +11,7 @@ $dataFmt = $dias[$now->dayOfWeek] . ', ' . $now->day . ' de ' . $meses[$now->mon
 $cards = [
     [
         'label'    => 'Painel',
-        'descricao'=> 'Turmas, alunos inclusivos e pendências de documentação.',
+        'descricao'=> 'Turmas, estudantes inclusivos e pendências de documentação.',
         'route'    => 'professor.painel',
         'cor'      => '#004B8D',
         'bg'       => '#E8F0F9',
@@ -19,7 +19,7 @@ $cards = [
     ],
     [
         'label'    => 'Turmas',
-        'descricao'=> 'Veja todas as turmas e os alunos vinculados a cada uma.',
+        'descricao'=> 'Veja todas as turmas e os estudantes vinculados a cada uma.',
         'route'    => 'professor.turmas.index',
         'cor'      => '#009C8C',
         'bg'       => '#E6F5F4',

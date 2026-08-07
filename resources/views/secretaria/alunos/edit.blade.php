@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Editar Aluno')
+@section('title', 'Editar Estudante')
 
 @section('content')
 <div style="max-width: 560px;">
@@ -9,7 +9,7 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Voltar para {{ strtolower(term('alunos')) }}
         </a>
-        <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0;">Editar aluno</h1>
+        <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0;">Editar estudante</h1>
     </div>
 
     <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 28px;">
@@ -24,7 +24,7 @@
                 </div>
                 <input type="hidden" name="remove_photo" id="remove_photo" value="0">
                 <div>
-                    <p style="font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px;">Foto do aluno</p>
+                    <p style="font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px;">Foto do estudante</p>
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
                         <label for="foto-input-edit" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-2); cursor: pointer;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -158,7 +158,7 @@
                            id="is_atypical"
                            {{ old('is_atypical', $aluno->is_atypical) ? 'checked' : '' }}
                            onchange="toggleAtypical(this.checked)">
-                    <span style="font-size: 14px; font-weight: 600; color: var(--text-1);">{{ term('aluno') }} {{ strtolower(term('publico_alvo')) }} da Educação Especial</span>
+                    <span style="font-size: 14px; font-weight: 600; color: var(--text-1);">Estudante {{ strtolower(term('publico_alvo')) }} da Educação Especial</span>
                 </label>
                 <p style="font-size: 12px; color: var(--text-4); margin: 0 0 0 26px;">Marque para habilitar os campos de condição</p>
 
@@ -197,7 +197,7 @@
                     {{-- Grupo: Outras condições --}}
                     <div style="border-radius: 10px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 16px;">
                         <div style="background: var(--bg-subtle); padding: 8px 12px; border-bottom: 1px solid var(--border);">
-                            <span style="font-size: 10px; font-weight: 700; color: var(--text-3); letter-spacing: 0.8px; text-transform: uppercase;">Outras condições atípicas</span>
+                            <span style="font-size: 10px; font-weight: 700; color: var(--text-3); letter-spacing: 0.8px; text-transform: uppercase;">Informações clínicas e diagnósticas</span>
                         </div>
                         <div style="padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
                             @foreach($transtornosOutros as $field => [$sigla, $nome])

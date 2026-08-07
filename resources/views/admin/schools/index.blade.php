@@ -29,7 +29,7 @@
                 <th class="text-left px-4 py-3 text-gray-600 font-medium">Escola</th>
                 <th class="text-left px-4 py-3 text-gray-600 font-medium">Plano</th>
                 <th class="text-left px-4 py-3 text-gray-600 font-medium">Status</th>
-                <th class="text-left px-4 py-3 text-gray-600 font-medium">Alunos</th>
+                <th class="text-left px-4 py-3 text-gray-600 font-medium">Estudantes</th>
                 <th class="text-left px-4 py-3 text-gray-600 font-medium">Usuários</th>
                 <th class="px-4 py-3"></th>
             </tr>
@@ -88,7 +88,7 @@
             <div>
                 <h3 style="font-size:15px; font-weight:700; color:#111827; margin:0 0 4px;">Excluir escola</h3>
                 <p style="font-size:13px; color:#6B7280; margin:0;">
-                    Esta ação é <strong style="color:#DC2626;">irreversível</strong>. Todos os alunos, usuários, documentos e laudos serão excluídos permanentemente.
+                    Esta ação é <strong style="color:#DC2626;">irreversível</strong>. Todos os estudantes, usuários, documentos e laudos serão excluídos permanentemente.
                 </p>
             </div>
         </div>

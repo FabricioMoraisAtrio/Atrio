@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    {{-- Card: Identificação do Aluno --}}
+    {{-- Card: Identificação do Estudante --}}
     <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 24px; margin-bottom: 16px;">
         <h2 style="font-size: 14px; font-weight: 700; color: var(--text-1); margin: 0 0 16px; text-transform: uppercase; letter-spacing: 0.5px;">Identificação do Estudante</h2>
 

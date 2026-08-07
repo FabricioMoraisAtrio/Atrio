@@ -50,7 +50,7 @@
     </div>
 </div>
 
-{{-- Lista de alunos --}}
+{{-- Lista de estudantes --}}
 <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); overflow: hidden;">
     <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-sub);">
         <p style="font-size: 13px; font-weight: 600; color: var(--text-2); margin: 0;">{{ term('alunos') }} matriculados</p>
@@ -130,7 +130,7 @@
     </table>
 </div>
 
-{{-- Modal novo aluno --}}
+{{-- Modal novo estudante --}}
 <div id="modal-aluno"
      style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center;">
     <div style="background: var(--bg-card); border-radius: 16px; padding: 32px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; position: relative;">

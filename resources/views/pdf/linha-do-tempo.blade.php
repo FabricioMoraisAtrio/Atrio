@@ -88,7 +88,7 @@
 {{-- Identificação --}}
 <table class="id-table">
     <tr>
-        <td class="id-label">Aluno(a)</td><td>{{ $aluno->name }}</td>
+        <td class="id-label">Estudante(a)</td><td>{{ $aluno->name }}</td>
         <td class="id-label">Matrícula</td><td>{{ $aluno->registration_number ?: '—' }}</td>
     </tr>
     <tr>

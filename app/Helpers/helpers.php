@@ -8,8 +8,8 @@ if (! function_exists('term')) {
     function term(string $key): string
     {
         static $defaults = [
-            'aluno'           => 'Aluno',
-            'alunos'          => 'Alunos',
+            'aluno'           => 'Estudante',
+            'alunos'          => 'Estudantes',
             'turma'           => 'Turma',
             'turmas'          => 'Turmas',
             'laudo'           => 'Laudo',

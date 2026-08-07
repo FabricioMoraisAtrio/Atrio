@@ -16,7 +16,7 @@
 <form method="GET" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 12px; align-items: end;">
         <div>
-            <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Aluno</label>
+            <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Estudante</label>
             <input type="text" name="aluno" value="{{ request('aluno') }}" placeholder="Nome do aluno..."
                    style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--text-1); background: var(--bg-card); outline: none; box-sizing: border-box;">
         </div>
@@ -77,7 +77,7 @@
             <tr style="background: var(--bg-sidebar);">
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Data / Hora</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Usuário</th>
-                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Estudante</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Documento</th>
                 <th style="text-align: center; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Ação</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">IP</th>

@@ -14,7 +14,7 @@
         <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
             <div>
                 <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">Linha do Tempo — {{ $aluno->name }}</h1>
-                <p style="font-size: 13px; color: var(--text-3); margin: 0;">Evolução das metas do PEI e histórico do aluno em um só lugar.</p>
+                <p style="font-size: 13px; color: var(--text-3); margin: 0;">Evolução das metas do PEI e histórico do estudante em um só lugar.</p>
             </div>
             <a href="{{ route('secretaria.alunos.linha-do-tempo.pdf', $aluno) }}"
                style="display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; text-decoration: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">

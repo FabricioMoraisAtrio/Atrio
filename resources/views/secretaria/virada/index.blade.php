@@ -12,8 +12,8 @@
     </div>
     <h1 style="font-size:22px; font-weight:800; color:var(--text-1); margin:0 0 4px;">Preparar o ano letivo de {{ $target }}</h1>
     <p style="font-size:13px; color:var(--text-3); margin:0 0 18px;">
-        Cria as turmas de {{ $target }} e matricula os alunos de {{ $current }} conforme o mapeamento abaixo.
-        Os dados do aluno (condição, laudos, observações) seguem automaticamente; documentos e PEI de {{ $current }} ficam preservados como histórico.
+        Cria as turmas de {{ $target }} e matricula os estudantes de {{ $current }} conforme o mapeamento abaixo.
+        Os dados do estudante (condição, laudos, observações) seguem automaticamente; documentos e PEI de {{ $current }} ficam preservados como histórico.
     </p>
 
     @if($jaExiste)
@@ -40,7 +40,7 @@
             <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:16px; justify-content:space-between; margin-bottom:12px;">
                 <div>
                     <div style="font-size:15px; font-weight:700; color:var(--text-1);">{{ $turma->name }}</div>
-                    <div style="font-size:12px; color:var(--text-4);">{{ $turma->shift }} · {{ $turma->students->count() }} aluno(s) · {{ $current }}</div>
+                    <div style="font-size:12px; color:var(--text-4);">{{ $turma->shift }} · {{ $turma->students->count() }} estudante(s) · {{ $current }}</div>
                 </div>
                 <div>
                     <label style="display:block; font-size:11px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:.4px; margin-bottom:5px;">Turma destino em {{ $target }}</label>
@@ -50,7 +50,7 @@
 
             @if($turma->students->isNotEmpty())
             <details>
-                <summary style="cursor:pointer; font-size:12px; font-weight:600; color:var(--accent-text); list-style:none;">Ajustar alunos (promovido / retido / saiu)</summary>
+                <summary style="cursor:pointer; font-size:12px; font-weight:600; color:var(--accent-text); list-style:none;">Ajustar estudantes (promovido / retido / saiu)</summary>
                 <div style="margin-top:10px; border-top:1px solid var(--border-sub); padding-top:10px;">
                     @foreach($turma->students as $aluno)
                     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:6px 0;">

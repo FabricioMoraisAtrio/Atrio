@@ -1,7 +1,7 @@
 @extends('marketing.layout')
 
 @section('metaTitle', "A Plataforma — Módulos do Átrio (Estudo de Caso, PAEE, PEI e mais)")
-@section('metaDescription', "Conheça os módulos do Átrio: gestão de alunos, documentos pedagógicos, PEI consolidado, Linha do Tempo, adaptações para prova e perfis de acesso.")
+@section('metaDescription', "Conheça os módulos do Átrio: gestão de estudantes, documentos pedagógicos, PEI consolidado, Linha do Tempo, adaptações para prova e perfis de acesso.")
 
 @section('content')
 
@@ -48,8 +48,8 @@
         <div class="steps-grid">
             <div class="step">
                 <div class="step-circle">1</div>
-                <div class="step-title">Cadastro do Aluno</div>
-                <div class="step-desc">A secretaria registra o aluno com dados completos, diagnóstico e responsáveis.</div>
+                <div class="step-title">Cadastro do Estudante</div>
+                <div class="step-desc">A secretaria registra o estudante com dados completos, diagnóstico e responsáveis.</div>
             </div>
             <div class="step">
                 <div class="step-circle">2</div>

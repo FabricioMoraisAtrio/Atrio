@@ -107,7 +107,7 @@
             font-weight: 500;
         }
 
-        /* ── Cards de aluno ── */
+        /* ── Cards de estudante ── */
         .students-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -286,7 +286,7 @@
         <div class="header-right">
             <div class="date">Gerado em {{ now()->format('d/m/Y \à\s H:i') }}</div>
             <div class="total">{{ $alunos->count() }}</div>
-            <div class="total-label">aluno(s) com perfil</div>
+            <div class="total-label">estudante(s) com perfil</div>
         </div>
     </div>
 
@@ -312,10 +312,10 @@
         </div>
     </div>
 
-    {{-- Grid de alunos --}}
+    {{-- Grid de estudantes --}}
     @if($alunos->isEmpty())
         <div style="text-align: center; padding: 60px; color: var(--text-4); font-size: 14px;">
-            Nenhum aluno com perfil alimentar cadastrado.
+            Nenhum estudante com perfil alimentar cadastrado.
         </div>
     @else
     <div class="students-grid">

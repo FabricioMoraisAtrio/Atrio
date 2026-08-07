@@ -35,7 +35,7 @@ class School extends Model
     {
         return [
             'painel'         => 'Painel de Controle',
-            'alunos'         => 'Alunos',
+            'alunos'         => 'Estudantes',
             'documentos'     => 'Documentos de Inclusão',
             'reunioes'       => 'Reuniões / Atas',
             'linha_do_tempo' => 'Linha do Tempo',

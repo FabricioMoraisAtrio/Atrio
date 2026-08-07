@@ -20,10 +20,10 @@
             </div>
             <div class="faq-item">
                 <button type="button" class="faq-q">Precisamos do laudo médico para começar?</button>
-                <div class="faq-a"><p>Não. O apoio parte da avaliação pedagógica do estudante (Estudo de Caso), feita pela própria equipe escolar. O laudo, quando existe, é anexado como complemento — mas o aluno não precisa esperar por ele para ter o PEI.</p></div>
+                <div class="faq-a"><p>Não. O apoio parte da avaliação pedagógica do estudante (Estudo de Caso), feita pela própria equipe escolar. O laudo, quando existe, é anexado como complemento — mas o estudante não precisa esperar por ele para ter o PEI.</p></div>
             </div>
             <div class="faq-item">
-                <button type="button" class="faq-q">Os dados dos alunos ficam seguros? E a LGPD?</button>
+                <button type="button" class="faq-q">Os dados dos estudantes ficam seguros? E a LGPD?</button>
                 <div class="faq-a"><p>Sim. Diagnósticos e laudos são dados sensíveis: o acesso é restrito por perfil e permissão, cada acesso a documento é registrado (data e usuário) e os PDFs saem com identificação de autoria e nota de conformidade LGPD.</p></div>
             </div>
             <div class="faq-item">

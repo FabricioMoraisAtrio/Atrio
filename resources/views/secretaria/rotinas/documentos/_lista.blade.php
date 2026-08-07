@@ -13,7 +13,7 @@
         <div>
             <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0 0 4px;">{{ $cfg['titulo'] }}</h1>
             <p style="font-size: 13px; color: var(--text-4); margin: 0;">
-                {{ $alunos->count() }} aluno(s) listado(s)
+                {{ $alunos->count() }} estudante(s) listado(s)
                 @if($cfg['so_publico']) · apenas {{ term('publico_alvo') }} @endif
             </p>
         </div>
@@ -79,13 +79,13 @@
 <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); overflow: hidden;">
     @if($alunos->isEmpty())
         <div style="padding: 48px; text-align: center;">
-            <p style="font-size: 14px; color: var(--text-4);">Nenhum aluno encontrado com os filtros selecionados.</p>
+            <p style="font-size: 14px; color: var(--text-4);">Nenhum estudante encontrado com os filtros selecionados.</p>
         </div>
     @else
         <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
             <thead>
                 <tr style="background: var(--bg-subtle); border-bottom: 1px solid var(--border-sub);">
-                    <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                    <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Estudante</th>
                     <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Turma</th>
                     <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
                     <th style="text-align: center; padding: 12px 16px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px;">{{ $cfg['titulo'] }}</th>

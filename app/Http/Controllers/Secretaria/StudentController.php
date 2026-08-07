@@ -78,7 +78,7 @@ public function index(\Illuminate\Http\Request $request)
         $currentCount = \App\Models\Student::count();
         if ($currentCount >= $school->max_students) {
             return back()->withErrors([
-                'limit' => "Limite de {$school->max_students} alunos atingido para o plano {$school->plan}."
+                'limit' => "Limite de {$school->max_students} estudantes atingido para o plano {$school->plan}."
             ]);
         }
 
@@ -133,7 +133,7 @@ public function index(\Illuminate\Http\Request $request)
         }
 
         return redirect()->route('secretaria.alunos.index')
-            ->with('success', 'Aluno cadastrado com sucesso.');
+            ->with('success', 'Estudante cadastrado com sucesso.');
     }
 
 public function show(Student $aluno)
@@ -217,7 +217,7 @@ public function show(Student $aluno)
         ]);
 
         return redirect()->route('secretaria.alunos.index')
-            ->with('success', 'Aluno atualizado com sucesso.');
+            ->with('success', 'Estudante atualizado com sucesso.');
     }
 
     public function destroy(Student $aluno)
@@ -235,7 +235,7 @@ public function show(Student $aluno)
 
         $aluno->delete();
         return redirect()->route('secretaria.alunos.index')
-            ->with('success', 'Aluno removido.');
+            ->with('success', 'Estudante removido.');
     }
 
     public function uploadPhoto(Request $request, Student $aluno)

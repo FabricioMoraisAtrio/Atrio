@@ -27,7 +27,7 @@
         <button type="submit" style="background: var(--accent); color: #fff; border: none; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Filtrar</button>
     </form>
 
-    {{-- Lista de alunos --}}
+    {{-- Lista de estudantes --}}
     <div style="background: var(--bg-card); border: 1px solid var(--border-sub); border-radius: 12px; overflow: hidden;">
         @forelse($alunos as $aluno)
             <a href="{{ route('secretaria.alunos.reunioes.index', $aluno) }}"

@@ -17,11 +17,11 @@
 {{-- Cards métricas --}}
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
     <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px;">
-        <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Total de alunos</p>
+        <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Total de estudantes</p>
         <p style="font-size: 28px; font-weight: 700; color: var(--text-1); margin: 0;">{{ $turma->students->count() }}</p>
     </div>
     <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px;">
-        <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Alunos atípicos</p>
+        <p style="font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Estudantes atípicos</p>
         <p style="font-size: 28px; font-weight: 700; color: var(--purple); margin: 0;">{{ $turma->students->where('is_atypical', true)->count() }}</p>
     </div>
     <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 20px;">
@@ -30,15 +30,15 @@
     </div>
 </div>
 
-{{-- Lista de alunos --}}
+{{-- Lista de estudantes --}}
 <div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); overflow: hidden;">
     <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-sub);">
-        <p style="font-size: 13px; font-weight: 600; color: var(--text-2); margin: 0;">Alunos matriculados</p>
+        <p style="font-size: 13px; font-weight: 600; color: var(--text-2); margin: 0;">Estudantes matriculados</p>
     </div>
     <table style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr style="background: var(--bg-subtle);">
-                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Estudante</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Matrícula</th>
                 <th style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
                 <th style="padding: 12px 20px;"></th>
@@ -61,20 +61,20 @@
                 <td style="padding: 14px 20px;">
                     @if($aluno->is_atypical)
                         <span style="background: var(--purple-bg); color: var(--purple); font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">Atípico</span>
-                        <x-cid-badges :aluno="$aluno" />
+                        <x-cid-badges :estudante="$aluno" />
                     @else
                         <span style="background: var(--bg-subtle); color: var(--text-3); font-size: 11px; padding: 3px 8px; border-radius: 20px;">Típico</span>
                     @endif
                 </td>
                 <td style="padding: 14px 20px; text-align: right;">
                     <a href="{{ route('professor.alunos.show', $aluno) }}"
-                       style="font-size: 13px; color: var(--accent-text); text-decoration: none; font-weight: 500;">Ver aluno</a>
+                       style="font-size: 13px; color: var(--accent-text); text-decoration: none; font-weight: 500;">Ver estudante</a>
                 </td>
             </tr>
             @empty
             <tr>
                 <td colspan="4" style="padding: 48px; text-align: center; color: var(--text-4); font-size: 14px;">
-                    Nenhum aluno matriculado nesta turma.
+                    Nenhum estudante matriculado nesta turma.
                 </td>
             </tr>
             @endforelse

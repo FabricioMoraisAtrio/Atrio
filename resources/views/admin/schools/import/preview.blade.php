@@ -60,7 +60,7 @@
         @csrf
         <label style="display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--adm-text-2); margin-bottom:16px; cursor:pointer;">
             <input type="checkbox" name="confirma" value="1" required style="margin-top:2px;">
-            <span>Confirmo a importação de {{ $aplicaveis }} aluno(s) ({{ $resumo['criar'] }} novo(s), {{ $resumo['atualizar'] }} atualização(ões)) para {{ $school->name }}. Linhas com erro são ignoradas.</span>
+            <span>Confirmo a importação de {{ $aplicaveis }} estudante(s) ({{ $resumo['criar'] }} novo(s), {{ $resumo['atualizar'] }} atualização(ões)) para {{ $school->name }}. Linhas com erro são ignoradas.</span>
         </label>
         <button type="submit" class="adm-btn adm-btn-primary">Confirmar importação</button>
     </form>

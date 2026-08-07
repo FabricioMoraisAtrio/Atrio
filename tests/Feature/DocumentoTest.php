@@ -33,10 +33,10 @@ class DocumentoTest extends TestCase
     public function test_criar_estudo_de_caso(): void
     {
         $response = $this->post(route('secretaria.alunos.documentos.store', $this->aluno), [
-            'type'            => 'estudo_caso',
-            'historico'       => 'Histórico do aluno',
-            'barreiras'       => 'Barreiras identificadas',
-            'potencialidades' => 'Pontos fortes',
+            'type'              => 'estudo_caso',
+            'historico_escolar' => 'Histórico do aluno',
+            'barreiras'         => 'Barreiras identificadas',
+            'potencialidades'   => 'Pontos fortes',
         ]);
 
         $response->assertRedirect();
@@ -50,7 +50,8 @@ class DocumentoTest extends TestCase
     {
         // Estudo de Caso é pré-requisito do PAEE.
         $response = $this->post(route('secretaria.alunos.documentos.store', $this->aluno), [
-            'type' => 'paee',
+            'type'               => 'paee',
+            'diagnostico_perfil' => ['Deficiência intelectual'],
         ]);
 
         $response->assertSessionHasErrors('documento');
@@ -73,8 +74,9 @@ class DocumentoTest extends TestCase
         ]);
 
         $response = $this->post(route('secretaria.alunos.documentos.store', $this->aluno), [
-            'type'      => 'paee',
-            'objetivos' => 'Objetivos do PAEE',
+            'type'               => 'paee',
+            'diagnostico_perfil' => ['Deficiência intelectual'],
+            'objetivos'          => 'Objetivos do PAEE',
         ]);
 
         $response->assertRedirect();
@@ -88,10 +90,10 @@ class DocumentoTest extends TestCase
     {
         // Ao criar o Estudo de Caso, o PEI (Document tipo pei) é criado vazio.
         $this->post(route('secretaria.alunos.documentos.store', $this->aluno), [
-            'type'            => 'estudo_caso',
-            'historico'       => 'Histórico',
-            'barreiras'       => 'Barreiras',
-            'potencialidades' => 'Potencialidades',
+            'type'              => 'estudo_caso',
+            'historico_escolar' => 'Histórico',
+            'barreiras'         => 'Barreiras',
+            'potencialidades'   => 'Potencialidades',
         ])->assertRedirect();
 
         $this->assertDatabaseHas('documents', [
@@ -113,8 +115,8 @@ class DocumentoTest extends TestCase
             ]);
 
             $response = $this->post(route('secretaria.alunos.documentos.store', $this->aluno), [
-                'type'      => 'estudo_caso',
-                'historico' => 'Tentativa duplicada',
+                'type'              => 'estudo_caso',
+                'historico_escolar' => 'Tentativa duplicada',
             ]);
 
             // Não deve criar um segundo documento

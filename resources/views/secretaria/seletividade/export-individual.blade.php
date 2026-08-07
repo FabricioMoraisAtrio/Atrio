@@ -20,7 +20,7 @@
             padding: 32px 24px 80px;
         }
 
-        /* ── Cabeçalho do aluno ── */
+        /* ── Cabeçalho do estudante ── */
         .student-header {
             background: #004B8D;
             border-radius: 16px;
@@ -301,7 +301,7 @@
 
 <div class="page">
 
-    {{-- Cabeçalho do aluno --}}
+    {{-- Cabeçalho do estudante --}}
     @php
         $turma   = $aluno->schoolClasses->first();
         $recusa  = $byStatus->get('recusa', collect());
@@ -349,7 +349,7 @@
 
     @if($recusa->isNotEmpty())
     <div class="alert-box">
-        Atenção: este aluno <strong>recusa {{ $recusa->count() }} alimento(s)</strong>. Verifique a lista abaixo antes de preparar o lanche.
+        Atenção: este estudante <strong>recusa {{ $recusa->count() }} alimento(s)</strong>. Verifique a lista abaixo antes de preparar o lanche.
     </div>
     @endif
 

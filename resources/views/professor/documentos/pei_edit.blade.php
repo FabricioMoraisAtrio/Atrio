@@ -23,7 +23,7 @@ $accent = '#004B8D';
         <a href="{{ route('professor.alunos.show', $aluno) }}"
            style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Voltar para o aluno
+            Voltar para o estudante
         </a>
         <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
             <div style="padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; background: var(--accent-bg); color: var(--accent-text);">
@@ -52,7 +52,7 @@ $accent = '#004B8D';
     <div style="background: var(--accent-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
         <p style="font-size: 11px; font-weight: 700; color: var(--text-4); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 12px;">Identificação — preenchido automaticamente</p>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; color: var(--text-2);">
-            <div><span style="color:var(--accent-text); font-weight:600;">Aluno(a):</span> {{ $aluno->name }}</div>
+            <div><span style="color:var(--accent-text); font-weight:600;">Estudante(a):</span> {{ $aluno->name }}</div>
             <div><span style="color:var(--accent-text); font-weight:600;">Matrícula:</span> {{ $aluno->registration_number }}</div>
             <div>
                 <span style="color:var(--accent-text); font-weight:600;">Data de Nascimento:</span>
@@ -158,7 +158,7 @@ $accent = '#004B8D';
                         Observações adicionais (opcional)
                     </label>
                     <textarea name="observacoes_livres" rows="3"
-                        placeholder="Outras observações relevantes sobre o aluno nesta {{ $isRegente ? 'área' : 'disciplina' }}..."
+                        placeholder="Outras observações relevantes sobre o estudante nesta {{ $isRegente ? 'área' : 'disciplina' }}..."
                         style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.6;"
                         onfocus="this.style.borderColor='var(--text-4)'" onblur="this.style.borderColor='var(--border)'">{{ old('observacoes_livres', $minha_secao['observacoes_livres'] ?? '') }}</textarea>
                 </div>

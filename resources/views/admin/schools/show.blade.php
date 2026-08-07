@@ -32,7 +32,7 @@
         </p>
     </div>
     <div class="bg-white rounded-xl border border-gray-200 p-4">
-        <p class="text-xs text-gray-500 mb-1">Alunos</p>
+        <p class="text-xs text-gray-500 mb-1">Estudantes</p>
         <p class="text-sm font-semibold text-gray-800">{{ $school->students_count }} / {{ $school->max_students }}</p>
     </div>
     <div class="bg-white rounded-xl border border-gray-200 p-4">

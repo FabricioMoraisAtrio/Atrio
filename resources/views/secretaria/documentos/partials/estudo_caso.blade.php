@@ -40,7 +40,7 @@ $textarea = fn(string $name, string $label, int $rows = 3) =>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px; color: var(--text-2);">
         <div><span style="color:var(--text-4); font-weight:600;">Escola:</span> {{ $aluno->school?->name }}</div>
         <div><span style="color:var(--text-4); font-weight:600;">Matrícula:</span> {{ $aluno->registration_number }}</div>
-        <div><span style="color:var(--text-4); font-weight:600;">Aluno(a):</span> {{ $aluno->name }}</div>
+        <div><span style="color:var(--text-4); font-weight:600;">Estudante(a):</span> {{ $aluno->name }}</div>
         <div>
             <span style="color:var(--text-4); font-weight:600;">Data de Nascimento:</span>
             {{ $aluno->birth_date ? $aluno->birth_date->format('d/m/Y') : '—' }}

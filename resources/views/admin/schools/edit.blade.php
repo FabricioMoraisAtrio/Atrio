@@ -9,7 +9,7 @@
         <a href="{{ route('admin.schools.import', $school) }}"
            style="display:inline-flex; align-items:center; gap:7px; padding:8px 14px; border:1px solid var(--adm-border, #E6EAF2); border-radius:8px; font-size:13px; font-weight:600; color:var(--adm-accent, #3B82F6); text-decoration:none; background:var(--adm-card, #fff);">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Importar alunos
+            Importar estudantes
         </a>
     </div>
 
@@ -76,7 +76,7 @@
                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
                     </div>
                     <div>
-                        <label class="block text-sm text-gray-600 mb-1">Máx. alunos</label>
+                        <label class="block text-sm text-gray-600 mb-1">Máx. estudantes</label>
                         <input type="number" name="max_students"
                                value="{{ old('max_students', $school->max_students) }}"
                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
@@ -320,8 +320,8 @@
 
             @php
             $termDefs = [
-                ['key' => 'aluno',            'label' => 'Aluno (singular)',      'default' => 'Aluno'],
-                ['key' => 'alunos',           'label' => 'Aluno (plural)',        'default' => 'Alunos'],
+                ['key' => 'aluno',            'label' => 'Estudante (singular)',      'default' => 'Estudante'],
+                ['key' => 'alunos',           'label' => 'Estudante (plural)',        'default' => 'Estudantes'],
                 ['key' => 'turma',            'label' => 'Turma (singular)',      'default' => 'Turma'],
                 ['key' => 'turmas',           'label' => 'Turma (plural)',        'default' => 'Turmas'],
                 ['key' => 'laudo',            'label' => 'Laudo (singular)',      'default' => 'Laudo'],

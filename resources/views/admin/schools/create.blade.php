@@ -36,7 +36,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-600 mb-1">Máx. alunos</label>
+                    <label class="block text-sm text-gray-600 mb-1">Máx. estudantes</label>
                     <input type="number" name="max_students" value="{{ old('max_students', 100) }}"
                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800">
                 </div>

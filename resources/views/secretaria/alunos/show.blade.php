@@ -45,7 +45,7 @@
             </a>
             @if($aluno->photo)
             <form method="POST" action="{{ route('secretaria.alunos.removePhoto', $aluno) }}"
-                  onsubmit="return confirm('Remover a foto do aluno?')">
+                  onsubmit="return confirm('Remover a foto do estudante?')">
                 @csrf
                 @method('DELETE')
                 <button type="submit"
@@ -307,9 +307,9 @@
 @endif
 
 {{-- Mural --}}
-<x-observation-feed :aluno="$aluno" role="secretaria" />
+<x-observation-feed :estudante="$aluno" role="secretaria" />
 
 {{-- Carregar laudos --}}
 @php $aluno->load('laudos.uploader'); @endphp
-<x-laudo-feed :aluno="$aluno" role="secretaria" />
+<x-laudo-feed :estudante="$aluno" role="secretaria" />
 @endsection

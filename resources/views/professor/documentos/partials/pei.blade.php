@@ -55,7 +55,7 @@
             <p style="font-size: 11px; font-weight: 700; color: {{ $cat['cor'] }}; letter-spacing: 1px; text-transform: uppercase; margin: 0;">
                 {{ $cat['label'] }} — {{ $subject->name }}
             </p>
-            <p style="font-size: 11px; color: var(--text-4); margin: 4px 0 0;">Avalie cada meta conforme o desempenho do aluno nesta disciplina.</p>
+            <p style="font-size: 11px; color: var(--text-4); margin: 4px 0 0;">Avalie cada meta conforme o desempenho do estudante nesta disciplina.</p>
         </div>
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; font-size: 12px;">

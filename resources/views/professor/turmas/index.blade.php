@@ -45,7 +45,7 @@
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <div style="text-align: right;">
                         <div style="font-size: 22px; font-weight: 700; color: var(--text-1); line-height: 1;">{{ $turma->students_count }}</div>
-                        <div style="font-size: 11px; color: var(--text-4);">alunos</div>
+                        <div style="font-size: 11px; color: var(--text-4);">estudantes</div>
                     </div>
                     <svg id="chevron-{{ $turma->id }}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"
                          style="transition: transform 0.2s; flex-shrink: 0;">
@@ -54,17 +54,17 @@
                 </div>
             </div>
 
-            {{-- Lista de alunos (recolhida por padrão) --}}
+            {{-- Lista de estudantes (recolhida por padrão) --}}
             <div id="turma-{{ $turma->id }}" style="display: none; border-top: 1px solid var(--border-sub);">
                 @if($turma->students->isEmpty())
                     <div style="padding: 24px; text-align: center; font-size: 13px; color: var(--text-4);">
-                        Nenhum aluno matriculado.
+                        Nenhum estudante matriculado.
                     </div>
                 @else
                     <table style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr style="background: var(--bg-subtle);">
-                                <th style="text-align: left; padding: 10px 24px; font-size: 10px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Aluno</th>
+                                <th style="text-align: left; padding: 10px 24px; font-size: 10px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Estudante</th>
                                 <th style="text-align: left; padding: 10px 16px; font-size: 10px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Perfil</th>
                                 <th style="text-align: center; padding: 10px 10px; font-size: 10px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">Est. Caso</th>
                                 <th style="text-align: center; padding: 10px 10px; font-size: 10px; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px;">PAEE</th>

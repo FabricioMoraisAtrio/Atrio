@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Novo Aluno')
+@section('title', 'Novo Estudante')
 
 @section('content')
 <div style="max-width: 560px;">
@@ -7,9 +7,9 @@
         <a href="{{ route('secretaria.alunos.index') }}"
            style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Voltar para alunos
+            Voltar para estudantes
         </a>
-        <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0;">Novo aluno</h1>
+        <h1 style="font-size: 22px; font-weight: 700; color: var(--text-1); margin: 0;">Novo estudante</h1>
     </div>
 
     @if($errors->has('limit'))
@@ -31,7 +31,7 @@
                     </span>
                 </div>
                 <div>
-                    <p style="font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px;">Foto do aluno</p>
+                    <p style="font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px;">Foto do estudante</p>
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
                         <label for="foto-input" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-2); cursor: pointer;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -151,7 +151,7 @@
                     <input type="checkbox" name="is_atypical" value="1"
                            id="is_atypical" {{ old('is_atypical') ? 'checked' : '' }}
                            onchange="toggleAtypical(this.checked)">
-                    <span style="font-size: 14px; font-weight: 600; color: var(--text-1);">{{ term('aluno') }} {{ strtolower(term('publico_alvo')) }} da Educação Especial</span>
+                    <span style="font-size: 14px; font-weight: 600; color: var(--text-1);">Estudante {{ strtolower(term('publico_alvo')) }} da Educação Especial</span>
                 </label>
                 <p style="font-size: 12px; color: var(--text-4); margin: 0 0 0 26px;">Marque para habilitar os campos de condição</p>
 
@@ -192,7 +192,7 @@
                     {{-- Grupo: Outras condições --}}
                     <div style="border-radius: 10px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 16px;">
                         <div style="background: var(--bg-subtle); padding: 8px 12px; border-bottom: 1px solid var(--border);">
-                            <span style="font-size: 10px; font-weight: 700; color: var(--text-3); letter-spacing: 0.8px; text-transform: uppercase;">Outras condições atípicas</span>
+                            <span style="font-size: 10px; font-weight: 700; color: var(--text-3); letter-spacing: 0.8px; text-transform: uppercase;">Informações clínicas e diagnósticas</span>
                         </div>
                         <div style="padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
                             @foreach($transtornosOutros as $field => [$sigla, $nome])
@@ -284,7 +284,7 @@
             <div style="display: flex; gap: 12px; margin-top: 24px;">
                 <button type="submit"
                         style="background: var(--accent); color: white; border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                    Cadastrar aluno
+                    Cadastrar estudante
                 </button>
                 <a href="{{ route('secretaria.alunos.index') }}"
                    style="padding: 11px 20px; border-radius: 8px; font-size: 13px; color: var(--text-3); text-decoration: none; border: 1px solid var(--border);">

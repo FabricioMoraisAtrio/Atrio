@@ -169,7 +169,7 @@
         <td colspan="3">{{ $school?->name }}</td>
     </tr>
     <tr>
-        <td class="id-label">Aluno(a)</td>
+        <td class="id-label">Estudante(a)</td>
         <td colspan="3" style="font-weight: bold;">{{ $aluno->name }}</td>
     </tr>
     <tr>

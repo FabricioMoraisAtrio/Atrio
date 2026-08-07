@@ -24,10 +24,10 @@ $cards = [
         'role'     => null,
         'module'   => 'painel',
     ],
-    // 2. Cadastro de Alunos
+    // 2. Cadastro de Estudantes
     [
         'label'    => 'Cadastro de ' . strtolower(term('alunos')),
-        'descricao'=> 'Cadastro completo dos alunos, diagnósticos e histórico.',
+        'descricao'=> 'Cadastro completo dos estudantes, diagnósticos e histórico.',
         'route'    => 'secretaria.alunos.index',
         'cor'      => '#009C8C',
         'bg'       => '#E6F5F4',
@@ -38,7 +38,7 @@ $cards = [
     // 3. Turmas
     [
         'label'    => term('turmas'),
-        'descricao'=> 'Gerencie as turmas e os alunos matriculados no ano letivo.',
+        'descricao'=> 'Gerencie as turmas e os estudantes matriculados no ano letivo.',
         'route'    => 'secretaria.turmas.index',
         'cor'      => '#004B8D',
         'bg'       => '#E8F0F9',
@@ -60,7 +60,7 @@ $cards = [
     // 5. Adaptações para Prova
     [
         'label'    => 'Adaptações para Prova',
-        'descricao'=> 'Controle das adaptações de avaliação por aluno e turma.',
+        'descricao'=> 'Controle das adaptações de avaliação por estudante e turma.',
         'route'    => 'secretaria.rotinas.adaptacoes',
         'cor'      => '#6D28D9',
         'bg'       => '#EDE9FE',
@@ -82,7 +82,7 @@ $cards = [
     // Linha do Tempo
     [
         'label'    => 'Linha do Tempo',
-        'descricao'=> 'Roadmap da evolução do aluno: metas, reuniões, laudos e observações.',
+        'descricao'=> 'Roadmap da evolução do estudante: metas, reuniões, laudos e observações.',
         'route'    => 'secretaria.rotinas.linha-do-tempo',
         'cor'      => '#0F766E',
         'bg'       => '#CCFBF1',
@@ -104,7 +104,7 @@ $cards = [
     // 7. Jornada Alimentar
     [
         'label'    => 'Jornada Alimentar',
-        'descricao'=> 'Perfil alimentar dos alunos: alimentos aceitos, tolerados e recusados.',
+        'descricao'=> 'Perfil alimentar dos estudantes: alimentos aceitos, tolerados e recusados.',
         'route'    => 'secretaria.seletividade.index',
         'cor'      => '#0F766E',
         'bg'       => '#CCFBF1',
