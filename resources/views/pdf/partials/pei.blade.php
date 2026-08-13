@@ -193,6 +193,10 @@
         <td colspan="3">{{ $diagnostico }}</td>
     </tr>
     @endif
+    <tr>
+        <td class="id-label">Nível (Bloom)</td>
+        <td colspan="3">{{ $aluno->nivel_bloom_label ?? '—' }}</td>
+    </tr>
     @if(!empty($ec['contexto_familiar']))
     <tr>
         <td class="id-label">Contexto Familiar</td>

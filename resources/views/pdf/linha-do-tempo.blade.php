@@ -100,6 +100,9 @@
         <td class="id-label">Responsável</td><td>{{ $responsaveis ?: '—' }}</td>
     </tr>
     <tr>
+        <td class="id-label">Nível (Bloom)</td><td colspan="3">{{ $aluno->nivel_bloom_label ?? '—' }}</td>
+    </tr>
+    <tr>
         <td class="id-label">Emitido em</td><td>{{ now()->format('d/m/Y') }}</td>
         <td class="id-label">Registros</td><td>{{ count($eventos) }} evento(s)</td>
     </tr>

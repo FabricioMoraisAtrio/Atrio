@@ -145,6 +145,18 @@
                 </select>
             </div>
 
+            {{-- Nível na Taxonomia de Bloom --}}
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 11px; font-weight: 600; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Nível na Taxonomia de Bloom</label>
+                <select name="nivel_bloom"
+                        style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;">
+                    <option value="">Não avaliado</option>
+                    @foreach(\App\Models\Student::NIVEIS_BLOOM as $bKey => $bLabel)
+                        <option value="{{ $bKey }}" {{ old('nivel_bloom') === $bKey ? 'selected' : '' }}>{{ $bLabel }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             {{-- Atipicidade --}}
             <div style="border: 1px solid var(--border-sub); border-radius: 10px; padding: 20px;">
                 <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 4px;">

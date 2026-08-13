@@ -77,6 +77,18 @@ $textarea = fn(string $name, string $label, int $rows = 3) =>
                   style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
                   onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ $fn('contexto_familiar') }}</textarea>
     </div>
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Nível na Taxonomia de Bloom</label>
+        <select name="nivel_bloom"
+                style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; background: transparent; box-sizing: border-box;"
+                onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">
+            <option value="">Não avaliado</option>
+            @foreach(\App\Models\Student::NIVEIS_BLOOM as $bKey => $bLabel)
+                <option value="{{ $bKey }}" {{ old('nivel_bloom', $aluno->nivel_bloom) === $bKey ? 'selected' : '' }}>{{ $bLabel }}</option>
+            @endforeach
+        </select>
+        <p style="font-size: 11px; color: var(--text-4); margin-top: 6px;">Nível cognitivo predominante do estudante (Taxonomia de Bloom revisada).</p>
+    </div>
 </div>
 
 <hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 28px;">

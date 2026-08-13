@@ -33,13 +33,6 @@ class DocumentController extends Controller
                 'rules'    => ['historico_escolar' => 'required|string'],
                 'messages' => ['historico_escolar.required' => 'Informe o histórico escolar do estudante.'],
             ],
-            'paee' => [
-                'rules'    => ['diagnostico_perfil' => 'required|array|min:1'],
-                'messages' => [
-                    'diagnostico_perfil.required' => 'Selecione ao menos um item em Diagnóstico / Perfil.',
-                    'diagnostico_perfil.min'      => 'Selecione ao menos um item em Diagnóstico / Perfil.',
-                ],
-            ],
             default => ['rules' => [], 'messages' => []],
         };
     }
@@ -86,7 +79,7 @@ class DocumentController extends Controller
         $obrig = self::obrigatorios($type);
 
         $request->validate(
-            ['type' => 'required|in:estudo_caso,paee'] + $obrig['rules'],
+            ['type' => 'required|in:estudo_caso,paee', 'nivel_bloom' => 'nullable|in:' . implode(',', array_keys(Student::NIVEIS_BLOOM))] + $obrig['rules'],
             $obrig['messages'],
         );
 
@@ -114,7 +107,10 @@ class DocumentController extends Controller
         ]);
 
         if ($type === 'estudo_caso') {
-            $aluno->update(['has_case_study' => true]);
+            $aluno->update([
+                'has_case_study' => true,
+                'nivel_bloom'    => $request->input('nivel_bloom'),
+            ]);
 
             // Cria o PEI vazio automaticamente para os professores preencherem
             Document::updateOrCreate(
@@ -183,6 +179,11 @@ class DocumentController extends Controller
         $obrig = self::obrigatorios($documento->type);
         if ($obrig['rules']) {
             $request->validate($obrig['rules'], $obrig['messages']);
+        }
+
+        if ($documento->type === 'estudo_caso') {
+            $request->validate(['nivel_bloom' => 'nullable|in:' . implode(',', array_keys(Student::NIVEIS_BLOOM))]);
+            $documento->student->update(['nivel_bloom' => $request->input('nivel_bloom')]);
         }
 
         if ($documento->type === 'pei') {

@@ -61,6 +61,7 @@ $textarea = fn(string $name, string $label, int $rows = 3, string $placeholder =
             {{ $turma ? $turma->name . ' · ' . $turma->shift : '—' }}
         </div>
         <div><span style="color:var(--text-4); font-weight:600;">Ano Letivo:</span> {{ $anoLetivo }}</div>
+        <div><span style="color:var(--text-4); font-weight:600;">Nível (Bloom):</span> {{ $aluno->nivel_bloom_label ?? '—' }}</div>
         @if($aluno->responsavel_nome)
         <div><span style="color:var(--text-4); font-weight:600;">Responsável:</span> {{ $aluno->responsavel_nome }}</div>
         @endif
@@ -74,44 +75,6 @@ $textarea = fn(string $name, string $label, int $rows = 3, string $placeholder =
         @endif
     </div>
 </div>
-
-{{-- ═══ DIAGNÓSTICO / PERFIL ═══ --}}
-{!! $section('Diagnóstico / Perfil', 'Necessidades educacionais e barreiras identificadas.') !!}
-<p style="font-size: 12px; color: var(--danger); margin: -6px 0 14px;">* Selecione ao menos um item abaixo.</p>
-
-@php
-$diagOpcoes = [
-    'Deficiência intelectual',
-    'Transtorno do espectro autista (TEA)',
-    'TDAH',
-    'Deficiência física',
-    'Deficiência auditiva',
-    'Deficiência visual',
-    'Altas habilidades/superdotação',
-    'Dificuldades específicas de aprendizagem',
-];
-$diagSelected = old('diagnostico_perfil', $content['diagnostico_perfil'] ?? []);
-@endphp
-<div style="margin-bottom: 28px;">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-bottom: 16px;">
-        @foreach($diagOpcoes as $opt)
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); cursor: pointer;">
-            <input type="checkbox" name="diagnostico_perfil[]" value="{{ $opt }}"
-                   {{ in_array($opt, (array)$diagSelected) ? 'checked' : '' }}
-                   style="accent-color: {{ $accent }}; width: 15px; height: 15px; flex-shrink: 0;">
-            {{ $opt }}
-        </label>
-        @endforeach
-    </div>
-    <div>
-        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 8px;">Observações complementares</label>
-        <textarea name="diagnostico_perfil_obs" rows="3"
-                  style="width: 100%; border: none; border-bottom: 2px solid var(--border); padding: 8px 0; font-size: 14px; color: var(--text-1); outline: none; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.7; background: transparent;"
-                  onfocus="this.style.borderColor='{{ $accent }}'" onblur="this.style.borderColor='var(--border)'">{{ old('diagnostico_perfil_obs', $content['diagnostico_perfil_obs'] ?? '') }}</textarea>
-    </div>
-</div>
-
-<hr style="border: none; border-top: 1px solid var(--border-sub); margin-bottom: 28px;">
 
 {{-- ═══ RECURSOS E ESTRATÉGIAS ═══ --}}
 {!! $section('Recursos e Estratégias', 'Recursos e estratégias utilizados no atendimento.') !!}

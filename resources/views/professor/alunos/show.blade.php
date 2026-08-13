@@ -29,6 +29,9 @@
                     @endif
                 </div>
                 <p style="font-size: 13px; color: var(--text-4); margin: 0;">Matrícula: {{ $aluno->registration_number }}</p>
+                @if($aluno->nivel_bloom_label)
+                    <p style="font-size: 12px; color: var(--accent-text); font-weight: 600; margin: 4px 0 0;">Taxonomia de Bloom: {{ $aluno->nivel_bloom_label }}</p>
+                @endif
             </div>
         </div>
         @if($aluno->is_atypical)

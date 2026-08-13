@@ -17,12 +17,22 @@ class Student extends Model
         'cid_deficiencia_auditiva', 'cid_dfm',
     ];
 
+    /** Níveis da Taxonomia de Bloom (revisada), do mais básico ao mais complexo. */
+    public const NIVEIS_BLOOM = [
+        'lembrar'  => 'Lembrar',
+        'entender' => 'Entender',
+        'aplicar'  => 'Aplicar',
+        'analisar' => 'Analisar',
+        'avaliar'  => 'Avaliar',
+        'criar'    => 'Criar',
+    ];
+
 protected $fillable = [
     'school_id', 'name', 'photo', 'registration_number',
     'birth_date',
     'responsavel_nome', 'responsavel_email', 'responsavel_telefone',
     'responsavel_2_nome', 'responsavel_2_email', 'responsavel_2_telefone',
-    'is_atypical', 'condition', 'has_case_study',
+    'is_atypical', 'condition', 'has_case_study', 'nivel_bloom',
     'tea_nivel_suporte',
     'cid_autismo', 'cid_tgd', 'cid_tdah', 'cid_down',
     'cid_deficiencia_intelectual', 'cid_deficiencia_visual',
@@ -71,6 +81,12 @@ protected function casts(): array
             if ($this->$field) return true;
         }
         return false;
+    }
+
+    /** Rótulo do nível de Bloom do estudante (ou null se não definido). */
+    public function getNivelBloomLabelAttribute(): ?string
+    {
+        return self::NIVEIS_BLOOM[$this->nivel_bloom] ?? null;
     }
 
     protected static function booted(): void

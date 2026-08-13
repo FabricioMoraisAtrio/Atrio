@@ -196,6 +196,10 @@
         <td colspan="3">{{ $diagnostico }}</td>
     </tr>
     @endif
+    <tr>
+        <td class="id-label">Nível (Bloom)</td>
+        <td colspan="3">{{ $aluno->nivel_bloom_label ?? '—' }}</td>
+    </tr>
 </table>
 
 @php
@@ -212,6 +216,7 @@ $checkCols = function(array $itens): string {
 
 {{-- Diagnóstico / Perfil --}}
 @php $diagItens = (array)($c['diagnostico_perfil'] ?? []); @endphp
+@if($diagItens || $val('diagnostico_perfil_obs'))
 <div class="section">
     <div class="section-header">
         <div class="section-title">Diagnóstico / Perfil</div>
@@ -223,6 +228,7 @@ $checkCols = function(array $itens): string {
     <div class="field-value" style="white-space: pre-wrap; font-size: 9px;">{{ $val('diagnostico_perfil_obs') }}</div>
     @endif
 </div>
+@endif
 
 <hr class="div">
 
