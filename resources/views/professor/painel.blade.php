@@ -207,10 +207,6 @@ document.addEventListener('click', function(e) {
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <a href="{{ route('professor.alunos.show', $aluno) }}"
-                               style="font-size: 12px; color: var(--accent-text); text-decoration: none; font-weight: 600; padding: 5px 12px; border: 1px solid #E8F0F9; border-radius: 8px; background: var(--accent-bg);">
-                                Ver perfil
-                            </a>
                             @php
                                 $pei              = $aluno->documents->firstWhere('type', 'pei');
                                 $temEstudoCaso    = $aluno->documents->contains('type', 'estudo_caso');

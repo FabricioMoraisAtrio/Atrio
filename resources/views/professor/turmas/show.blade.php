@@ -61,7 +61,7 @@
                 <td style="padding: 14px 20px;">
                     @if($aluno->is_atypical)
                         <span style="background: var(--purple-bg); color: var(--purple); font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px;">Atípico</span>
-                        <x-cid-badges :estudante="$aluno" />
+                        <x-cid-badges :aluno="$aluno" />
                     @else
                         <span style="background: var(--bg-subtle); color: var(--text-3); font-size: 11px; padding: 3px 8px; border-radius: 20px;">Típico</span>
                     @endif

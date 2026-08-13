@@ -307,9 +307,9 @@
 @endif
 
 {{-- Mural --}}
-<x-observation-feed :estudante="$aluno" role="secretaria" />
+<x-observation-feed :aluno="$aluno" role="secretaria" />
 
 {{-- Carregar laudos --}}
 @php $aluno->load('laudos.uploader'); @endphp
-<x-laudo-feed :estudante="$aluno" role="secretaria" />
+<x-laudo-feed :aluno="$aluno" role="secretaria" />
 @endsection
