@@ -28,13 +28,7 @@ class DocumentController extends Controller
      */
     private static function obrigatorios(string $type): array
     {
-        return match ($type) {
-            'estudo_caso' => [
-                'rules'    => ['historico_escolar' => 'required|string'],
-                'messages' => ['historico_escolar.required' => 'Informe o histórico escolar do estudante.'],
-            ],
-            default => ['rules' => [], 'messages' => []],
-        };
+        return \App\Support\CamposDocumento::regras(session('school_id'), $type);
     }
 
     public function create(Student $aluno, Request $request)
