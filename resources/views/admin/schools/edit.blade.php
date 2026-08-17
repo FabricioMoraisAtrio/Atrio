@@ -20,6 +20,7 @@
             'aparencia'      => 'Aparência',
             'modulos'        => 'Módulos',
             'terminologias'  => 'Terminologias',
+            'campos_obrig'   => 'Obrigatórios',
             'materias'       => 'Matérias',
         ] as $id => $label)
         <button type="button" onclick="switchTab('{{ $id }}')" id="tab-{{ $id }}"
@@ -361,10 +362,46 @@
         </div>
     </form>
 
+    {{-- ══ ABA: CAMPOS OBRIGATÓRIOS (form separado) ══ --}}
+    <form id="panel-campos_obrig" class="tab-panel" style="display:none;"
+          method="POST" action="{{ route('admin.schools.campos-obrigatorios.update', $school) }}">
+        @csrf @method('PUT')
+
+        <div class="bg-white rounded-b-xl rounded-tr-xl border border-t-0 border-gray-200 p-6">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Campos obrigatórios</p>
+            <p class="text-xs text-gray-400 mb-4">Marque os campos que esta escola deve preencher obrigatoriamente em cada documento. Sem marcar nenhum, o documento pode ser salvo mesmo em branco.</p>
+
+            @php
+                $obrigCfg   = \App\Support\CamposDocumento::configDaEscola($school->id);
+                $labelsTipo = ['estudo_caso' => 'Estudo de Caso', 'paee' => 'PAEE'];
+            @endphp
+
+            @foreach(\App\Support\CamposDocumento::CATALOGO as $tipo => $campos)
+                <p class="text-xs font-semibold text-gray-700 mt-4 mb-2">{{ $labelsTipo[$tipo] ?? $tipo }}</p>
+                <div class="grid grid-cols-2 gap-2">
+                    @foreach($campos as $key => $campo)
+                        <label class="flex items-center gap-2 text-sm text-gray-700">
+                            <input type="checkbox" name="obrig[{{ $tipo }}][]" value="{{ $key }}"
+                                   {{ in_array($key, $obrigCfg[$tipo] ?? [], true) ? 'checked' : '' }}>
+                            {{ $campo['label'] }}
+                        </label>
+                    @endforeach
+                </div>
+            @endforeach
+
+            <div style="padding-top: 20px; border-top: 1px solid #F3F4F6; margin-top: 20px;">
+                <button type="submit"
+                        class="bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg px-4 py-2 transition">
+                    Salvar campos obrigatórios
+                </button>
+            </div>
+        </div>
+    </form>
+
 </div>
 
 <script>
-const TABS = ['escola', 'aparencia', 'modulos', 'terminologias', 'materias'];
+const TABS = ['escola', 'aparencia', 'modulos', 'terminologias', 'campos_obrig', 'materias'];
 
 function switchTab(active) {
     TABS.forEach(id => {
@@ -379,7 +416,7 @@ function switchTab(active) {
 
     // Oculta botão de salvar principal em abas com form próprio
     const saveMain = document.getElementById('save-main');
-    if (saveMain) saveMain.style.display = ['terminologias', 'materias'].includes(active) ? 'none' : 'flex';
+    if (saveMain) saveMain.style.display = ['terminologias', 'campos_obrig', 'materias'].includes(active) ? 'none' : 'flex';
 
     sessionStorage.setItem('schoolTab', active);
 }

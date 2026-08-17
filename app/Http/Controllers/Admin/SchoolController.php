@@ -132,6 +132,13 @@ class SchoolController extends Controller
             ->with('success', 'Terminologias atualizadas.');
     }
 
+    public function updateCamposObrigatorios(Request $request, School $school)
+    {
+        \App\Support\CamposDocumento::salvar($school->id, (array) $request->input('obrig', []));
+
+        return back()->with('success', 'Campos obrigatórios atualizados.');
+    }
+
     public function update(Request $request, School $school)
     {
         $data = $request->validate([

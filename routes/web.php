@@ -303,6 +303,7 @@ Route::prefix('superadmin')->withoutMiddleware([\Illuminate\Auth\Middleware\Auth
             Route::resource('schools', \App\Http\Controllers\Admin\SchoolController::class)->names('admin.schools');
             Route::post('schools/{school}/reset-password/{user}', [\App\Http\Controllers\Admin\SchoolController::class, 'resetPassword'])->name('admin.schools.resetPassword');
             Route::put('schools/{school}/terminologias', [\App\Http\Controllers\Admin\SchoolController::class, 'updateTerminologias'])->name('admin.schools.terminologias.update');
+            Route::put('schools/{school}/campos-obrigatorios', [\App\Http\Controllers\Admin\SchoolController::class, 'updateCamposObrigatorios'])->name('admin.schools.campos-obrigatorios.update');
             // Matérias (gerenciadas pelo Super Admin por escola)
             Route::post('schools/{school}/materias',                  [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'store'])->name('admin.schools.materias.store');
             Route::put('schools/{school}/materias/{subject}',         [\App\Http\Controllers\Admin\SchoolSubjectController::class, 'update'])->name('admin.schools.materias.update');
