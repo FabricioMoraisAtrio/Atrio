@@ -15,6 +15,17 @@ class SchoolRoleController extends Controller
     public static function permissionGroups(): array
     {
         return [
+            'Rotinas — acesso ao menu' => [
+                'rotina.painel'         => 'Painel de Acompanhamento',
+                'rotina.turmas'         => 'Turmas',
+                'rotina.alunos'         => 'Cadastro de Estudantes',
+                'rotina.documentos'     => 'Documentos de Inclusão',
+                'rotina.adaptacoes'     => 'Adaptações para Prova',
+                'rotina.reunioes'       => 'Reuniões / Atas',
+                'rotina.linha_do_tempo' => 'Linha do Tempo',
+                'rotina.seletividade'   => 'Jornada Alimentar',
+                'rotina.usuarios'       => 'Usuários',
+            ],
             'Estudantes' => [
                 'alunos.ver'    => 'Visualizar estudantes',
                 'alunos.criar'  => 'Cadastrar estudantes',

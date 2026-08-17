@@ -68,6 +68,17 @@
                 @php
                     $school     = auth()->user()->school;
                     $hasModule  = fn(string $k) => !$school || $school->hasModule($k);
+                    // Permissão de acesso à rotina (visibilidade no menu), por perfil.
+                    $rotinaPermMap = [
+                        'painel' => 'rotina.painel', 'turmas' => 'rotina.turmas', 'alunos' => 'rotina.alunos',
+                        'documentos' => 'rotina.documentos', 'adaptacoes' => 'rotina.adaptacoes',
+                        'reunioes' => 'rotina.reunioes', 'linha_do_tempo' => 'rotina.linha_do_tempo',
+                        'seletividade' => 'rotina.seletividade', 'usuarios' => 'rotina.usuarios',
+                    ];
+                    $podeRotina = function (array $item) use ($rotinaPermMap) {
+                        $p = $rotinaPermMap[$item['module'] ?? ''] ?? null;
+                        return ! $p || auth()->user()->can($p);
+                    };
                     $pendCacheKey = 'pendentes_count_' . session('school_id');
                     $pendentesCount = 0;
                 @endphp
@@ -149,6 +160,7 @@
 
                 @foreach($items ?? [] as $item)
                     @continue(isset($item['module']) && !$hasModule($item['module']))
+                    @continue(! $podeRotina($item))
                     @include('layouts.partials.sidebar-item', ['item' => $item, 'hasModule' => $hasModule])
                 @endforeach
 
@@ -156,6 +168,7 @@
                     <div style="margin-top: auto;">
                         @foreach($footerItems as $item)
                             @continue(isset($item['module']) && !$hasModule($item['module']))
+                            @continue(! $podeRotina($item))
                             @include('layouts.partials.sidebar-item', ['item' => $item, 'hasModule' => $hasModule])
                         @endforeach
                     </div>
