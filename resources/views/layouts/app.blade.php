@@ -75,7 +75,16 @@
                         'reunioes' => 'rotina.reunioes', 'linha_do_tempo' => 'rotina.linha_do_tempo',
                         'seletividade' => 'rotina.seletividade', 'usuarios' => 'rotina.usuarios',
                     ];
-                    $podeRotina = function (array $item) use ($rotinaPermMap) {
+                    // O filtro de rotina vale APENAS para perfis customizados (s{escola}_*)
+                    // e só quando as permissões já existem (evita esconder tudo antes do migrate).
+                    // Papéis internos (admin/coordenador/orientador/professor) veem tudo por módulo.
+                    $ehCustom    = ! auth()->user()->hasRole('admin')
+                        && auth()->user()->roles->contains(fn ($r) => str_starts_with($r->name, 's' . session('school_id') . '_'));
+                    $rotinaAtiva = $ehCustom && \Spatie\Permission\Models\Permission::where('name', 'rotina.painel')->exists();
+                    $podeRotina  = function (array $item) use ($rotinaPermMap, $rotinaAtiva) {
+                        if (! $rotinaAtiva) {
+                            return true;
+                        }
                         $p = $rotinaPermMap[$item['module'] ?? ''] ?? null;
                         return ! $p || auth()->user()->can($p);
                     };

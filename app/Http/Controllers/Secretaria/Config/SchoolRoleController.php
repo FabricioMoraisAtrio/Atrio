@@ -143,7 +143,9 @@ class SchoolRoleController extends Controller
 
         // Cria o role no Spatie
         $role = Role::firstOrCreate(['name' => $spatieRole, 'guard_name' => 'web']);
-        $role->syncPermissions($data['permissions'] ?? []);
+        $role->syncPermissions(
+            Permission::whereIn('name', (array) ($data['permissions'] ?? []))->pluck('name')->toArray()
+        );
 
         // Salva o school_role
         SchoolRole::create([
@@ -191,7 +193,9 @@ class SchoolRoleController extends Controller
         // Atualiza permissões no Spatie
         $role = Role::where('name', $perfil->spatie_role)->first();
         if ($role) {
-            $role->syncPermissions($data['permissions'] ?? []);
+            $role->syncPermissions(
+            Permission::whereIn('name', (array) ($data['permissions'] ?? []))->pluck('name')->toArray()
+        );
         }
 
         $perfil->update([
