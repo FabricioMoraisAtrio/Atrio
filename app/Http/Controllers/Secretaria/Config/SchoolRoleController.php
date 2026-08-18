@@ -76,7 +76,7 @@ class SchoolRoleController extends Controller
     /** permissionGroups com o grupo "Rotinas" limitado aos módulos habilitados da escola. */
     public static function permissionGroupsParaEscola(?int $schoolId): array
     {
-        $groups = self::permissionGroupsParaEscola(session('school_id'));
+        $groups = self::permissionGroups();
         $school = $schoolId ? \App\Models\School::find($schoolId) : null;
 
         if ($school && isset($groups['Rotinas — acesso ao menu'])) {
