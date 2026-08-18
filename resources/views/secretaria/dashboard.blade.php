@@ -146,6 +146,7 @@ $cards = [
         @if(isset($card['module']) && !$hasModule($card['module']))
             @continue
         @endif
+        @continue(! pode_rotina($card['module'] ?? null))
         <a href="{{ route($card['route']) }}" style="text-decoration: none;">
             <div style="background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border); padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; height: 100%;"
                  onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.09)'; this.style.borderColor='{{ $card['cor'] }}33';"

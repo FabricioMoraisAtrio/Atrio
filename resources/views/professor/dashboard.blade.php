@@ -16,6 +16,7 @@ $cards = [
         'cor'      => '#004B8D',
         'bg'       => '#E8F0F9',
         'icon'     => '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+        'module'   => 'painel',
     ],
     [
         'label'    => 'Turmas',
@@ -24,6 +25,7 @@ $cards = [
         'cor'      => '#009C8C',
         'bg'       => '#E6F5F4',
         'icon'     => '<path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+        'module'   => 'turmas',
     ],
 ];
 @endphp
@@ -44,6 +46,7 @@ $cards = [
 {{-- Grid de atalhos --}}
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
     @foreach($cards as $card)
+    @continue(! pode_rotina($card['module'] ?? null))
     <a href="{{ route($card['route']) }}" style="text-decoration: none;">
         <div style="background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border); padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; height: 100%;"
              onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.09)'; this.style.borderColor='{{ $card['cor'] }}33';"

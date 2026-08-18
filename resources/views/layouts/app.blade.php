@@ -68,28 +68,9 @@
                 @php
                     $school     = auth()->user()->school;
                     $hasModule  = fn(string $k) => !$school || $school->hasModule($k);
-                    // Permissão de acesso à rotina (visibilidade no menu), por perfil.
-                    $rotinaPermMap = [
-                        'painel' => 'rotina.painel', 'turmas' => 'rotina.turmas', 'alunos' => 'rotina.alunos',
-                        'documentos' => 'rotina.documentos', 'adaptacoes' => 'rotina.adaptacoes',
-                        'reunioes' => 'rotina.reunioes', 'linha_do_tempo' => 'rotina.linha_do_tempo',
-                        'seletividade' => 'rotina.seletividade', 'usuarios' => 'rotina.usuarios',
-                    ];
-                    // O filtro de rotina vale APENAS para perfis customizados (s{escola}_*)
-                    // e só quando as permissões já existem (evita esconder tudo antes do migrate).
-                    // Papéis internos (admin/coordenador/orientador/professor) veem tudo por módulo.
-                    // O filtro de rotina vale para o professor e para perfis customizados
-                    // (admin/coordenador/orientador veem tudo). Só quando as permissões existem.
-                    $ehCustom      = auth()->user()->roles->contains(fn ($r) => str_starts_with($r->name, 's' . session('school_id') . '_'));
-                    $filtrarRotina = (auth()->user()->hasRole('professor') || $ehCustom)
-                        && \Spatie\Permission\Models\Permission::where('name', 'rotina.painel')->exists();
-                    $podeRotina = function (array $item) use ($rotinaPermMap, $filtrarRotina) {
-                        if (! $filtrarRotina) {
-                            return true;
-                        }
-                        $p = $item['perm'] ?? ($rotinaPermMap[$item['module'] ?? ''] ?? null);
-                        return ! $p || auth()->user()->can($p);
-                    };
+                    // Visibilidade por rotina: regra ÚNICA em pode_rotina() (app/Helpers/helpers.php),
+                    // compartilhada entre a barra lateral e os dashboards iniciais.
+                    $podeRotina = fn (array $item) => pode_rotina($item['module'] ?? null, $item['perm'] ?? null);
                     $pendCacheKey = 'pendentes_count_' . session('school_id');
                     $pendentesCount = 0;
                 @endphp
