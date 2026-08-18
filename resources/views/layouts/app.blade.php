@@ -78,14 +78,16 @@
                     // O filtro de rotina vale APENAS para perfis customizados (s{escola}_*)
                     // e só quando as permissões já existem (evita esconder tudo antes do migrate).
                     // Papéis internos (admin/coordenador/orientador/professor) veem tudo por módulo.
-                    $ehCustom    = ! auth()->user()->hasRole('admin')
-                        && auth()->user()->roles->contains(fn ($r) => str_starts_with($r->name, 's' . session('school_id') . '_'));
-                    $rotinaAtiva = $ehCustom && \Spatie\Permission\Models\Permission::where('name', 'rotina.painel')->exists();
-                    $podeRotina  = function (array $item) use ($rotinaPermMap, $rotinaAtiva) {
-                        if (! $rotinaAtiva) {
+                    // O filtro de rotina vale para o professor e para perfis customizados
+                    // (admin/coordenador/orientador veem tudo). Só quando as permissões existem.
+                    $ehCustom      = auth()->user()->roles->contains(fn ($r) => str_starts_with($r->name, 's' . session('school_id') . '_'));
+                    $filtrarRotina = (auth()->user()->hasRole('professor') || $ehCustom)
+                        && \Spatie\Permission\Models\Permission::where('name', 'rotina.painel')->exists();
+                    $podeRotina = function (array $item) use ($rotinaPermMap, $filtrarRotina) {
+                        if (! $filtrarRotina) {
                             return true;
                         }
-                        $p = $rotinaPermMap[$item['module'] ?? ''] ?? null;
+                        $p = $item['perm'] ?? ($rotinaPermMap[$item['module'] ?? ''] ?? null);
                         return ! $p || auth()->user()->can($p);
                     };
                     $pendCacheKey = 'pendentes_count_' . session('school_id');
@@ -138,8 +140,8 @@
                     @php
                         $items = [
                             ['route' => 'professor.dashboard',    'icon' => 'home',     'label' => 'Início'],
-                            ['route' => 'professor.painel',       'icon' => 'grid',     'label' => 'Painel de Acompanhamento'],
-                            ['route' => 'professor.turmas.index', 'icon' => 'academic', 'label' => 'Turmas'],
+                            ['route' => 'professor.painel',       'icon' => 'grid',     'label' => 'Painel de Acompanhamento', 'perm' => 'rotina.painel'],
+                            ['route' => 'professor.turmas.index', 'icon' => 'academic', 'label' => 'Turmas', 'perm' => 'rotina.turmas'],
                         ];
                         $footerItems = [];
                     @endphp
