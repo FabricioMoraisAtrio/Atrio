@@ -78,7 +78,7 @@ class RotinaAdaptacoesController extends Controller
             }
         }
 
-        $query = Student::with([
+        $query = Student::visiveisPara(auth()->user())->with([
             'schoolClasses',
             'documents' => fn($q) => $q->whereIn('type', ['pei', 'estudo_caso', 'paee'])->where('year', date('Y')),
             'laudos',

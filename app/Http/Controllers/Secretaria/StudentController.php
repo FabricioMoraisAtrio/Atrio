@@ -13,7 +13,9 @@ class StudentController extends Controller
 public function index(\Illuminate\Http\Request $request)
 {
     $ano = date('Y');
-    $query = Student::with(['schoolClasses' => fn($q) => $q->where('year', $ano)])->latest();
+    // Escopo: quem não tem alunos.ver_todos (professor) vê só os das próprias turmas.
+    $query = Student::visiveisPara(auth()->user())
+        ->with(['schoolClasses' => fn($q) => $q->where('year', $ano)])->latest();
 
     if ($request->filled('turma')) {
         $query->whereHas('schoolClasses', fn($q) => $q->where('school_classes.id', $request->input('turma')));
@@ -139,6 +141,8 @@ public function index(\Illuminate\Http\Request $request)
 
 public function show(Student $aluno)
 {
+    abort_unless(auth()->user()->podeAcessarEstudante($aluno), 403);
+
     $aluno->load([
         'schoolClasses:id,name,shift,year',
         'documents' => fn($q) => $q->with('author:id,name'), // todos os anos (histórico)

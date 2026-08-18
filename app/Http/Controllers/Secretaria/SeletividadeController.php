@@ -14,7 +14,8 @@ class SeletividadeController extends Controller
     {
         $schoolId = session('school_id');
 
-        $alunos = Student::with(['foodItems', 'schoolClasses' => fn($q) => $q->where('year', date('Y'))->select('school_classes.id', 'name')])
+        $alunos = Student::visiveisPara(auth()->user())
+            ->with(['foodItems', 'schoolClasses' => fn($q) => $q->where('year', date('Y'))->select('school_classes.id', 'name')])
             ->where('is_atypical', true)
             ->orderBy('name')
             ->get();
@@ -24,6 +25,8 @@ class SeletividadeController extends Controller
 
     public function show(Student $aluno)
     {
+        abort_unless(auth()->user()->podeAcessarEstudante($aluno), 403);
+
         $aluno->load(['foodItems', 'schoolClasses' => fn($q) => $q->where('year', date('Y'))->select('school_classes.id', 'name')]);
 
         $categories = StudentFoodItem::CATEGORIES;
@@ -58,6 +61,8 @@ class SeletividadeController extends Controller
 
     public function exportIndividual(Student $aluno)
     {
+        abort_unless(auth()->user()->podeAcessarEstudante($aluno), 403);
+
         $school = School::find(session('school_id'));
         $aluno->load([
             'foodItems',
@@ -76,7 +81,8 @@ class SeletividadeController extends Controller
     {
         $school = School::find(session('school_id'));
 
-        $alunos = Student::with([
+        $alunos = Student::visiveisPara(auth()->user())
+            ->with([
                 'foodItems',
                 'schoolClasses' => fn($q) => $q->where('year', date('Y'))->select('school_classes.id', 'name'),
             ])

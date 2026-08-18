@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $ano = date('Y');
 
-        $turmas = SchoolClass::where('year', $ano)
+        $turmas = SchoolClass::visiveisPara(auth()->user())->where('year', $ano)
             ->with([
                 'students' => fn($q) => $q->with([
                     'documents' => fn($q) => $q->where('year', $ano)->select('id', 'student_id', 'type', 'author_id'),
@@ -55,7 +55,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $totalPendentes = Student::where(function ($q) {
+        $totalPendentes = Student::visiveisPara(auth()->user())->where(function ($q) {
                 foreach (Student::PUBLICO_ALVO_FIELDS as $f) { $q->orWhere($f, true); }
             })
             ->with(['documents' => fn($q) => $q->where('year', $ano)->select('id', 'student_id', 'type')])
@@ -66,7 +66,7 @@ class DashboardController extends Controller
             });
 
         // Alunos com adaptações no PEI, agrupados por turma
-        $adaptacoesPorTurma = SchoolClass::where('year', $ano)
+        $adaptacoesPorTurma = SchoolClass::visiveisPara(auth()->user())->where('year', $ano)
             ->with(['students' => fn($q) => $q->where('is_atypical', true)
                 ->with(['documents' => fn($d) => $d->where('year', $ano)->where('type', 'pei')])
             ])
@@ -97,7 +97,7 @@ class DashboardController extends Controller
     {
         $ano = date('Y');
 
-        $turmas = SchoolClass::where('year', $ano)
+        $turmas = SchoolClass::visiveisPara(auth()->user())->where('year', $ano)
             ->with([
                 'students' => fn($q) => $q->with([
                     'documents' => fn($q) => $q->where('year', $ano)->select('id', 'student_id', 'type', 'author_id'),
@@ -135,7 +135,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $totalPendentes = Student::where(function ($q) {
+        $totalPendentes = Student::visiveisPara(auth()->user())->where(function ($q) {
                 foreach (Student::PUBLICO_ALVO_FIELDS as $f) { $q->orWhere($f, true); }
             })
             ->with(['documents' => fn($q) => $q->where('year', $ano)->select('id', 'student_id', 'type')])
@@ -145,7 +145,7 @@ class DashboardController extends Controller
                 return count(array_diff(['estudo_caso', 'pei', 'paee'], $criados)) > 0;
             });
 
-        $adaptacoesPorTurma = SchoolClass::where('year', $ano)
+        $adaptacoesPorTurma = SchoolClass::visiveisPara(auth()->user())->where('year', $ano)
             ->with(['students' => fn($q) => $q->where('is_atypical', true)
                 ->with(['documents' => fn($d) => $d->where('year', $ano)->where('type', 'pei')])
             ])

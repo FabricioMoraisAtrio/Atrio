@@ -33,4 +33,17 @@ class SchoolClass extends Model
         return $this->belongsToMany(Student::class, 'school_class_student')
                     ->withTimestamps();
     }
+
+    /**
+     * Restringe às turmas visíveis para o usuário: quem tem `alunos.ver_todos`
+     * vê todas; os demais (professor) apenas as próprias. Regra ÚNICA de escopo.
+     */
+    public function scopeVisiveisPara($query, ?User $user)
+    {
+        if (! $user || $user->podeVerTodosEstudantes()) {
+            return $query;
+        }
+
+        return $query->whereIn('id', $user->turmasIds());
+    }
 }

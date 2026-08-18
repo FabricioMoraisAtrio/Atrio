@@ -60,6 +60,20 @@ protected $fillable = [
     {
         return $this->can('alunos.ver_todos');
     }
+
+    /**
+     * Se o usuário pode acessar um estudante específico: quem vê todos, sim;
+     * os demais (professor) só os estudantes das próprias turmas. Usado nos guards
+     * de detalhe (show/exportar) das rotas unificadas.
+     */
+    public function podeAcessarEstudante(Student $aluno): bool
+    {
+        if ($this->podeVerTodosEstudantes()) {
+            return true;
+        }
+
+        return $aluno->schoolClasses()->whereIn('school_classes.id', $this->turmasIds())->exists();
+    }
     public function children(): BelongsToMany
 {
     return $this->belongsToMany(Student::class, 'student_user')
