@@ -14,7 +14,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $permissions = [
             // Alunos
-            'alunos.ver', 'alunos.criar', 'alunos.editar', 'alunos.deletar',
+            'alunos.ver', 'alunos.ver_todos', 'alunos.criar', 'alunos.editar', 'alunos.deletar',
             // Turmas
             'turmas.ver', 'turmas.gerenciar',
             // Documentos

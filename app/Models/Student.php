@@ -113,6 +113,20 @@ protected function casts(): array
                     ->withTimestamps();
     }
 
+    /**
+     * Restringe a consulta aos estudantes visíveis para o usuário:
+     * quem tem `alunos.ver_todos` vê todos; os demais (professor) veem apenas
+     * os estudantes das próprias turmas. Regra ÚNICA de escopo do portal.
+     */
+    public function scopeVisiveisPara($query, ?User $user)
+    {
+        if (! $user || $user->podeVerTodosEstudantes()) {
+            return $query;
+        }
+
+        return $query->whereHas('schoolClasses', fn ($q) => $q->whereIn('school_classes.id', $user->turmasIds()));
+    }
+
     public function documents(): HasMany
     {
         return $this->hasMany(Document::class);

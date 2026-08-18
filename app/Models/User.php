@@ -44,6 +44,22 @@ protected $fillable = [
                     ->withPivot('subject')
                     ->withTimestamps();
     }
+
+    /** IDs das turmas que o usuário leciona/participa — base do escopo restrito (professor). */
+    public function turmasIds(): array
+    {
+        return $this->schoolClasses()->pluck('school_classes.id')->all();
+    }
+
+    /**
+     * Se o usuário enxerga TODOS os estudantes da escola (admin/coordenador/orientador e
+     * perfis com a permissão) ou apenas os das próprias turmas (professor).
+     * Regra ÚNICA de escopo, usada pelas rotas unificadas do portal.
+     */
+    public function podeVerTodosEstudantes(): bool
+    {
+        return $this->can('alunos.ver_todos');
+    }
     public function children(): BelongsToMany
 {
     return $this->belongsToMany(Student::class, 'student_user')

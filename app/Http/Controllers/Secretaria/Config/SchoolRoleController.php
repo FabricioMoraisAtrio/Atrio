@@ -27,10 +27,11 @@ class SchoolRoleController extends Controller
                 'rotina.usuarios'       => 'Usuários',
             ],
             'Estudantes' => [
-                'alunos.ver'    => 'Visualizar estudantes',
-                'alunos.criar'  => 'Cadastrar estudantes',
-                'alunos.editar' => 'Editar estudantes',
-                'alunos.deletar'=> 'Remover estudantes',
+                'alunos.ver'       => 'Visualizar estudantes',
+                'alunos.ver_todos' => 'Ver estudantes de todas as turmas (não só as próprias)',
+                'alunos.criar'     => 'Cadastrar estudantes',
+                'alunos.editar'    => 'Editar estudantes',
+                'alunos.deletar'   => 'Remover estudantes',
             ],
             'Turmas' => [
                 'turmas.ver'      => 'Visualizar turmas',
