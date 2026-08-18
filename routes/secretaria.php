@@ -26,7 +26,7 @@ use App\Http\Controllers\Secretaria\MeetingController;
 
 
 
-Route::get('/dashboard', [DashboardController::class, '__invoke'])->name('dashboard');
+Route::get('/menu', [DashboardController::class, '__invoke'])->name('dashboard');
 Route::middleware('school.module:painel')->group(function () {
     Route::get('/painel',    [DashboardController::class, 'painel'])->name('painel');
 });

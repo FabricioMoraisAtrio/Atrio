@@ -82,7 +82,7 @@
                 <span class="app-dot" style="background:#FF5F57;"></span>
                 <span class="app-dot" style="background:#FEBC2E;"></span>
                 <span class="app-dot" style="background:#28C840;"></span>
-                <span class="app-url">atriosystem.com.br/portal</span>
+                <span class="app-url">atriosystem.com.br/menu</span>
             </div>
             <div class="app-body">
                 <aside class="app-side">
