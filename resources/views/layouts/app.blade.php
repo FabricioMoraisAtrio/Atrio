@@ -117,21 +117,15 @@
                     @endphp
                 @endhasanyrole
 
-                @hasrole('professor')
-                    @php
-                        $items = [
-                            ['route' => 'secretaria.dashboard',    'icon' => 'home',     'label' => 'Início'],
-                            ['route' => 'secretaria.painel',       'icon' => 'grid',     'label' => 'Painel de Acompanhamento', 'perm' => 'rotina.painel'],
-                            ['route' => 'secretaria.turmas.index', 'icon' => 'academic', 'label' => 'Turmas', 'perm' => 'rotina.turmas'],
-                        ];
-                        $footerItems = [];
-                    @endphp
-                @endhasrole
-
                 @php
+                    // Professor e perfis customizados usam o MESMO menu dinâmico: os itens
+                    // aparecem conforme as flags de rotina do perfil (pode_rotina). O acesso
+                    // efetivo a cada rota continua vindo das permissões (can:) do perfil.
                     if (!isset($items) && auth()->check()) {
                         $schoolId = session('school_id');
-                        if (auth()->user()->roles()->where('name', 'like', "s{$schoolId}_%")->exists()) {
+                        $ehProfessor  = auth()->user()->hasRole('professor');
+                        $ehCustomRole = auth()->user()->roles()->where('name', 'like', "s{$schoolId}_%")->exists();
+                        if ($ehProfessor || $ehCustomRole) {
                             $items = [
                                 ['route' => 'secretaria.dashboard',                  'icon' => 'home',    'label' => 'Início'],
                                 ['route' => 'secretaria.painel',                     'icon' => 'grid',    'label' => 'Painel de Acompanhamento', 'module' => 'painel'],

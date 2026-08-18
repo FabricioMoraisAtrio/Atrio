@@ -12,11 +12,8 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-        // Portal unificado: quem não vê todos os estudantes (professor) recebe o menu enxuto.
-        if (! auth()->user()->podeVerTodosEstudantes()) {
-            return $this->menuProfessor();
-        }
-
+        // Portal unificado: todos (inclusive professor) usam o mesmo dashboard de cards,
+        // que aparecem conforme as flags de rotina do perfil. Dados são escopados.
         $ano = date('Y');
 
         $turmas = SchoolClass::visiveisPara(auth()->user())->where('year', $ano)
@@ -176,17 +173,6 @@ class DashboardController extends Controller
             })->filter(fn($t) => $t['alunos']->isNotEmpty())->values();
 
         return view('secretaria.painel', compact('turmas', 'totalPendentes', 'adaptacoesPorTurma', 'ano'));
-    }
-
-    /** Menu inicial enxuto do professor (escopado às próprias turmas/matéria). */
-    private function menuProfessor()
-    {
-        $professor   = auth()->user();
-        $ano         = date('Y');
-        $subjectSlug = $professor->schoolClasses()->where('year', $ano)->first()?->pivot->subject;
-        $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->first() : null;
-
-        return view('professor.dashboard', compact('ano', 'subject'));
     }
 
     /** Painel do professor: pendências de PEI da matéria dele nas próprias turmas. */
