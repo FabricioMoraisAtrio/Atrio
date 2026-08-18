@@ -19,6 +19,7 @@ use App\Http\Controllers\Secretaria\Rotinas\RotinaDocumentoListController;
 use App\Http\Controllers\Secretaria\Config\ConfigController;
 use App\Http\Controllers\Secretaria\Config\SchoolRoleController;
 use App\Http\Controllers\Secretaria\PeiConsolidadoController;
+use App\Http\Controllers\Secretaria\PeiController;
 use App\Http\Controllers\Secretaria\LogController;
 use App\Http\Controllers\Secretaria\SeletividadeController;
 use App\Http\Controllers\Secretaria\SubjectController;
@@ -114,6 +115,11 @@ Route::middleware('school.module:alunos')->group(function () {
 
 // ─── Documentos ───────────────────────────────────────────────────────────────
 Route::middleware('school.module:documentos')->group(function () {
+    // PEI unificado (uma rota para todos): quem tem documentos.ver_todos edita o
+    // consolidado; o professor edita a seção da própria matéria. Duas telas, mesma URL.
+    Route::get('alunos/{aluno}/pei', [PeiController::class, 'edit'])->name('alunos.pei.edit');
+    Route::put('alunos/{aluno}/pei', [PeiController::class, 'update'])->name('alunos.pei.update');
+
     Route::middleware('can:documentos.ver_todos')->group(function () {
         Route::get('documentos', AllDocumentsController::class)->name('documentos.index');
         Route::get('documentos/{documento}/pdf',     [DocumentPdfController::class, '__invoke'])->name('documentos.pdf');
@@ -124,8 +130,6 @@ Route::middleware('school.module:documentos')->group(function () {
         Route::get('rotinas/documentos/paee',         [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'paee')->name('rotinas.documentos.paee');
         Route::get('rotinas/documentos/pei',          [RotinaDocumentoListController::class, '__invoke'])->defaults('tipo', 'pei')->name('rotinas.documentos.pei');
         Route::get('alunos/{aluno}/documento-final', DocumentoFinalController::class)->name('alunos.documento-final');
-        Route::get('alunos/{aluno}/pei-consolidado', [PeiConsolidadoController::class, 'edit'])->name('alunos.pei-consolidado');
-        Route::put('alunos/{aluno}/pei-consolidado', [PeiConsolidadoController::class, 'update'])->name('alunos.pei-consolidado.update');
     });
 
     // Metas acadêmicas customizadas do aluno (cadastradas pelo admin/perfis com permissão, usadas no PEI)

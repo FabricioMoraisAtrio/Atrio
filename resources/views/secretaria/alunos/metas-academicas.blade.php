@@ -28,7 +28,7 @@
 
     {{-- Cabeçalho --}}
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+        <a href="{{ route('secretaria.alunos.pei.edit', $aluno) }}"
            style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Voltar para o PEI de {{ $aluno->name }}
@@ -133,7 +133,7 @@
         </p>
 
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
-            <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+            <a href="{{ route('secretaria.alunos.pei.edit', $aluno) }}"
                style="padding: 11px 20px; border-radius: 8px; font-size: 13px; color: var(--text-3); text-decoration: none; border: 1px solid var(--border);">
                 Cancelar
             </a>

@@ -84,7 +84,7 @@ $accent = '#004B8D';
     </div>
     @endif
 
-    <form method="POST" action="{{ route('professor.alunos.pei.update', $aluno) }}">
+    <form method="POST" action="{{ route('secretaria.alunos.pei.update', $aluno) }}">
         @csrf @method('PUT')
 
         <input type="hidden" name="subject_slug" value="{{ $subjectSlug }}">

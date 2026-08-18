@@ -72,7 +72,7 @@ class PeiConsolidadoController extends Controller
             ]
         );
 
-        return redirect()->route('secretaria.alunos.pei-consolidado', $aluno)
+        return redirect()->route('secretaria.alunos.pei.edit', $aluno)
             ->with('success', 'Observações salvas com sucesso.');
     }
 

@@ -108,7 +108,7 @@
     {!! $emptyBlock('Objetivos de Aprendizagem', 'Preencha os objetivos no Estudo de Caso.') !!}
 @endif
 
-<form method="POST" action="{{ route('secretaria.alunos.pei-consolidado.update', $aluno) }}" id="form-pei">
+<form method="POST" action="{{ route('secretaria.alunos.pei.update', $aluno) }}" id="form-pei">
 @csrf @method('PUT')
 
 {{-- ═══ INVENTÁRIO DE HABILIDADES ═══ --}}

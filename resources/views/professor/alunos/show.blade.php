@@ -92,7 +92,7 @@
             @endforeach
 
             {{-- Meu PEI (registro privado do professor) --}}
-            <a href="{{ route('professor.alunos.pei.edit', $aluno) }}"
+            <a href="{{ route('secretaria.alunos.pei.edit', $aluno) }}"
                style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; text-decoration: none;"
                onmouseover="this.style.background='var(--bg-subtle)'" onmouseout="this.style.background='transparent'">
                 <div style="display: flex; align-items: center; gap: 10px;">

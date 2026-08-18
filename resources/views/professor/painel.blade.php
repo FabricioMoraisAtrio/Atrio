@@ -40,7 +40,7 @@
                         <span style="font-size: 12px; color: var(--text-4); margin-left: 8px;">{{ $item['turma']->name }}</span>
                     </div>
                     <div style="display: flex; gap: 4px;">
-                        <a href="{{ route('professor.alunos.pei.edit', $item['aluno']) }}"
+                        <a href="{{ route('secretaria.alunos.pei.edit', $item['aluno']) }}"
                            style="background: #92400E; color: #fff; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; text-decoration: none;">
                             Preencher PEI
                         </a>
@@ -214,7 +214,7 @@ document.addEventListener('click', function(e) {
                                 $preencheu        = $pei && isset(($pei->content['subjects'] ?? [])[$subjectSlugTurma]);
                             @endphp
                             @if($pei && $preencheu)
-                                <a href="{{ route('professor.alunos.pei.edit', $aluno) }}"
+                                <a href="{{ route('secretaria.alunos.pei.edit', $aluno) }}"
                                    style="font-size: 11px; background: var(--success-bg); color: var(--success); font-weight: 600; padding: 5px 10px; border-radius: 8px; text-decoration: none;">
                                     PEI ✓
                                 </a>
@@ -223,7 +223,7 @@ document.addEventListener('click', function(e) {
                                     PEI bloqueado
                                 </span>
                             @else
-                                <a href="{{ route('professor.alunos.pei.edit', $aluno) }}"
+                                <a href="{{ route('secretaria.alunos.pei.edit', $aluno) }}"
                                    style="font-size: 11px; background: var(--accent); color: #fff; font-weight: 600; padding: 5px 10px; border-radius: 8px; text-decoration: none;">
                                     Preencher PEI
                                 </a>

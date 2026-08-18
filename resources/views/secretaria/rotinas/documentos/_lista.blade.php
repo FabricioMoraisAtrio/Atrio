@@ -126,7 +126,7 @@
                             <td style="padding: 12px 20px; text-align: right;">
                                 @if($cfg['tipo'] === 'pei')
                                     {{-- PEI: botão para o consolidado, não para criar novo --}}
-                                    <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+                                    <a href="{{ route('secretaria.alunos.pei.edit', $aluno) }}"
                                        style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 8px; background: {{ $corPrincipal }};">
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
                                         PEI Consolidado
@@ -254,7 +254,7 @@
                                 @if($cfg['tipo'] === 'pei')
                                     @php $peiConsolidado = $aluno->documents->first(fn($d) => $d->type === 'pei_consolidado'); @endphp
                                     <div style="display: inline-flex; align-items: center; gap: 6px;">
-                                        <a href="{{ route('secretaria.alunos.pei-consolidado', $aluno) }}"
+                                        <a href="{{ route('secretaria.alunos.pei.edit', $aluno) }}"
                                            style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: {{ $corPrincipal }}; text-decoration: none; padding: 6px 14px; border-radius: 8px; border: 1px solid {{ $corPrincipal }};">
                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                             Acessar
