@@ -3,7 +3,7 @@
 
 @section('content')
 <div style="margin-bottom: 24px;">
-    <a href="{{ route('professor.turmas.index') }}"
+    <a href="{{ route('secretaria.turmas.index') }}"
        style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Voltar para turmas
@@ -67,7 +67,7 @@
                     @endif
                 </td>
                 <td style="padding: 14px 20px; text-align: right;">
-                    <a href="{{ route('professor.alunos.show', $aluno) }}"
+                    <a href="{{ route('secretaria.alunos.show', $aluno) }}"
                        style="font-size: 13px; color: var(--accent-text); text-decoration: none; font-weight: 500;">Ver estudante</a>
                 </td>
             </tr>

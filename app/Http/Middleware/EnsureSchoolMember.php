@@ -21,8 +21,9 @@ class EnsureSchoolMember
             return redirect()->route('login');
         }
 
-        // Roles built-in do sistema
-        if ($user->hasAnyRole(['admin', 'coordenador', 'orientador'])) {
+        // Roles built-in do sistema (professor entra escopado às próprias turmas
+        // pelas regras de permissão/escopo — portal unificado, sem rota separada).
+        if ($user->hasAnyRole(['admin', 'coordenador', 'orientador', 'professor'])) {
             return $next($request);
         }
 

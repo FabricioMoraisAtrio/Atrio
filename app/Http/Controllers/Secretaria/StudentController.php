@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DocumentAccessLog;
 use App\Models\SchoolClass;
 use App\Models\Student;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -141,7 +142,13 @@ public function index(\Illuminate\Http\Request $request)
 
 public function show(Student $aluno)
 {
-    abort_unless(auth()->user()->podeAcessarEstudante($aluno), 403);
+    $user = auth()->user();
+    abort_unless($user->podeAcessarEstudante($aluno), 403);
+
+    // Professor: visão enxuta, só a seção de PEI dele + sua matéria.
+    if (! $user->podeVerTodosEstudantes()) {
+        return $this->showProfessor($aluno);
+    }
 
     $aluno->load([
         'schoolClasses:id,name,shift,year',
@@ -153,6 +160,21 @@ public function show(Student $aluno)
     $turmas = SchoolClass::where('year', date('Y'))->orderBy('name')->get(['id','name','shift']);
 
     return view('secretaria.alunos.show', compact('aluno', 'turmas'));
+}
+
+/** Perfil do estudante na visão do professor: esconde PEI de outras matérias. */
+private function showProfessor(Student $aluno)
+{
+    $aluno->load([
+        'observations.user',
+        'documents' => fn($q) => $q->where('year', date('Y'))
+            ->where(fn($q2) => $q2->where('type', '!=', 'pei')->orWhere('author_id', auth()->id())),
+    ]);
+
+    $subjectSlug = auth()->user()->schoolClasses()->first()?->pivot->subject;
+    $subject     = $subjectSlug ? Subject::where('slug', $subjectSlug)->first() : null;
+
+    return view('professor.alunos.show', compact('aluno', 'subject'));
 }
 
     public function edit(Student $aluno)

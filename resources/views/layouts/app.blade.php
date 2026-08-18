@@ -20,7 +20,7 @@
         {{-- Logo --}}
         <div style="padding: 24px 20px 20px; border-bottom: 1px solid var(--border-sub);">
             @php
-                $roleDashboardMap = ['admin' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'professor.dashboard'];
+                $roleDashboardMap = ['admin' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'secretaria.dashboard'];
                 $dashboardRoute = auth()->check() ? ($roleDashboardMap[auth()->user()->getRoleNames()->first()] ?? 'secretaria.dashboard') : 'secretaria.dashboard';
             @endphp
             <a href="{{ route($dashboardRoute) }}"
@@ -120,9 +120,9 @@
                 @hasrole('professor')
                     @php
                         $items = [
-                            ['route' => 'professor.dashboard',    'icon' => 'home',     'label' => 'Início'],
-                            ['route' => 'professor.painel',       'icon' => 'grid',     'label' => 'Painel de Acompanhamento', 'perm' => 'rotina.painel'],
-                            ['route' => 'professor.turmas.index', 'icon' => 'academic', 'label' => 'Turmas', 'perm' => 'rotina.turmas'],
+                            ['route' => 'secretaria.dashboard',    'icon' => 'home',     'label' => 'Início'],
+                            ['route' => 'secretaria.painel',       'icon' => 'grid',     'label' => 'Painel de Acompanhamento', 'perm' => 'rotina.painel'],
+                            ['route' => 'secretaria.turmas.index', 'icon' => 'academic', 'label' => 'Turmas', 'perm' => 'rotina.turmas'],
                         ];
                         $footerItems = [];
                     @endphp

@@ -20,7 +20,7 @@ $accent = '#004B8D';
 
     {{-- Cabeçalho --}}
     <div style="margin-bottom: 24px;">
-        <a href="{{ route('professor.alunos.show', $aluno) }}"
+        <a href="{{ route('secretaria.alunos.show', $aluno) }}"
            style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Voltar para o estudante
@@ -168,7 +168,7 @@ $accent = '#004B8D';
 
         {{-- Rodapé --}}
         <div style="display: flex; justify-content: flex-end; gap: 12px; padding-top: 4px;">
-            <a href="{{ route('professor.alunos.show', $aluno) }}"
+            <a href="{{ route('secretaria.alunos.show', $aluno) }}"
                style="padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); color: var(--text-3);">
                 Cancelar
             </a>

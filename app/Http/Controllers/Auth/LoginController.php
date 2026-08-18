@@ -38,7 +38,7 @@ class LoginController extends Controller
                 'admin'       => 'secretaria.dashboard',
                 'coordenador' => 'secretaria.dashboard',
                 'orientador'  => 'secretaria.dashboard',
-                'professor'   => 'professor.dashboard',
+                'professor'   => 'secretaria.dashboard',
             ];
             $role = $user->getRoleNames()->first();
 

@@ -118,7 +118,7 @@
                                 </td>
                                 @endforeach
                                 <td style="padding: 12px 24px; text-align: right;">
-                                    <a href="{{ route('professor.turmas.show', $turma) }}"
+                                    <a href="{{ route('secretaria.turmas.show', $turma) }}"
                                        style="font-size: 12px; color: var(--accent-text); text-decoration: none; font-weight: 500;">Ver turma</a>
                                 </td>
                             </tr>

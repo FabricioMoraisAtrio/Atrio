@@ -3,7 +3,7 @@
 
 @section('content')
 <div style="margin-bottom: 28px;">
-    <a href="{{ route('professor.dashboard') }}"
+    <a href="{{ route('secretaria.dashboard') }}"
        style="font-size: 13px; color: var(--text-4); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Início
@@ -55,7 +55,7 @@
 @php
     $filtroCidLabel = $filtroCid ? ($transtornos[$filtroCid][0] . ' — ' . $transtornos[$filtroCid][1]) : '';
 @endphp
-<form method="GET" action="{{ route('professor.painel') }}" id="formFiltroCid"
+<form method="GET" action="{{ route('secretaria.painel') }}" id="formFiltroCid"
       style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-sub); padding: 16px 20px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
     <input type="hidden" name="filtro_cid" id="filtro_cid_value" value="{{ $filtroCid ?? '' }}">
     <div style="flex: 1; min-width: 200px; position: relative;">
@@ -75,7 +75,7 @@
             Filtrar
         </button>
         @if($filtroCid)
-            <a href="{{ route('professor.painel') }}"
+            <a href="{{ route('secretaria.painel') }}"
                style="padding: 9px 14px; border-radius: 8px; font-size: 13px; color: var(--text-3); text-decoration: none; border: 1px solid var(--border);">
                 Limpar
             </a>

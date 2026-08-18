@@ -11,7 +11,7 @@ class SchoolClassController extends Controller
     public function index()
     {
         $year   = date('Y');
-        $turmas = SchoolClass::where('school_id', session('school_id'))
+        $turmas = SchoolClass::visiveisPara(auth()->user())
             ->withCount('students')
             ->with([
                 'students' => fn($q) => $q->orderBy('name')->with([
@@ -22,7 +22,9 @@ class SchoolClassController extends Controller
             ])
             ->orderBy('name')
             ->get();
-        return view('secretaria.turmas.index', compact('turmas'));
+
+        $view = auth()->user()->podeVerTodosEstudantes() ? 'secretaria.turmas.index' : 'professor.turmas.index';
+        return view($view, compact('turmas'));
     }
 
     public function create()
@@ -91,6 +93,10 @@ class SchoolClassController extends Controller
     }
     public function show(SchoolClass $turma)
     {
+        $user = auth()->user();
+        // Professor só acessa as próprias turmas.
+        abort_unless($user->podeVerTodosEstudantes() || in_array($turma->id, $user->turmasIds(), true), 403);
+
         $year = date('Y');
         $turma->load([
             'teachers',
@@ -98,6 +104,8 @@ class SchoolClassController extends Controller
                 ->whereIn('type', ['estudo_caso', 'paee', 'pei', 'pei_consolidado']),
             'students.laudos',
         ]);
-        return view('secretaria.turmas.show', compact('turma'));
+
+        $view = $user->podeVerTodosEstudantes() ? 'secretaria.turmas.show' : 'professor.turmas.show';
+        return view($view, compact('turma'));
     }
 }

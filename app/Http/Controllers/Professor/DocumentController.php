@@ -120,7 +120,7 @@ class DocumentController extends Controller
 
         $pei->update(['content' => $novoConteudo]);
 
-        return redirect()->route('professor.painel')
+        return redirect()->route('secretaria.painel')
             ->with('success', 'PEI de ' . $aluno->name . ' preenchido com sucesso.');
     }
 }

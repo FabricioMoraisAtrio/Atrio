@@ -66,6 +66,7 @@ Route::middleware('school.module:turmas')->group(function () {
     });
     Route::middleware('can:turmas.ver')->group(function () {
         Route::get('turmas',              [SchoolClassController::class, 'index'])->name('turmas.index');
+        Route::get('turmas/{turma}',      [SchoolClassController::class, 'show'])->name('turmas.show');
     });
 });
 

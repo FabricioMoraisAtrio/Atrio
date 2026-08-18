@@ -19,7 +19,7 @@
         @auth
         @php
             $school = auth()->user()->school;
-            $roleDashboardMap = ['admin' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'professor.dashboard'];
+            $roleDashboardMap = ['admin' => 'secretaria.dashboard', 'coordenador' => 'secretaria.dashboard', 'orientador' => 'secretaria.dashboard', 'professor' => 'secretaria.dashboard'];
             $hubRole = auth()->user()->getRoleNames()->first();
             if (isset($roleDashboardMap[$hubRole])) {
                 $hubDashRoute = $roleDashboardMap[$hubRole];

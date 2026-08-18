@@ -36,29 +36,21 @@ class AuthTest extends TestCase
         $response->assertSessionHasErrors();
     }
 
-    public function test_professor_nao_acessa_rota_secretaria(): void
+    public function test_professor_acessa_portal_unificado(): void
     {
+        // Portal unificado: o professor usa as mesmas rotas, entrando escopado.
         $this->loginComo($this->professor);
 
-        $response = $this->get(route('secretaria.dashboard'));
-
-        $response->assertStatus(403);
+        $this->get(route('secretaria.dashboard'))->assertOk();
+        $this->get(route('secretaria.painel'))->assertOk();
+        $this->get(route('secretaria.turmas.index'))->assertOk();
     }
 
-    public function test_pai_nao_acessa_rota_secretaria(): void
+    public function test_pai_nao_acessa_portal(): void
     {
         $this->loginComo($this->pai);
 
         $response = $this->get(route('secretaria.dashboard'));
-
-        $response->assertStatus(403);
-    }
-
-    public function test_secretaria_nao_acessa_rota_professor(): void
-    {
-        $this->loginComo($this->secretaria);
-
-        $response = $this->get(route('professor.dashboard'));
 
         $response->assertStatus(403);
     }

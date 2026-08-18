@@ -124,7 +124,7 @@
                     style="background: var(--accent); color: var(--accent-contrast); border: none; padding: 11px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
                 Salvar alterações
             </button>
-            <a href="{{ route(auth()->user()->hasRole('professor') ? 'professor.dashboard' : 'secretaria.dashboard') }}"
+            <a href="{{ route('secretaria.dashboard') }}"
                style="padding: 11px 24px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-2); font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;">
                 Cancelar
             </a>

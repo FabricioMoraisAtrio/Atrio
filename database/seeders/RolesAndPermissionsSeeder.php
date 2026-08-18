@@ -62,16 +62,19 @@ class RolesAndPermissionsSeeder extends Seeder
             'relatorios.exportar',
         ]));
 
-        // Professor: visualizar alunos/turmas, PEI, observações e leitura de Jornada/Adaptações
+        // Professor: leitura escopada às próprias turmas no portal unificado. As ações
+        // de escrita (seção do PEI por matéria, observações) vivem em rotas próprias
+        // gated por papel (professor.*), não por permissão — por isso NÃO recebe
+        // pei.*/observacoes.criar aqui (evita destravar rotas de documento da secretaria).
+        // rotina.painel/turmas são criadas na migration de rotinas e liberam o menu.
         $professor = Role::firstOrCreate(['name' => 'professor']);
-        $professor->syncPermissions([
-            'alunos.ver',
-            'turmas.ver',
-            'pei.ver', 'pei.criar', 'pei.editar',
-            'observacoes.criar',
-            'seletividade.ver',
-            'adaptacoes.ver',
-        ]);
+        $professorPerms = ['alunos.ver', 'turmas.ver', 'seletividade.ver', 'adaptacoes.ver'];
+        foreach (['rotina.painel', 'rotina.turmas'] as $rp) {
+            if (Permission::where('name', $rp)->exists()) {
+                $professorPerms[] = $rp;
+            }
+        }
+        $professor->syncPermissions($professorPerms);
 
     }
 }

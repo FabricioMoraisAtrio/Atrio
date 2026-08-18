@@ -12,7 +12,7 @@ $cards = [
     [
         'label'    => 'Painel',
         'descricao'=> 'Turmas, estudantes inclusivos e pendências de documentação.',
-        'route'    => 'professor.painel',
+        'route'    => 'secretaria.painel',
         'cor'      => '#004B8D',
         'bg'       => '#E8F0F9',
         'icon'     => '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
@@ -21,7 +21,7 @@ $cards = [
     [
         'label'    => 'Turmas',
         'descricao'=> 'Veja todas as turmas e os estudantes vinculados a cada uma.',
-        'route'    => 'professor.turmas.index',
+        'route'    => 'secretaria.turmas.index',
         'cor'      => '#009C8C',
         'bg'       => '#E6F5F4',
         'icon'     => '<path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
