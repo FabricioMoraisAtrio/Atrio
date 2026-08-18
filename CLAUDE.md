@@ -48,15 +48,16 @@ Toda tabela de dados tem `school_id`. O `App\Scopes\SchoolScope` (global scope) 
 - Roles built-in: `admin`, `coordenador`, `orientador` (acesso ao "portal", antigo perfil secretaria — renomeado de `secretaria` para `admin` na migration `2026_04_04_*`) e `professor`.
 - Cada escola pode criar **roles customizados** via `App\Models\SchoolRole`, mapeados para roles Spatie com prefixo `s{school_id}_` e permissões próprias (campo `permissions` JSON).
 - Rotas de portal usam middleware `can:<permissao>` (ex.: `can:alunos.ver`, `can:documentos.ver_todos`) — não checam role diretamente.
-- `EnsureSchoolMember` (`school.member`) libera acesso ao portal para roles built-in (`admin`/`coordenador`/`orientador`) ou para qualquer role `s{school_id}_*`.
+- `EnsureSchoolMember` (`school.member`) libera acesso ao portal para roles built-in (`admin`/`coordenador`/`orientador`/`professor`) ou para qualquer role `s{school_id}_*`. **Portal unificado**: o professor usa as MESMAS rotas de todos, entrando **escopado** às próprias turmas (não há mais árvore `professor.*`).
+- **Escopo por permissão** (`alunos.ver_todos`): quem tem enxerga todos os estudantes; quem não tem (professor) só os das próprias turmas. Regra central em `User::podeVerTodosEstudantes()`/`podeAcessarEstudante()`, `Student::scopeVisiveisPara()`, `SchoolClass::scopeVisiveisPara()`. Controllers que servem os dois perfis (Dashboard, SchoolClass, Student, Pei) **ramificam por essa capacidade** (staff vê a tela da secretaria; professor vê a tela enxuta em `resources/views/professor/*`).
 - `EnsureSchoolHasModule` (`school.module:<chave>`) bloqueia rotas se o módulo não estiver habilitado em `School.modules` (JSON array; `null` = todos habilitados). Módulos disponíveis: `painel`, `alunos`, `documentos`, `turmas`, `adaptacoes`, `materias`, `usuarios`, `configuracoes`, `seletividade` (Jornada Alimentar) — ver `School::availableModules()`.
 - `EnsureSchoolIsActive` (`school.active`) faz logout se a escola estiver inativa ou com plano vencido.
 - Guard separado `admin` (`AdminUser`) para o painel SaaS em `/superadmin`, com middleware `admin.auth`.
 
 ### Rotas
 - `routes/web.php`: rotas públicas (login, reset de senha, landing, termos) + grupo `auth + school.active` que carrega:
-  - `routes/secretaria.php` com prefixo `/portal`, nome `secretaria.*`, middleware `school.member` (apesar do nome, hoje é o portal de admin/coordenador/orientador + roles customizados);
-  - `routes/professor.php` com prefixo `/professor`, nome `professor.*`, middleware `role:professor`.
+  - `routes/secretaria.php` — **árvore ÚNICA do portal**, URLs no topo (ex.: `/menu`, `/painel`, `/turmas`, `/alunos/{id}`, `/documentos`, `/alunos/{id}/pei`), nome `secretaria.*`, middleware `school.member`. **Sem prefixo `/portal`**. Usada por todos os perfis (admin/coordenador/orientador/professor + roles customizados); o que cada um vê é decidido por permissão/escopo.
+  - **Não existe mais `routes/professor.php` nem prefixo `/professor`** — a navegação e o PEI do professor foram fundidos na árvore única (removidos na unificação de rotas). O `Professor\DocumentController` (edição da seção do PEI por matéria) sobrevive como classe, despachado pela rota única `secretaria.alunos.pei.*` via `Secretaria\PeiController` (ramifica: `documentos.ver_todos` → consolidado; professor → própria matéria). Views enxutas do professor ficam em `resources/views/professor/*` e são renderizadas pelos controllers da secretaria conforme a capacidade.
 - Dentro de `secretaria.php`, cada grupo de recursos combina `school.module:<modulo>` + `can:<permissao>`.
 - `/superadmin/*` é guard `admin`, fora do middleware de auth padrão.
 

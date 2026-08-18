@@ -11,6 +11,9 @@ class ObservationController extends Controller
 {
     public function store(Request $request, Student $aluno)
     {
+        // Escopo: professor só observa estudantes das próprias turmas.
+        abort_unless(auth()->user()->podeAcessarEstudante($aluno), 403);
+
         $request->validate([
             'content'  => 'required|string|max:1000',
             'urgency'  => 'required|in:normal,atencao,critico',
@@ -47,7 +50,13 @@ class ObservationController extends Controller
 
     public function destroy(Observation $observation)
     {
-        $student = $observation->student;
+        // Quem vê todos os estudantes remove qualquer observação; os demais (professor)
+        // só as próprias.
+        abort_unless(
+            auth()->user()->podeVerTodosEstudantes() || $observation->user_id === auth()->id(),
+            403
+        );
+
         $observation->delete();
         return back()->with('success', 'Observação removida.');
     }

@@ -121,5 +121,5 @@
 @endif
 
 {{-- Mural --}}
-<x-observation-feed :aluno="$aluno" role="professor" />
+<x-observation-feed :aluno="$aluno" />
 @endsection

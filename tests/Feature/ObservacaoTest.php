@@ -57,7 +57,7 @@ class ObservacaoTest extends TestCase
             'category'   => 'comportamento',
         ]);
 
-        $response = $this->delete(route('professor.observacoes.destroy', $obs));
+        $response = $this->delete(route('secretaria.observacoes.destroy', $obs));
 
         $response->assertStatus(403);
         $this->assertDatabaseHas('observations', ['id' => $obs->id]);

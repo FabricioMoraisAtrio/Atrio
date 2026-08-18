@@ -68,7 +68,7 @@ class RolesAndPermissionsSeeder extends Seeder
         // pei.*/observacoes.criar aqui (evita destravar rotas de documento da secretaria).
         // rotina.painel/turmas são criadas na migration de rotinas e liberam o menu.
         $professor = Role::firstOrCreate(['name' => 'professor']);
-        $professorPerms = ['alunos.ver', 'turmas.ver', 'seletividade.ver', 'adaptacoes.ver'];
+        $professorPerms = ['alunos.ver', 'turmas.ver', 'seletividade.ver', 'adaptacoes.ver', 'observacoes.criar'];
         foreach (['rotina.painel', 'rotina.turmas'] as $rp) {
             if (Permission::where('name', $rp)->exists()) {
                 $professorPerms[] = $rp;

@@ -5,7 +5,7 @@
 
     {{-- Formulário --}}
     <form method="POST"
-          action="{{ route($role . '.alunos.observacoes.store', $aluno) }}"
+          action="{{ route('secretaria.alunos.observacoes.store', $aluno) }}"
           style="margin-bottom: 20px;">
         @csrf
 
@@ -60,8 +60,8 @@
                     <p style="font-size: 13px; color: var(--text-2); margin: 0; line-height: 1.5;">{{ $obs->content }}</p>
                 </div>
 
-                @if($obs->user_id === auth()->id() || $role === 'secretaria')
-                    <form method="POST" action="{{ route($role . '.observacoes.destroy', $obs) }}">
+                @if($obs->user_id === auth()->id() || auth()->user()?->podeVerTodosEstudantes())
+                    <form method="POST" action="{{ route('secretaria.observacoes.destroy', $obs) }}">
                         @csrf @method('DELETE')
                         <button type="button" data-confirm="Remover observação?"
                                 style="font-size: 12px; color: var(--danger); background: none; border: none; cursor: pointer; white-space: nowrap; padding: 0;">

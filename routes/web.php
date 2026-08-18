@@ -269,14 +269,11 @@ Route::middleware(['auth', 'school.active'])->group(function () {
     Route::get('/alunos/{aluno}/foto', \App\Http\Controllers\StudentPhotoController::class)->name('alunos.foto');
 
     // Portal unificado: URLs no topo (ex.: /menu, /documentos, /alunos), iguais para
-    // todos os usuários. O que cada um enxerga é decidido pelas permissões do perfil.
+    // todos os usuários — inclusive o professor, que entra escopado às próprias turmas.
+    // O que cada um enxerga é decidido apenas pelas permissões do perfil.
     Route::middleware('school.member')
         ->name('secretaria.')
         ->group(base_path('routes/secretaria.php'));
-
-    Route::middleware('role:professor')
-        ->prefix('professor')->name('professor.')
-        ->group(base_path('routes/professor.php'));
 
 });
 
