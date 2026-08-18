@@ -73,6 +73,23 @@ class SchoolRoleController extends Controller
         ];
     }
 
+    /** permissionGroups com o grupo "Rotinas" limitado aos módulos habilitados da escola. */
+    public static function permissionGroupsParaEscola(?int $schoolId): array
+    {
+        $groups = self::permissionGroupsParaEscola(session('school_id'));
+        $school = $schoolId ? \App\Models\School::find($schoolId) : null;
+
+        if ($school && isset($groups['Rotinas — acesso ao menu'])) {
+            $groups['Rotinas — acesso ao menu'] = array_filter(
+                $groups['Rotinas — acesso ao menu'],
+                fn ($label, $key) => $school->hasModule(str_replace('rotina.', '', $key)),
+                ARRAY_FILTER_USE_BOTH
+            );
+        }
+
+        return $groups;
+    }
+
     /** Garante que os perfis do sistema existam na tabela school_roles para esta escola */
     private function ensureSystemRoles(int $schoolId): void
     {
@@ -108,14 +125,14 @@ class SchoolRoleController extends Controller
         $this->ensureSystemRoles($schoolId);
 
         $roles  = SchoolRole::where('school_id', $schoolId)->orderBy('is_system', 'desc')->orderBy('name')->get();
-        $groups = self::permissionGroups();
+        $groups = self::permissionGroupsParaEscola(session('school_id'));
 
         return view('secretaria.config.perfis.index', compact('roles', 'groups'));
     }
 
     public function create()
     {
-        $groups = self::permissionGroups();
+        $groups = self::permissionGroupsParaEscola(session('school_id'));
         return view('secretaria.config.perfis.create', compact('groups'));
     }
 
@@ -172,7 +189,7 @@ class SchoolRoleController extends Controller
             }
         }
 
-        $groups = self::permissionGroups();
+        $groups = self::permissionGroupsParaEscola(session('school_id'));
         return view('secretaria.config.perfis.edit', compact('perfil', 'groups'));
     }
 
@@ -203,6 +220,8 @@ class SchoolRoleController extends Controller
             'color'       => $data['color'] ?? $perfil->color,
             'permissions' => $data['permissions'] ?? [],
         ]);
+
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         return redirect()->route('secretaria.config.perfis.index')
             ->with('success', 'Perfil atualizado.');
